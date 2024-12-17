@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'leaflet/dist/leaflet.css';
+
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+  user-select: none;
+  outline: none;
+}
+
+
+html{
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.input-login {
+  background-color: transparent;
+  caret-color: #ddceb8;
+}
+
+@layer base {
+  :root {
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+.mysidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.card-shape {
+  @apply bg-[#383838] rounded-xl p-6 shadow-lg shadow-[#282828] border-none !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dark-input {
+  @apply bg-[#282828] text-gray-100 rounded-full border-none outline-none placeholder:text-gray-400;
+}
+
+
+.add-button{
+  @apply text-[#c1c1c1] bg-[#474747] border-none select-none rounded-md hover:text-[#ddd] hover:bg-[#404040] !important;
+}
+
+.custom-input{
+  @apply rounded-full bg-[#141414] border-none text-gray-100 placeholder:text-gray-500 select-none h-10 px-4 !important;
+}
+
+.custom-tabs{
+  @apply bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary !important
+} 
+.leaflet-container {
+  height: 70vh;
+  width: 95%;
+  border-radius: 0.5rem;
+}
