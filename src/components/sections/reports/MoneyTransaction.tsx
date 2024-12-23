@@ -1,114 +1,142 @@
-import * as React from 'react'
-import { format } from 'date-fns'
-import { CalendarIcon } from 'lucide-react'
-import { Button } from '../../ui/button'
-import { Calendar } from '../../ui/calendar'
+import * as React from "react";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { Button } from "../../ui/button";
+import { Calendar } from "../../ui/calendar";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '../../ui/select'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '../../ui/popover'
-
-import { cn } from '../../../lib/utils'
-import { Card, CardContent } from '../../ui/card'
-import OrdersTable from './OrdersTable'
+} from "../../ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
+import { Card, CardContent } from "../../ui/card";
+import OrdersTable from "./OrdersTable";
+import { useTranslation } from "react-i18next";
 
 type Transaction = {
-  id: string
-  period: string
-  city: string
-  carClass: string
-  operationType: string
-  status: string
-  amount: number
-}
+  id: string;
+  period: string;
+  city: string;
+  carClass: string;
+  operationType: string;
+  status: string;
+  amount: number;
+};
 
 export default function MoneyTransaction() {
-  const [selectedCity, setSelectedCity] = React.useState('Kazan')
-  const [selectedCarClass, setSelectedCarClass] = React.useState('All classes of cars')
-  const [selectedOperation, setSelectedOperation] = React.useState('All types of operations')
-  const [selectedPerformer, setSelectedPerformer] = React.useState('All performers/clients')
-  const [dateRange, setDateRange] = React.useState<[Date | undefined, Date | undefined]>([
-    undefined,
-    undefined,
-  ])
-  const [selectedDateFilter, setSelectedDateFilter] = React.useState('all')
+  const { t } = useTranslation();
+  const [selectedCity, setSelectedCity] = React.useState("Kazan");
+  const [selectedCarClass, setSelectedCarClass] = React.useState(t("allClassesOfCars"));
+  const [selectedOperation, setSelectedOperation] = React.useState(t("allTypesOfOperations"));
+  const [selecteddriver, setSelecteddriver] = React.useState(t("allDriversClients"));
+  const [dateRange, setDateRange] = React.useState<[Date | undefined, Date | undefined]>([undefined, undefined]);
+  const [_selectedDateFilter, setSelectedDateFilter] = React.useState("all");
 
   const transactions: Transaction[] = [
     {
-      id: '1',
-      period: '01.01.2023 - 03.02.2023',
-      city: 'Kazan',
-      carClass: '-',
-      operationType: 'Replenishment of the balance',
-      status: 'Updated on 02/19/2023 14:18',
+      id: "1",
+      period: "01.01.2023 - 03.02.2023",
+      city: "Kazan",
+      carClass: "-",
+      operationType: t("replenishmentOfBalance"),
+      status: t("updatedOn", { date: "02/19/2023 14:18" }),
       amount: 1000,
     },
     {
-      id: '2',
-      period: '04.02.2023 - 05.02.2023',
-      city: 'Moscow',
-      carClass: 'Economy',
-      operationType: 'Withdrawal',
-      status: 'Updated on 02/20/2023 10:30',
+      id: "2",
+      period: "04.02.2023 - 05.02.2023",
+      city: "Moscow",
+      carClass: t("economy"),
+      operationType: t("withdrawal"),
+      status: t("updatedOn", { date: "02/20/2023 10:30" }),
       amount: 500,
     },
-  ]
+  ];
 
-  const totalAmount = transactions.reduce((sum, transaction) => sum + transaction.amount, 0)
+  const totalAmount = transactions.reduce((sum, transaction) => sum + transaction.amount, 0);
 
   return (
     <div className="p-6 space-y-6 flex flex-col">
       <div className="space-y-4">
-        <h1 className="text-2xl font-semibold">Monetary transactions</h1>
-        
+        <h1 className="text-2xl font-semibold">{t("monetaryTransactions")}</h1>
+
         <div className="flex flex-wrap gap-4">
-          {[
-            { value: selectedCity, onChange: setSelectedCity, placeholder: "Select city", options: [{ value: "Kazan", label: "Kazan" }] },
-            { value: selectedCarClass, onChange: setSelectedCarClass, placeholder: "Select car class", options: [{ value: "All classes of cars", label: "All classes of cars" }] },
-            { value: selectedOperation, onChange: setSelectedOperation, placeholder: "Select operation type", options: [{ value: "All types of operations", label: "All types of operations" }] },
-            { value: selectedPerformer, onChange: setSelectedPerformer, placeholder: "Select performer/client", options: [{ value: "All performers/clients", label: "All performers/clients" }] },
-          ].map(({ value, onChange, placeholder, options }) => (
-            <Select key={placeholder} onValueChange={onChange} defaultValue={value}>
-              <SelectTrigger className="w-[200px] rounded-full h-10 bg-[#282828] text-gray-100 placeholder:text-gray-500 custom-input">
-                <SelectValue placeholder={placeholder} />
-              </SelectTrigger>
-              <SelectContent>
-                {options.map(({ value, label }) => (
-                  <SelectItem key={value} value={value}>{label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          ))}
+          <Select onValueChange={setSelectedCity} defaultValue={selectedCity}>
+            <SelectTrigger className="w-[200px] rounded-full h-10 bg-[#282828] text-gray-100 placeholder:text-gray-500 custom-input">
+              <SelectValue placeholder={t("selectCity")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Kazan">{t("kazan")}</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select onValueChange={setSelectedCarClass} defaultValue={selectedCarClass}>
+            <SelectTrigger className="w-[200px] rounded-full h-10 bg-[#282828] text-gray-100 placeholder:text-gray-500 custom-input">
+              <SelectValue placeholder={t("selectCarClass")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={t("allClassesOfCars")}>{t("allClassesOfCars")}</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select onValueChange={setSelectedOperation} defaultValue={selectedOperation}>
+            <SelectTrigger className="w-[200px] rounded-full h-10 bg-[#282828] text-gray-100 placeholder:text-gray-500 custom-input">
+              <SelectValue placeholder={t("selectOperationType")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={t("allTypesOfOperations")}>{t("allTypesOfOperations")}</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select onValueChange={setSelecteddriver} defaultValue={selecteddriver}>
+            <SelectTrigger className="w-[200px] rounded-full h-10 bg-[#282828] text-gray-100 placeholder:text-gray-500 custom-input">
+              <SelectValue placeholder={t("selectDriverClient")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={t("allDriversClients")}>{t("allDriversClients")}</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="flex flex-wrap items-center gap-4">
-          {['all', 'today', 'yesterday', 'june'].map((filter) => (
-            <Button
-              key={filter}
-              // variant={selectedDateFilter === filter ? 'secondary' : 'outline'}
-              className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]"
-              onClick={() => setSelectedDateFilter(filter)}
-            >
-              {filter.charAt(0).toUpperCase() + filter.slice(1)}
-            </Button>
-          ))}
+          <Button
+            className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]"
+            onClick={() => setSelectedDateFilter("all")}
+          >
+            {t("all")}
+          </Button>
+          <Button
+            className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]"
+            onClick={() => setSelectedDateFilter("today")}
+          >
+            {t("today")}
+          </Button>
+          <Button
+            className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]"
+            onClick={() => setSelectedDateFilter("yesterday")}
+          >
+            {t("yesterday")}
+          </Button>
+          <Button
+            className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]"
+            onClick={() => setSelectedDateFilter("june")}
+          >
+            {t("june")}
+          </Button>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="justify-start text-left font-normal text-slate-200 bg-stone-700 hover:bg-stone-800 border-none hover:text-slate-200 select-none">
+              <Button
+                variant="outline"
+                className="justify-start text-left font-normal text-slate-200 bg-stone-700 hover:bg-stone-800 border-none hover:text-slate-200 select-none"
+              >
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {dateRange[0] && dateRange[1] 
-                  ? `${format(dateRange[0], 'dd.MM.yyyy')} - ${format(dateRange[1], 'dd.MM.yyyy')}`
+                {dateRange[0] && dateRange[1]
+                  ? `${format(dateRange[0], "dd.MM.yyyy")} - ${format(dateRange[1], "dd.MM.yyyy")}`
                   : dateRange[0]
-                  ? format(dateRange[0], 'dd.MM.yyyy')
-                  : 'Pick a date range'}
+                  ? format(dateRange[0], "dd.MM.yyyy")
+                  : t("pickDateRange")}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -122,7 +150,7 @@ export default function MoneyTransaction() {
               />
             </PopoverContent>
           </Popover>
-          <Button className="ml-auto">Show</Button>
+          <Button className="ml-auto">{t("show")}</Button>
         </div>
       </div>
 
@@ -130,12 +158,37 @@ export default function MoneyTransaction() {
         <OrdersTable />
       </div>
 
-      <Card className='bg-transparent border-none'>
+      <Card className="bg-transparent border-none">
         <CardContent className="flex justify-between items-center py-3 px-5 bg-black rounded-full text-slate-200">
-          <span className="font-semibold">Total:</span>
+          <span className="font-semibold">{t("total")}:</span>
           <span className="text-lg font-bold">${totalAmount}</span>
         </CardContent>
       </Card>
     </div>
-  )
+  );
+}
+
+const moneyTransactionTranslations = {
+  "moneyTransaction": {
+    "allClassesOfCars": "All classes of cars",
+    "allTypesOfOperations": "All types of operations",
+    "allDriversClients": "All drivers/clients",
+    "replenishmentOfBalance": "Replenishment of the balance",
+    "updatedOn": "Updated on {{date}}",
+    "economy": "Economy",
+    "withdrawal": "Withdrawal",
+    "monetaryTransactions": "Monetary transactions",
+    "selectCity": "Select city",
+    "selectCarClass": "Select car class",
+    "selectOperationType": "Select operation type",
+    "selectDriverClient": "Select driver/client",
+    "kazan": "Kazan",
+    "all": "All",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "june": "June",
+    "pickDateRange": "Pick a date range",
+    "show": "Show",
+    "total": "Total"
+  }
 }

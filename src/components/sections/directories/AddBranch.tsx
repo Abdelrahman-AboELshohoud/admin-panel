@@ -10,8 +10,8 @@ import {
   SelectValue,
 } from "../../ui/select";
 import { Input } from "../../ui/input";
-
 import { Textarea } from "../../ui/textarea";
+import { useTranslation } from "react-i18next";
 
 interface Contact {
   id: string;
@@ -22,6 +22,7 @@ interface Contact {
 }
 
 export default function AddBranch() {
+  const { t } = useTranslation();
   const [contacts, setContacts] = useState<Contact[]>([
     {
       id: "1",
@@ -54,47 +55,65 @@ export default function AddBranch() {
   return (
     <div className="min-h-screen p-6 ">
       <div className="max-w-5xl mx-auto space-y-6">
-        <h1 className="text-3xl font-normal text-zinc-100">Add a branch</h1>
+        <h1 className="text-3xl font-normal text-zinc-100">
+          {t("addBranch.title")}
+        </h1>
 
         <div className="grid gap-6 md:grid-cols-2">
           <Card className="card-shape">
             <CardContent className="p-6 h-full flex flex-col justify-between">
               <div className="space-y-2">
                 <label className="text-sm text-zinc-100 flex items-center gap-1">
-                  A country
+                  {t("addBranch.country")}
                   <span className="text-amber-500">*</span>
                 </label>
                 <Select>
                   <SelectTrigger className="custom-input">
-                    <SelectValue placeholder="Russian Federation" />
+                    <SelectValue
+                      placeholder={t("addBranch.countryPlaceholder")}
+                    />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
-                    <SelectItem value="ru">Russian Federation</SelectItem>
+                    <SelectItem value="ru">
+                      {t("addBranch.countryOption")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-100">City</label>
+                <label className="text-sm text-zinc-100">
+                  {t("addBranch.city")}
+                </label>
                 <Select>
                   <SelectTrigger className="custom-input">
-                    <SelectValue placeholder="Choose a city" />
+                    <SelectValue placeholder={t("addBranch.cityPlaceholder")} />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
-                    <SelectItem value="moscow">Moscow</SelectItem>
-                    <SelectItem value="kazan">Kazan</SelectItem>
+                    <SelectItem value="moscow">
+                      {t("addBranch.cityOption1")}
+                    </SelectItem>
+                    <SelectItem value="kazan">
+                      {t("addBranch.cityOption2")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <label className="text-sm text-zinc-100">Interface language</label>
+                <label className="text-sm text-zinc-100">
+                  {t("addBranch.language")}
+                </label>
                 <Select>
                   <SelectTrigger className="custom-input">
-                    <SelectValue placeholder="Russian" />
+                    <SelectValue
+                      placeholder={t("addBranch.languagePlaceholder")}
+                    />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
-                    <SelectItem value="ru">Russian</SelectItem>
+                    <SelectItem value="ru">
+                      {t("addBranch.languageOption")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -106,29 +125,37 @@ export default function AddBranch() {
             <CardContent className="p-6 space-y-4">
               <div className="space-y-2">
                 <label className="text-sm text-zinc-100 flex items-center gap-1">
-                  Currency
+                  {t("addBranch.currency")}
                   <span className="text-amber-500">*</span>
                 </label>
                 <Select>
                   <SelectTrigger className="custom-input">
-                    <SelectValue placeholder="Russian Ruble" />
+                    <SelectValue
+                      placeholder={t("addBranch.currencyPlaceholder")}
+                    />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
-                    <SelectItem value="rub">Russian Ruble</SelectItem>
+                    <SelectItem value="rub">
+                      {t("addBranch.currencyOption")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm text-zinc-100">
-                  Format price displays
+                  {t("addBranch.priceFormat")}
                 </label>
                 <Select>
                   <SelectTrigger className="custom-input">
-                    <SelectValue placeholder="₽:kopecks-100.00" />
+                    <SelectValue
+                      placeholder={t("addBranch.priceFormatPlaceholder")}
+                    />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
-                    <SelectItem value="format1">₽:kopecks-100.00</SelectItem>
+                    <SelectItem value="format1">
+                      {t("addBranch.priceFormatOption")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -136,20 +163,26 @@ export default function AddBranch() {
               <div className="space-y-2">
                 <div className="space-y-1">
                   <label className="text-sm text-zinc-100">
-                    Play a sound signal when
+                    {t("addBranch.soundSignal")}
                   </label>
                   <label className="text-sm text-zinc-400 block">
-                    a new order is received
-                  <span className="text-amber-500 text-sm">{" "}*</span>
+                    {t("addBranch.newOrder")}
+                    <span className="text-amber-500 text-sm"> *</span>
                   </label>
                 </div>
                 <Select>
                   <SelectTrigger className="custom-input">
-                    <SelectValue placeholder="No" />
+                    <SelectValue
+                      placeholder={t("addBranch.soundSignalPlaceholder")}
+                    />
                   </SelectTrigger>
                   <SelectContent className="bg-zinc-800 border-zinc-700">
-                    <SelectItem value="no">No</SelectItem>
-                    <SelectItem value="yes">Yes</SelectItem>
+                    <SelectItem value="no">
+                      {t("addBranch.soundSignalOptionNo")}
+                    </SelectItem>
+                    <SelectItem value="yes">
+                      {t("addBranch.soundSignalOptionYes")}
+                    </SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -161,7 +194,9 @@ export default function AddBranch() {
         <Card className="card-shape">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
-              <label className="text-sm text-zinc-100">Sorting</label>
+              <label className="text-sm text-zinc-100">
+                {t("addBranch.sorting")}
+              </label>
               <Button
                 variant="ghost"
                 size="icon"
@@ -171,51 +206,61 @@ export default function AddBranch() {
               </Button>
             </div>
             <Textarea
-              placeholder="To write..."
+              placeholder={t("addBranch.sortingPlaceholder")}
               className="bg-transparent border-0 text-zinc-400 px-0 h-auto placeholder:text-zinc-500 border-none select-none resize-none focus-visible:ring-0"
             />
           </CardContent>
         </Card>
 
-       <div  className="flex gap-6">
-        <Card className="card-shape w-1/2">
-          <CardContent className="p-6 space-y-2">
-            <label className="text-sm text-zinc-100 flex items-center gap-1">
-              Current professions
-              <span className="text-amber-500">*</span>
-            </label>
-            <Select>
-              <SelectTrigger className="custom-input">
-                <SelectValue placeholder="Taxi driver" />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-800 border-zinc-700">
-                <SelectItem value="taxi">Taxi driver</SelectItem>
-              </SelectContent>
-            </Select>
-          </CardContent>
-        </Card>
+        <div className="flex gap-6">
+          <Card className="card-shape w-1/2">
+            <CardContent className="p-6 space-y-2">
+              <label className="text-sm text-zinc-100 flex items-center gap-1">
+                {t("addBranch.professions")}
+                <span className="text-amber-500">*</span>
+              </label>
+              <Select>
+                <SelectTrigger className="custom-input">
+                  <SelectValue
+                    placeholder={t("addBranch.professionsPlaceholder")}
+                  />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectItem value="taxi">
+                    {t("addBranch.professionsOption")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </CardContent>
+          </Card>
 
-        <Card className="card-shape w-1/2">
-          <CardContent className="p-6 space-y-2">
-            <label className="text-sm text-zinc-100">
-              Languages for translations
-            </label>
-            <Select>
-              <SelectTrigger className="custom-input">
-                <SelectValue placeholder="Not selected" />
-              </SelectTrigger>
-              <SelectContent className="bg-zinc-800 border-zinc-700">
-                <SelectItem value="none">Not selected</SelectItem>
-              </SelectContent>
-            </Select>
-          </CardContent>
-        </Card>
+          <Card className="card-shape w-1/2">
+            <CardContent className="p-6 space-y-2">
+              <label className="text-sm text-zinc-100">
+                {t("addBranch.languages")}
+              </label>
+              <Select>
+                <SelectTrigger className="custom-input">
+                  <SelectValue
+                    placeholder={t("addBranch.languagesPlaceholder")}
+                  />
+                </SelectTrigger>
+                <SelectContent className="bg-zinc-800 border-zinc-700">
+                  <SelectItem value="none">
+                    {t("addBranch.languagesOption")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Contacts */}
         <Card className="card-shape">
           <CardContent className="p-6 flex flex-col gap-4">
-            <label className="text-sm text-zinc-100">Contacts</label>
+            <label className="text-sm text-zinc-100">
+              {t("addBranch.contacts")}
+            </label>
             <div className="flex flex-col gap-4">
               {contacts.map((contact) => (
                 <div
@@ -230,7 +275,7 @@ export default function AddBranch() {
                       <SelectContent className="bg-zinc-800 border-zinc-700">
                         {contactTypes.map((type) => (
                           <SelectItem key={type} value={type}>
-                            {type}
+                            {t(`addBranch.contactTypes.${type.toLowerCase()}`)}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -238,13 +283,13 @@ export default function AddBranch() {
                   </div>
                   <div className="col-span-3">
                     <Input
-                      placeholder="Enter a name..."
+                      placeholder={t("addBranch.contactNamePlaceholder")}
                       className="bg-zinc-900 border-zinc-700 text-zinc-100 "
                     />
                   </div>
                   <div className="col-span-3">
                     <Input
-                      placeholder="Enter the tel..."
+                      placeholder={t("addBranch.contactTelPlaceholder")}
                       className="bg-zinc-900 border-zinc-700 text-zinc-100"
                     />
                   </div>
@@ -265,7 +310,7 @@ export default function AddBranch() {
                 className=" ml-auto  px-4 py-2 bg-zinc-600 border-zinc-700 text-zinc-100 hover:bg-zinc-700"
                 onClick={addContact}
               >
-                Add a contact
+                {t("addBranch.addContact")}
               </Button>
             </div>
           </CardContent>
@@ -273,7 +318,7 @@ export default function AddBranch() {
 
         <div className="flex justify-end">
           <Button className="bg-[#B69D74] hover:bg-[#a08a65] text-zinc-900 px-8">
-            Save
+            {t("addBranch.save")}
           </Button>
         </div>
       </div>

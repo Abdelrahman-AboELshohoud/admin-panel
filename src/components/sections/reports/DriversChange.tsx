@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Button } from "../../ui/button";
 import {
   Select,
@@ -15,147 +16,101 @@ import {
   TableRow,
 } from "../../ui/table";
 
-const Performers = () => {
+const DriversChange = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-4xl text-white mb-6">Performers</h1>
+      <h1 className="text-4xl text-white mb-6">{t('driversChange.title')}</h1>
 
-      {/* Navigation */}
       <div className="flex gap-6 text-gray-400 mb-6">
-        <button className="hover:text-white">Orders</button>
-        <button className="hover:text-white">Change</button>
+        <button className="hover:text-white">{t('driversChange.nav.orders')}</button>
+        <button className="hover:text-white">{t('driversChange.nav.change')}</button>
       </div>
 
-      {/* Filters */}
       <div className="grid grid-cols-3 gap-4 mb-6">
-        <Select>
-          <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
-            <SelectValue placeholder="Kazan" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="kazan">Kazan</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select>
-          <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
-            <SelectValue placeholder="Everything is a profession" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Everything is a profession</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select>
-          <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
-            <SelectValue placeholder="All classes of cars" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All classes of cars</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Select>
-          <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
-            <SelectValue placeholder="Partners" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="partners">Partners</SelectItem>
-          </SelectContent>
-        </Select>
+        {['city', 'profession', 'carClass', 'partners'].map((filter) => (
+          <Select key={filter}>
+            <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
+              <SelectValue placeholder={t(`driversChange.filters.${filter}.placeholder`)} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={filter}>{t(`driversChange.filters.${filter}.option`)}</SelectItem>
+            </SelectContent>
+          </Select>
+        ))}
       </div>
-
 
       <div className="flex items-center gap-4 mb-6">
         <div className="flex gap-2">
-          <Button
-            variant="outline"
-            className="bg-[#B89962] text-black hover:bg-[#B89962]/90"
-          >
-            Today
-          </Button>
-          <Button variant="outline" className="bg-[#1E1E1E] border-none">
-            Yesterday
-          </Button>
-          <Button variant="outline" className="bg-[#1E1E1E] border-none">
-            June
-          </Button>
-          <Button variant="outline" className="bg-[#1E1E1E] border-none">
-            Period
-          </Button>
+          {['today', 'yesterday', 'june', 'period'].map((period) => (
+            <Button
+              key={period}
+              variant="outline"
+              className={period === 'today' ? "bg-[#B89962] text-black hover:bg-[#B89962]/90" : "bg-[#1E1E1E] border-none"}
+            >
+              {t(`driversChange.periods.${period}`)}
+            </Button>
+          ))}
         </div>
 
         <div className="flex gap-2">
-          <input
-            type="text"
-            value="08.07.2023"
-            className="bg-[#1E1E1E] border-none rounded-md px-3 py-2 text-white"
-          />
-          <input
-            type="text"
-            value="10.07.2023"
-            className="bg-[#1E1E1E] border-none rounded-md px-3 py-2 text-white"
-          />
+          {['startDate', 'endDate'].map((date) => (
+            <input
+              key={date}
+              type="text"
+              value={t(`driversChange.dates.${date}`)}
+              className="bg-[#1E1E1E] border-none rounded-md px-3 py-2 text-white"
+            />
+          ))}
         </div>
 
         <Button className="bg-black text-white hover:bg-black/90 px-8">
-          Show
+          {t('driversChange.showButton')}
         </Button>
       </div>
 
-      {/* Table */}
       <Table>
         <TableHeader>
           <TableRow className="border-none hover:bg-transparent">
-            {[
-              "Executor",
-              "Total orders",
-              "Number of paid",
-              "The amount paid",
-              "Quantity unpaid",
-              "The amount unpaid",
-              "Quantity cancelled",
-              "Effectiveness",
-            ].map((performer) => (
-              <TableHead className="text-gray-400">{performer}</TableHead>
+            {Object.keys(t('driversChange.tableHeaders', { returnObjects: true })).map((header) => (
+              <TableHead key={header} className="text-gray-400">{t(`driversChange.tableHeaders.${header}`)}</TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {performers.map((performer) => (
+          {drivers.map((driver) => (
             <TableRow
-              key={performer.id}
+              key={driver.id}
               className="border-none hover:bg-[#2F2F2F]"
             >
               <TableCell>
                 <div>
-                  <div className="font-medium">{performer.id}</div>
-                  <div className="text-sm text-gray-400">{performer.name}</div>
+                  <div className="font-medium">{driver.id}</div>
+                  <div className="text-sm text-gray-400">{driver.name}</div>
                 </div>
               </TableCell>
-              <TableCell>{performer.totalOrders}</TableCell>
-              <TableCell>{performer.numberPaid}</TableCell>
-              <TableCell>{performer.amountPaid} ₽</TableCell>
-              <TableCell>{performer.quantityUnpaid}</TableCell>
-              <TableCell>{performer.amountUnpaid} ₽</TableCell>
-              <TableCell>{performer.quantityCancelled}</TableCell>
-              <TableCell>{performer.effectiveness}</TableCell>
+              <TableCell>{driver.totalOrders}</TableCell>
+              <TableCell>{driver.numberPaid}</TableCell>
+              <TableCell>{driver.amountPaid} ₽</TableCell>
+              <TableCell>{driver.quantityUnpaid}</TableCell>
+              <TableCell>{driver.amountUnpaid} ₽</TableCell>
+              <TableCell>{driver.quantityCancelled}</TableCell>
+              <TableCell>{driver.effectiveness}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-      {/* Total */}
       <div className="flex justify-between items-center bg-black rounded-lg p-4 mt-4">
-        <span className="text-white text-lg">Total</span>
-        <span className="text-white text-lg">0 ₽</span>
+        <span className="text-white text-lg">{t('driversChange.total.label')}</span>
+        <span className="text-white text-lg">{t('driversChange.total.amount')}</span>
       </div>
     </div>
   );
 };
 
-// Sample data
-const performers = [
+const drivers = [
   {
     id: "22287",
     name: "Dmitry Dolgov",
@@ -178,7 +133,6 @@ const performers = [
     quantityCancelled: "0",
     effectiveness: "0%",
   },
-  // Add more performers as needed
 ];
 
-export default Performers;
+export default DriversChange;

@@ -1,18 +1,25 @@
-import { Button } from "../../ui/button";
-import Switch from "../../common/Switch";
+import { Button } from "../../components/ui/button";
+import Switch from "../../components/common/Switch";
 import {
   Table,
   TableBody,
   TableHead,
   TableHeader,
   TableRow,
-} from "../../ui/table";
+} from "../../components/ui/table";
 import { UserPlus } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../ui/tabs";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../../components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
-import DriverRow from "./DriverRow";
-import DriversFilters from "./DriversFilters";
-
+import DriverRow from "../../components/sections/drivers/DriverRow";
+import DriversFilters from "../../components/sections/drivers/DriversFilters";
+import { Driver, DriversListGQL } from "../../graphql/requests";
+import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 const tabItems = [
   { value: "active", label: "Active" },
   { value: "blocked", label: "Blocked" },
@@ -21,19 +28,33 @@ const tabItems = [
 
 const TableColumns = [
   "Date of registration",
-  "FCs",
-  "Call sign",
-  "Profession",
-  "Balance",
+  "Name",
+  "Phone number",
+  "Rating",
   "Car",
-  "Partner",
-  "Date of change",
-  "Whom changed",
+  "Status",
+  "Reviews count",
 ];
 
-const Performers = () => {
+const Drivers = () => {
   const location = useLocation();
+  const [drivers, setDrivers] = useState<Driver[]>([]);
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    const getAllDrivers = async () => {
+      const res: any = await DriversListGQL({
+        paging: {
+          offset: 0,
+          limit: 10,
+        },
+      });
+      console.log(res);
+      setDrivers(res?.data?.drivers?.nodes);
+    };
+    getAllDrivers();
+  }, []);
 
   const renderPagination = () => (
     <div className="flex items-center gap-2 mt-4">
@@ -63,13 +84,20 @@ const Performers = () => {
               value={tab.value}
               className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
             >
-              {tab.label}
+              {t(`tabs.${tab.value}`)}
             </TabsTrigger>
           ))}
           <div className="ml-auto">
-            <Button variant="outline" className="gap-2 add-button">
+            <Button
+              variant="outline"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate("/control-panel/drivers/add-driver");
+              }}
+              className="gap-2 add-button"
+            >
               <UserPlus size={16} />
-              Add
+              {t("drivers.buttons.add")}
             </Button>
           </div>
         </TabsList>
@@ -78,8 +106,10 @@ const Performers = () => {
           <DriversFilters />
 
           {location.pathname.split("/")[3] === "active" && (
-            <div className="flex items-center gap-2 mb-6">
-              <span className="text-sm text-gray-300">Performers Online</span>
+            <div className="flex items-center gap-6 mb-6">
+              <span className="text-sm text-gray-300">
+                {t("drivers.online")}
+              </span>
               <Switch checked={false} disabled={false} />
             </div>
           )}
@@ -95,13 +125,14 @@ const Performers = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {performers.map((performer) => (
-                <DriverRow
-                  key={performer.id}
-                  {...performer}
-                  id={String(performer.id)}
-                />
-              ))}
+              {drivers &&
+                drivers?.map((driver: Driver) => (
+                  <DriverRow
+                    key={driver.id}
+                    data={driver}
+                    id={String(driver.id)}
+                  />
+                ))}
             </TableBody>
           </Table>
 
@@ -115,25 +146,23 @@ const Performers = () => {
   );
 };
 
-const performers = [
-  {
-    id: 1,
-    registrationDate: "06.07.2023 12:15",
-    name: "Shamsemukhametov",
-    fullName: "Fail Nurmukhametovich",
-    avatar: "/path-to-avatar.jpg",
-    callSign: "333",
-    profession: "Taxi driver",
-    balance: "1,721.42 Rubles",
-    status: "active",
-    car: {
-      model: "Hyundai Equus",
-      number: "0333EC116",
-    },
-    partner: "Olrus Auto",
-    changeDate: "06.07.2023 12:33",
-    changedBy: "Jalalitdinov P.P.",
-  },
-];
+// const drivers = [
+//   {
+//     id: 1,
+//     registrationDate: "06.07.2023 12:15",
+//     name: "Shamsemukhametov",
+//     fullName: "Fail Nurmukhametovich",
+//     avatar: undefined,
+//     profession: "Taxi driver",
+//     balance: "1,721.42 Rubles",
+//     status: "active",
+//     car: {
+//       model: "Hyundai Equus",
+//       number: "0333EC116",
+//     },
+//     changeDate: "06.07.2023 12:33",
+//     changedBy: "Jalalitdinov P.P.",
+//   },
+// ];
 
-export default Performers;
+export default Drivers;

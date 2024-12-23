@@ -1,10 +1,9 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../ui/select'
 import { Input } from '../../ui/input'
 import { Textarea } from '../../ui/textarea'
-import { Button } from '../../ui/button'
-import { Pencil } from 'lucide-react'
 import Switch from '../../common/Switch'
 
 interface PaymentMethod {
@@ -14,107 +13,106 @@ interface PaymentMethod {
 }
 
 export default function Application() {
+  const { t } = useTranslation()
   const [demoMode, setDemoMode] = useState(false)
-  const [restrictUnauthorized, setRestrictUnauthorized] = useState(false)
+  const [restrictUnauthorized, _setRestrictUnauthorized] = useState(false)
   const [smsResendInterval, setSmsResendInterval] = useState('60')
   const [smsLifetime, setSmsLifetime] = useState('5')
-  const [additionalFields, setAdditionalFields] = useState('email')
-  const [requireProfile, setRequireProfile] = useState(false)
-  const [addressRequest, setAddressRequest] = useState('never')
-  const [welcomeTitle, setWelcomeTitle] = useState('')
-  const [welcomeText, setWelcomeText] = useState('')
-  const [showDriverTips, setShowDriverTips] = useState(false)
-  const [showDriverTerminal, setShowDriverTerminal] = useState(false)
-  
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
-    { id: 'cash', name: 'Cash', visible: true },
-    { id: 'card', name: 'Bank Card', visible: true },
-    { id: 'fast', name: 'Fast Payment System', visible: false },
-    { id: 'personal', name: 'Personal Account', visible: true },
-    { id: 'bonus', name: 'Bonus Account', visible: true },
-    { id: 'terminal', name: 'Terminal', visible: true },
-    { id: 'corporate', name: 'Corporate Balance', visible: true },
+  const [additionalFields, setAdditionalFields] = useState("email")
+  const [requireProfile, _setRequireProfile] = useState(false)
+  const [addressRequest, setAddressRequest] = useState("never")
+  const [welcomeTitle, setWelcomeTitle] = useState("")
+  const [welcomeText, setWelcomeText] = useState("")
+  const [showDriverTips, _setShowDriverTips] = useState(false)
+  const [showDriverTerminal, _setShowDriverTerminal] = useState(false)
+
+  const [paymentMethods, _setPaymentMethods] = useState<PaymentMethod[]>([
+    { id: 'cash', name: t('application.paymentMethods.cash'), visible: true },
+    { id: 'card', name: t('application.paymentMethods.bankCard'), visible: true },
+    { id: 'fast', name: t('application.paymentMethods.fastPayment'), visible: false },
+    { id: 'personal', name: t('application.paymentMethods.personalAccount'), visible: true },
+    { id: 'bonus', name: t('application.paymentMethods.bonusAccount'), visible: true },
+    { id: 'terminal', name: t('application.paymentMethods.terminal'), visible: true },
+    { id: 'corporate', name: t('application.paymentMethods.corporateBalance'), visible: true },
   ])
 
-  const togglePaymentMethod = (id: string) => {
-    setPaymentMethods(methods =>
-      methods.map(method =>
-        method.id === id ? { ...method, visible: !method.visible } : method
-      )
-    )
-  }
-
-  const [orderScreenText, setOrderScreenText] = useState(
-    'ATTENTION! High traffic on roads! We recommend using the "pre-order" service.'
-  )
+  const [orderScreenText, setOrderScreenText] = useState(t('application.orderScreenText'))
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <Card className='card-shape border-none text-gray-100'>
         <CardHeader>
-          <CardTitle className='text-2xl'>Application for clients</CardTitle>
+          <CardTitle className='text-2xl'>{t('application.title')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
-            <label htmlFor="demo-mode">Demo Mode</label>
+            <label htmlFor="demo-mode">{t('application.demoMode')}</label>
             <Select value={demoMode ? 'enabled' : 'disabled'} onValueChange={(v: string) => setDemoMode(v === 'enabled')}>
               <SelectTrigger className="w-[180px] custom-input">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="enabled">Enabled</SelectItem>
-                <SelectItem value="disabled">Disabled</SelectItem>
+                <SelectItem value="enabled">{t('application.enabled')}</SelectItem>
+                <SelectItem value="disabled">{t('application.disabled')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="flex items-center justify-between">
-            <label htmlFor="restrict">Restrict unauthorized clients</label>
+            <label htmlFor="restrict">{t('application.restrictUnauthorized')}</label>
             <Switch
-            disabled={!restrictUnauthorized}
+              disabled={!restrictUnauthorized}
               checked={restrictUnauthorized}
             />
           </div>
 
           <div className="space-y-4">
-            {[
-              { label: 'SMS Resend Interval', value: smsResendInterval, onChange: setSmsResendInterval, options: [30, 60, 90] },
-              { label: 'SMS Lifetime', value: smsLifetime, onChange: setSmsLifetime, options: [3, 5, 10] }
-            ].map(({ label, value, onChange, options }) => (
-              <div key={label} className="flex items-center justify-between">
-                <label>{label}</label>
-                <Select value={value} onValueChange={onChange}>
-                  <SelectTrigger className="w-[180px] custom-input">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {options.map(opt => (
-                      <SelectItem key={opt} value={opt.toString()}>{opt} {label.includes('Interval') ? 'sec' : 'min'}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            ))}
+            <div className="flex items-center justify-between">
+              <label>{t('application.smsResendInterval')}</label>
+              <Select value={smsResendInterval} onValueChange={setSmsResendInterval}>
+                <SelectTrigger className="w-[180px] custom-input">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="30">30 {t('application.sec')}</SelectItem>
+                  <SelectItem value="60">60 {t('application.sec')}</SelectItem>
+                  <SelectItem value="90">90 {t('application.sec')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-center justify-between">
+              <label>{t('application.smsLifetime')}</label>
+              <Select value={smsLifetime} onValueChange={setSmsLifetime}>
+                <SelectTrigger className="w-[180px] custom-input">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="3">3 {t('application.min')}</SelectItem>
+                  <SelectItem value="5">5 {t('application.min')}</SelectItem>
+                  <SelectItem value="10">10 {t('application.min')}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <label>Show Additional Profile Fields</label>
+              <label>{t('application.showAdditionalProfileFields')}</label>
               <Select value={additionalFields} onValueChange={setAdditionalFields}>
                 <SelectTrigger className="w-[180px] custom-input">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="email">Email</SelectItem>
-                  <SelectItem value="none">None</SelectItem>
+                  <SelectItem value="email">{t('application.email')}</SelectItem>
+                  <SelectItem value="none">{t('application.none')}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="flex items-center justify-between">
-              <label>Require Profile Completion</label>
+              <label>{t('application.requireProfileCompletion')}</label>
               <Switch
-              disabled={!requireProfile}
+                disabled={!requireProfile}
                 checked={requireProfile}
               />
             </div>
@@ -124,54 +122,54 @@ export default function Application() {
 
       <Card className='card-shape border-none text-gray-100'>
         <CardHeader>
-          <CardTitle className='text-lg'>Welcome Screen</CardTitle>
+          <CardTitle className='text-lg'>{t('application.welcomeScreen')}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex justify-between items-center">
-            <label>Address Request</label>
+            <label>{t('application.addressRequest')}</label>
             <Select value={addressRequest} onValueChange={setAddressRequest}>
               <SelectTrigger className='custom-input w-1/2'>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="never">Never</SelectItem>
-                <SelectItem value="first">First Visit</SelectItem>
-                <SelectItem value="always">Always</SelectItem>
+                <SelectItem value="never">{t('application.never')}</SelectItem>
+                <SelectItem value="first">{t('application.firstVisit')}</SelectItem>
+                <SelectItem value="always">{t('application.always')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <label>Welcome Title</label>
+            <label>{t('application.welcomeTitle')}</label>
             <Input
               value={welcomeTitle}
               onChange={(e : React.ChangeEvent<HTMLInputElement>) => setWelcomeTitle(e.target.value)}
-              placeholder="Enter welcome title"
+              placeholder={t('application.enterWelcomeTitle')}
             />
           </div>
 
           <div className="space-y-2">
-            <label>Welcome Text</label>
+            <label>{t('application.welcomeText')}</label>
             <Textarea 
               value={welcomeText}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setWelcomeText(e.target.value)}
-              placeholder="Enter welcome message"
+              placeholder={t('application.enterWelcomeMessage')}
             />
           </div>
 
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <label>Show Driver Tips</label>
+              <label>{t('application.showDriverTips')}</label>
               <Switch
-              disabled={!showDriverTips}
+                disabled={!showDriverTips}
                 checked={showDriverTips}
               />
             </div>
 
             <div className="flex items-center justify-between">
-              <label>Show Driver Terminal Payment</label>
+              <label>{t('application.showDriverTerminalPayment')}</label>
               <Switch
-              disabled
+                disabled
                 checked={showDriverTerminal}
               />
             </div>
@@ -182,8 +180,7 @@ export default function Application() {
       <Card className='card-shape border-none text-gray-100'>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            Order Screen Text
-
+            {t('application.orderScreenText')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -196,7 +193,7 @@ export default function Application() {
 
       <Card className='card-shape border-none text-gray-100'>
         <CardHeader>
-          <CardTitle>Payment Methods</CardTitle>
+          <CardTitle>{t('application.paymentMethods.title')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
@@ -205,7 +202,7 @@ export default function Application() {
                 <span>{method.name}</span>
                 <div className="flex items-center gap-4">
                   <Switch
-                  disabled
+                    disabled
                     checked={method.visible}
                   />
                 </div>

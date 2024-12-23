@@ -1,26 +1,31 @@
 import { Button } from "../../ui/button";
-
 import Switch from "../../common/Switch";
 import BottomCustomerEdit from "./BottomCustomerEdit";
 import LeftCustomerEdit from "./LeftCustomerEdit";
 import RightCustomerEdit from "./RightCustomerEdit";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
 const Customer = () => {
   const [editing, setEditing] = useState(false);
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen card-shape p-8">
-      <div className="text-sm text-gray-400 mb-2">Tariffs for customers</div>
-      <h1 className="text-4xl mb-8">BUSINESS Lite</h1>
+      <div className="text-sm text-gray-400 mb-2">
+        {t("tariffsForCustomers")}
+      </div>
+      <h1 className="text-4xl mb-8">{t("businessLite")}</h1>
 
       <div className="grid grid-cols-2 gap-8">
         <LeftCustomerEdit editing={editing} />
         <RightCustomerEdit editing={editing} />
       </div>
 
-      <BottomCustomerEdit  />
+      <BottomCustomerEdit />
       <div className="mt-8 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <span>Block</span>
+          <span>{t("block")}</span>
           <Switch checked={false} disabled={!editing} />
         </div>
         <Button
@@ -30,7 +35,7 @@ const Customer = () => {
             editing ? "bg-yellow-500 hover:bg-yellow-400" : ""
           }`}
         >
-          {editing ? "Save" : "Edit"}
+          {editing ? t("save") : t("edit")}
         </Button>
       </div>
     </div>

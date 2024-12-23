@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import "../global.css";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../graphql/requests";
+import { LoginGQL } from "../graphql/requests";
 import useLogin from "../hooks/useLogin";
+import ChangeLanguageBtn from "../components/common/ChangeLanguageBtn";
 
 export default function Login() {
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
-  const [showLanguage, setShowLanguage] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const isLoggedIn = useLogin()
+  const isLoggedIn = useLogin();
 
   const inputs = [
     {
@@ -31,27 +31,29 @@ export default function Login() {
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (email.trim() === "" || password.trim() === "") {
-      return;
+      return setError("inputs can't be empty");
     }
-    try {
-      const res: any = await loginUser(email, password);
-      if(res.status) { 
-        navigate("/control-panel/main", { replace: true });
-      }
-      setError(res.message);
-    } catch (error: any) {
-      console.log(error);
-      setError(error.message);
 
+    const res: any = await LoginGQL({
+      username: email.trim(),
+      password: password.trim(),
+    });
+    console.log(res.status);
+    if (res.status) {
+      const token = res.data.login.token;
+      localStorage.setItem("token", token);
+      setError("");
+      navigate("/control-panel/main", { replace: true });
+    } else {
+      setError("Invalid credentials!");
     }
   };
-
 
   useEffect(() => {
     if (isLoggedIn) {
       navigate("/control-panel/main", { replace: true });
     }
-  }, [isLoggedIn])
+  }, [isLoggedIn]);
 
   return (
     <section className="flex flex-row items-center justify-start relative">
@@ -99,24 +101,7 @@ export default function Login() {
           </button>
           {error && <p className="text-red-500 text-sm">{error}</p>}
         </form>
-        <div className="relative w-full">
-          <img
-            src={`/${showLanguage ? "world-colored" : "world"}.svg`}
-            alt="bg-milly-taxi"
-            className="w-8 absolute top-0 left-0 z-10 cursor-pointer"
-            onClick={() => setShowLanguage(!showLanguage)}
-          />
-          <ul
-            className="menu dropdown-content bg-base-100 absolute bottom-0 left-10 bg-quinary border-slate-900 border-opacity-5 text-slate-300 shadow-sm z-[1] rounded-lg  px-4  w-24 py-2"
-            style={{ display: showLanguage ? "block" : "none" }}
-          >
-            {["English", "Russian", "French"].map((language) => (
-              <li key={language} className="text-sm py-0.5">
-                {language}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ChangeLanguageBtn />
       </div>
       <img
         src="/bg-milly-taxi.png"

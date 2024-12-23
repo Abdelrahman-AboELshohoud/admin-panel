@@ -1,4 +1,4 @@
-
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card'
 import { Button } from '../../ui/button'
 import {
@@ -10,26 +10,28 @@ import {
 } from '../../ui/select'
 
 export default function ATC() {
+  const { t } = useTranslation();
+
   return (
 
       <Card className="card-shape text-gray-100 w-1/2">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">External ATS</CardTitle>
+        <CardTitle className="text-2xl font-bold">{t('atc.title')}</CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-6">
           <div className="flex flex-col gap-4">
-            <label htmlFor="ats-provider" className="text-sm font-medium">List of ATS Providers</label>
+          <label htmlFor="ats-provider" className="text-sm font-medium">{t('atc.providerLabel')}</label>
             <Select defaultValue="disabled">
               <SelectTrigger id="ats-provider" className='custom-input'>
-                <SelectValue placeholder="Select provider" />
+              <SelectValue placeholder={t('atc.selectPlaceholder')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="disabled">Disable</SelectItem>
-                <SelectItem value="custom">Custom ATS</SelectItem>
-                <SelectItem value="runtel">Runtel</SelectItem>
-                <SelectItem value="sms">SMS-center</SelectItem>
-                <SelectItem value="common">Common</SelectItem>
-                <SelectItem value="runtel-new">Runtel New</SelectItem>
+              <SelectItem value="disabled">{t('atc.options.disable')}</SelectItem>
+              <SelectItem value="custom">{t('atc.options.custom')}</SelectItem>
+              <SelectItem value="runtel">{t('atc.options.runtel')}</SelectItem>
+              <SelectItem value="sms">{t('atc.options.sms')}</SelectItem>
+              <SelectItem value="common">{t('atc.options.common')}</SelectItem>
+              <SelectItem value="runtel-new">{t('atc.options.runtelNew')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -38,7 +40,7 @@ export default function ATC() {
             className="w-1/3 ml-auto bg-primary hover:bg-primary/80 text-white" 
             size="lg"
           >
-            Save
+          {t('atc.saveButton')}
           </Button>
         </CardContent>
       </Card>

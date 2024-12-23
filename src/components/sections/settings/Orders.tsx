@@ -7,7 +7,7 @@ import Switch from "../../common/Switch";
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Plus, X } from "lucide-react";
 import ToolTip from "../../common/ToolTip";
-import SelectsWithLabel from "../../common/SelectswithLabel";
+import SelectsWithLabel from "../../common/SelectsWithLabel";
 
 export default function OrderDistributionSettings() {
   const [circles, setCircles] = React.useState([
@@ -308,7 +308,7 @@ export default function OrderDistributionSettings() {
                     <SelectsWithLabel
                       value="Automatically"
                       placeholder="Automatically"
-                      options={["Automatically", "Manually by the performer"]}
+                      options={["Automatically", "Manually by the driver"]}
                       label="Time calculation until submission"
                     />
 

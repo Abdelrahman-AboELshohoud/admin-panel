@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Input } from "../../ui/input";
 import {
   Select,
@@ -17,11 +18,11 @@ interface FilterOption {
 
 const filterOptions: FilterOption[] = [
   {
-    placeholder: "All cities",
+    placeholder: "drivers.filters.cities",
     options: [{ value: "all", label: "All cities" }],
   },
   {
-    placeholder: "Profession",
+    placeholder: "drivers.filters.profession",
     options: [{ value: "taxi", label: "Taxi driver" }],
   },
   {
@@ -45,32 +46,35 @@ const filterOptions: FilterOption[] = [
     options: [{ value: "option1", label: "Option 1" }],
   },
   {
-    placeholder: "Performer's Options",
+    placeholder: "Drivers's Options",
     options: [{ value: "option1", label: "Option 1" }],
   },
 ];
 
-const DriversFilters = () => (
-  <div className="grid grid-cols-3 gap-4 mb-6">
-    {filterOptions.map((filter, index) => (
-      <Select key={index}>
-        <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
-          <SelectValue placeholder={filter.placeholder} />
-        </SelectTrigger>
-        <SelectContent>
-          {filter.options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
-              {option.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    ))}
-    <Input
-      placeholder="Search by name, phone, poses..."
-      className="bg-[#1E1E1E] border-none"
-    />
-  </div>
-);
+const DriversFilters = () => {
+  const { t } = useTranslation();
+  return (
+    <div className="grid grid-cols-3 gap-4 mb-6">
+      {filterOptions.map((filter, index) => (
+        <Select key={index}>
+          <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
+            <SelectValue placeholder={t(filter.placeholder)} />
+          </SelectTrigger>
+          <SelectContent>
+            {filter.options.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ))}
+      <Input
+        placeholder="Search by name, phone, poses..."
+        className="bg-[#1E1E1E] border-none"
+      />
+    </div>
+  );
+};
 
 export default DriversFilters;

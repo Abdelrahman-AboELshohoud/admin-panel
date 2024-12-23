@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Button } from "../../ui/button";
 import {
   Select,
@@ -46,6 +47,8 @@ interface Order {
 }
 
 const ListOfOrders = () => {
+  const { t } = useTranslation();
+
   const orders: Order[] = [
     {
       id: "№6267",
@@ -59,7 +62,7 @@ const ListOfOrders = () => {
         area: "Center",
       },
       status: {
-        text: "Completed",
+        text: t('listOfOrders.completed'),
         type: "completed",
       },
       executor: {
@@ -79,71 +82,110 @@ const ListOfOrders = () => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-3 gap-4">
-        {[
-          { label: "City", defaultValue: "kazan", options: [{ value: "kazan", label: "Kazan" }] },
-          { label: "Profession", defaultValue: "profession", options: [{ value: "profession", label: "Everything is a profession" }] },
-          { label: "Partners", defaultValue: "partners", options: [{ value: "partners", label: "Partners" }] },
-          { label: "Payment method", defaultValue: "all", options: [{ value: "all", label: "All payment methods" }] },
-          { label: "All sources", defaultValue: "all", options: [{ value: "all", label: "All sources" }] },
-          { label: "All statuses", options: [{ value: "all", label: "All statuses" }] }
-        ].map(({ label, defaultValue, options }) => (
-          <Select key={label} defaultValue={defaultValue}>
-            <SelectTrigger className="custom-input border-none h-10">
-              <SelectValue placeholder={label} />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map(option => (
-                <SelectItem key={option.value} value={option.value}>
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        ))}
+        <Select defaultValue="kazan">
+          <SelectTrigger className="custom-input border-none h-10">
+            <SelectValue placeholder={t('listOfOrders.city')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="kazan">{t('listOfOrders.kazan')}</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select defaultValue="profession">
+          <SelectTrigger className="custom-input border-none h-10">
+            <SelectValue placeholder={t('listOfOrders.profession')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="profession">{t('listOfOrders.everythingIsProfession')}</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select defaultValue="partners">
+          <SelectTrigger className="custom-input border-none h-10">
+            <SelectValue placeholder={t('listOfOrders.partners')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="partners">{t('listOfOrders.partners')}</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select defaultValue="all">
+          <SelectTrigger className="custom-input border-none h-10">
+            <SelectValue placeholder={t('listOfOrders.paymentMethod')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('listOfOrders.allPaymentMethods')}</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select defaultValue="all">
+          <SelectTrigger className="custom-input border-none h-10">
+            <SelectValue placeholder={t('listOfOrders.allSources')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('listOfOrders.allSources')}</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select>
+          <SelectTrigger className="custom-input border-none h-10">
+            <SelectValue placeholder={t('listOfOrders.allStatuses')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('listOfOrders.allStatuses')}</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="flex gap-6 items-center">
-      {['Today', 'Yesterday', 'June', 'Period'].map((text) => (
-        <Button key={text}  className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
-          <span>{text}</span>
+        <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+          <span>{t('listOfOrders.today')}</span>
         </Button>
-      ))}
+        <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+          <span>{t('listOfOrders.yesterday')}</span>
+        </Button>
+        <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+          <span>{t('listOfOrders.june')}</span>
+        </Button>
+        <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+          <span>{t('listOfOrders.period')}</span>
+        </Button>
 
         <Input
-              type="date"
-              className="bg-[#1E1E1E] border-none text-white"
-              defaultValue="2023-07-08"
-              />
-            <Input
-              type="date"
-              className="bg-[#1E1E1E] border-none text-white"
-              defaultValue="2023-07-10"
-              />
-        <Button className="ml-auto bg-[#121212] hover:bg-[#888]">Show</Button>
+          type="date"
+          className="bg-[#1E1E1E] border-none text-white"
+          defaultValue="2023-07-08"
+        />
+        <Input
+          type="date"
+          className="bg-[#1E1E1E] border-none text-white"
+          defaultValue="2023-07-10"
+        />
+        <Button className="ml-auto bg-[#121212] hover:bg-[#888]">{t('listOfOrders.show')}</Button>
       </div>
 
       <div className="flex gap-4">
-        <Input placeholder="Order number" className="bg-[#121212] hover:bg-[#888] border-none" />
+        <Input placeholder={t('listOfOrders.orderNumber')} className="bg-[#121212] hover:bg-[#888] border-none" />
         <Input
-          placeholder="The driver's or car's call sign"
+          placeholder={t('listOfOrders.driverOrCarCallSign')}
           className="bg-[#121212] hover:bg-[#888] border-none"
         />
         <Button variant="outline" className="bg-[#121212] hover:bg-[#888] border-none">
-          Show
+          {t('listOfOrders.show')}
         </Button>
         <Button variant="outline" className="border-none bg-[#121212] hover:bg-[#888]">
-          Create a file in the queue
+          {t('listOfOrders.createFileInQueue')}
         </Button>
       </div>
 
       <Table>
-        <TableHeader  className="border-none">
+        <TableHeader className="border-none">
           <TableRow className="hover:bg-transparent border-none">
-            <TableHead>№</TableHead>
-            <TableHead>Address</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Executor</TableHead>
-            <TableHead>Rate</TableHead>
+            <TableHead>{t('listOfOrders.number')}</TableHead>
+            <TableHead>{t('listOfOrders.address')}</TableHead>
+            <TableHead>{t('listOfOrders.status')}</TableHead>
+            <TableHead>{t('listOfOrders.executor')}</TableHead>
+            <TableHead>{t('listOfOrders.rate')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -152,17 +194,17 @@ const ListOfOrders = () => {
               <TableCell className="text-slate-300">
                 {order.id}
                 <div className="text-sm text-slate-400">
-                  on {order.date}
+                  {t('listOfOrders.on')} {order.date}
                   <br />
                   {order.time}
                 </div>
                 <div className="text-sm text-slate-400 mt-2">
-                  Dispatcher
+                  {t('listOfOrders.dispatcher')}
                   <br />
                   {order.dispatcher}
                 </div>
                 <div className="text-sm text-slate-400 mt-2">
-                  From the client
+                  {t('listOfOrders.fromTheClient')}
                   <br />
                   {order.client}
                 </div>
@@ -206,7 +248,7 @@ const ListOfOrders = () => {
       </Table>
 
       <div className="flex justify-between items-center bg-black rounded-full p-4 mt-4">
-        <span className="text-white text-lg">Total</span>
+        <span className="text-white text-lg">{t('listOfOrders.total')}</span>
         <span className="text-white text-lg">4122.3 ₽</span>
       </div>
     </div>

@@ -12,9 +12,11 @@ import { Input } from "../../ui/input";
 import Switch from "../../common/Switch";
 import { useState } from "react";
 import Map from "../../common/Map";
+import { useTranslation } from "react-i18next";
 
 export default function AddInMap() {
-  const [showAllDistricts, setShowAllDistricts] = useState(false);
+  const { t } = useTranslation();
+  const [showAllDistricts, _setShowAllDistricts] = useState(false);
   const [formData, setFormData] = useState({
     type: "city",
     title: "",
@@ -27,11 +29,11 @@ export default function AddInMap() {
     <div className="min-h-screen bg-transparent text-gray-300 p-4">
       <Card className=" card-shape p-6 mb-4">
         <div className="space-y-6">
-          <h1 className="text-3xl font-bold text-white">Add</h1>
+          <h1 className="text-3xl font-bold text-white">{t("addInMap.add")}</h1>
 
-          <div className="flex  gap-4 text-gray-100">
+          <div className="flex gap-4 text-gray-100">
             <div className="w-1/2 flex flex-col gap-2">
-              <label htmlFor="area-type ">Type of area *</label>
+              <label htmlFor="area-type">{t("addInMap.typeOfArea")}</label>
               <Select
                 value={formData.type}
                 onValueChange={(value) =>
@@ -39,22 +41,28 @@ export default function AddInMap() {
                 }
               >
                 <SelectTrigger className="w-full custom-input">
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder={t("addInMap.selectType")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="city">City</SelectItem>
-                  <SelectItem value="countryside">The countryside</SelectItem>
-                  <SelectItem value="airport">An airport</SelectItem>
-                  <SelectItem value="railway">Railway station</SelectItem>
+                  <SelectItem value="city">{t("addInMap.city")}</SelectItem>
+                  <SelectItem value="countryside">
+                    {t("addInMap.countryside")}
+                  </SelectItem>
+                  <SelectItem value="airport">
+                    {t("addInMap.airport")}
+                  </SelectItem>
+                  <SelectItem value="railway">
+                    {t("addInMap.railway")}
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="w-1/2 flex flex-col gap-2">
-              <label htmlFor="title">Title</label>
+              <label htmlFor="title">{t("addInMap.title")}</label>
               <Input
                 id="title"
-                placeholder="Enter..."
+                placeholder={t("addInMap.enterTitle")}
                 className="border-none focus:ring-0 text-gray-100 focus-visible:ring-0 custom-input"
                 value={formData.title}
                 onChange={(e) =>
@@ -64,11 +72,9 @@ export default function AddInMap() {
             </div>
           </div>
 
-
-            <div className="flex flex-row gap-2 justify-between text-gray-200">
- 
+          <div className="flex flex-row gap-2 justify-between text-gray-200">
             <div className="flex flex-col gap-2">
-              <label>Sorting</label>
+              <label>{t("addInMap.sorting")}</label>
               <Input
                 type="number"
                 className="custom-input"
@@ -78,48 +84,41 @@ export default function AddInMap() {
                 }
               />
             </div>
-              <div key="district-ratio" className="flex flex-col gap-2">
-                <label>District ratio</label>
-                <div className="flex w-full gap-4 ">
-                  {[
-                    { label: "from", stateKey: "ratioFrom" },
-                    { label: "to", stateKey: "ratioTo" },
-                  ].map(
-                    ({
-                      label,
-                      stateKey,
-                    }: {
-                      label: string;
-                      stateKey: string;
-                    }) => (
-                      <div key={label} className="">
-                        <div className="flex items-center gap-2">
-                        <Input
-                          type="number"
-                          className="custom-input"
-                          value={formData[stateKey as keyof typeof formData]}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              [stateKey]: e.target.value,
-                            })
-                          }
-                          />
-                        <span>%</span>
-                          </div>
-                          <span className="pl-2">{label}</span>
-                      </div>
-                    )
-                  )}
-             
+            <div className="flex flex-col gap-2">
+              <label>{t("addInMap.districtRatio")}</label>
+              <div className="flex w-full gap-4">
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    className="custom-input"
+                    value={formData.ratioFrom}
+                    onChange={(e) =>
+                      setFormData({ ...formData, ratioFrom: e.target.value })
+                    }
+                  />
+                  <span>%</span>
+                </div>
+                <span className="pl-2">{t("addInMap.from")}</span>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    className="custom-input"
+                    value={formData.ratioTo}
+                    onChange={(e) =>
+                      setFormData({ ...formData, ratioTo: e.target.value })
+                    }
+                  />
+                  <span>%</span>
+                </div>
+                <span className="pl-2">{t("addInMap.to")}</span>
               </div>
             </div>
           </div>
         </div>
       </Card>
-                  <div className="flex justify-center">
-                  <Map />
-                  </div>
+      <div className="flex justify-center">
+        <Map />
+      </div>
 
       <div className="flex items-center justify-between mt-6">
         <div className="flex items-center gap-6">
@@ -127,7 +126,7 @@ export default function AddInMap() {
             htmlFor="show-districts"
             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
-            Show all districts on the map
+            {t("addInMap.showAllDistricts")}
           </label>
           <Switch
             checked={showAllDistricts}
@@ -137,7 +136,7 @@ export default function AddInMap() {
         </div>
 
         <Button className="bg-[#B69F7D] hover:bg-[#A38D6B] text-black">
-          Save
+          {t("addInMap.save")}
         </Button>
       </div>
     </div>

@@ -1,42 +1,43 @@
 import { TableCell, TableRow } from "../../ui/table";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { Driver } from "../../../graphql/requests";
+import { useTranslation } from "react-i18next";
 
-const DriverRow = (performer: any) => {
+const DriverRow = ({ data, id }: { data: Driver; id: string }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  console.log(data);
   return (
     <TableRow
       onClick={() => {
-        navigate(`/control-panel/drivers/${performer.status}/${performer.id}/profile`);
+        navigate(`/control-panel/drivers/${data.status}/${id}/profile`);
       }}
-      key={performer.id}
+      key={id}
       className="bg-[#282828] border-none mb-2 hover:bg-[#2F2F2F] hover:cursor-pointer"
     >
-      <TableCell className="text-sm">{performer.registrationDate}</TableCell>
+      <TableCell className="text-sm">
+        {moment(data.registrationTimestamp).format("DD.MM.YYYY")}
+        <br />
+        {moment(data.registrationTimestamp).format("HH:mm A")}
+      </TableCell>
       <TableCell>
-        <div className="flex items-center gap-2">
-          <img
-            src={performer.avatar}
-            alt=""
-            className="w-10 h-10 rounded-full"
-          />
-          <div>
-            <div className="font-medium">{performer.name}</div>
-            <div className="text-sm text-gray-400">{performer.fullName}</div>
-          </div>
+        <div className="flex items-center gap-1">
+          <div className="font-medium text-gray-400">{data.firstName}</div>
+          <div className="text-sm">{data.lastName}</div>
         </div>
       </TableCell>
-      <TableCell>{performer.callSign}</TableCell>
-      <TableCell>{performer.profession}</TableCell>
-      <TableCell>{performer.balance}</TableCell>
+      <TableCell>{data.mobileNumber || t("notAssigned")}</TableCell>
+      <TableCell>{data.rating || 0}</TableCell>
       <TableCell>
         <div>
-          <div>{performer.car.model}</div>
-          <div className="text-sm text-gray-400">{performer.car.number}</div>
+          <div>{data?.carProductionYear || "-"}</div>
+          <div className="text-sm text-gray-400">{data?.carColorId || "-"}</div>
         </div>
       </TableCell>
-      <TableCell>{performer.partner}</TableCell>
-      <TableCell>{performer.changeDate}</TableCell>
-      <TableCell>{performer.changedBy}</TableCell>
+
+      <TableCell>{t(`drivers.driver.status.${data.status}`)}</TableCell>
+      <TableCell>{data.reviewCount || 0}</TableCell>
     </TableRow>
   );
 };

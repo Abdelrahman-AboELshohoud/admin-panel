@@ -1,4 +1,3 @@
-import React from "react";
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs";
 import {
   Select,
@@ -18,8 +17,10 @@ import {
 } from "../../ui/table";
 import { TabsContent } from "@radix-ui/react-tabs";
 import { Button } from "../../ui/button";
+import { useTranslation } from "react-i18next";
 
 export default function Employees() {
+  const { t } = useTranslation();
   const staff = [
     {
       id: 1,
@@ -46,57 +47,72 @@ export default function Employees() {
   return (
     <div className="flex-1 p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl text-zinc-100">Employees</h1>
+        <h1 className="text-3xl text-zinc-100">{t("employees.title")}</h1>
       </div>
 
       <Tabs defaultValue="working" className="mb-6">
         <TabsList className="bg-transparent mb-2">
           <TabsTrigger value="working" className="custom-tabs">
-            Working
+            {t("employees.tabs.working")}
           </TabsTrigger>
           <TabsTrigger value="invitations" className="custom-tabs">
-            Invitations have been sent
+            {t("employees.tabs.invitations")}
           </TabsTrigger>
           <TabsTrigger value="blocked" className="custom-tabs">
-            Blocked
+            {t("employees.tabs.blocked")}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="working">
           <div className="grid grid-cols-3 gap-4 mb-6">
-            {[
-              { placeholder: "All cities", options: ["All cities", "Kazan"] },
-              {
-                placeholder: "Post",
-                options: ["All posts", "Administrator", "Partner's employee"],
-              },
-              { placeholder: "Partners", options: ["All partners"] },
-            ].map(({ placeholder, options }, index) => (
-              <Select key={index}>
-                <SelectTrigger className="custom-input">
-                  <SelectValue placeholder={placeholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  {options.map((option, i) => (
-                    <SelectItem
-                      key={i}
-                      value={i === 0 ? "all" : option.toLowerCase()}
-                    >
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ))}
+            <Select>
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("employees.filters.allCities")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("employees.filters.allCities")}
+                </SelectItem>
+                <SelectItem value="kazan">
+                  {t("employees.filters.kazan")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("employees.filters.post")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("employees.filters.allPosts")}
+                </SelectItem>
+                <SelectItem value="administrator">
+                  {t("employees.filters.administrator")}
+                </SelectItem>
+                <SelectItem value="partnerEmployee">
+                  {t("employees.filters.partnerEmployee")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("employees.filters.partners")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("employees.filters.allPartners")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             <Input
-              placeholder="Search by FULL name..."
+              placeholder={t("employees.search.fullName")}
               className="bg-zinc-900 border-zinc-700 text-zinc-100"
             />
             <Input
-              placeholder="To find"
+              placeholder={t("employees.search.toFind")}
               className="bg-black border-zinc-700 text-zinc-100"
             />
           </div>
@@ -105,9 +121,9 @@ export default function Employees() {
             <Table>
               <TableHeader>
                 <TableRow className="border-transparent text-slate-300 hover:bg-transparent ">
-                  <TableHead>Full name</TableHead>
-                  <TableHead>Job title</TableHead>
-                  <TableHead>The branch where the employee works</TableHead>
+                  <TableHead>{t("employees.table.fullName")}</TableHead>
+                  <TableHead>{t("employees.table.jobTitle")}</TableHead>
+                  <TableHead>{t("employees.table.branch")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -137,40 +153,55 @@ export default function Employees() {
           </div>
         </TabsContent>
         <TabsContent value="invitations">
-        <div className="grid grid-cols-3 gap-4 mb-6">
-            {[
-              { placeholder: "All cities", options: ["All cities", "Kazan"] },
-              {
-                placeholder: "Post",
-                options: ["All posts", "Administrator", "Partner's employee"],
-              },
-              { placeholder: "Partners", options: ["All partners"] },
-            ].map(({ placeholder, options }, index) => (
-              <Select key={index}>
-                <SelectTrigger className="custom-input">
-                  <SelectValue placeholder={placeholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  {options.map((option, i) => (
-                    <SelectItem
-                      key={i}
-                      value={i === 0 ? "all" : option.toLowerCase()}
-                    >
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ))}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <Select>
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("employees.filters.allCities")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("employees.filters.allCities")}
+                </SelectItem>
+                <SelectItem value="kazan">
+                  {t("employees.filters.kazan")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("employees.filters.post")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("employees.filters.allPosts")}
+                </SelectItem>
+                <SelectItem value="administrator">
+                  {t("employees.filters.administrator")}
+                </SelectItem>
+                <SelectItem value="partnerEmployee">
+                  {t("employees.filters.partnerEmployee")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("employees.filters.partners")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("employees.filters.allPartners")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             <Input
-              placeholder="Search by FULL name..."
+              placeholder={t("employees.search.fullName")}
               className="bg-zinc-900 border-zinc-700 text-zinc-100"
             />
             <Input
-              placeholder="To find"
+              placeholder={t("employees.search.toFind")}
               className="bg-black border-zinc-700 text-zinc-100"
             />
           </div>
@@ -179,9 +210,9 @@ export default function Employees() {
             <Table>
               <TableHeader>
                 <TableRow className="border-transparent text-slate-300 hover:bg-transparent ">
-                  <TableHead>Full name</TableHead>
-                  <TableHead>Job title</TableHead>
-                  <TableHead>The branch where the employee works</TableHead>
+                  <TableHead>{t("employees.table.fullName")}</TableHead>
+                  <TableHead>{t("employees.table.jobTitle")}</TableHead>
+                  <TableHead>{t("employees.table.branch")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -206,10 +237,10 @@ export default function Employees() {
                     </TableCell>
                     <TableCell className="text-zinc-100 flex gap-4">
                       <Button className="bg-transparent border-green-500 border-2 text-green-500 hover:bg-green-500 hover:text-white p-2 rounded-md">
-                        Send Again
+                        {t("employees.actions.sendAgain")}
                       </Button>
                       <Button className="bg-transparent border-red-500 border-2 text-red-500 hover:bg-red-500 hover:text-white p-2 rounded-md">
-                        Cancel
+                        {t("employees.actions.cancel")}
                       </Button>
                     </TableCell>
                   </TableRow>
@@ -219,40 +250,55 @@ export default function Employees() {
           </div>
         </TabsContent>
         <TabsContent value="blocked">
-        <div className="grid grid-cols-3 gap-4 mb-6">
-            {[
-              { placeholder: "All cities", options: ["All cities", "Kazan"] },
-              {
-                placeholder: "Post",
-                options: ["All posts", "Administrator", "Partner's employee"],
-              },
-              { placeholder: "Partners", options: ["All partners"] },
-            ].map(({ placeholder, options }, index) => (
-              <Select key={index}>
-                <SelectTrigger className="custom-input">
-                  <SelectValue placeholder={placeholder} />
-                </SelectTrigger>
-                <SelectContent>
-                  {options.map((option, i) => (
-                    <SelectItem
-                      key={i}
-                      value={i === 0 ? "all" : option.toLowerCase()}
-                    >
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ))}
+          <div className="grid grid-cols-3 gap-4 mb-6">
+            <Select>
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("employees.filters.allCities")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("employees.filters.allCities")}
+                </SelectItem>
+                <SelectItem value="kazan">
+                  {t("employees.filters.kazan")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("employees.filters.post")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("employees.filters.allPosts")}
+                </SelectItem>
+                <SelectItem value="administrator">
+                  {t("employees.filters.administrator")}
+                </SelectItem>
+                <SelectItem value="partnerEmployee">
+                  {t("employees.filters.partnerEmployee")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+            <Select>
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("employees.filters.partners")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">
+                  {t("employees.filters.allPartners")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="grid grid-cols-2 gap-4 mb-6">
             <Input
-              placeholder="Search by FULL name..."
+              placeholder={t("employees.search.fullName")}
               className="bg-zinc-900 border-zinc-700 text-zinc-100"
             />
             <Input
-              placeholder="To find"
+              placeholder={t("employees.search.toFind")}
               className="bg-black border-zinc-700 text-zinc-100"
             />
           </div>
@@ -261,9 +307,9 @@ export default function Employees() {
             <Table>
               <TableHeader>
                 <TableRow className="border-transparent text-slate-300 hover:bg-transparent ">
-                  <TableHead>Full name</TableHead>
-                  <TableHead>Job title</TableHead>
-                  <TableHead>The branch where the employee works</TableHead>
+                  <TableHead>{t("employees.table.fullName")}</TableHead>
+                  <TableHead>{t("employees.table.jobTitle")}</TableHead>
+                  <TableHead>{t("employees.table.branch")}</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

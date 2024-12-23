@@ -1,61 +1,68 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "../../ui/button";
-import { Card, CardContent } from "../../ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../ui/select";
 import Switch from "../../common/Switch";
+import { CardContent, Card } from "../../ui/card";
+import { useTranslation } from "react-i18next";
 
-const PhotoControlForm: React.FC = () => {
-  const [photoRequirements, setPhotoRequirements] = useState([
-    { id: 1, label: "In front, so that the state number is visible", checked: true },
-    { id: 2, label: "The back part so that the state is visible", checked: true },
-    { id: 3, label: "Right side", checked: true },
-    { id: 4, label: "Left side", checked: true },
-    { id: 5, label: "The front of the cabin", checked: true },
-    { id: 6, label: "The back of the cabin", checked: true },
-    { id: 7, label: "Trunk", checked: true },
-    { id: 8, label: "Documents", checked: true },
+const PhotoControlForm = () => {
+  const { t } = useTranslation();
+  const [photoRequirements, _setPhotoRequirements] = useState([
+    { id: 1, label: t("photoRequirements.front"), checked: true },
+    { id: 2, label: t("photoRequirements.back"), checked: true },
+    { id: 3, label: t("photoRequirements.right"), checked: true },
+    { id: 4, label: t("photoRequirements.left"), checked: true },
+    { id: 5, label: t("photoRequirements.frontCabin"), checked: true },
+    { id: 6, label: t("photoRequirements.backCabin"), checked: true },
+    { id: 7, label: t("photoRequirements.trunk"), checked: true },
+    { id: 8, label: t("photoRequirements.documents"), checked: true },
   ]);
-
-  const toggleRequirement = (id: number) => {
-    setPhotoRequirements(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, checked: !item.checked } : item
-      )
-    );
-  };
 
   return (
     <div className="min-h-screen bg-[#1E1E1E] text-white p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         <div>
-          <p className="text-sm text-gray-400">Photo control</p>
-          <h1 className="text-3xl font-semibold mt-2">Add</h1>
+          <p className="text-sm text-gray-400">{t("photoControl.title")}</p>
+          <h1 className="text-3xl font-semibold mt-2">
+            {t("photoControl.add")}
+          </h1>
         </div>
-
         <Card className="bg-[#2A2A2A] border-gray-700">
           <CardContent className="space-y-6 pt-6">
             <div className="grid gap-6">
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-gray-100">City</label>
+                  <label className="text-gray-100">{t("labels.city")}</label>
                   <Select defaultValue="kazan">
                     <SelectTrigger className="bg-[#1E1E1E] border-gray-700 text-white">
-                      <SelectValue placeholder="Select city" />
+                      <SelectValue placeholder={t("placeholders.selectCity")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="kazan">Kazan</SelectItem>
+                      <SelectItem value="kazan">{t("cities.kazan")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-gray-100">Profession</label>
+                  <label className="text-gray-100">
+                    {t("labels.profession")}
+                  </label>
                   <Select defaultValue="taxi">
                     <SelectTrigger className="bg-[#1E1E1E] border-gray-700 text-white">
-                      <SelectValue placeholder="Select profession" />
+                      <SelectValue
+                        placeholder={t("placeholders.selectProfession")}
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="taxi">Taxi driver</SelectItem>
+                      <SelectItem value="taxi">
+                        {t("professions.taxi")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -63,46 +70,61 @@ const PhotoControlForm: React.FC = () => {
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-gray-100">Car class</label>
+                  <label className="text-gray-100">
+                    {t("labels.carClass")}
+                  </label>
                   <Select defaultValue="business">
                     <SelectTrigger className="bg-[#1E1E1E] border-gray-700 text-white">
-                      <SelectValue placeholder="Select car class" />
+                      <SelectValue
+                        placeholder={t("placeholders.selectCarClass")}
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="business">Business</SelectItem>
+                      <SelectItem value="business">
+                        {t("carClasses.business")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-gray-100">Period</label>
+                  <label className="text-gray-100">{t("labels.period")}</label>
                   <Select defaultValue="start">
                     <SelectTrigger className="bg-[#1E1E1E] border-gray-700 text-white">
-                      <SelectValue placeholder="Select period" />
+                      <SelectValue
+                        placeholder={t("placeholders.selectPeriod")}
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="start">At the start of the shift</SelectItem>
-                      <SelectItem value="24h">Every 24 hours</SelectItem>
-                      <SelectItem value="week">Every week</SelectItem>
-                      <SelectItem value="month">Every month</SelectItem>
+                      <SelectItem value="start">
+                        {t("periods.start")}
+                      </SelectItem>
+                      <SelectItem value="24h">
+                        {t("periods.every24h")}
+                      </SelectItem>
+                      <SelectItem value="week">
+                        {t("periods.everyWeek")}
+                      </SelectItem>
+                      <SelectItem value="month">
+                        {t("periods.everyMonth")}
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
               </div>
 
               <div className="space-y-4">
-                <label className="text-gray-100">Which photos should I require</label>
+                <label className="text-gray-100">
+                  {t("labels.photoRequirements")}
+                </label>
                 <div className="space-y-4">
                   {photoRequirements.map((item) => (
-                    <div key={item.id} className="flex items-center justify-between gap-4">
-                      <label className="text-gray-300">
-                        {item.label}
-                      </label>
-                      <Switch 
-                        checked={item.checked} 
-                        disabled={false}
-                        // onChange={() => toggleRequirement(item.id)}
-                      />
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between gap-4"
+                    >
+                      <label className="text-gray-300">{item.label}</label>
+                      <Switch checked={item.checked} disabled={false} />
                     </div>
                   ))}
                 </div>
@@ -112,7 +134,9 @@ const PhotoControlForm: React.FC = () => {
         </Card>
 
         <div className="flex justify-end">
-          <Button className="bg-[#D4AF37] text-black hover:bg-[#C4A137] px-8">Save</Button>
+          <Button className="bg-[#D4AF37] text-black hover:bg-[#C4A137] px-8">
+            {t("buttons.save")}
+          </Button>
         </div>
       </div>
     </div>

@@ -1,111 +1,142 @@
-
-import React from "react"
-import { Button } from "../../ui/button"
+import { Button } from "../../ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../ui/select"
-import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs"
-import { Plus } from 'lucide-react'
+} from "../../ui/select";
+import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs";
+import { Plus } from "lucide-react";
 import {
   Table,
   TableBody,
-  TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "../../ui/table"
-import { useNavigate } from "react-router-dom"
-
-type TabValue = "active" | "blocked" | "reports"
-type Period = "shift-start" | "24h" | "week" | "month"
-
-interface PhotoControlEntry {
-  profession: string
-  carClass: string
-  city: string
-}
+} from "../../ui/table";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function PhotoControl() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
   return (
     <div className="p-6 space-y-6 bg-background text-foreground min-h-screen">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Photo control</h1>
-        <Button variant="outline" size="sm" className="add-button border-none" onClick={() => {
-          navigate("/control-panel/drivers-photo-control/add-photo")
-        }}>
+        <h1 className="text-2xl font-semibold">{t("photoControl.title")}</h1>
+        <Button
+          variant="outline"
+          size="sm"
+          className="add-button border-none"
+          onClick={() => {
+            navigate("/control-panel/drivers-photo-control/add-photo");
+          }}
+        >
           <Plus className="h-4 w-4 mr-2 bg-transparent" />
-          Add photo control
+          {t("photoControl.addButton")}
         </Button>
       </div>
 
       <Tabs defaultValue="active" className="w-full">
-        <TabsList  className="bg-transparent hover:bg-transparent mb-6 ">
-          <TabsTrigger value="active"  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary">Active</TabsTrigger>
-          <TabsTrigger value="blocked"  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary">Blocked</TabsTrigger>
-          <TabsTrigger value="reports"  className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary">Reports</TabsTrigger>
+        <TabsList className="bg-transparent hover:bg-transparent mb-6 ">
+          <TabsTrigger
+            value="active"
+            className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
+          >
+            {t("photoControl.tabs.active")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="blocked"
+            className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
+          >
+            {t("photoControl.tabs.blocked")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="reports"
+            className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
+          >
+            {t("photoControl.tabs.reports")}
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Select>
           <SelectTrigger className="custom-input">
-            <SelectValue placeholder="All cities" />
+            <SelectValue placeholder={t("photoControl.selects.allCities")} />
           </SelectTrigger>
           <SelectContent>
-            {["All cities", "New York", "London", "Paris"].map((city) => (
-              <SelectItem key={city} value={city.toLowerCase().replace(" ", "-")}>
-                {city}
-              </SelectItem>
-            ))}
+            <SelectItem value="all-cities">
+              {t("photoControl.selects.allCities")}
+            </SelectItem>
+            <SelectItem value="new-york">
+              {t("photoControl.selects.newYork")}
+            </SelectItem>
+            <SelectItem value="london">
+              {t("photoControl.selects.london")}
+            </SelectItem>
+            <SelectItem value="paris">
+              {t("photoControl.selects.paris")}
+            </SelectItem>
           </SelectContent>
         </Select>
 
         <Select>
           <SelectTrigger className="custom-input">
-            <SelectValue placeholder="Profession" />
+            <SelectValue placeholder={t("photoControl.selects.profession")} />
           </SelectTrigger>
           <SelectContent>
-            {["Driver", "Courier", "Delivery"].map((profession) => (
-              <SelectItem key={profession} value={profession.toLowerCase()}>
-                {profession}
-              </SelectItem>
-            ))}
+            <SelectItem value="driver">
+              {t("photoControl.selects.driver")}
+            </SelectItem>
+            <SelectItem value="courier">
+              {t("photoControl.selects.courier")}
+            </SelectItem>
+            <SelectItem value="delivery">
+              {t("photoControl.selects.delivery")}
+            </SelectItem>
           </SelectContent>
         </Select>
 
         <Select>
           <SelectTrigger className="custom-input">
-            <SelectValue placeholder="Car class" />
+            <SelectValue placeholder={t("photoControl.selects.carClass")} />
           </SelectTrigger>
           <SelectContent>
-            {["Economy", "Comfort", "Business", "Premium"].map((carClass) => (
-              <SelectItem key={carClass} value={carClass.toLowerCase()}>
-                {carClass}
-              </SelectItem>
-            ))}
+            <SelectItem value="economy">
+              {t("photoControl.selects.economy")}
+            </SelectItem>
+            <SelectItem value="comfort">
+              {t("photoControl.selects.comfort")}
+            </SelectItem>
+            <SelectItem value="business">
+              {t("photoControl.selects.business")}
+            </SelectItem>
+            <SelectItem value="premium">
+              {t("photoControl.selects.premium")}
+            </SelectItem>
           </SelectContent>
         </Select>
 
         <Select>
           <SelectTrigger className="custom-input">
-            <SelectValue placeholder="Period" />
+            <SelectValue placeholder={t("photoControl.selects.period")} />
           </SelectTrigger>
           <SelectContent>
-            {[
-              { value: "shift-start", label: "At the start of the shift" },
-              { value: "24h", label: "Every 24 hours" },
-              { value: "week", label: "Every week" },
-              { value: "month", label: "Every month" },
-            ].map(({ value, label }) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
+            <SelectItem value="shift-start">
+              {t("photoControl.selects.shiftStart")}
+            </SelectItem>
+            <SelectItem value="24h">
+              {t("photoControl.selects.every24Hours")}
+            </SelectItem>
+            <SelectItem value="week">
+              {t("photoControl.selects.everyWeek")}
+            </SelectItem>
+            <SelectItem value="month">
+              {t("photoControl.selects.everyMonth")}
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -113,15 +144,13 @@ export default function PhotoControl() {
       <Table>
         <TableHeader className="bg-transparent hover:bg-transparent">
           <TableRow className="bg-transparent hover:bg-transparent">
-            <TableHead>Profession</TableHead>
-            <TableHead>Car class</TableHead>
-            <TableHead>City</TableHead>
+            <TableHead>{t("photoControl.table.profession")}</TableHead>
+            <TableHead>{t("photoControl.table.carClass")}</TableHead>
+            <TableHead>{t("photoControl.table.city")}</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {/* Add table rows here when you have data */}
-        </TableBody>
+        <TableBody>{/* Add table rows here when you have data */}</TableBody>
       </Table>
     </div>
-  )
+  );
 }

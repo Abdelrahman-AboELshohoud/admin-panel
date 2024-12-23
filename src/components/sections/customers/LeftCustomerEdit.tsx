@@ -7,53 +7,57 @@ import {
 } from "../../ui/select";
 import { Input } from "../../ui/input";
 import Switch from "../../common/Switch";
+import { useTranslation } from "react-i18next";
 
 export default function LeftCustomerEdit({ editing }: { editing: boolean }) {
+  const { t } = useTranslation();
+
   const options = [
     {
-      label: "The branch where to staff work",
+      label: t("leftCustomerEdit.branchLabel"),
       labelClass: "text-sm mb-1 block w-1/3",
-      placeholder: "Select city",
-      options: [{ value: "kazan", label: "Kazan" }],
+      placeholder: t("leftCustomerEdit.branchPlaceholder"),
+      options: [{ value: "kazan", label: t("leftCustomerEdit.kazan") }],
     },
     {
-      label: "Profession",
+      label: t("leftCustomerEdit.professionLabel"),
       labelClass: "block mb-1 w-1/3",
-      placeholder: "Select profession",
-      options: [{ value: "taxi", label: "Taxi driver" }],
+      placeholder: t("leftCustomerEdit.professionPlaceholder"),
+      options: [{ value: "taxi", label: t("leftCustomerEdit.taxiDriver") }],
     },
     {
-      label: "Car class",
+      label: t("leftCustomerEdit.carClassLabel"),
       labelClass: "flex items-center mb-1 w-1/3",
       required: true,
-      placeholder: "Select class",
-      options: [{ value: "business", label: "Business" }],
+      placeholder: t("leftCustomerEdit.carClassPlaceholder"),
+      options: [{ value: "business", label: t("leftCustomerEdit.business") }],
     },
     {
-      label: "Fare type for taxi",
+      label: t("leftCustomerEdit.fareTypeLabel"),
       labelClass: "block mb-1 w-1/3",
       required: true,
-      placeholder: "Select type",
-      options: [{ value: "type1", label: "Select type" }],
+      placeholder: t("leftCustomerEdit.fareTypePlaceholder"),
+      options: [{ value: "type1", label: t("leftCustomerEdit.selectType") }],
     },
     {
-      label: "Where is the tariff available?",
+      label: t("leftCustomerEdit.tariffAvailabilityLabel"),
       labelClass: "block mb-1 w-1/3",
-      placeholder: "Select availability",
-      options: [{ value: "all", label: "All" }],
+      placeholder: t("leftCustomerEdit.tariffAvailabilityPlaceholder"),
+      options: [{ value: "all", label: t("leftCustomerEdit.all") }],
     },
   ];
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-6">
         <div className="flex items-center justify-between">
           <div className="w-1/3">
-            Name
+            {t("leftCustomerEdit.name")}
             <span className="text-yellow-500 ml-1">*</span>
           </div>
           <Input
             type="text"
-            placeholder="BUSINESS Light"
+            placeholder={t("leftCustomerEdit.namePlaceholder")}
             className="w-2/3 rounded-full bg-[#282828] text-gray-100 placeholder:text-gray-500"
           />
         </div>
@@ -84,12 +88,12 @@ export default function LeftCustomerEdit({ editing }: { editing: boolean }) {
 
       <div className="flex flex-col gap-4">
         {[
-          "Website",
-          "Application",
-          "Dispatcher",
-          "Driver (curb)",
-          "Personal account",
-          "To demand an advance payment",
+          t("leftCustomerEdit.website"),
+          t("leftCustomerEdit.application"),
+          t("leftCustomerEdit.dispatcher"),
+          t("leftCustomerEdit.driverCurb"),
+          t("leftCustomerEdit.personalAccount"),
+          t("leftCustomerEdit.advancePayment"),
         ].map((item) => (
           <div key={item} className="flex items-center justify-between">
             <span>{item}</span>
@@ -97,7 +101,9 @@ export default function LeftCustomerEdit({ editing }: { editing: boolean }) {
           </div>
         ))}
         <div className="flex flex-row gap-4">
-          <label className="flex items-center w-1/3">Sorting</label>
+          <label className="flex items-center w-1/3">
+            {t("leftCustomerEdit.sorting")}
+          </label>
           <Input
             type="number"
             defaultValue="3"
@@ -107,14 +113,13 @@ export default function LeftCustomerEdit({ editing }: { editing: boolean }) {
         <div className="flex flex-col gap-2 items-center justify-between">
           <div className="flex flex-row gap-2 items-center">
             <span className="text-gray-300 text-sm">
-              Fine the customer for canceling the order when the contractor has
-              already left
+              {t("leftCustomerEdit.fineCustomer")}
             </span>
             <Switch checked={false} disabled={!editing} />
           </div>
           <div className="flex flex-row gap-2">
             <span className="text-gray-300 text-sm">
-              A fine after X minutes from when the driver left for the client
+              {t("leftCustomerEdit.fineAfterXMinutes")}
             </span>
             <input
               type="number"
@@ -123,7 +128,7 @@ export default function LeftCustomerEdit({ editing }: { editing: boolean }) {
             />
           </div>
           <div className="flex flex-row text-nowrp justify-between w-full items-center gap-2">
-            <div className="w-3/4">Fine on</div>
+            <div className="w-3/4">{t("leftCustomerEdit.fineOn")}</div>
             <div className="flex flex-row rounded-full bg-[#282828] text-gray-100 px-4 py-2">
               <input
                 type="number"

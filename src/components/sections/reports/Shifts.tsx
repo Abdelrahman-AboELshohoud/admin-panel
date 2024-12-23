@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Select,
   SelectContent,
@@ -32,6 +33,7 @@ interface Employee {
 }
 
 export default function Shifts() {
+  const { t } = useTranslation()
   const [startDate, setStartDate] = useState<Date>()
   const [endDate, setEndDate] = useState<Date>()
 
@@ -58,44 +60,51 @@ export default function Shifts() {
 
   return (
     <div className="min-h-screen border-none text-white p-6">
-      <h1 className="text-2xl font-semibold mb-6">Employee session time report</h1>
+      <h1 className="text-2xl font-semibold mb-6">{t('shifts.employeeSessionTimeReport')}</h1>
       
       <div className="flex flex-wrap gap-4 mb-6">
         <Select defaultValue="kazan">
           <SelectTrigger className="w-[200px] custom-input">
-            <SelectValue placeholder="Select location" />
+            <SelectValue placeholder={t('shifts.selectLocation')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="kazan">Kazan</SelectItem>
-            <SelectItem value="moscow">Moscow</SelectItem>
+            <SelectItem value="kazan">{t('shifts.kazan')}</SelectItem>
+            <SelectItem value="moscow">{t('shifts.moscow')}</SelectItem>
           </SelectContent>
         </Select>
 
         <Select defaultValue="all">
           <SelectTrigger className="w-[200px] custom-input">
-            <SelectValue placeholder="Select profession" />
+            <SelectValue placeholder={t('shifts.selectProfession')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All professions</SelectItem>
-            <SelectItem value="developer">Developer</SelectItem>
-            <SelectItem value="manager">Manager</SelectItem>
+            <SelectItem value="all">{t('shifts.allProfessions')}</SelectItem>
+            <SelectItem value="developer">{t('shifts.developer')}</SelectItem>
+            <SelectItem value="manager">{t('shifts.manager')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div className="flex flex-wrap gap-4 mb-6">
-      {['Today', 'Yesterday', 'June', 'Period'].map((text) => (
-        <Button key={text}  className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
-          <span>{text}</span>
+        <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+          <span>{t('shifts.today')}</span>
         </Button>
-      ))}
+        <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+          <span>{t('shifts.yesterday')}</span>
+        </Button>
+        <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+          <span>{t('shifts.june')}</span>
+        </Button>
+        <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+          <span>{t('shifts.period')}</span>
+        </Button>
         
         <div className="flex items-center gap-2">
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="outline" className="bg-gray-800">
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {startDate ? format(startDate, 'dd.MM.yyyy') : 'Start date'}
+                {startDate ? format(startDate, 'dd.MM.yyyy') : t('shifts.startDate')}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
@@ -112,7 +121,7 @@ export default function Shifts() {
             <PopoverTrigger asChild>
               <Button variant="outline" className="bg-gray-800">
                 <CalendarIcon className="mr-2 h-4 w-4" />
-                {endDate ? format(endDate, 'dd.MM.yyyy') : 'End date'}
+                {endDate ? format(endDate, 'dd.MM.yyyy') : t('shifts.endDate')}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0">
@@ -126,17 +135,17 @@ export default function Shifts() {
           </Popover>
         </div>
 
-        <Button className="ml-auto">Order a report</Button>
+        <Button className="ml-auto">{t('shifts.orderReport')}</Button>
       </div>
 
       <div className="p-4 bg-[#1C1C1E] rounded-xl">
         <Table>
           <TableHeader>
             <TableRow className="border-transparent hover:bg-transparent h-12 text-gray-300">
-              <TableHead >Employee</TableHead>
-              <TableHead >Time of entry</TableHead>
-              <TableHead >Exit time</TableHead>
-              <TableHead >IP Address</TableHead>
+              <TableHead>{t('shifts.employee')}</TableHead>
+              <TableHead>{t('shifts.timeOfEntry')}</TableHead>
+              <TableHead>{t('shifts.exitTime')}</TableHead>
+              <TableHead>{t('shifts.ipAddress')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -154,4 +163,3 @@ export default function Shifts() {
     </div>
   )
 }
-

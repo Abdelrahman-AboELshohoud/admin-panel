@@ -8,8 +8,8 @@ import {
 import { Button } from "../../ui/button"
 import { Card, CardContent } from "../../ui/card"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
-// Types for our form data
 interface VehicleFormData {
   branch: string
   make: string
@@ -18,7 +18,6 @@ interface VehicleFormData {
   class: string
 }
 
-// Mock data - in a real app this would come from an API
 const MOCK_DATA = {
   branches: ['Any', 'North', 'South', 'East', 'West'],
   makes: ['Toyota', 'Honda', 'Ford', 'BMW', 'Mercedes'],
@@ -33,7 +32,6 @@ const MOCK_DATA = {
   classes: ['Economy', 'Business', 'Premium', 'Luxury']
 }
 
-// Reusable select component
 interface FormSelectProps {
   label: string
   value: string
@@ -63,6 +61,7 @@ function FormSelect({ label, value, onChange, options, placeholder }: FormSelect
 }
 
 export default function AddClass() {
+  const { t } = useTranslation()
   const [formData, setFormData] = useState<VehicleFormData>({
     branch: '',
     make: '',
@@ -71,75 +70,65 @@ export default function AddClass() {
     class: ''
   })
 
-  // Handle form submission
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Form submitted:', formData)
-    // Here you would typically send the data to your backend
   }
 
-  // Get available models based on selected make
   const availableModels = formData.make ? MOCK_DATA.models[formData.make as keyof typeof MOCK_DATA.models] : []
 
   return (
     <div className="min-h-screen bg-transparent flex flex-col p-4">
-            <h1 className="text-2xl font-bold text-white mb-6">Add Vehicle</h1>
+      <h1 className="text-2xl font-bold text-white mb-6">{t('addVehicle.title')}</h1>
       <Card className="w-2/3 card-shape">
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            
             <FormSelect
-              label="Branch"
+              label={t('addVehicle.branch')}
               value={formData.branch}
               onChange={(value) => setFormData(prev => ({ ...prev, branch: value }))}
               options={MOCK_DATA.branches}
-              placeholder="Any"
+              placeholder={t('addVehicle.any')}
             />
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormSelect
-                label="Brand"
+                label={t('addVehicle.brand')}
                 value={formData.make}
                 onChange={(value) => setFormData(prev => ({ ...prev, make: value, model: '' }))}
                 options={MOCK_DATA.makes}
-                placeholder="Select brand"
+                placeholder={t('addVehicle.selectBrand')}
               />
-
               <FormSelect
-                label="Type"
+                label={t('addVehicle.type')}
                 value={formData.model}
                 onChange={(value) => setFormData(prev => ({ ...prev, model: value }))}
                 options={availableModels}
-                placeholder="Select type"
+                placeholder={t('addVehicle.selectType')}
               />
             </div>
-
             <FormSelect
-              label="Year"
+              label={t('addVehicle.year')}
               value={formData.year}
               onChange={(value) => setFormData(prev => ({ ...prev, year: value }))}
               options={MOCK_DATA.years}
-              placeholder="Any"
+              placeholder={t('addVehicle.any')}
             />
-
             <FormSelect
-              label="Class"
+              label={t('addVehicle.class')}
               value={formData.class}
               onChange={(value) => setFormData(prev => ({ ...prev, class: value }))}
               options={MOCK_DATA.classes}
-              placeholder="Select class"
+              placeholder={t('addVehicle.selectClass')}
             />
-
             <Button 
               type="submit" 
               className="px-6 py-2 ml-auto mt-2 bg-primary hover:bg-primary/80 text-black hover:text-white transition"
             >
-              Save
+              {t('addVehicle.save')}
             </Button>
           </form>
         </CardContent>
       </Card>
     </div>
   )
-}
-
+};

@@ -1,0 +1,1158 @@
+{
+  "header": {
+    "personalAccount": "Personal account",
+
+    "logout": "Logout"
+  },
+  "links": {
+    "main": "Main",
+    "orders": "Orders",
+    "customers": {
+      "title": "Customers"
+    },
+    "drivers": {
+      "title": "Drivers",
+      "cars": "Cars",
+      "groups": "Drivers groups",
+      "photoControl": "Photo control"
+    },
+    "reports": {
+      "title": "Reports",
+      "orders": "Orders",
+      "forAggregator": "For Aggregator",
+      "forPartner": "For Partner",
+      "shifts": "Shifts of employees",
+      "listOfOrders": "List of orders",
+      "moneyTransactions": "Money transactions",
+      "corporationClients": "Corporate clients"
+    },
+    "directories": {
+      "title": "Directories",
+      "branches": "Branches",
+      "partners": "Partners",
+      "employees": "Employees",
+      "map": "Map",
+      "news": "News",
+      "addresses": "Addresses"
+    },
+    "settings": {
+      "title": "Settings",
+      "organizationDetails": "Organization details",
+      "application": "Application for clients",
+      "orders": "Orders settings",
+      "cmc": "CMC",
+      "notifications": "Notifications to clients",
+      "drivers": "Drivers",
+      "carClasses": "Car classes",
+      "onlineCheckout": "Online checkout",
+      "atc": "ATC"
+    }
+  },
+  "main": {
+    "dateButtons": {
+      "today": "Today",
+      "week": "Week",
+      "month": "Month"
+    },
+    "online": "Online",
+    "onOrder": "On Order",
+    "free": "Free",
+    "onPause": "On Pause"
+  },
+  "orders": {
+    "orderHeader": "Today",
+    "carSummary": "Cars on the line",
+    "mapButton": "Map",
+    "newOrderButton": "Add a new order",
+    "inputs": {
+      "orderNumber": "Order number",
+      "address": "Address",
+      "client": "Client",
+      "executor": "Executor",
+      "comment": "Comment"
+    },
+    "statusFilter": {
+      "all": "All",
+      "inProgress": "In progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "drivers": {
+    "title": "Drivers",
+    "subtitle": "List of all drivers registered.",
+    "filters": {
+      "cities": "All cities",
+      "profession": "Profession",
+      "group": "A group of drivers",
+      "partners": "Partners",
+      "carClass": "Car class",
+      "carColor": "The color of the car",
+      "autoOptions": "Auto Options",
+      "driversOptions": "Drivers's Options"
+    },
+    "driver": {
+      "statusTitle": "Status",
+      "status": {
+        "pendingApproval": "Pending Approval",
+        "approved": "Approved",
+        "blocked": "Blocked",
+        "softReject": "Soft Reject",
+        "hardReject": "Hard Reject",
+        "offline": "Offline",
+        "WaitingDocuments": "Pending Submission",
+        "inService": "In Service",
+        "online": "Online"
+      },
+      "profile": {
+        "personalInformation": "Personal Information",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "gender": "Gender",
+        "documents": "Documents",
+        "email": "Email",
+        "phone": "Phone",
+        "bankInformation": "Bank Information",
+        "bankName": "Bank Name",
+        "bankAccountNumber": "Bank Account Number",
+        "bankSwift": "Bank Swift",
+        "blocked": "Blocked",
+        "save": "Save",
+        "edit": "Edit",
+        "noDocuments": "No documents provided currently.",
+        "cars": "Car",
+        "carModel": "Car Model",
+        "carColor": "Car Color",
+        "carPlateNumber": "Car Plate Number",
+        "carProductionYear": "Car Production Year"
+      }
+    },
+    "buttons": {
+      "add": "Add"
+    },
+    "online": "Drivers Online"
+  },
+
+  "tabs": {
+    "active": "Active",
+    "inactive": "Inactive",
+    "pending": "Pending",
+    "rejected": "Rejected",
+    "blocked": "Blocked",
+    "all": "All"
+  },
+  "buttons": {
+    "save": "Save",
+    "edit": "Edit"
+  },
+  "request": {
+    "Requested": "Requested",
+    "NotFound": "Not Found",
+    "NoCloseFound": "Close Not Found",
+    "Found": "Found",
+    "DriverAccepted": "Driver Accepted",
+    "Arrived": "Arrived",
+    "WaitingForPrefy": "Waiting For Pre-Payment",
+    "DriverCanceled": "Driver Canceled",
+    "RiderCanceled": "Rider Canceled",
+    "Started": "Started",
+    "WaitingForPostPay": "Waiting For Post-Payment",
+    "WaitingForReview": "Waiting For Review",
+    "Finished": "Finished",
+    "Booked": "Booked",
+    "Expired": "Expired"
+  },
+  "transactionType": {
+    "OrderFee": "Order Fee",
+    "Cash": "Cash",
+    "BankTransfer": "Bank Transfer",
+    "Gift": "Gift",
+    "Commission": "Commission",
+    "Correction": "Correction",
+    "InAppPayment": "In App Payment",
+    "Withdraw": "Withdraw"
+  },
+  "transactionStatus": {
+    "Processing": "Processing",
+    "Done": "Done",
+    "Canceled": "Canceled",
+    "Rejected": "Rejected"
+  },
+  "gender": {
+    "male": "Male",
+    "female": "Female",
+    "genderless": "Genderless"
+  },
+  "complaintStatus": {
+    "submitted": "Submitted",
+    "underInvestigation": "Under Investigation",
+    "resolved": "Resolved"
+  },
+  "sosStatus": {
+    "submitted": "Submitted",
+    "underReview": "Under Review",
+    "falseAlarm": "False Alarm",
+    "resolved": "Resolved"
+  },
+  "cars": {
+    "title": "Cars",
+    "filters": {
+      "allCities": "All cities",
+      "profession": "Everything is a profession",
+      "partners": "Partners"
+    },
+    "details": {
+      "carName": "Car Name",
+      "callSign": "Call Sign",
+      "branch": "Branch",
+      "owner": "Owner",
+      "selectOwner": "Select owner",
+      "ownerTypes": {
+        "driver": "Driver",
+        "company": "Company"
+      },
+      "selectBrand": "Select brand",
+      "selectModel": "Select model",
+      "models": {
+        "eClass": "E-Class"
+      },
+      "year": "Year",
+      "selectYear": "Select year",
+      "class": "Class",
+      "selectClass": "Select class",
+      "classes": {
+        "business": "Business"
+      },
+      "color": "Color",
+      "selectColor": "Select color",
+      "colors": {
+        "black": "Black"
+      },
+      "stateNumber": "State Number",
+      "additionalInfo": "Additional Info",
+      "partners": "Partners",
+      "selectPartner": "Select partner",
+      "ctp": {
+        "title": "CTP",
+        "number": "Number",
+        "seriesNumber": "Series Number",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "insuranceCompany": "Insurance Company",
+        "selectInsuranceCompany": "Select Insurance Company"
+      },
+      "ptsd": {
+        "title": "PTSD",
+        "number": "Number",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "seriesNumber": "Series Number",
+        "insuranceCompany": "Insurance Company",
+        "selectInsuranceCompany": "Select Insurance Company"
+      },
+      "license": {
+        "title": "License",
+        "number": "Number",
+        "startDate": "Start Date",
+        "endDate": "End Date",
+        "issuedBy": "Issued By",
+        "selectIssuer": "Select Issuer"
+      },
+      "scan": "Scan"
+    },
+    "car": {
+      "title": "Car"
+    },
+    "model": "Car model",
+    "color": "Car color",
+    "dateButtons": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "june": "June",
+      "period": "Period"
+    },
+    "table": {
+      "time": "Time",
+      "totalOrders": "Total orders",
+      "numberOfPaid": "Number of paid",
+      "amountPaid": "The amount paid",
+      "quantityUnpaid": "Quantity unpaid",
+      "amountUnpaidCancelled": "The amount unpaid cancelled",
+      "quantity": "Quantity",
+      "effectiveness": "Effectiveness"
+    },
+    "buttons": {
+      "show": "Show",
+      "add": "Add"
+    },
+    "total": "Total"
+  },
+  "show": "Show",
+  "add": "Add",
+  "block": "Block",
+  "calculationOfDelivery": "Calculation of delivery",
+  "basicOptions": "Basic options",
+  "workingHours": "Working hours",
+  "workingHoursValue": "All the time, except for exceptions",
+  "typeOfCalculationCity": "Type of calculation (City)",
+  "typeOfCalculationOutOfTown": "Type of calculation (Out of town)",
+  "typeOfCalculationValue": "For distance and time",
+  "anAirport": "An airport",
+  "anAirportValue": "airPlane",
+  "railway": "railway",
+  "railwayValue": "No",
+  "exceptions": "Exceptions",
+  "addException": "Add an exception",
+  "tariffsForCustomers": "Tarrifs for customers",
+  "rightCustomerEdit": {
+    "shortDescription": "Short description",
+    "shortDescriptionPlaceholder": "To write...",
+    "typesOfCars": "Types of cars",
+
+    "preOrder": "It is possible to make a pre-order",
+    "addressesLabel": "The number of addresses for creating an order",
+    "addressesPlaceholder": "Select address option",
+    "addressesOption": "Allow multiple addresses to be selected, but only 1 is required",
+    "tariffLabel": "The tariff is available",
+    "tariffPlaceholder": "Select availability",
+    "tariffOption": "To everyone",
+    "standbyMode": "Enabling the standby mode in the performer's application",
+    "standbyModes": {
+      "auto": "Automatically by GPS",
+      "manual": "Manually using the button"
+    },
+    "hours": "hours",
+    "tariffAvailability": "Tariff is available if the order is more than"
+  },
+  "hours": "hours",
+  "leftCustomerEdit": {
+    "branchLabel": "The branch where to staff work",
+    "branchPlaceholder": "Select city",
+    "kazan": "Kazan",
+    "professionLabel": "Profession",
+    "professionPlaceholder": "Select profession",
+    "taxiDriver": "Taxi driver",
+    "carClassLabel": "Car class",
+    "carClassPlaceholder": "Select class",
+    "business": "Business",
+    "fareTypeLabel": "Fare type for taxi",
+    "fareTypePlaceholder": "Select type",
+    "selectType": "Select type",
+    "tariffAvailabilityLabel": "Where is the tariff available?",
+    "tariffAvailabilityPlaceholder": "Select availability",
+    "all": "All",
+    "name": "Name",
+    "namePlaceholder": "BUSINESS Light",
+    "website": "Website",
+    "application": "Application",
+    "dispatcher": "Dispatcher",
+    "driverCurb": "Driver (curb)",
+    "personalAccount": "Personal account",
+    "advancePayment": "To demand an advance payment",
+    "sorting": "Sorting",
+    "fineCustomer": "Fine the customer for canceling the order when the contractor has already left",
+    "fineAfterXMinutes": "A fine after X minutes from when the driver left for the client",
+    "fineOn": "Fine on"
+  },
+  "addAddress": "Add Address",
+  "formSubmitted": "Form submitted:",
+  "save": "Save",
+  "fields": {
+    "city": "City",
+    "placeName": "Place Name",
+    "street": "Street",
+    "houseNumber": "House Number",
+    "lat": "Latitude",
+    "lon": "Longitude"
+  },
+  "placeholders": {
+    "city": "Enter city...",
+    "placeName": "Enter place name...",
+    "street": "Enter street...",
+    "houseNumber": "Enter house number...",
+    "lat": "Enter latitude...",
+    "lon": "Enter longitude..."
+  },
+  "errors": {
+    "cityRequired": "City is required",
+    "placeNameRequired": "Place name is required",
+    "streetRequired": "Street is required",
+    "houseNumberRequired": "House number is required",
+    "latRequired": "Latitude is required",
+    "latInvalid": "Latitude must be a number between -90 and 90",
+    "lonRequired": "Longitude is required",
+    "lonInvalid": "Longitude must be a number between -180 and 180"
+  },
+  "addresses": {
+    "title": "Addresses",
+    "addAddress": "Add address",
+    "name": "Name",
+    "address": "Address"
+  },
+  "addNews": {
+    "title": "Add News",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Enter title",
+    "branchLabel": "Branch",
+    "branchPlaceholder": "Not selected",
+    "branches": ["Branch 1", "Branch 2", "Branch 3"],
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "Write description...",
+    "activityPeriodLabel": "Activity Period",
+    "datePlaceholders": ["Start date", "End date"],
+    "pushLabel": "Push Notification",
+    "pushPlaceholder": "Write push notification...",
+    "blockLabel": "Block",
+    "saveButton": "Save"
+  },
+  "addInMap": {
+    "add": "Add",
+    "typeOfArea": "Type of area *",
+    "selectType": "Select type",
+    "city": "City",
+    "countryside": "The countryside",
+    "airport": "An airport",
+    "railway": "Railway station",
+    "title": "Title",
+    "enterTitle": "Enter...",
+    "sorting": "Sorting",
+    "districtRatio": "District ratio",
+    "from": "from",
+    "to": "to",
+    "showAllDistricts": "Show all districts on the map",
+    "save": "Save"
+  },
+  "addBranch": {
+    "title": "Add a branch",
+    "country": "A country",
+    "countryPlaceholder": "Russian Federation",
+    "countryOption": "Russian Federation",
+    "city": "City",
+    "cityPlaceholder": "Choose a city",
+    "cityOption1": "Moscow",
+    "cityOption2": "Kazan",
+    "language": "Interface language",
+    "languagePlaceholder": "Russian",
+    "languageOption": "Russian",
+    "currency": "Currency",
+    "currencyPlaceholder": "Russian Ruble",
+    "currencyOption": "Russian Ruble",
+    "priceFormat": "Format price displays",
+    "priceFormatPlaceholder": "₽:kopecks-100.00",
+    "priceFormatOption": "₽:kopecks-100.00",
+    "soundSignal": "Play a sound signal when",
+    "newOrder": "a new order is received",
+    "soundSignalPlaceholder": "No",
+    "soundSignalOptionNo": "No",
+    "soundSignalOptionYes": "Yes",
+    "sorting": "Sorting",
+    "sortingPlaceholder": "To write...",
+    "professions": "Current professions",
+    "professionsPlaceholder": "Taxi driver",
+    "professionsOption": "Taxi driver",
+    "languages": "Languages for translations",
+    "languagesPlaceholder": "Not selected",
+    "languagesOption": "Not selected",
+    "contacts": "Contacts",
+    "contactNamePlaceholder": "Enter a name...",
+    "contactTelPlaceholder": "Enter the tel...",
+    "addContact": "Add a contact",
+    "save": "Save",
+    "contactTypes": {
+      "telephone": "Telephone",
+      "whatsapp": "WhatsApp",
+      "viber": "Viber",
+      "telegram": "Telegram",
+      "link": "Link"
+    }
+  },
+  "branches": {
+    "title": "Branches",
+    "addButton": "Add a new branch",
+    "active": "Active",
+    "blocked": "Blocked",
+    "table": {
+      "title": "Title",
+      "sorting": "Sorting"
+    }
+  },
+  "addPartner": {
+    "title": "Add a new partner",
+    "label": {
+      "title": "Title",
+      "telephone": "Telephone",
+      "commission": "Partner's commission"
+    },
+    "organization": {
+      "title": "Organization",
+      "name": "Name of the organization",
+      "contractNumber": "Contract number",
+      "agreementDate": "Date of the agreement",
+      "legalAddress": "Legal address",
+      "ogrn": "OGRn",
+      "inn": "inn",
+      "directorName": "Full name of the director",
+      "email": "Email",
+      "bank": "Bank",
+      "pc": "P/c",
+      "ks": "K/s",
+      "bic": "BIC",
+      "taxService": "The Tax Service",
+      "comment": "Comment"
+    },
+    "block": "Block",
+    "save": "Save"
+  },
+  "districts": {
+    "City": "City",
+    "Aircraft building district": "Aircraft building district",
+    "Azino": "Azino",
+    "Konstantinovka": "Konstantinovka",
+    "Tsaritsyno": "Tsaritsyno",
+    "Derbyshki": "Derbyshki",
+    "Slides": "Slides",
+    "Boriskovo": "Boriskovo",
+    "Slides 2": "Slides 2",
+    "Sovetsky district": "Sovetsky district",
+    "Moskovsky district": "Moskovsky district",
+    "Kirovsky district": "Kirovsky district",
+    "Novo-Savinovsky": "Novo-Savinovsky",
+    "Centre": "Centre",
+    "The countryside": "The countryside",
+    "Suburb 1": "Suburb 1",
+    "Suburb 2": "Suburb 2",
+    "Tatarstan District": "Tatarstan District",
+    "An airport": "An airport",
+    "Railway station": "Railway station",
+    "Order acceptance area": "Order acceptance area"
+  },
+  "categories": {
+    "Suburban Areas": "Suburban Areas",
+    "Transportation": "Transportation",
+    "Other": "Other"
+  },
+  "buttonsAdd": {
+    "addInMap": "Add in map"
+  },
+  "titles": {
+    "districts": "Districts"
+  },
+  "partners": {
+    "title": "Partners",
+    "addNewPartner": "Add new partner",
+    "active": "Active",
+    "blocked": "Blocked",
+    "searchPlaceholder": "Name..",
+    "tableHeadName": "Name",
+    "tableHeadSort": "Sort",
+    "noBlockedPartners": "No blocked partners"
+  },
+  "news": {
+    "title": "News",
+    "addButton": "Add news",
+    "tabs": {
+      "active": "Active",
+      "blocked": "Blocked"
+    },
+    "table": {
+      "name": "Name",
+      "branch": "Branch",
+      "activityPeriod": "Activity Period",
+      "status": "Status",
+      "noItems": "No items found"
+    }
+  },
+  "employees": {
+    "title": "Employees",
+    "tabs": {
+      "working": "Working",
+      "invitations": "Invitations have been sent",
+      "blocked": "Blocked"
+    },
+    "filters": {
+      "allCities": "All cities",
+      "kazan": "Kazan",
+      "post": "Post",
+      "allPosts": "All posts",
+      "administrator": "Administrator",
+      "partnerEmployee": "Partner's employee",
+      "partners": "Partners",
+      "allPartners": "All partners"
+    },
+    "search": {
+      "fullName": "Search by FULL name...",
+      "toFind": "To find"
+    },
+    "table": {
+      "fullName": "Full name",
+      "jobTitle": "Job title",
+      "branch": "The branch where the employee works"
+    },
+    "actions": {
+      "sendAgain": "Send Again",
+      "cancel": "Cancel"
+    }
+  },
+  "addDriver": {
+    "title": "Add Driver",
+    "form": {
+      "title": "Title",
+      "branch": "The branch where the group works",
+      "profession": "Profession",
+      "carClass": "Car class",
+      "tariffs": "Tariffs",
+      "orderClass": "What classes of orders will the group see?",
+      "priority": "Priority when distribution of orders?"
+    },
+    "options": {
+      "kazan": "Kazan",
+      "taxiDriver": "Taxi driver",
+      "business": "Business",
+      "businessLite": "Business Lite"
+    },
+    "save": "Save"
+  },
+
+  "customers": {
+    "active": "Active Customers",
+    "blocked": "Blocked Customers",
+    "all": "All",
+    "inprogress": "In progress",
+    "completed": "Completed"
+  },
+  "addGroup": {
+    "title": "Add Group"
+  },
+  "formFields": {
+    "title": "Title",
+    "branch": "The branch where the group works",
+    "profession": "Profession",
+    "carClass": "Car class",
+    "tariffs": "Tariffs",
+    "orderClass": "What classes of orders will the group see?",
+    "priority": "Priority when distribution of orders?"
+  },
+  "options": {
+    "kazan": "Kazan",
+    "taxiDriver": "Taxi driver",
+    "business": "Business",
+    "businessLite": "Business Lite"
+  },
+  "addPhoto": {
+    "title": "Add",
+    "form": {
+      "city": "City",
+      "profession": "Profession",
+      "carClass": "Car class",
+      "period": "Period"
+    },
+    "options": {
+      "kazan": "Kazan",
+      "taxiDriver": "Taxi driver",
+      "business": "Business",
+      "shiftStart": "At the start of the shift",
+      "every24Hours": "Every 24 hours",
+      "everyWeek": "Every week",
+      "everyMonth": "Every month"
+    },
+    "requirePhotos": "Which photos should I require",
+    "photoRequirements": {
+      "front": "In front, so that the state number is visible",
+      "back": "The back part so that the state is visible",
+      "right": "Right side",
+      "left": "Left side",
+      "cabin-front": "The front of the cabin",
+      "cabin-back": "The back of the cabin",
+      "trunk": "Trunk",
+      "documents": "Documents"
+    },
+    "saveButton": "Save"
+  },
+  "notAssigned": "Not assigned",
+  "photoControl": {
+    "title": "Photo control",
+    "addButton": "Add photo control",
+    "tabs": {
+      "active": "Active",
+      "blocked": "Blocked",
+      "reports": "Reports"
+    },
+    "selects": {
+      "allCities": "All cities",
+      "newYork": "New York",
+      "london": "London",
+      "paris": "Paris",
+      "profession": "Profession",
+      "driver": "Driver",
+      "courier": "Courier",
+      "delivery": "Delivery",
+      "carClass": "Car class",
+      "economy": "Economy",
+      "comfort": "Comfort",
+      "business": "Business",
+      "premium": "Premium",
+      "period": "Period",
+      "shiftStart": "At the start of the shift",
+      "every24Hours": "Every 24 hours",
+      "everyWeek": "Every week",
+      "everyMonth": "Every month"
+    },
+    "table": {
+      "profession": "Profession",
+      "carClass": "Car class",
+      "city": "City"
+    }
+  },
+  "fleetDrivers": "Fleet drivers",
+  "active": "Active",
+  "blocked": "Blocked",
+  "allCities": "All cities",
+  "kazan": "Kazan",
+  "profession": "Profession",
+  "allProfessions": "All professions",
+  "taxiDriver": "Taxi driver",
+  "titlePlaceholder": "Title...",
+  "title": "Title",
+  "class": "Class",
+  "city": "City",
+  "priority": "Priority",
+  "everythingIsAProfession": "Everything is a profession",
+  "today": "Today",
+  "yesterday": "Yesterday",
+  "june": "June",
+  "period": "Period",
+  "time": "Time",
+  "totalOrders": "Total orders",
+  "numberPaid": "Number of paid",
+  "amountPaid": "The amount paid",
+  "quantityUnpaid": "Quantity unpaid",
+  "amountUnpaid": "The amount unpaid",
+  "quantityCancelled": "Quantity cancelled",
+  "effectiveness": "Effectiveness",
+  "total": "Total",
+  "pushMails": {
+    "title": "Push Mails",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "june": "June",
+    "period": "Period",
+    "show": "Show",
+    "date": "Date",
+    "name": "Name",
+    "recipient": "Recipient",
+    "total": "Total"
+  },
+  "forPartner": "For Partner",
+  "selectCity": "Select city",
+  "selectPartner": "Select partner",
+  "selectPaymentType": "Select payment type",
+  "orderReport": "Order report",
+  "cityOptions": {
+    "kazan": "Kazan"
+  },
+  "partnerOptions": {
+    "olrusAuto": "Olrus Auto"
+  },
+  "paymentTypeOptions": {
+    "allPaymentTypes": "All payment types"
+  },
+  "periodButtons": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "june": "June",
+    "period": "Period"
+  },
+  "tableHeaders": {
+    "period": "Period",
+    "city": "City",
+    "partner": "Partner",
+    "payment": "Payment",
+    "executors": "Number of executors",
+    "status": "Status"
+  },
+  "currentAsOf": "Current as of {{date}}",
+  "corporateClients": {
+    "title": "Corporate Clients",
+    "titlePlaceholder": "Search by title",
+    "activityT": "Activity",
+    "city": "City",
+    "cities": {
+      "allCities": "All Cities",
+      "Kazan": "Kazan",
+      "Moscow": "Moscow",
+      "Saint Petersburg": "Saint Petersburg"
+    },
+    "activity": {
+      "Yes": "Yes",
+      "No": "No"
+    }
+  },
+  "listOfOrders": {
+    "city": "City",
+    "kazan": "Kazan",
+    "profession": "Profession",
+    "everythingIsProfession": "Everything is a profession",
+    "partners": "Partners",
+    "paymentMethod": "Payment method",
+    "allPaymentMethods": "All payment methods",
+    "allSources": "All sources",
+    "allStatuses": "All statuses",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "june": "June",
+    "period": "Period",
+    "show": "Show",
+    "orderNumber": "Order number",
+    "driverOrCarCallSign": "The driver's or car's call sign",
+    "createFileInQueue": "Create a file in the queue",
+    "number": "№",
+    "address": "Address",
+    "status": "Status",
+    "executor": "Executor",
+    "rate": "Rate",
+    "on": "on",
+    "dispatcher": "Dispatcher",
+    "fromTheClient": "From the client",
+    "total": "Total",
+    "completed": "Completed"
+  },
+  "forAggregrator": {
+    "title": "For Aggregrator",
+    "selectCity": "Select city",
+    "selectPartner": "Select partner",
+    "kazan": "Kazan",
+    "olrusAuto": "Olrus Auto",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "june": "June",
+    "period": "Period",
+    "orderReport": "Order report",
+    "city": "City",
+    "partner": "Partner",
+    "payment": "Payment",
+    "numberOfExecutors": "Number of executors",
+    "status": "Status",
+    "currentAsOf": "Current as of {{date}}"
+  },
+  "driversChange": {
+    "title": "drivers",
+    "nav": {
+      "orders": "Orders",
+      "change": "Change"
+    },
+    "filters": {
+      "city": {
+        "placeholder": "Kazan",
+        "option": "Kazan"
+      },
+      "profession": {
+        "placeholder": "Everything is a profession",
+        "option": "Everything is a profession"
+      },
+      "carClass": {
+        "placeholder": "All classes of cars",
+        "option": "All classes of cars"
+      },
+      "partners": {
+        "placeholder": "Partners",
+        "option": "Partners"
+      }
+    },
+    "periods": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "june": "June",
+      "period": "Period"
+    },
+    "dates": {
+      "startDate": "08.07.2023",
+      "endDate": "10.07.2023"
+    },
+    "showButton": "Show",
+    "tableHeaders": {
+      "executor": "Executor",
+      "totalOrders": "Total orders",
+      "numberPaid": "Number of paid",
+      "amountPaid": "The amount paid",
+      "quantityUnpaid": "Quantity unpaid",
+      "amountUnpaid": "The amount unpaid",
+      "quantityCancelled": "Quantity cancelled",
+      "effectiveness": "Effectiveness"
+    },
+    "total": {
+      "label": "Total",
+      "amount": "0 ₽"
+    }
+  },
+  "ordersReports": {
+    "title": "Orders",
+    "tabs": {
+      "statistics": "Statistics",
+      "byTheClock": "By the clock",
+      "listOfOrders": "List of orders"
+    },
+    "filters": {
+      "city": "Kazan",
+      "cityOption": "Kazan",
+      "allProfessions": "All professions",
+      "allProfessionsOption": "All professions",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "june": "June",
+      "period": "Period",
+      "show": "Show"
+    },
+    "table": {
+      "status": "Status",
+      "total": "Total",
+      "amount": "For the amount of",
+      "quantity": "Quantity",
+      "drivers": "Drivers"
+    },
+    "statuses": {
+      "created": "Created",
+      "preliminary": "Preliminary",
+      "done": "Done",
+      "specialAndCancelled": "Special and Cancelled"
+    }
+  },
+  "shifts": {
+    "employeeSessionTimeReport": "Employee session time report",
+    "selectLocation": "Select location",
+    "kazan": "Kazan",
+    "moscow": "Moscow",
+    "selectProfession": "Select profession",
+    "allProfessions": "All professions",
+    "developer": "Developer",
+    "manager": "Manager",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "june": "June",
+    "period": "Period",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "orderReport": "Order a report",
+    "employee": "Employee",
+    "timeOfEntry": "Time of entry",
+    "exitTime": "Exit time",
+    "ipAddress": "IP Address"
+  },
+  "orderstable": {
+    "executor": "Executor",
+    "totalOrders": "Total Orders",
+    "paidCount": "Paid Count",
+    "paidAmount": "Paid Amount",
+    "unpaidCount": "Unpaid Count",
+    "unpaidAmount": "Unpaid Amount",
+    "cancelledCount": "Cancelled Count",
+    "efficiency": "Efficiency"
+  },
+  "addVehicle": {
+    "title": "Add Vehicle",
+    "branch": "Branch",
+    "brand": "Brand",
+    "type": "Type",
+    "year": "Year",
+    "class": "Class",
+    "any": "Any",
+    "selectBrand": "Select brand",
+    "selectType": "Select type",
+    "selectClass": "Select class",
+    "save": "Save"
+  },
+  "application": {
+    "title": "Application for clients",
+    "demoMode": "Demo Mode",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "restrictUnauthorized": "Restrict unauthorized clients",
+    "smsResendInterval": "SMS Resend Interval",
+    "smsLifetime": "SMS Lifetime",
+    "sec": "sec",
+    "min": "min",
+    "showAdditionalProfileFields": "Show Additional Profile Fields",
+    "email": "Email",
+    "none": "None",
+    "requireProfileCompletion": "Require Profile Completion",
+    "welcomeScreen": "Welcome Screen",
+    "addressRequest": "Address Request",
+    "never": "Never",
+    "firstVisit": "First Visit",
+    "always": "Always",
+    "welcomeTitle": "Welcome Title",
+    "enterWelcomeTitle": "Enter welcome title",
+    "welcomeText": "Welcome Text",
+    "enterWelcomeMessage": "Enter welcome message",
+    "showDriverTips": "Show Driver Tips",
+    "showDriverTerminalPayment": "Show Driver Terminal Payment",
+    "orderScreenText": "Order Screen Text",
+    "paymentMethods": {
+      "title": "Payment Methods",
+      "cash": "Cash",
+      "bankCard": "Bank Card",
+      "fastPayment": "Fast Payment System",
+      "personalAccount": "Personal Account",
+      "bonusAccount": "Bonus Account",
+      "terminal": "Terminal",
+      "corporateBalance": "Corporate Balance"
+    }
+  },
+  "atc": {
+    "title": "External ATS",
+    "providerLabel": "List of ATS Providers",
+    "selectPlaceholder": "Select provider",
+    "options": {
+      "disable": "Disable",
+      "custom": "Custom ATS",
+      "runtel": "Runtel",
+      "sms": "SMS-center",
+      "common": "Common",
+      "runtelNew": "Runtel New"
+    },
+    "saveButton": "Save"
+  },
+  "carClasses": {
+    "title": "Car Classes",
+    "addButton": "Add news",
+    "tabs": {
+      "active": "Active",
+      "blocked": "Blocked"
+    },
+    "selects": {
+      "cities": "Cities",
+      "types": "Types"
+    },
+    "table": {
+      "headers": {
+        "branchAndType": "Branch and type",
+        "yearOfRelease": "Year of release",
+        "assignACar": "Assign a car",
+        "city": "City"
+      },
+      "noItems": "No items found"
+    }
+  },
+  "cmcSettings": {
+    "title": "CMC",
+    "providerLabel": "Select CMC Provider",
+    "selectPlaceholder": "Select duration",
+    "option60": "60 sec.",
+    "option120": "120 sec.",
+    "option180": "180 sec.",
+    "loginLabel": "Login",
+    "passwordLabel": "Password",
+    "signatureLabel": "Signature",
+    "serverLabel": "Server Address",
+    "inputPlaceholder": "5 min."
+  },
+
+  "customerNotifications": {
+    "title": "Customer Notifications",
+    "orderCreatedDispatch": "Order created through dispatch",
+    "orderCreatedApp": "Order created through app",
+    "accepted": "Accepted",
+    "inProgress": "In Progress",
+    "ready": "Ready",
+    "pickup": "Pickup",
+    "newOrder": "New Order",
+    "executorAssigned": "Executor Assigned",
+    "driverWillStart": "Driver will start after current order",
+    "newPreliminaryOrder": "New Preliminary Order",
+    "executorAcceptedOrder": "Executor Accepted Order",
+    "executorArrived": "Executor Arrived",
+    "paidWaiting": "Paid Waiting",
+    "orderExecution": "Order Execution",
+    "completedPaid": "Completed and Paid",
+    "orderCancelled": "Order Cancelled",
+    "executorRejected": "Executor Rejected Assigned Order",
+    "executorDelayed": "Executor is Delayed",
+    "preliminaryOrderExecution": "Preliminary Order Execution",
+    "overdueOrder": "Overdue Order",
+    "executorAcceptedPreliminary": "Executor Accepted Preliminary Order",
+    "executorCancelled": "Executor Cancelled Order",
+    "driverNotFound": "Driver Not Found",
+    "cancelledByDriver": "Cancelled by Driver",
+    "orderedByMistake": "Ordered by Mistake",
+    "executorRequestedCancel": "Executor Requested Cancellation",
+    "waitingTooLong": "Waiting Too Long",
+    "differentVehicle": "Different Vehicle Arrived",
+    "executorDifferentRoute": "Executor Took Different Route",
+    "unhappyWithVehicle": "Unhappy with Vehicle Model",
+    "nothing": "Nothing",
+    "smsToClient": "SMS to client",
+    "pushToClient": "PUSH to client",
+    "save": "Save"
+  },
+  "onlineCheckout": {
+    "title": "Online Checkout",
+    "cashierProfiles": "List of Cashier Profiles",
+    "cashierConfigurations": "List of Cashier Configurations"
+  },
+  "organizationDetails": {
+    "title": "Organization Details",
+    "fullOrganizationName": "Full Organization Name",
+    "organizationNamePlaceholder": "LLC 'Infotrans'",
+    "taxiServiceName": "Taxi Service Name",
+    "taxiServiceNamePlaceholder": "Milly",
+    "legalAddress": "Legal Address",
+    "legalAddressPlaceholder": "RT. Pestrechinsky district...",
+    "postalAddress": "Postal Address",
+    "postalAddressPlaceholder": "RT. Pestrechinsky district...",
+    "organizationPhone": "Organization Phone",
+    "phonePlaceholder": "+7(900)000-00-00",
+    "organizationEmail": "Organization Email",
+    "emailPlaceholder": "email@example.com",
+    "website": "Website",
+    "websitePlaceholder": "https://example.com",
+    "contactPerson": "Contact Person",
+    "lastName": "Last Name",
+    "firstName": "First Name",
+    "middleName": "Middle Name",
+    "contactPhone": "Contact Phone",
+    "contactEmail": "Contact Email",
+    "organizationLogo": "Organization Logo",
+    "uploadLogo": "Upload Logo",
+    "logoRecommendation": "Recommended: 256x256px or larger",
+    "logoFileTypes": "JPG, PNG or GIF. Max 5MB.",
+    "directorFullName": "Director's Full Name",
+    "fullNamePlaceholder": "Full name",
+    "position": "Position",
+    "positionPlaceholder": "Director",
+    "inn": "INN",
+    "innPlaceholder": "1686012898",
+    "kpp": "KPP",
+    "kppPlaceholder": "168601001",
+    "ogrn": "OGRN",
+    "ogrnPlaceholder": "1221600048779",
+    "save": "Save"
+  },
+  "orderDistributionSettingsI18n": {
+    "title": "Order Distribution Settings",
+    "order": "Orders",
+    "taxiDriver": "Taxi Driver",
+    "driver": "Driver",
+    "firstRule": "First Rule",
+    "firstRuleTooltip": "Distance: the proximity of the car to the client is taken into account.\nArea: cars located in the same area as the client participate.",
+    "distance": "distance",
+    "district": "district",
+    "circles": "Circles",
+    "searchRadius": "Search Radius",
+    "repeatCount": "Repeat Count",
+    "circle": "Circle",
+    "addCircle": "Add Circle",
+    "orderStatus": "Order status between distribution attempts",
+    "toSingleExecutor": "To single executor",
+    "newOrder": "New order",
+    "freeOrder": "Free order",
+    "delayBetweenDistributionAttempts": "Delay between distribution attempts",
+    "considerExecutorRating": "Consider executor rating during distribution",
+    "offerOrderSimultaneously": "Offer order simultaneously",
+    "thirdRule": "Third Rule",
+    "forthRule": "Forth Rule",
+    "no": "No",
+    "businessPlus": "Business+",
+    "executorBlockingType": "Executor blocking type",
+    "consecutive": "Consecutive",
+    "perShift": "Per shift"
+  }
+}

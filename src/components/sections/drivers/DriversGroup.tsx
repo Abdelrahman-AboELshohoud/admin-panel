@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import {
@@ -19,6 +19,7 @@ import {
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 type Driver = {
   title: string;
@@ -46,13 +47,24 @@ const drivers: Driver[] = [
 ];
 
 export default function DriversGroups() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState("active");
   const [filters, setFilters] = useState({
     city: "all",
     profession: "all",
     title: "",
   });
+
   const navigate = useNavigate();
+
+  const FleetDrivers = async () => {
+    const res = 2;
+    console.log(res);
+  };
+
+  useEffect(() => {
+    FleetDrivers();
+  }, []);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -66,23 +78,33 @@ export default function DriversGroups() {
   return (
     <div className="bg-background text-foreground p-6 rounded-lg">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Groups of drivers</h1>
-        <Button onClick={() => navigate("/control-panel/drivers-groups/add-group")} className="add-button">
-          <Plus className="mr-2 h-4 w-4" /> Add
+        <h1 className="text-2xl font-bold">{t("fleetDrivers")}</h1>
+        <Button
+          onClick={() => navigate("/control-panel/drivers-groups/add-group")}
+          className="add-button"
+        >
+          <Plus className="mr-2 h-4 w-4" /> {t("add")}
         </Button>
       </div>
 
-      <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
+      <Tabs
+        value={activeTab}
+        onValueChange={handleTabChange}
+        className="w-full"
+      >
         <TabsList className="bg-transparent flex justify-start gap-4 mb-6">
-          {["active", "blocked"].map((tab) => (
-            <TabsTrigger
-              key={tab}
-              value={tab}
-              className="bg-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-            >
-              {tab}
-            </TabsTrigger>
-          ))}
+          <TabsTrigger
+            value="active"
+            className="bg-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
+          >
+            {t("active")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="blocked"
+            className="bg-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
+          >
+            {t("blocked")}
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 
@@ -92,11 +114,11 @@ export default function DriversGroups() {
           onValueChange={(value) => handleFilterChange("city", value)}
         >
           <SelectTrigger className="custom-input">
-            <SelectValue placeholder="All cities" />
+            <SelectValue placeholder={t("allCities")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All cities</SelectItem>
-            <SelectItem value="kazan">Kazan</SelectItem>
+            <SelectItem value="all">{t("allCities")}</SelectItem>
+            <SelectItem value="kazan">{t("kazan")}</SelectItem>
           </SelectContent>
         </Select>
 
@@ -105,38 +127,42 @@ export default function DriversGroups() {
           onValueChange={(value) => handleFilterChange("profession", value)}
         >
           <SelectTrigger className="custom-input">
-            <SelectValue placeholder="Profession" />
+            <SelectValue placeholder={t("profession")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">All professions</SelectItem>
-            <SelectItem value="taxi">Taxi driver</SelectItem>
+            <SelectItem value="all">{t("allProfessions")}</SelectItem>
+            <SelectItem value="taxi">{t("taxiDriver")}</SelectItem>
           </SelectContent>
         </Select>
 
         <Input
-          placeholder="Title..."
+          placeholder={t("titlePlaceholder")}
           value={filters.title}
           onChange={(e) => handleFilterChange("title", e.target.value)}
           className="custom-input"
         />
       </div>
 
-      <div className="text-sm text-muted-foreground mb-4">Taxi driver</div>
+      <div className="text-sm text-muted-foreground mb-4">
+        {t("taxiDriver")}
+      </div>
 
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead>Title</TableHead>
-            <TableHead>Class</TableHead>
-            <TableHead>City</TableHead>
-            <TableHead>Profession</TableHead>
-            <TableHead>Priority</TableHead>
+            <TableHead>{t("title")}</TableHead>
+            <TableHead>{t("class")}</TableHead>
+            <TableHead>{t("city")}</TableHead>
+            <TableHead>{t("profession")}</TableHead>
+            <TableHead>{t("priority")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {drivers.map((driver, index) => (
             <TableRow key={index} className="hover:bg-transparent">
-              <TableCell className="whitespace-pre-line">{driver.title}</TableCell>
+              <TableCell className="whitespace-pre-line">
+                {driver.title}
+              </TableCell>
               <TableCell>{driver.class}</TableCell>
               <TableCell>{driver.city}</TableCell>
               <TableCell>{driver.profession}</TableCell>

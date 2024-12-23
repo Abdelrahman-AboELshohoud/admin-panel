@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { X } from "lucide-react";
 import { Button } from "../../ui/button";
 import {
@@ -37,6 +38,8 @@ const orders: Order[] = [
 ];
 
 export default function OrdersTable() {
+  const { t } = useTranslation();
+
   const handleDelete = (id: string) => {
     console.log(`Delete order with id: ${id}`);
     // Implement delete logic here
@@ -47,39 +50,37 @@ export default function OrdersTable() {
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead>Executor</TableHead>
-            <TableHead>Total Orders</TableHead>
-            <TableHead>Paid Count</TableHead>
-            <TableHead>Paid Amount</TableHead>
-            <TableHead>Unpaid Count</TableHead>
-            <TableHead>Unpaid Amount</TableHead>
-            <TableHead>Cancelled Count</TableHead>
-            <TableHead>Efficiency</TableHead>
+            <TableHead>{t('orderstable.executor')}</TableHead>
+            <TableHead>{t('orderstable.totalOrders')}</TableHead>
+            <TableHead>{t('orderstable.paidCount')}</TableHead>
+            <TableHead>{t('orderstable.paidAmount')}</TableHead>
+            <TableHead>{t('orderstable.unpaidCount')}</TableHead>
+            <TableHead>{t('orderstable.unpaidAmount')}</TableHead>
+            <TableHead>{t('orderstable.cancelledCount')}</TableHead>
+            <TableHead>{t('orderstable.efficiency')}</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id} className="hover:bg-transparent">
-              <TableCell>{`${order.id}, ${order.executor}`}</TableCell>
-              <TableCell>{order.totalOrders}</TableCell>
-              <TableCell>{order.paidCount}</TableCell>
-              <TableCell>{`${order.paidAmount} ₽`}</TableCell>
-              <TableCell>{order.unpaidCount}</TableCell>
-              <TableCell>{`${order.unpaidAmount} ₽`}</TableCell>
-              <TableCell>{order.cancelledCount}</TableCell>
-              <TableCell>{order.efficiency}</TableCell>
-              <TableCell>
-                <Button
-                  variant="destructive"
-                  className="h-8 w-8 rounded-full"
-                  onClick={() => handleDelete(order.id)}
-                >
-                  <X />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          <TableRow key={orders[0].id} className="hover:bg-transparent">
+            <TableCell>{`${orders[0].id}, ${orders[0].executor}`}</TableCell>
+            <TableCell>{orders[0].totalOrders}</TableCell>
+            <TableCell>{orders[0].paidCount}</TableCell>
+            <TableCell>{`${orders[0].paidAmount} ₽`}</TableCell>
+            <TableCell>{orders[0].unpaidCount}</TableCell>
+            <TableCell>{`${orders[0].unpaidAmount} ₽`}</TableCell>
+            <TableCell>{orders[0].cancelledCount}</TableCell>
+            <TableCell>{orders[0].efficiency}</TableCell>
+            <TableCell>
+              <Button
+                variant="destructive"
+                className="h-8 w-8 rounded-full"
+                onClick={() => handleDelete(orders[0].id)}
+              >
+                <X />
+              </Button>
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </div>

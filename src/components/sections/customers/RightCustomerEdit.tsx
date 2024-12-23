@@ -6,38 +6,36 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
-import  Switch from "../../common/Switch";
+import { useTranslation } from "react-i18next";
 
 export default function RightCustomerEdit({ editing }: { editing: boolean }) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6">
       <div>
-        <label className="block mb-2">Short description</label>
+        <label className="block mb-2">
+          {t("rightCustomerEdit.shortDescription")}
+        </label>
         <Textarea
-          placeholder="To write..."
+          placeholder={t("rightCustomerEdit.shortDescriptionPlaceholder")}
           className="h-32 border-transparent resize-none outline-none focus:outline-none select-none"
         />
       </div>
 
       <div>
         <div className="flex items-center justify-between mb-2">
-          <label>Types of cars</label>
+          <label>{t("rightCustomerEdit.typesOfCars")}</label>
         </div>
         <div className="card-shape p-4">
           <ul className="space-y-2">
-            {[
-              "Lexus ES250",
-              "BMW 5er(f10)",
-              "Audi A6",
-              "Genesis G80",
-              "Toyota Camry",
-              "Kia (K5,K900,Quoris)",
-            ].map((car) => (
-              <li key={car}>{car}</li>
-            ))}
-            <li className="text-gray-500">
-              It is possible to make a pre-order
-            </li>
+            <li className="text-gray-500">Toyota Camry</li>
+            <li className="text-gray-500">Honda Accord</li>
+            <li className="text-gray-500">Ford Mustang</li>
+            <li className="text-gray-500">Chevrolet Corvette</li>
+            <li className="text-gray-500">BMW 3 Series</li>
+
+            <li className="text-gray-500">{t("rightCustomerEdit.preOrder")}</li>
           </ul>
         </div>
       </div>
@@ -45,23 +43,22 @@ export default function RightCustomerEdit({ editing }: { editing: boolean }) {
       <div className="flex flex-col gap-4">
         {[
           {
-            label: "The number of addresses for creating an order",
-            placeholder: "Select address option",
+            label: t("rightCustomerEdit.addressesLabel"),
+            placeholder: t("rightCustomerEdit.addressesPlaceholder"),
             options: [
               {
                 value: "multiple",
-                label:
-                  "Allow multiple addresses to be selected, but only 1 is required",
+                label: t("rightCustomerEdit.addressesOption"),
               },
             ],
           },
           {
-            label: "The tariff is available",
-            placeholder: "Select availability",
+            label: t("rightCustomerEdit.tariffLabel"),
+            placeholder: t("rightCustomerEdit.tariffPlaceholder"),
             options: [
               {
                 value: "everyone",
-                label: "To everyone",
+                label: t("rightCustomerEdit.tariffOption"),
               },
             ],
           },
@@ -91,29 +88,23 @@ export default function RightCustomerEdit({ editing }: { editing: boolean }) {
       <div>
         <div className="flex items-center justify-between mb-4">
           <label className="flex items-center font-bold ">
-            Enabling the standby mode in the performer's application
+            {t("rightCustomerEdit.standbyMode")}
           </label>
         </div>
         <div className="flex flex-col gap-4">
-          {["Automatically by GPS", "Manually using the button"].map((mode) => (
-            <div key={mode} className="flex items-center justify-between">
-              <span>{mode}</span>
-              <Switch checked={false} disabled={!editing} />
-            </div>
-          ))}
+          {t("rightCustomerEdit.standbyModes.auto")}
+          {t("rightCustomerEdit.standbyModes.manual")}
         </div>
       </div>
       <div className="flex flex-row text-nowrp items-center gap-2">
-        <div className="w-3/4">
-          Tariff is available if the order is more than
-        </div>
+        <div className="w-3/4">{t("rightCustomerEdit.tariffAvailability")}</div>
         <div className="flex flex-row rounded-full bg-[#282828] text-gray-100 px-4 py-2">
           <input
             type="number"
             defaultValue="3"
             className="placeholder:text-gray-500 bg-transparent border-none focus:outline-none focus:border-none"
           />
-          <span>hours</span>
+          <span>{t("rightCustomerEdit.hours")}</span>
         </div>
       </div>
     </div>

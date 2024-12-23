@@ -1,10 +1,11 @@
 import { useState } from "react";
 import Switch from "../../common/Switch";
-
 import Map from "../../common/Map";
 import { Button } from "../../ui/button";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
 interface District {
   name: string;
   category: string;
@@ -41,16 +42,11 @@ const districts: Record<string, District[]> = {
 };
 
 function Switches() {
-  const [activeDistricts, setActiveDistricts] = useState<
+  const { t } = useTranslation();
+  const [activeDistricts, _setActiveDistricts] = useState<
     Record<string, boolean>
   >({});
 
-  const handleToggle = (districtName: string) => {
-    setActiveDistricts((prev) => ({
-      ...prev,
-      [districtName]: !prev[districtName],
-    }));
-  };
   const navigate = useNavigate();
 
   return (
@@ -62,7 +58,7 @@ function Switches() {
             className="flex items-center justify-between"
           >
             <label htmlFor={district.name} className="text-sm">
-              {district.name}
+              {t(`districts.${district.name}`)}
             </label>
             <Switch
               disabled={false}
@@ -74,14 +70,16 @@ function Switches() {
       <div className="flex flex-col ml-4 w-1/2  gap-4">
         {["Suburban Areas", "Transportation", "Other"].map((category) => (
           <div key={category} className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold text-zinc-400">{category}</h3>
+            <h3 className="text-sm font-semibold text-zinc-400">
+              {t(`categories.${category}`)}
+            </h3>
             {districts[category].map((district) => (
               <div
                 key={district.name}
                 className="flex items-center justify-between"
               >
                 <label htmlFor={district.name} className="text-sm">
-                  {district.name}
+                  {t(`districts.${district.name}`)}
                 </label>
                 <Switch
                   disabled={false}
@@ -91,22 +89,28 @@ function Switches() {
             ))}
           </div>
         ))}
-            <Button className="add-button w-fit ml-auto mt-4" onClick={()=>{
-              navigate("/control-panel/directories/add-in-map")
-            }}>
-             <Plus className="mr-2" />Add in map
-            </Button>
+        <Button
+          className="add-button w-fit ml-auto mt-4"
+          onClick={() => {
+            navigate("/control-panel/directories/add-in-map");
+          }}
+        >
+          <Plus className="mr-2" />
+          {t("buttonsAdd.addInMap")}
+        </Button>
       </div>
     </div>
   );
 }
 
 export default function MapPage() {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col bg-transparent p-4">
       <div className="flex-grow flex flex-col items-center mb-4">
         <h1 className="text-3xl font-bold text-zinc-100 mb-4 w-full pl-12">
-          Districts
+          {t("titles.districts")}
         </h1>
         <Map />
       </div>

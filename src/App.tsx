@@ -2,14 +2,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import "./global.css";
 import ControlPanel from "./pages/ControlPanel";
-import Orders from "./components/sections/Orders";
-import Main from "./components/sections/Main";
+import Orders from "./pages/Orders";
+import Main from "./pages/Main";
 import Customers from "./components/sections/customers/Customers";
 import Customer from "./components/sections/customers/Customer";
-import Drivers from "./components/sections/drivers/Drivers";
-import Driver from "./components/sections/drivers/Driver";
-import Cars from "./components/sections/drivers/Cars";
-import Car from "./components/sections/drivers/Car";
+import Drivers from "./pages/Drivers/Drivers";
+import Driver from "./pages/Drivers/Driver";
+import Cars from "./pages/Drivers/Cars";
+import Car from "./pages/Drivers/Car";
 import DriversGroups from "./components/sections/drivers/DriversGroup";
 import AddGroup from "./components/sections/drivers/AddGroup";
 import PhotoControl from "./components/sections/drivers/PhotoControl";
@@ -43,12 +43,11 @@ import CarClasses from "./components/sections/settings/CarClasses";
 import AddClass from "./components/sections/settings/AddClass";
 import OnlineCheckout from "./components/sections/settings/OnlineCheckout";
 import ATC from "./components/sections/settings/ATC";
-import { getFleets } from "./graphql/apis";
+
 import DriverSettings from "./components/sections/settings/Drivers";
+import AddDriver from "./pages/Drivers/AddDriver";
 
 function App() {
-  // getAllRiders();
-  getFleets();
   return (
     <BrowserRouter>
       <Routes>
@@ -97,6 +96,10 @@ function App() {
           <Route
             path="/control-panel/drivers-groups/:status"
             element={<ControlPanel children={<DriversGroups />} />}
+          />
+          <Route
+            path="/control-panel/drivers/add-driver"
+            element={<ControlPanel children={<AddDriver />} />}
           />
           <Route
             path="/control-panel/drivers-groups/add-group"

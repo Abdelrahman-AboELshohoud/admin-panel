@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "../../ui/button";
 import {
   Card,
@@ -28,6 +29,7 @@ interface FormData {
 }
 
 const DriverForm: React.FC = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<FormData>({
     title: "",
     branch: "",
@@ -35,16 +37,16 @@ const DriverForm: React.FC = () => {
     carClass: "",
     tariff: "business-lite",
     orderClass: "",
-    priority: ""
+    priority: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    setFormData(prevData => ({ ...prevData, [id]: value }));
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
   const handleSelectChange = (id: string) => (value: string) => {
-    setFormData(prevData => ({ ...prevData, [id]: value }));
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -57,43 +59,52 @@ const DriverForm: React.FC = () => {
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-xl bg-zinc-900 text-white">
         <CardHeader>
-          <CardTitle className="text-2xl">Add Driver</CardTitle>
+          <CardTitle className="text-2xl">{t("addDriver.title")}</CardTitle>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-6">
             <FormField
-              label="Title"
+              label={t("addDriver.form.title")}
               id="title"
               value={formData.title}
               onChange={handleInputChange}
             />
 
             <FormSelect
-              label="The branch where the group works"
+              label={t("addDriver.form.branch")}
               id="branch"
               value={formData.branch}
               onValueChange={handleSelectChange("branch")}
-              options={[{ value: "kazan", label: "Kazan" }]}
+              options={[
+                { value: "kazan", label: t("addDriver.options.kazan") },
+              ]}
             />
 
             <FormSelect
-              label="Profession"
+              label={t("addDriver.form.profession")}
               id="profession"
               value={formData.profession}
               onValueChange={handleSelectChange("profession")}
-              options={[{ value: "taxi-driver", label: "Taxi driver" }]}
+              options={[
+                {
+                  value: "taxi-driver",
+                  label: t("addDriver.options.taxiDriver"),
+                },
+              ]}
             />
 
             <FormSelect
-              label="Car class"
+              label={t("addDriver.form.carClass")}
               id="carClass"
               value={formData.carClass}
               onValueChange={handleSelectChange("carClass")}
-              options={[{ value: "business", label: "Business" }]}
+              options={[
+                { value: "business", label: t("addDriver.options.business") },
+              ]}
             />
 
             <div className="space-y-2">
-              <label>Tariffs</label>
+              <label>{t("addDriver.form.tariffs")}</label>
               <RadioGroup
                 value={formData.tariff}
                 onValueChange={handleSelectChange("tariff")}
@@ -101,32 +112,36 @@ const DriverForm: React.FC = () => {
               >
                 <div className="flex items-center space-x-2">
                   <RadioGroupItem value="business-lite" id="business-lite" />
-                  <label htmlFor="business-lite">Business Lite</label>
+                  <label htmlFor="business-lite">
+                    {t("addDriver.options.businessLite")}
+                  </label>
                 </div>
               </RadioGroup>
             </div>
 
             <FormSelect
-              label="What classes of orders will the group see?"
+              label={t("addDriver.form.orderClass")}
               id="orderClass"
               value={formData.orderClass}
               onValueChange={handleSelectChange("orderClass")}
-              options={[{ value: "business", label: "Business" }]}
+              options={[
+                { value: "business", label: t("addDriver.options.business") },
+              ]}
             />
 
             <FormField
-              label="Priority when distribution of orders?"
+              label={t("addDriver.form.priority")}
               id="priority"
               value={formData.priority}
               onChange={handleInputChange}
             />
           </CardContent>
           <CardFooter>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-[#B69C76] hover:bg-[#A38B65] text-white"
             >
-              Save
+              {t("addDriver.save")}
             </Button>
           </CardFooter>
         </form>
@@ -142,7 +157,12 @@ interface FormFieldProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const FormField: React.FC<FormFieldProps> = ({ label, id, value, onChange }) => (
+const FormField: React.FC<FormFieldProps> = ({
+  label,
+  id,
+  value,
+  onChange,
+}) => (
   <div className="space-y-2">
     <label htmlFor={id}>{label}</label>
     <Input
@@ -162,7 +182,13 @@ interface FormSelectProps {
   options: { value: string; label: string }[];
 }
 
-const FormSelect: React.FC<FormSelectProps> = ({ label, id, value, onValueChange, options }) => (
+const FormSelect: React.FC<FormSelectProps> = ({
+  label,
+  id,
+  value,
+  onValueChange,
+  options,
+}) => (
   <div className="space-y-2">
     <label>{label}</label>
     <Select value={value} onValueChange={onValueChange}>
@@ -170,7 +196,7 @@ const FormSelect: React.FC<FormSelectProps> = ({ label, id, value, onValueChange
         <SelectValue placeholder={`Select ${id}`} />
       </SelectTrigger>
       <SelectContent>
-        {options.map(option => (
+        {options.map((option) => (
           <SelectItem key={option.value} value={option.value}>
             {option.label}
           </SelectItem>

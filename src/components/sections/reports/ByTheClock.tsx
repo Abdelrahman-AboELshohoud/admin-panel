@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import {
@@ -17,68 +18,81 @@ import {
 } from "../../ui/table";
 
 const ByTheClock = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6">
-      {/* Filters */}
       <div className="grid grid-cols-6 gap-6 mb-6 ">
-        {['Kazan', 'Everything is a profession', 'Partners'].map((placeholder, index) => (
-          <Select key={index}>
-            <SelectTrigger className="col-span-2 h-10 border-none custom-input">
-              <SelectValue placeholder={placeholder} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={placeholder.toLowerCase().replace(/\s+/g, '-')}>
-                {placeholder}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        ))}
+        <Select>
+          <SelectTrigger className="col-span-2 h-10 border-none custom-input">
+            <SelectValue placeholder={t('kazan')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="kazan">{t('kazan')}</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select>
+          <SelectTrigger className="col-span-2 h-10 border-none custom-input">
+            <SelectValue placeholder={t('everythingIsAProfession')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="everything-is-a-profession">{t('everythingIsAProfession')}</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select>
+          <SelectTrigger className="col-span-2 h-10 border-none custom-input">
+            <SelectValue placeholder={t('partners')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="partners">{t('partners.title')}</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
-      {/* Date Selection */}
-      <div className="flex  col-span-5 gap-4">
+      <div className="flex col-span-5 gap-4">
         <div className="flex gap-6">
-        {['Today', 'Yesterday', 'June', 'Period'].map((text) => (
-        <Button key={text}  className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
-          <span>{text}</span>
-        </Button>
-      ))}
-            <div className="flex justify-center gap-4">
-        <Input
+          <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+            <span>{t('today')}</span>
+          </Button>
+          <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+            <span>{t('yesterday')}</span>
+          </Button>
+          <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+            <span>{t('june')}</span>
+          </Button>
+          <Button className="flex items-center gap-2 bg-[#121212] hover:bg-[#888]">
+            <span>{t('period')}</span>
+          </Button>
+          <div className="flex justify-center gap-4">
+            <Input
               type="date"
               className="bg-[#1E1E1E] border-none text-white"
               defaultValue="2023-07-08"
-              />
+            />
             <Input
               type="date"
               className="bg-[#1E1E1E] border-none text-white"
               defaultValue="2023-07-10"
-              />
+            />
+          </div>
         </div>
-        </div>
-
 
         <Button className="bg-black ml-auto text-white hover:bg-black/90 px-8 col-span-1">
-          Show
+          {t('show')}
         </Button>
       </div>
 
-      {/* Table */}
       <Table>
         <TableHeader>
           <TableRow className="border-none hover:bg-transparent">
-            {[
-              "Time",
-              "Total orders",
-              "Number of paid",
-              "The amount paid",
-              "Quantity unpaid",
-              "The amount unpaid",
-              "Quantity cancelled",
-              "Effectiveness",
-            ].map((performer) => (
-              <TableHead className="text-gray-400">{performer}</TableHead>
-            ))}
+            <TableHead className="text-gray-400">{t('time')}</TableHead>
+            <TableHead className="text-gray-400">{t('totalOrders')}</TableHead>
+            <TableHead className="text-gray-400">{t('numberPaid')}</TableHead>
+            <TableHead className="text-gray-400">{t('amountPaid')}</TableHead>
+            <TableHead className="text-gray-400">{t('quantityUnpaid')}</TableHead>
+            <TableHead className="text-gray-400">{t('amountUnpaid')}</TableHead>
+            <TableHead className="text-gray-400">{t('quantityCancelled')}</TableHead>
+            <TableHead className="text-gray-400">{t('effectiveness')}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -100,16 +114,14 @@ const ByTheClock = () => {
         </TableBody>
       </Table>
 
-      {/* Total */}
       <div className="flex justify-between items-center bg-black rounded-full p-4 mt-4">
-        <span className="text-white text-lg">Total</span>
+        <span className="text-white text-lg">{t('total')}</span>
         <span className="text-white text-lg">4122.3 ₽</span>
       </div>
     </div>
   );
 };
 
-// Sample data
 const timeSlots = [
   {
     time: "00-01",
@@ -141,7 +153,6 @@ const timeSlots = [
     quantity: "2",
     effectiveness: "0",
   },
-  // Add more time slots as needed
 ];
 
 export default ByTheClock;

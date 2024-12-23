@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Table,
   TableBody,
@@ -29,15 +30,16 @@ const clients: Client[] = [
   { title: 'FPD', activity: 'No', city: 'Kazan' },
 ]
 
-const cities = ['All cities', 'Kazan', 'Moscow', 'Saint Petersburg']
+const cities = ['allCities', 'Kazan', 'Moscow', 'Saint Petersburg']
 
 export default function CorporateClients() {
-  const [selectedCity, setSelectedCity] = React.useState('All cities')
+  const { t } = useTranslation()
+  const [selectedCity, setSelectedCity] = React.useState('allCities')
   const [searchQuery, setSearchQuery] = React.useState('')
 
   const filteredClients = React.useMemo(() => {
     return clients.filter(client => {
-      const matchesCity = selectedCity === 'All cities' || client.city === selectedCity
+      const matchesCity = selectedCity === 'allCities' || client.city === selectedCity
       const matchesSearch = client.title.toLowerCase().includes(searchQuery.toLowerCase())
       return matchesCity && matchesSearch
     })
@@ -45,7 +47,7 @@ export default function CorporateClients() {
 
   return (
     <div className="min-h-screen p-6 text-zinc-100">
-      <h1 className="mb-8 text-3xl font-semibold tracking-tight">Corporate clients</h1>
+      <h1 className="mb-8 text-3xl font-semibold tracking-tight">{t('corporateClients.title')}</h1>
       
       <div className="mb-6 flex gap-4">
         <Select value={selectedCity} onValueChange={setSelectedCity}>
@@ -55,14 +57,14 @@ export default function CorporateClients() {
           <SelectContent className="bg-zinc-800 text-zinc-100">
             {cities.map(city => (
               <SelectItem key={city} value={city} className="hover:bg-zinc-700">
-                {city}
+                {t(`corporateClients.cities.${city}`)}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
 
         <Input
-          placeholder="Title..."
+          placeholder={t('corporateClients.titlePlaceholder')}
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           className="w-[300px] bg-zinc-800 text-zinc-100 placeholder:text-zinc-400"
@@ -73,9 +75,9 @@ export default function CorporateClients() {
         <Table>
           <TableHeader>
             <TableRow className="border-zinc-800  h-12 hover:bg-transparent">
-              <TableHead className="text-zinc-400">Title</TableHead>
-              <TableHead className="text-zinc-400">Activity</TableHead>
-              <TableHead className="text-zinc-400">City</TableHead>
+              <TableHead className="text-zinc-400">{t('corporateClients.title')}</TableHead>
+              <TableHead className="text-zinc-400">{t('corporateClients.activity')}</TableHead>
+              <TableHead className="text-zinc-400">{t('corporateClients.city')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className='py-6'>
@@ -92,7 +94,7 @@ export default function CorporateClients() {
                     {client.title}
                   </Link>
                 </TableCell>
-                <TableCell className="text-zinc-100">{client.activity}</TableCell>
+                <TableCell className="text-zinc-100">{t(`corporateClients.activity.${client.activity}`)}</TableCell>
                 <TableCell className="text-zinc-100">{client.city}</TableCell>
               </TableRow>
             ))}
@@ -102,3 +104,4 @@ export default function CorporateClients() {
     </div>
   )
 }
+
