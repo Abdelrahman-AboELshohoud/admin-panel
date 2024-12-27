@@ -9,7 +9,7 @@ i18n
   .use(initReactI18next) // Bind i18n to React
   .init({
     fallbackLng: "en", // Default language
-    debug: true, // Enable debug in dev
+    debug: false, // Enable debug in dev
     interpolation: {
       escapeValue: false, // React already escapes by default
     },

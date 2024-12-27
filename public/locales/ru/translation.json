@@ -1,0 +1,1214 @@
+{
+  "header": {
+    "personalAccount": "Личный кабинет",
+    "logout": "Выйти"
+  },
+  "links": {
+    "main": "Главная",
+    "orders": "Заказы",
+    "customers": {
+      "title": "Клиенты"
+    },
+    "drivers": {
+      "title": "Водители",
+      "cars": "Машины",
+      "groups": "Группы водителей",
+      "photoControl": "Контроль фото"
+    },
+    "reports": {
+      "title": "Отчеты",
+      "orders": "Заказы",
+      "forAggregator": "Для агрегатора",
+      "forPartner": "Для партнера",
+      "shifts": "Смены сотрудников",
+      "listOfOrders": "Список заказов",
+      "moneyTransactions": "Денежные транзакции",
+      "corporationClients": "Корпоративные клиенты"
+    },
+    "directories": {
+      "title": "Справочники",
+      "branches": "Филиалы",
+      "partners": "Партнеры",
+      "employees": "Сотрудники",
+      "map": "Карта",
+      "news": "Новости",
+      "addresses": "Адреса"
+    },
+    "settings": {
+      "title": "Настройки",
+      "organizationDetails": "Данные организации",
+      "application": "Приложение для клиентов",
+      "orders": "Настройки заказов",
+      "cmc": "СМС",
+      "notifications": "Уведомления клиентам",
+      "drivers": "Водители",
+      "carClasses": "Классы автомобилей",
+      "onlineCheckout": "Онлайн касса",
+      "atc": "АТС"
+    }
+  },
+  "main": {
+    "dateButtons": {
+      "today": "Сегодня",
+      "week": "Неделя",
+      "month": "Месяц"
+    },
+    "online": "В сети",
+    "onOrder": "На заказе",
+    "free": "Свободен",
+    "onPause": "На паузе"
+  },
+  "orders": {
+    "orderHeader": "Сегодня",
+    "carSummary": "Машины на линии",
+    "mapButton": "Карта",
+    "newOrderButton": "Добавить новый заказ",
+    "inputs": {
+      "orderNumber": "Номер заказа",
+      "address": "Адрес",
+      "client": "Клиент",
+      "executor": "Исполнитель",
+      "comment": "Комментарий"
+    },
+    "statusFilter": {
+      "all": "Все",
+      "inProgress": "В процессе",
+      "completed": "Завершено",
+      "cancelled": "Отменено"
+    },
+    "filters": {
+      "status": "Статус",
+      "allStatuses": "Все статусы",
+      "completed": "Завершено",
+      "cancelled": "Отменено",
+      "inProgress": "В процессе",
+      "driverCanceled": "Отменено водителем",
+      "riderCanceled": "Отменено клиентом",
+      "finished": "Завершено"
+    },
+    "table": {
+      "date": "Дата",
+      "status": "Статус",
+      "distance": "Расстояние",
+      "duration": "Длительность",
+      "cost": "Стоимость",
+      "addresses": "Адреса"
+    },
+    "noOrders": "Заказы не найдены",
+    "summary": {
+      "total": "Итоговая сумма"
+    }
+  },
+  "drivers": {
+    "title": "Водители",
+    "subtitle": "Список всех зарегистрированных водителей.",
+    "filters": {
+      "cities": "Все города",
+      "profession": "Профессия",
+      "group": "Группа водителей",
+      "partners": "Партнеры",
+      "carClass": "Класс автомобиля",
+      "carColor": "Цвет автомобиля",
+      "autoOptions": "Настройки автомобиля",
+      "driversOptions": "Настройки водителя"
+    },
+    "driver": {
+      "statusTitle": "Статус",
+      "status": {
+        "pendingApproval": "Ожидает одобрения",
+        "approved": "Одобрено",
+        "blocked": "Заблокирован",
+        "softReject": "Мягкий отказ",
+        "hardReject": "Жесткий отказ",
+        "offline": "Не в сети",
+        "WaitingDocuments": "Ожидает документов",
+        "inService": "На смене",
+        "online": "В сети"
+      },
+      "profile": {
+        "personalInformation": "Личная информация",
+        "firstName": "Имя",
+        "lastName": "Фамилия",
+        "gender": "Пол",
+        "documents": "Документы",
+        "email": "Электронная почта",
+        "phone": "Телефон",
+        "bankInformation": "Банковская информация",
+        "bankName": "Название банка",
+        "bankAccountNumber": "Номер счета",
+        "bankSwift": "SWIFT банка",
+        "blocked": "Заблокирован",
+        "save": "Сохранить",
+        "edit": "Редактировать",
+        "noDocuments": "Документы отсутствуют.",
+        "cars": "Машина",
+        "carModel": "Модель машины",
+        "carColor": "Цвет машины",
+        "carPlateNumber": "Госномер",
+        "carProductionYear": "Год выпуска"
+      }
+    },
+    "buttons": {
+      "add": "Добавить"
+    },
+    "online": "Водители в сети"
+  },
+  "tabs": {
+    "active": "Активные",
+    "inactive": "Неактивные",
+    "pending": "Ожидающие",
+    "rejected": "Отклоненные",
+    "blocked": "Заблокированные",
+    "all": "Все"
+  },
+  "buttons": {
+    "save": "Сохранить",
+    "edit": "Редактировать"
+  },
+  "request": {
+    "Requested": "Запрошено",
+    "NotFound": "Не найдено",
+    "NoCloseFound": "Ближайшие не найдены",
+    "Found": "Найдено",
+    "DriverAccepted": "Водитель принял",
+    "Arrived": "Прибыл",
+    "WaitingForPrefy": "Ожидание предоплаты",
+    "DriverCanceled": "Водитель отменил",
+    "RiderCanceled": "Клиент отменил",
+    "Started": "Начато",
+    "WaitingForPostPay": "Ожидание постоплаты",
+    "WaitingForReview": "Ожидание отзыва",
+    "Finished": "Завершено",
+    "Booked": "Забронировано",
+    "Expired": "Истекло"
+  },
+  "transactionType": {
+    "OrderFee": "Комиссия за заказ",
+    "Cash": "Наличные",
+    "BankTransfer": "Банковский перевод",
+    "Gift": "Подарок",
+    "Commission": "Комиссия",
+    "Correction": "Коррекция",
+    "InAppPayment": "Оплата в приложении",
+    "Withdraw": "Вывод"
+  },
+  "transactionStatus": {
+    "Processing": "Обрабатывается",
+    "Done": "Выполнено",
+    "Canceled": "Отменено",
+    "Rejected": "Отклонено"
+  },
+  "gender": {
+    "male": "Мужской",
+    "female": "Женский",
+    "genderless": "Без пола"
+  },
+  "complaintStatus": {
+    "submitted": "Отправлено",
+    "underInvestigation": "На рассмотрении",
+    "resolved": "Решено"
+  },
+  "sosStatus": {
+    "submitted": "Отправлено",
+    "underReview": "На рассмотрении",
+    "falseAlarm": "Ложная тревога",
+    "resolved": "Решено"
+  },
+  "cars": {
+    "title": "Машины",
+    "filters": {
+      "allCities": "Все города",
+      "profession": "Все профессии",
+      "partners": "Партнеры"
+    },
+    "details": {
+      "carName": "Название машины",
+      "callSign": "Позывной",
+      "branch": "Филиал",
+      "owner": "Владелец",
+      "selectOwner": "Выберите владельца",
+      "ownerTypes": {
+        "driver": "Водитель",
+        "company": "Компания"
+      },
+      "selectBrand": "Выберите бренд",
+      "selectModel": "Выберите модель",
+      "models": {
+        "eClass": "Е-класс"
+      },
+      "year": "Год",
+      "selectYear": "Выберите год",
+      "class": "Класс",
+      "selectClass": "Выберите класс",
+      "classes": {
+        "business": "Бизнес"
+      },
+      "color": "Цвет",
+      "selectColor": "Выберите цвет",
+      "colors": {
+        "black": "Черный"
+      },
+      "stateNumber": "Госномер",
+      "additionalInfo": "Дополнительная информация",
+      "partners": "Партнеры",
+      "selectPartner": "Выберите партнера",
+      "ctp": {
+        "title": "ОСАГО",
+        "number": "Номер",
+        "seriesNumber": "Серия",
+        "startDate": "Дата начала",
+        "endDate": "Дата окончания",
+        "insuranceCompany": "Страховая компания",
+        "selectInsuranceCompany": "Выберите страховую компанию"
+      },
+      "ptsd": {
+        "title": "ДК",
+        "number": "Номер",
+        "startDate": "Дата начала",
+        "endDate": "Дата окончания",
+        "seriesNumber": "Серия",
+        "insuranceCompany": "Страховая компания",
+        "selectInsuranceCompany": "Выберите страховую компанию"
+      },
+      "license": {
+        "title": "Лицензия",
+        "number": "Номер",
+        "startDate": "Дата начала",
+        "endDate": "Дата окончания",
+        "issuedBy": "Выдано",
+        "selectIssuer": "Выберите выдавшего"
+      },
+      "scan": "Скан"
+    },
+    "car": {
+      "title": "Машина"
+    },
+    "model": "Модель машины",
+    "color": "Цвет машины",
+    "dateButtons": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "june": "Июнь",
+      "period": "Период"
+    },
+    "table": {
+      "time": "Время",
+      "totalOrders": "Всего заказов",
+      "numberOfPaid": "Оплаченные",
+      "amountPaid": "Сумма оплаченных",
+      "quantityUnpaid": "Неоплаченные",
+      "amountUnpaidCancelled": "Сумма отмененных",
+      "quantity": "Количество",
+      "effectiveness": "Эффективность"
+    },
+    "buttons": {
+      "show": "Показать",
+      "add": "Добавить"
+    },
+    "total": "Итого"
+  },
+  "show": "Показать",
+  "add": "Добавить",
+  "block": "Заблокировать",
+  "calculationOfDelivery": "Расчёт доставки",
+  "basicOptions": "Основные настройки",
+  "workingHours": "Часы работы",
+  "workingHoursValue": "Всё время, кроме исключений",
+  "typeOfCalculationCity": "Тип расчёта (Город)",
+  "typeOfCalculationOutOfTown": "Тип расчёта (За городом)",
+  "typeOfCalculationValue": "По расстоянию и времени",
+  "anAirport": "Аэропорт",
+  "anAirportValue": "Самолёт",
+  "railway": "Железная дорога",
+  "railwayValue": "Нет",
+  "exceptions": "Исключения",
+  "addException": "Добавить исключение",
+  "tariffsForCustomers": "Тарифы для клиентов",
+  "rightCustomerEdit": {
+    "shortDescription": "Краткое описание",
+    "shortDescriptionPlaceholder": "Написать...",
+    "typesOfCars": "Типы автомобилей",
+    "preOrder": "Возможность предварительного заказа",
+    "addressesLabel": "Количество адресов для создания заказа",
+    "addressesPlaceholder": "Выберите вариант адреса",
+    "addressesOption": "Разрешить выбор нескольких адресов, но обязателен только один",
+    "tariffLabel": "Тариф доступен",
+    "tariffPlaceholder": "Выберите доступность",
+    "tariffOption": "Для всех",
+    "standbyMode": "Включение режима ожидания в приложении исполнителя",
+    "standbyModes": {
+      "auto": "Автоматически по GPS",
+      "manual": "Вручную с помощью кнопки"
+    },
+    "hours": "часы",
+    "tariffAvailability": "Тариф доступен, если заказ более"
+  },
+  "hours": "часы",
+  "leftCustomerEdit": {
+    "branchLabel": "Филиал, где работают сотрудники",
+    "branchPlaceholder": "Выберите город",
+    "kazan": "Казань",
+    "professionLabel": "Профессия",
+    "professionPlaceholder": "Выберите профессию",
+    "taxiDriver": "Водитель такси",
+    "carClassLabel": "Класс автомобиля",
+    "carClassPlaceholder": "Выберите класс",
+    "business": "Бизнес",
+    "fareTypeLabel": "Тип тарифа для такси",
+    "fareTypePlaceholder": "Выберите тип",
+    "selectType": "Выберите тип",
+    "tariffAvailabilityLabel": "Где доступен тариф?",
+    "tariffAvailabilityPlaceholder": "Выберите доступность",
+    "all": "Все",
+    "name": "Название",
+    "namePlaceholder": "BUSINESS Light",
+    "website": "Веб-сайт",
+    "application": "Приложение",
+    "dispatcher": "Диспетчер",
+    "driverCurb": "Водитель (бордюр)",
+    "personalAccount": "Личный кабинет",
+    "advancePayment": "Требовать предоплату",
+    "sorting": "Сортировка",
+    "fineCustomer": "Штрафовать клиента за отмену заказа, когда исполнитель уже выехал",
+    "fineAfterXMinutes": "Штраф через X минут после выезда водителя к клиенту",
+    "fineOn": "Штраф включён"
+  },
+  "addAddress": "Добавить адрес",
+  "formSubmitted": "Форма отправлена:",
+  "save": "Сохранить",
+  "fields": {
+    "city": "Город",
+    "placeName": "Название места",
+    "street": "Улица",
+    "houseNumber": "Номер дома",
+    "lat": "Широта",
+    "lon": "Долгота"
+  },
+  "placeholders": {
+    "city": "Введите город...",
+    "placeName": "Введите название места...",
+    "street": "Введите улицу...",
+    "houseNumber": "Введите номер дома...",
+    "lat": "Введите широту...",
+    "lon": "Введите долготу..."
+  },
+  "errors": {
+    "cityRequired": "Город обязателен",
+    "placeNameRequired": "Название места обязательно",
+    "streetRequired": "Улица обязательна",
+    "houseNumberRequired": "Номер дома обязателен",
+    "latRequired": "Широта обязательна",
+    "latInvalid": "Широта должна быть числом от -90 до 90",
+    "lonRequired": "Долгота обязательна",
+    "lonInvalid": "Долгота должна быть числом от -180 до 180"
+  },
+  "addresses": {
+    "title": "Адреса",
+    "addAddress": "Добавить адрес",
+    "name": "Название",
+    "address": "Адрес"
+  },
+  "addNews": {
+    "title": "Добавить новости",
+    "titleLabel": "Заголовок",
+    "titlePlaceholder": "Введите заголовок",
+    "branchLabel": "Филиал",
+    "branchPlaceholder": "Не выбран",
+    "branches": ["Филиал 1", "Филиал 2", "Филиал 3"],
+    "descriptionLabel": "Описание",
+    "descriptionPlaceholder": "Напишите описание...",
+    "activityPeriodLabel": "Период активности",
+    "datePlaceholders": ["Дата начала", "Дата окончания"],
+    "pushLabel": "Push-уведомление",
+    "pushPlaceholder": "Напишите push-уведомление...",
+    "blockLabel": "Заблокировать",
+    "saveButton": "Сохранить"
+  },
+  "addInMap": {
+    "add": "Добавить",
+    "typeOfArea": "Тип района *",
+    "selectType": "Выберите тип",
+    "city": "Город",
+    "countryside": "Пригород",
+    "airport": "Аэропорт",
+    "railway": "Железнодорожная станция",
+    "title": "Название",
+    "enterTitle": "Введите...",
+    "sorting": "Сортировка",
+    "districtRatio": "Коэффициент района",
+    "from": "от",
+    "to": "до",
+    "showAllDistricts": "Показать все районы на карте",
+    "save": "Сохранить"
+  },
+  "addBranch": {
+    "title": "Добавить филиал",
+    "country": "Страна",
+    "countryPlaceholder": "Российская Федерация",
+    "countryOption": "Российская Федерация",
+    "city": "Город",
+    "cityPlaceholder": "Выберите город",
+    "cityOption1": "Москва",
+    "cityOption2": "Казань",
+    "language": "Язык интерфейса",
+    "languagePlaceholder": "Русский",
+    "languageOption": "Русский",
+    "currency": "Валюта",
+    "currencyPlaceholder": "Российский рубль",
+    "currencyOption": "Российский рубль",
+    "priceFormat": "Формат отображения цен",
+    "priceFormatPlaceholder": "₽:копейки-100.00",
+    "priceFormatOption": "₽:копейки-100.00",
+    "soundSignal": "Проигрывать звуковой сигнал, когда",
+    "newOrder": "поступает новый заказ",
+    "soundSignalPlaceholder": "Нет",
+    "soundSignalOptionNo": "Нет",
+    "soundSignalOptionYes": "Да",
+    "sorting": "Сортировка",
+    "sortingPlaceholder": "Написать...",
+    "professions": "Текущие профессии",
+    "professionsPlaceholder": "Водитель такси",
+    "professionsOption": "Водитель такси",
+    "languages": "Языки перевода",
+    "languagesPlaceholder": "Не выбрано",
+    "languagesOption": "Не выбрано",
+    "contacts": "Контакты",
+    "contactNamePlaceholder": "Введите имя...",
+    "contactTelPlaceholder": "Введите номер...",
+    "addContact": "Добавить контакт",
+    "save": "Сохранить",
+    "contactTypes": {
+      "telephone": "Телефон",
+      "whatsapp": "WhatsApp",
+      "viber": "Viber",
+      "telegram": "Telegram",
+      "link": "Ссылка"
+    }
+  },
+  "branches": {
+    "title": "Филиалы",
+    "addButton": "Добавить новый филиал",
+    "active": "Активные",
+    "blocked": "Заблокированные",
+    "table": {
+      "title": "Название",
+      "sorting": "Сортировка"
+    }
+  },
+  "addPartner": {
+    "title": "Добавить нового партнёра",
+    "label": {
+      "title": "Название",
+      "telephone": "Телефон",
+      "commission": "Комиссия партнёра"
+    },
+    "organization": {
+      "title": "Организация",
+      "name": "Название организации",
+      "contractNumber": "Номер контракта",
+      "agreementDate": "Дата соглашения",
+      "legalAddress": "Юридический адрес",
+      "ogrn": "ОГРН",
+      "inn": "ИНН",
+      "directorName": "Полное имя директора",
+      "email": "Электронная почта",
+      "bank": "Банк",
+      "pc": "Р/с",
+      "ks": "К/с",
+      "bic": "БИК",
+      "taxService": "Налоговая служба",
+      "comment": "Комментарий"
+    },
+    "block": "Заблокировать",
+    "save": "Сохранить"
+  },
+  "districts": {
+    "City": "Город",
+    "Aircraft building district": "Район авиационного строительства",
+    "Azino": "Азино",
+    "Konstantinovka": "Константиновка",
+    "Tsaritsyno": "Царицыно",
+    "Derbyshki": "Дербышки",
+    "Slides": "Слайды",
+    "Boriskovo": "Борисково",
+    "Slides 2": "Слайды 2",
+    "Sovetsky district": "Советский район",
+    "Moskovsky district": "Московский район",
+    "Kirovsky district": "Кировский район",
+    "Novo-Savinovsky": "Новосавиновский",
+    "Centre": "Центр",
+    "The countryside": "Загород",
+    "Suburb 1": "Пригород 1",
+    "Suburb 2": "Пригород 2",
+    "Tatarstan District": "Район Татарстан",
+    "An airport": "Аэропорт",
+    "Railway station": "Железнодорожный вокзал",
+    "Order acceptance area": "Зона приема заказов"
+  },
+  "categories": {
+    "Suburban Areas": "Пригородные районы",
+    "Transportation": "Транспорт",
+    "Other": "Прочее"
+  },
+  "buttonsAdd": {
+    "addInMap": "Добавить на карту"
+  },
+  "titles": {
+    "districts": "Районы"
+  },
+  "partners": {
+    "title": "Партнеры",
+    "addNewPartner": "Добавить нового партнера",
+    "active": "Активные",
+    "blocked": "Заблокированные",
+    "searchPlaceholder": "Название..",
+    "tableHeadName": "Название",
+    "tableHeadSort": "Сортировка",
+    "noBlockedPartners": "Нет заблокированных партнеров"
+  },
+  "news": {
+    "title": "Новости",
+    "addButton": "Добавить новость",
+    "tabs": {
+      "active": "Активные",
+      "blocked": "Заблокированные"
+    },
+    "table": {
+      "name": "Название",
+      "branch": "Филиал",
+      "activityPeriod": "Период активности",
+      "status": "Статус",
+      "noItems": "Элементы не найдены"
+    }
+  },
+  "employees": {
+    "title": "Сотрудники",
+    "tabs": {
+      "working": "Работающие",
+      "invitations": "Приглашения отправлены",
+      "blocked": "Заблокированные"
+    },
+    "filters": {
+      "allCities": "Все города",
+      "kazan": "Казань",
+      "post": "Должность",
+      "allPosts": "Все должности",
+      "administrator": "Администратор",
+      "partnerEmployee": "Сотрудник партнера",
+      "partners": "Партнеры",
+      "allPartners": "Все партнеры"
+    },
+    "search": {
+      "fullName": "Поиск по полному имени...",
+      "toFind": "Найти"
+    },
+    "table": {
+      "fullName": "Полное имя",
+      "jobTitle": "Должность",
+      "branch": "Филиал"
+    },
+    "actions": {
+      "sendAgain": "Отправить снова",
+      "cancel": "Отменить"
+    }
+  },
+  "addDriver": {
+    "title": "Добавить водителя",
+    "form": {
+      "title": "Название",
+      "branch": "Филиал, где работает группа",
+      "profession": "Профессия",
+      "carClass": "Класс автомобиля",
+      "tariffs": "Тарифы",
+      "orderClass": "Какие классы заказов будет видеть группа?",
+      "priority": "Приоритет при распределении заказов?"
+    },
+    "options": {
+      "kazan": "Казань",
+      "taxiDriver": "Таксист",
+      "business": "Бизнес",
+      "businessLite": "Бизнес Лайт"
+    },
+    "save": "Сохранить"
+  },
+  "customers": {
+    "active": "Активные клиенты",
+    "blocked": "Заблокированные клиенты",
+    "all": "Все",
+    "inprogress": "В процессе",
+    "completed": "Завершено"
+  },
+  "addGroup": {
+    "title": "Добавить группу"
+  },
+  "formFields": {
+    "title": "Название",
+    "branch": "Филиал, где работает группа",
+    "profession": "Профессия",
+    "carClass": "Класс автомобиля",
+    "tariffs": "Тарифы",
+    "orderClass": "Какие классы заказов будет видеть группа?",
+    "priority": "Приоритет при распределении заказов?"
+  },
+  "options": {
+    "kazan": "Казань",
+    "taxiDriver": "Таксист",
+    "business": "Бизнес",
+    "businessLite": "Бизнес Лайт"
+  },
+  "addPhoto": {
+    "title": "Добавить фото",
+    "form": {
+      "city": "Город",
+      "profession": "Профессия",
+      "carClass": "Класс автомобиля",
+      "period": "Период"
+    },
+    "options": {
+      "kazan": "Казань",
+      "taxiDriver": "Таксист",
+      "business": "Бизнес",
+      "shiftStart": "На начало смены",
+      "every24Hours": "Каждые 24 часа",
+      "everyWeek": "Каждую неделю",
+      "everyMonth": "Каждый месяц"
+    },
+    "requirePhotos": "Какие фото я должен требовать",
+    "photoRequirements": {
+      "front": "Спереди, чтобы был виден госномер",
+      "back": "Сзади, чтобы был виден госномер",
+      "right": "Правая сторона",
+      "left": "Левая сторона",
+      "cabin-front": "Передняя часть кабины",
+      "cabin-back": "Задняя часть кабины",
+      "trunk": "Багажник",
+      "documents": "Документы"
+    },
+    "saveButton": "Сохранить"
+  },
+  "notAssigned": "Не назначено",
+  "photoControl": {
+    "title": "Контроль фото",
+    "addButton": "Добавить контроль фото",
+    "tabs": {
+      "active": "Активные",
+      "blocked": "Заблокированные",
+      "reports": "Отчеты"
+    },
+    "selects": {
+      "allCities": "Все города",
+      "newYork": "Нью-Йорк",
+      "london": "Лондон",
+      "paris": "Париж",
+      "profession": "Профессия",
+      "driver": "Водитель",
+      "courier": "Курьер",
+      "delivery": "Доставка",
+      "carClass": "Класс автомобиля",
+      "economy": "Эконом",
+      "comfort": "Комфорт",
+      "business": "Бизнес",
+      "premium": "Премиум",
+      "period": "Период",
+      "shiftStart": "На начало смены",
+      "every24Hours": "Каждые 24 часа",
+      "everyWeek": "Каждую неделю",
+      "everyMonth": "Каждый месяц"
+    },
+    "table": {
+      "profession": "Профессия",
+      "carClass": "Класс автомобиля",
+      "city": "Город"
+    }
+  },
+
+  "fleetDrivers": "Водители автопарка",
+  "active": "Активный",
+  "blocked": "Заблокирован",
+  "allCities": "Все города",
+  "kazan": "Казань",
+  "profession": "Профессия",
+  "allProfessions": "Все профессии",
+  "taxiDriver": "Водитель такси",
+  "titlePlaceholder": "Заголовок...",
+  "title": "Заголовок",
+  "class": "Класс",
+  "city": "Город",
+  "priority": "Приоритет",
+  "everythingIsAProfession": "Всё – профессия",
+  "today": "Сегодня",
+  "yesterday": "Вчера",
+  "june": "Июнь",
+  "period": "Период",
+  "time": "Время",
+  "totalOrders": "Общее количество заказов",
+  "numberPaid": "Количество оплаченных",
+  "amountPaid": "Сумма оплаченных",
+  "quantityUnpaid": "Количество неоплаченных",
+  "amountUnpaid": "Сумма неоплаченных",
+  "quantityCancelled": "Количество отменённых",
+  "effectiveness": "Эффективность",
+  "total": "Итого",
+  "pushMails": {
+    "title": "Push-уведомления",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "june": "Июнь",
+    "period": "Период",
+    "show": "Показать",
+    "date": "Дата",
+    "name": "Имя",
+    "recipient": "Получатель",
+    "total": "Всего"
+  },
+  "forPartner": "Для партнёра",
+  "selectCity": "Выберите город",
+  "selectPartner": "Выберите партнёра",
+  "selectPaymentType": "Выберите тип оплаты",
+  "orderReport": "Отчёт по заказам",
+  "cityOptions": {
+    "kazan": "Казань"
+  },
+  "partnerOptions": {
+    "olrusAuto": "Olrus Auto"
+  },
+  "paymentTypeOptions": {
+    "allPaymentTypes": "Все типы оплаты"
+  },
+  "periodButtons": {
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "june": "Июнь",
+    "period": "Период"
+  },
+  "tableHeaders": {
+    "period": "Период",
+    "city": "Город",
+    "partner": "Партнёр",
+    "payment": "Оплата",
+    "executors": "Количество исполнителей",
+    "status": "Статус"
+  },
+  "currentAsOf": "Текущий на {{date}}",
+  "corporateClients": {
+    "title": "Корпоративные клиенты",
+    "titlePlaceholder": "Поиск по названию",
+    "activityT": "Активность",
+    "city": "Город",
+    "cities": {
+      "allCities": "Все города",
+      "Kazan": "Казань",
+      "Moscow": "Москва",
+      "Saint Petersburg": "Санкт-Петербург"
+    },
+    "activity": {
+      "Yes": "Да",
+      "No": "Нет"
+    }
+  },
+  "listOfOrders": {
+    "city": "Город",
+    "kazan": "Казань",
+    "profession": "Профессия",
+    "everythingIsProfession": "Всё – профессия",
+    "partners": "Партнёры",
+    "paymentMethod": "Способ оплаты",
+    "allPaymentMethods": "Все способы оплаты",
+    "allSources": "Все источники",
+    "allStatuses": "Все статусы",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "june": "Июнь",
+    "period": "Период",
+    "show": "Показать",
+    "orderNumber": "Номер заказа",
+    "driverOrCarCallSign": "Позывной водителя или машины",
+    "createFileInQueue": "Создать файл в очереди",
+    "number": "№",
+    "address": "Адрес",
+    "status": "Статус",
+    "executor": "Исполнитель",
+    "rate": "Тариф",
+    "on": "на",
+    "dispatcher": "Диспетчер",
+    "fromTheClient": "От клиента",
+    "total": "Итого",
+    "completed": "Завершено"
+  },
+  "forAggregrator": {
+    "title": "Для агрегатора",
+    "selectCity": "Выберите город",
+    "selectPartner": "Выберите партнёра",
+    "kazan": "Казань",
+    "olrusAuto": "Olrus Auto",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "june": "Июнь",
+    "period": "Период",
+    "orderReport": "Отчёт по заказам",
+    "city": "Город",
+    "partner": "Партнёр",
+    "payment": "Оплата",
+    "numberOfExecutors": "Количество исполнителей",
+    "status": "Статус",
+    "currentAsOf": "Текущий на {{date}}"
+  },
+  "driversChange": {
+    "title": "Водители",
+    "nav": {
+      "orders": "Заказы",
+      "change": "Изменения"
+    },
+    "filters": {
+      "city": {
+        "placeholder": "Казань",
+        "option": "Казань"
+      },
+      "profession": {
+        "placeholder": "Всё – профессия",
+        "option": "Всё – профессия"
+      },
+      "carClass": {
+        "placeholder": "Все классы автомобилей",
+        "option": "Все классы автомобилей"
+      },
+      "partners": {
+        "placeholder": "Партнёры",
+        "option": "Партнёры"
+      }
+    },
+    "periods": {
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "june": "Июнь",
+      "period": "Период"
+    },
+    "dates": {
+      "startDate": "08.07.2023",
+      "endDate": "10.07.2023"
+    },
+    "showButton": "Показать",
+    "tableHeaders": {
+      "executor": "Исполнитель",
+      "totalOrders": "Общее количество заказов",
+      "numberPaid": "Количество оплаченных",
+      "amountPaid": "Сумма оплаченных",
+      "quantityUnpaid": "Количество неоплаченных",
+      "amountUnpaid": "Сумма неоплаченных",
+      "quantityCancelled": "Количество отменённых",
+      "effectiveness": "Эффективность"
+    },
+    "total": {
+      "label": "Итого",
+      "amount": "0 ₽"
+    }
+  },
+  "ordersReports": {
+    "title": "Заказы",
+    "tabs": {
+      "statistics": "Статистика",
+      "byTheClock": "По часам",
+      "listOfOrders": "Список заказов"
+    },
+    "filters": {
+      "city": "Казань",
+      "cityOption": "Казань",
+      "allProfessions": "Все профессии",
+      "allProfessionsOption": "Все профессии",
+      "today": "Сегодня",
+      "yesterday": "Вчера",
+      "june": "Июнь",
+      "period": "Период",
+      "show": "Показать"
+    },
+    "table": {
+      "status": "Статус",
+      "total": "Итого",
+      "amount": "На сумму",
+      "quantity": "Количество",
+      "drivers": "Водители"
+    },
+    "statuses": {
+      "created": "Создано",
+      "preliminary": "Предварительно",
+      "done": "Выполнено",
+      "specialAndCancelled": "Специальные и отменённые"
+    }
+  },
+  "shifts": {
+    "employeeSessionTimeReport": "Отчёт по времени сессии сотрудника",
+    "selectLocation": "Выберите локацию",
+    "kazan": "Казань",
+    "moscow": "Москва",
+    "selectProfession": "Выберите профессию",
+    "allProfessions": "Все профессии",
+    "developer": "Разработчик",
+    "manager": "Менеджер",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "june": "Июнь",
+    "period": "Период",
+    "startDate": "Дата начала",
+    "endDate": "Дата окончания",
+    "orderReport": "Заказать отчёт",
+    "employee": "Сотрудник",
+    "timeOfEntry": "Время входа",
+    "exitTime": "Время выхода",
+    "ipAddress": "IP-адрес"
+  },
+  "orderstable": {
+    "executor": "Исполнитель",
+    "totalOrders": "Общее количество заказов",
+    "paidCount": "Количество оплаченных",
+    "paidAmount": "Сумма оплаченных",
+    "unpaidCount": "Количество неоплаченных",
+    "unpaidAmount": "Сумма неоплаченных",
+    "cancelledCount": "Количество отменённых",
+    "efficiency": "Эффективность"
+  },
+  "addVehicle": {
+    "title": "Добавить транспортное средство",
+    "branch": "Филиал",
+    "brand": "Марка",
+    "type": "Тип",
+    "year": "Год",
+    "class": "Класс",
+    "any": "Любой",
+    "selectBrand": "Выберите марку",
+    "selectType": "Выберите тип",
+    "selectClass": "Выберите класс",
+    "save": "Сохранить"
+  },
+  "application": {
+    "title": "Заявка для клиентов",
+    "demoMode": "Режим демонстрации",
+    "enabled": "Включено",
+    "disabled": "Отключено",
+    "restrictUnauthorized": "Ограничить неавторизованных клиентов",
+    "smsResendInterval": "Интервал повторной отправки SMS",
+    "smsLifetime": "Срок действия SMS",
+    "sec": "сек",
+    "min": "мин",
+    "showAdditionalProfileFields": "Показать дополнительные поля профиля",
+    "email": "Электронная почта",
+    "none": "Нет",
+    "requireProfileCompletion": "Требовать завершение профиля",
+    "welcomeScreen": "Экран приветствия",
+    "addressRequest": "Запрос адреса",
+    "never": "Никогда",
+    "firstVisit": "Первый визит",
+    "always": "Всегда",
+    "welcomeTitle": "Заголовок приветствия",
+    "enterWelcomeTitle": "Введите заголовок приветствия",
+    "welcomeText": "Текст приветствия",
+    "enterWelcomeMessage": "Введите текст приветствия",
+    "showDriverTips": "Показать советы водителю",
+    "showDriverTerminalPayment": "Показать оплату через терминал для водителя",
+    "orderScreenText": "Текст на экране заказа",
+    "paymentMethods": {
+      "title": "Способы оплаты",
+      "cash": "Наличные",
+      "bankCard": "Банковская карта",
+      "fastPayment": "Система быстрой оплаты",
+      "personalAccount": "Личный счет",
+      "bonusAccount": "Бонусный счет",
+      "terminal": "Терминал",
+      "corporateBalance": "Корпоративный баланс"
+    }
+  },
+  "atc": {
+    "title": "Внешняя АТС",
+    "providerLabel": "Список поставщиков АТС",
+    "selectPlaceholder": "Выберите поставщика",
+    "options": {
+      "disable": "Отключить",
+      "custom": "Пользовательская АТС",
+      "runtel": "Runtel",
+      "sms": "SMS-центр",
+      "common": "Общий",
+      "runtelNew": "Runtel New"
+    },
+    "saveButton": "Сохранить"
+  },
+  "carClasses": {
+    "title": "Классы автомобилей",
+    "addButton": "Добавить новость",
+    "tabs": {
+      "active": "Активные",
+      "blocked": "Заблокированные"
+    },
+    "selects": {
+      "cities": "Города",
+      "types": "Типы"
+    },
+    "table": {
+      "headers": {
+        "branchAndType": "Филиал и тип",
+        "yearOfRelease": "Год выпуска",
+        "assignACar": "Назначить машину",
+        "city": "Город"
+      },
+      "noItems": "Элементы не найдены"
+    }
+  },
+  "cmcSettings": {
+    "title": "CMC",
+    "providerLabel": "Выберите поставщика CMC",
+    "selectPlaceholder": "Выберите продолжительность",
+    "option60": "60 сек.",
+    "option120": "120 сек.",
+    "option180": "180 сек.",
+    "loginLabel": "Логин",
+    "passwordLabel": "Пароль",
+    "signatureLabel": "Подпись",
+    "serverLabel": "Адрес сервера",
+    "inputPlaceholder": "5 мин."
+  },
+  "customerNotifications": {
+    "title": "Уведомления для клиентов",
+    "orderCreatedDispatch": "Заказ создан через диспетчера",
+    "orderCreatedApp": "Заказ создан через приложение",
+    "accepted": "Принято",
+    "inProgress": "В процессе",
+    "ready": "Готово",
+    "pickup": "Забор",
+    "newOrder": "Новый заказ",
+    "executorAssigned": "Назначен исполнитель",
+    "driverWillStart": "Водитель начнёт после текущего заказа",
+    "newPreliminaryOrder": "Новый предварительный заказ",
+    "executorAcceptedOrder": "Исполнитель принял заказ",
+    "executorArrived": "Исполнитель прибыл",
+    "paidWaiting": "Оплачивается ожидание",
+    "orderExecution": "Выполнение заказа",
+    "completedPaid": "Выполнено и оплачено",
+    "orderCancelled": "Заказ отменён",
+    "executorRejected": "Исполнитель отклонил назначенный заказ",
+    "executorDelayed": "Исполнитель задерживается",
+    "preliminaryOrderExecution": "Выполнение предварительного заказа",
+    "overdueOrder": "Просроченный заказ",
+    "executorAcceptedPreliminary": "Исполнитель принял предварительный заказ",
+    "executorCancelled": "Исполнитель отменил заказ",
+    "driverNotFound": "Водитель не найден",
+    "cancelledByDriver": "Отменено водителем",
+    "orderedByMistake": "Заказ сделан по ошибке",
+    "executorRequestedCancel": "Исполнитель запросил отмену",
+    "waitingTooLong": "Ожидание слишком долгое",
+    "differentVehicle": "Прибыло другое транспортное средство",
+    "executorDifferentRoute": "Исполнитель выбрал другой маршрут",
+    "unhappyWithVehicle": "Не доволен моделью транспортного средства",
+    "nothing": "Ничего",
+    "smsToClient": "SMS клиенту",
+    "pushToClient": "PUSH клиенту",
+    "save": "Сохранить"
+  },
+  "onlineCheckout": {
+    "title": "Онлайн-касса",
+    "cashierProfiles": "Список профилей кассиров",
+    "cashierConfigurations": "Список конфигураций кассиров"
+  },
+  "organizationDetails": {
+    "title": "Данные организации",
+    "fullOrganizationName": "Полное название организации",
+    "organizationNamePlaceholder": "ООО 'Инфотранс'",
+    "taxiServiceName": "Название службы такси",
+    "taxiServiceNamePlaceholder": "Милли",
+    "legalAddress": "Юридический адрес",
+    "legalAddressPlaceholder": "РТ. Пестрецинский район...",
+    "postalAddress": "Почтовый адрес",
+    "postalAddressPlaceholder": "РТ. Пестрецинский район...",
+    "organizationPhone": "Телефон организации",
+    "phonePlaceholder": "+7(900)000-00-00",
+    "organizationEmail": "Электронная почта организации",
+    "emailPlaceholder": "email@example.com",
+    "website": "Веб-сайт",
+    "websitePlaceholder": "https://example.com",
+    "contactPerson": "Контактное лицо",
+    "lastName": "Фамилия",
+    "firstName": "Имя",
+    "middleName": "Отчество",
+    "contactPhone": "Телефон контактного лица",
+    "contactEmail": "Электронная почта контактного лица",
+    "organizationLogo": "Логотип организации",
+    "uploadLogo": "Загрузить логотип",
+    "logoRecommendation": "Рекомендуется: 256x256px или больше",
+    "logoFileTypes": "JPG, PNG или GIF. Максимум 5MB.",
+    "directorFullName": "Полное имя директора",
+    "fullNamePlaceholder": "Полное имя",
+    "position": "Должность",
+    "positionPlaceholder": "Директор",
+    "inn": "ИНН",
+    "innPlaceholder": "1686012898",
+    "kpp": "КПП",
+    "kppPlaceholder": "168601001",
+    "ogrn": "ОГРН",
+    "ogrnPlaceholder": "1221600048779",
+    "save": "Сохранить"
+  },
+  "orderDistributionSettingsI18n": {
+    "title": "Настройки распределения заказов",
+    "order": "Заказы",
+    "taxiDriver": "Водитель такси",
+    "driver": "Водитель",
+    "firstRule": "Первое правило",
+    "firstRuleTooltip": "Расстояние: учитывается близость машины к клиенту.\nРайон: машины, расположенные в том же районе, что и клиент, участвуют.",
+    "distance": "расстояние",
+    "district": "район",
+    "circles": "Круги",
+    "searchRadius": "Радиус поиска",
+    "repeatCount": "Количество повторов",
+    "circle": "Круг",
+    "addCircle": "Добавить круг",
+    "orderStatus": "Статус заказа между попытками распределения",
+    "toSingleExecutor": "К одному исполнителю",
+    "newOrder": "Новый заказ",
+    "freeOrder": "Свободный заказ",
+    "delayBetweenDistributionAttempts": "Задержка между попытками распределения",
+    "considerExecutorRating": "Учитывать рейтинг исполнителя при распределении",
+    "offerOrderSimultaneously": "Предлагать заказ одновременно",
+    "thirdRule": "Третье правило",
+    "forthRule": "Четвертое правило",
+    "no": "Нет",
+    "businessPlus": "Business+",
+    "executorBlockingType": "Тип блокировки исполнителя",
+    "consecutive": "Последовательно",
+    "perShift": "За смену"
+  },
+  "common": {
+    "loading": "Загрузка...",
+    "apply": "Применить",
+    "previous": "Назад",
+    "next": "Вперед",
+    "page": "Страница"
+  },
+  "driversOrders": {
+    "noOrders": "Нет заказов",
+    "noOrdersDescription": "Заказы для этого водителя не найдены.",
+    "inputs": {
+      "id": "ID",
+      "createdOn": "Создано",
+      "status": "Статус",
+      "distance": "Расстояние",
+      "duration": "Длительность",
+      "cost": "Стоимость",
+      "finalCost": "Итоговая стоимость",
+      "currency": "Валюта",
+      "addresses": "Адреса"
+    }
+  },
+  "viewOrders": {
+    "noOrders": "Нет заказов",
+    "noOrdersDescription": "Заказы для этого водителя не найдены.",
+    "rider": "Пассажир",
+    "driver": "Водитель",
+    "name": "Имя",
+    "mobile": "Телефон",
+    "noDriver": "Нет водителя",
+    "orderDetails": "Детали заказа",
+    "id": "ID",
+    "status": "Статус",
+    "created": "Создано",
+    "cost": "Стоимость",
+    "finalCost": "Итоговая стоимость",
+    "addresses": "Адреса"
+  }
+}

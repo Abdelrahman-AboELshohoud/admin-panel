@@ -41,6 +41,10 @@ const MySidebar = () => {
           name: t("links.customers.title"),
           path: "/control-panel/customers/active",
         },
+        {
+          name: t("links.customers.clients"),
+          path: "/control-panel/clients/active",
+        },
       ],
     },
     {
@@ -128,6 +132,10 @@ const MySidebar = () => {
       icon: <FaCog />,
       links: [
         {
+          name: t("links.settings.payment"),
+          path: "/control-panel/settings/payment",
+        },
+        {
           name: t("Organization details"),
           path: "/control-panel/settings/organization-details",
         },
@@ -162,6 +170,10 @@ const MySidebar = () => {
         {
           name: t("links.settings.atc"),
           path: "/control-panel/settings/atc",
+        },
+        {
+          name: t("links.settings.configuration"),
+          path: "/control-panel/settings/configuration",
         },
       ],
     },

@@ -9,8 +9,8 @@ import {
   Legend,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
-import { ChartTimeframe } from "../../../graphql/requests";
-import { Suspense } from "react";
+import { ChartTimeframe, IncomeChartGQL } from "../../../graphql/requests";
+import { Suspense, useEffect, useState } from "react";
 import { periodCalculating } from "./periodCalculating";
 import moment from "moment";
 
@@ -24,21 +24,29 @@ ChartJS.register(
   Legend
 );
 
-export default function Lines({
-  getBy,
-  apiData,
-}: {
-  getBy: ChartTimeframe;
-  apiData?: Array<{
-    count: number;
-    time: number;
-  }>;
-}) {
+export default function Lines({ getBy }: { getBy: ChartTimeframe }) {
+  const [apiData, setApiData] = useState<
+    Array<{ count: number; time: number }>
+  >([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await IncomeChartGQL({ timeframe: getBy });
+        if (data.data.length) {
+          setApiData(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData();
+  }, [getBy]);
+
   const res = periodCalculating(getBy);
   const labels = res.labels;
   const periods = res.periods;
 
-  console.log(apiData);
   const data = {
     labels,
     datasets: [
@@ -78,8 +86,8 @@ export default function Lines({
       title: {
         display: true,
         text: [
-          " Opening hours",
-          ` ${apiData?.reduce((acc, data) => acc + data.count, 0) || 0}`,
+          "Income",
+          ` ${apiData.reduce((acc, data) => acc + data.count, 0) || 0}`,
         ],
         align: "start" as const,
         color: "#353535",

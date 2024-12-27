@@ -1,40 +1,58 @@
-// import { Button } from "../ui/button";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "../ui/dialog";
-// import { useAssets } from "../../context/AssetsContext";
-// import { DialogDescription } from "@radix-ui/react-dialog";
+import { ReactNode } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../ui/dialog";
+import { Button } from "../ui/button";
 
-// export const MyDialog = ({
-//   trigger,
-//   title,
-//   description,
-//   ActionButton,
-// }: {
-//   description: string;
-//   trigger: any;
-//   title: string;
-//   ActionButton: React.ReactNode;
-// }) => {
-//   const { openDialog, handleOpenDialog } = useAssets();
-//   return (
-//     <Dialog open={openDialog} onOpenChange={handleOpenDialog}>
-//       <DialogTrigger>{trigger}</DialogTrigger>
-//       {ActionButton}
-//       {/* <DialogHeader>
-//         <DialogTitle className="text-xl font-bold">{title}</DialogTitle>
-//         <DialogDescription className="text-sm text-gray-500">
-//           {description}
-//         </DialogDescription>
-//       </DialogHeader> */}
-//       {/* <DialogFooter>
-//         <Button onClick={handleOpenDialog}>Close</Button>
-//       </DialogFooter> */}
-//     </Dialog>
-//   );
-// };
+interface MyDialogProps {
+  trigger?: ReactNode;
+  title: string;
+  description?: string;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
+  children: ReactNode;
+  showCloseButton?: boolean;
+  className?: string;
+}
+
+export const MyDialog = ({
+  trigger,
+  title,
+  description,
+  isOpen,
+  onOpenChange,
+  children,
+  showCloseButton = true,
+  className = "",
+}: MyDialogProps) => {
+  return (
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      <DialogContent className={`min-h-[200px] flex flex-col ${className}`}>
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          {description && (
+            <DialogDescription className="text-sm text-muted-foreground">
+              {description}
+            </DialogDescription>
+          )}
+        </DialogHeader>
+
+        <div className="flex-1 my-4">{children}</div>
+
+        {showCloseButton && (
+          <div className="flex justify-end mt-auto">
+            <Button variant="outline" onClick={() => onOpenChange(false)}>
+              Close
+            </Button>
+          </div>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};

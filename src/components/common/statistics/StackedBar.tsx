@@ -7,11 +7,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-
 import { Bar } from "react-chartjs-2";
+import { ChartTimeframe, RequestsChartGQL } from "../../../graphql/requests";
+import { Suspense, useEffect, useState } from "react";
 import { periodCalculating } from "./periodCalculating";
-import { ChartTimeframe } from "../../../graphql/requests";
-import { Suspense } from "react";
+import moment from "moment";
 
 ChartJS.register(
   CategoryScale,
@@ -22,108 +22,160 @@ ChartJS.register(
   Legend
 );
 
-export default function StackedBar({
-  getBy,
-  apiData,
-}: {
+// Fake data structure matching the API response
+const fakeData = [
+  { time: new Date().getTime(), sum: 100, count: 20 },
+  { time: new Date().getTime() - 86400000, sum: 150, count: 25 },
+  { time: new Date().getTime() - 2 * 86400000, sum: 80, count: 15 },
+  { time: new Date().getTime() - 3 * 86400000, sum: 120, count: 22 },
+  { time: new Date().getTime() - 4 * 86400000, sum: 90, count: 18 },
+  { time: new Date().getTime() - 5 * 86400000, sum: 160, count: 30 },
+];
+
+interface StackedBarProps {
   getBy: ChartTimeframe;
-  apiData?: any;
-}) {
-  const calculateMetrics = (apiData: any) => {
-    if (!apiData) return null;
+}
 
-    const times = apiData.map((item: any) => item.time);
-    const sums = apiData.map((item: any) => item.sum);
-    const counts = apiData.map((item: any) => item.count);
+export default function StackedBar({ getBy }: StackedBarProps) {
+  const [apiData, setApiData] = useState<typeof fakeData>(fakeData);
 
-    const percentages = counts.map((count: number, i: number) => {
-      return sums[i] > 0 ? (count / sums[i]) * 100 : 0;
-    });
-
-    return {
-      times,
-      sums,
-      counts,
-      percentages,
-    };
+  const fetchOrdersFunction = async () => {
+    const res = await RequestsChartGQL({ timeframe: getBy });
+    setApiData(res.data.requestChart);
   };
 
-  const metrics = calculateMetrics(apiData);
-  const labels = periodCalculating(getBy).labels;
-  console.log(labels);
+  const timeCalculating = periodCalculating(getBy);
+  const labels = timeCalculating.labels;
+  const periods = timeCalculating.periods;
+
   const data = {
     labels,
     datasets: [
       {
-        backgroundColor: "rgba(255,99,132)",
-        data: metrics?.counts || [65, 59, 80, 81, 56, 55, 40, 20],
+        label: "Orders Count",
+        data: periods.map((label) => {
+          const dataPoint = apiData?.find((data) => {
+            const date = new Date(data.time);
+            let timeLabel = "";
+            switch (getBy) {
+              case ChartTimeframe.Daily:
+                timeLabel = moment(date).format("HH");
+                break;
+              case ChartTimeframe.Weekly:
+                timeLabel = moment(date).format("ddd DD");
+                break;
+              case ChartTimeframe.Monthly:
+                timeLabel = moment(date).format("ddd DD");
+                break;
+            }
+            return label === timeLabel;
+          });
+          return dataPoint ? dataPoint.count : 0;
+        }),
+        backgroundColor: "rgba(255, 99, 132, 0.8)",
       },
       {
-        backgroundColor: "rgba(54, 162, 235)",
-        data: metrics?.percentages || [28, 48, 40, 19, 86, 27, 90, 20],
+        label: "Success Rate %",
+        data: periods.map((label) => {
+          const dataPoint = apiData?.find((data) => {
+            const date = new Date(data.time);
+            let timeLabel = "";
+            switch (getBy) {
+              case ChartTimeframe.Daily:
+                timeLabel = moment(date).format("HH");
+                break;
+              case ChartTimeframe.Weekly:
+                timeLabel = moment(date).format("ddd DD");
+                break;
+              case ChartTimeframe.Monthly:
+                timeLabel = moment(date).format("ddd DD");
+                break;
+            }
+            return label === timeLabel;
+          });
+          return dataPoint && dataPoint.sum > 0
+            ? Math.round((dataPoint.count / dataPoint.sum) * 100)
+            : 0;
+        }),
+        backgroundColor: "rgba(54, 162, 235, 0.8)",
       },
     ],
   };
 
-  const totalOrders =
-    metrics?.counts.reduce((a: number, b: number) => a + b, 0) || 0;
-
   const options = {
+    responsive: true,
     plugins: {
       title: {
         display: true,
-        text: [" Orders", `  ${totalOrders}`],
+        text: [
+          "Orders Overview",
+          `Total: ${apiData?.reduce((acc, data) => acc + data.count, 0) || 0}`,
+        ],
         align: "start" as const,
-        color: "#353535",
+        color: "#121212",
         font: {
           size: 16,
-          weight: 700,
+          weight: "bold" as const,
         },
         padding: {
-          bottom: 15,
+          bottom: 20,
+          left: 30,
         },
       },
       legend: {
         display: false,
       },
-    },
-    interaction: {
-      mode: "index" as const,
-      intersect: false,
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            const label = context.dataset.label || "";
+            const value = context.parsed.y;
+            return `${label}: ${value}${context.datasetIndex === 1 ? "%" : ""}`;
+          },
+        },
+      },
     },
     scales: {
       x: {
         stacked: true,
-        ticks: {
-          autoSkip: false,
-          maxRotation: 45,
-          minRotation: 45,
-          font: {
-            size: 11,
-          },
-        },
         grid: {
-          offset: true,
+          color: "rgba(75, 85, 99, 0.2)",
+        },
+        ticks: {
+          color: "#9ca3af",
+          autoSkip: false,
         },
       },
       y: {
-        ticks: {
-          stepSize: 2,
-          maxTicksLimit: 20,
-        },
-        min: 0,
-        max: 300,
-        suggestedMax: 200,
         stacked: true,
+        grid: {
+          color: "rgba(75, 85, 99, 0.2)",
+        },
+        ticks: {
+          color: "#9ca3af",
+          callback: function (value: any): any {
+            return `${value}${
+              this.chart.getDatasetMeta(1) ===
+              this.chart.getDatasetMeta(this.datasetIndex)
+                ? "%"
+                : ""
+            }`;
+          },
+        },
       },
     },
     maintainAspectRatio: false,
-    responsive: true,
   };
+
+  useEffect(() => {
+    fetchOrdersFunction();
+  }, [getBy]);
 
   return (
     <Suspense>
-      <Bar data={data} options={options} />
+      <div style={{ height: "400px", width: "100%" }}>
+        <Bar data={data} options={options} />
+      </div>
     </Suspense>
   );
 }

@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import "./global.css";
 import ControlPanel from "./pages/ControlPanel";
-import Orders from "./pages/Orders";
+import Orders from "./pages/orders/Orders";
 import Main from "./pages/Main";
 import Customers from "./components/sections/customers/Customers";
 import Customer from "./components/sections/customers/Customer";
@@ -46,6 +46,16 @@ import ATC from "./components/sections/settings/ATC";
 
 import DriverSettings from "./components/sections/settings/Drivers";
 import AddDriver from "./pages/Drivers/AddDriver";
+import ViewOrder from "./pages/Drivers/ViewOrder";
+import Clients from "./components/sections/customers/Clients";
+import AddClient from "./components/sections/customers/AddClient";
+import Client from "./components/sections/customers/Client";
+import Fleet from "./pages/Drivers/Fleet";
+import Payment from "./components/sections/settings/Payment";
+import Configuration from "./components/sections/settings/Configuration";
+import SingleNews from "./components/sections/directories/SingleNews";
+import Employee from "./components/sections/directories/Employee";
+import AddEmployee from "./components/sections/directories/AddEmployee";
 
 function App() {
   return (
@@ -78,6 +88,18 @@ function App() {
             element={<ControlPanel children={<Customer />} />}
           />
           <Route
+            path="/control-panel/clients/:status"
+            element={<ControlPanel children={<Clients />} />}
+          />
+          <Route
+            path="/control-panel/clients/add-client"
+            element={<ControlPanel children={<AddClient />} />}
+          />
+          <Route
+            path="/control-panel/clients/:status/:id/profile"
+            element={<ControlPanel children={<Client />} />}
+          />
+          <Route
             path="/control-panel/drivers/:status"
             element={<ControlPanel children={<Drivers />} />}
           />
@@ -90,12 +112,20 @@ function App() {
             element={<ControlPanel children={<Cars />} />}
           />
           <Route
+            path="/control-panel/orders/:orderId"
+            element={<ControlPanel children={<ViewOrder />} />}
+          />
+          <Route
             path="/control-panel/cars/:status/:id/:status"
             element={<ControlPanel children={<Car />} />}
           />
           <Route
             path="/control-panel/drivers-groups/:status"
             element={<ControlPanel children={<DriversGroups />} />}
+          />
+          <Route
+            path="/control-panel/drivers-groups/fleet/:fleetId"
+            element={<ControlPanel children={<Fleet />} />}
           />
           <Route
             path="/control-panel/drivers/add-driver"
@@ -170,10 +200,22 @@ function App() {
             element={<ControlPanel children={<Employees />} />}
           />
           <Route
+            path="/control-panel/directories/employees/add"
+            element={<ControlPanel children={<AddEmployee />} />}
+          />
+          <Route
+            path="/control-panel/directories/employees/:id"
+            element={<ControlPanel children={<Employee />} />}
+          />
+          <Route
             path="/control-panel/directories/map"
             element={<ControlPanel children={<MapPage />} />}
           />
         </Route>
+        <Route
+          path="/control-panel/directories/news/:id"
+          element={<ControlPanel children={<SingleNews />} />}
+        />
         <Route
           path="/control-panel/directories/add-in-map"
           element={<ControlPanel children={<AddInMap />} />}
@@ -193,6 +235,10 @@ function App() {
         <Route
           path="/control-panel/directories/add-address"
           element={<ControlPanel children={<AddAddress />} />}
+        />
+        <Route
+          path="/control-panel/settings/payment"
+          element={<ControlPanel children={<Payment />} />}
         />
         <Route
           path="/control-panel/settings/organization-details"
@@ -233,6 +279,10 @@ function App() {
         <Route
           path="/control-panel/settings/drivers"
           element={<ControlPanel children={<DriverSettings />} />}
+        />
+        <Route
+          path="/control-panel/settings/configuration"
+          element={<ControlPanel children={<Configuration />} />}
         />
       </Routes>
     </BrowserRouter>

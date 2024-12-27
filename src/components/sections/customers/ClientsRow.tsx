@@ -1,17 +1,17 @@
 import { TableCell, TableRow } from "../../ui/table";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { Driver } from "../../../graphql/requests";
+import { Rider } from "../../../graphql/requests";
 import { useTranslation } from "react-i18next";
 
-const DriverRow = ({ data, id }: { data: Driver; id: string }) => {
+const ClientRow = ({ data, id }: { data: Rider; id: string }) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  console.log(data);
+
   return (
     <TableRow
       onClick={() => {
-        navigate(`/control-panel/drivers/${data.status}/${id}/profile`);
+        navigate(`/control-panel/clients/${data.status}/${id}/profile`);
       }}
       key={id}
       className="bg-[#282828] border-none mb-2 hover:bg-[#2F2F2F] hover:cursor-pointer"
@@ -25,7 +25,7 @@ const DriverRow = ({ data, id }: { data: Driver; id: string }) => {
         <img
           className="w-12 h-12 rounded-full object-cover"
           src={data.media?.address}
-          alt="driver"
+          alt="client"
         />
       </TableCell>
       <TableCell>
@@ -35,24 +35,16 @@ const DriverRow = ({ data, id }: { data: Driver; id: string }) => {
         </div>
       </TableCell>
       <TableCell>{data.mobileNumber || t("notAssigned")}</TableCell>
-      <TableCell>{data.rating || 0}</TableCell>
-      <TableCell>
-        <div>
-          <div>{data?.carProductionYear || "-"}</div>
-          <div className="text-sm text-gray-400">{data?.carColorId || "-"}</div>
-        </div>
-      </TableCell>
-
       <TableCell>
         {t(
-          `drivers.driver.status.${
+          `clients.client.status.${
             data.status.charAt(0).toLowerCase() + data.status.slice(1)
           }`
         )}
       </TableCell>
-      <TableCell>{data.reviewCount || 0}</TableCell>
+      <TableCell>{data.orders?.totalCount || 0}</TableCell>
     </TableRow>
   );
 };
 
-export default DriverRow;
+export default ClientRow;

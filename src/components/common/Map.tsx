@@ -1,43 +1,46 @@
 import { useState } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { renderToStaticMarkup } from "react-dom/server";
-import { MdLocationPin } from "react-icons/md";
-const MapWithClusters = () => {
-  const [selectedLocations, setSelectedLocations] = useState<
-    { lat: number; lng: number }[]
-  >([]);
+import { GoogleMap, LoadScript, Marker, Polygon } from "@react-google-maps/api";
+import { iconUrl } from "./Mark";
 
+const MapWithClusters = ({
+  selectedLocations,
+  setSelectedLocations,
+  center = { lat: 0, lng: 0 },
+  children,
+  regions,
+  ...props
+}: {
+  selectedLocations?: { lat: number; lng: number }[];
+  setSelectedLocations?: any;
+  center?: { lat: number; lng: number };
+  props?: object;
+  children?: React.ReactNode;
+  regions?: any;
+}) => {
   const mapContainerStyle = {
     width: "100%",
     height: "400px",
   };
 
-  const createIconURL = (IconComponent: any) => {
-    const svgString = renderToStaticMarkup(<IconComponent color="#d3121f" />);
-    return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svgString)}`;
-  };
-
-  const iconUrl = createIconURL(MdLocationPin);
-
-  const center = {
-    lat: 37.7749, // Example latitude (San Francisco)
-    lng: -122.4194, // Example longitude
-  };
+  const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
 
   return (
-    <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}>
+    <LoadScript
+      googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+      onLoad={() => setGoogleMapsLoaded(true)}
+    >
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         onClick={(e) => {
           e.domEvent;
-          if (e.latLng) {
+          if (e.latLng && selectedLocations) {
             if (selectedLocations.length === 2) {
-              setSelectedLocations((prev) => [
+              setSelectedLocations((prev: any) => [
                 prev[0],
                 { lat: e.latLng?.lat() ?? 0, lng: e.latLng?.lng() ?? 0 },
               ]);
             } else {
-              setSelectedLocations((prev) => [
+              setSelectedLocations((prev: any) => [
                 ...prev,
                 { lat: e.latLng?.lat() ?? 0, lng: e.latLng?.lng() ?? 0 },
               ]);
@@ -46,22 +49,32 @@ const MapWithClusters = () => {
         }}
         center={center}
         zoom={10}
+        {...props}
       >
-        {selectedLocations.map((location, index) => (
-          <Marker
-            onClick={() => {
-              setSelectedLocations((prev) =>
-                prev.filter((_, i) => i !== index)
-              );
-            }}
-            key={`dynamic-${index}`}
-            position={location}
-            icon={{
-              url: iconUrl,
-              scaledSize: new google.maps.Size(40, 40),
-            }}
+        {googleMapsLoaded &&
+          selectedLocations?.map((location, index) => (
+            <Marker
+              onClick={() => {
+                setSelectedLocations((prev: any) =>
+                  prev.filter((_: any, i: number) => i !== index)
+                );
+              }}
+              key={`dynamic-${index}`}
+              position={location}
+              icon={{
+                url: iconUrl,
+                scaledSize: new window.google.maps.Size(20, 20),
+              }}
+            />
+          ))}
+        {regions?.map((region: any) => (
+          <Polygon
+            key={region.id}
+            paths={region.location}
+            options={{ fillColor: "#0000FF", strokeColor: "#0000FF" }}
           />
         ))}
+        {children}
       </GoogleMap>
     </LoadScript>
   );

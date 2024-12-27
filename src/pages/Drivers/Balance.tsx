@@ -9,13 +9,53 @@ import {
   TableHeader,
   TableRow,
 } from "../../components/ui/table";
-import { DriverFinancialsGQL } from "../../graphql/requests";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../../components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
+import {
+  DriverFinancialsGQL,
+  CreateDriverTransactionGQL,
+} from "../../graphql/requests";
 import { Driver as DriverType } from "../../graphql/requests";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
+import {
+  DriverRechargeTransactionType,
+  DriverDeductTransactionType,
+  TransactionAction,
+} from "../../graphql/requests";
+
+interface TransactionFormData {
+  amount: string;
+  currency: string;
+  action: TransactionAction;
+  rechargeType?: DriverRechargeTransactionType;
+  deductType?: DriverDeductTransactionType;
+  description?: string;
+}
 
 const Balance = ({ profile }: { profile: DriverType }) => {
+  const { t } = useTranslation();
   const [financialData, setFinancialData] = useState<any>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState<TransactionFormData>({
+    amount: "",
+    currency: "USD",
+    action: TransactionAction.Recharge,
+  });
+
   const getUserFinancialData = async () => {
     const res = await DriverFinancialsGQL({
       id: profile.id,
@@ -24,36 +64,192 @@ const Balance = ({ profile }: { profile: DriverType }) => {
         limit: 10,
       },
     });
-    console.log(res.data);
     setFinancialData(res.data);
   };
+
   useEffect(() => {
     getUserFinancialData();
   }, []);
 
-  // const transactions: Transaction[] = [
-  //   {
-  //     date: "30.06.2023",
-  //     operation: "Balance on the balance sheet at the beginning of the period",
-  //     writedowns: "",
-  //     entrance: "-36.15 ₽",
-  //   },
-  //   {
-  //     date: "07.07.2023",
-  //     time: "12:07",
-  //     operation: "Write-off Comment: Write-off of commission for order No.6212",
-  //     writedowns: "155.1 ₽",
-  //     entrance: "",
-  //   },
-  //   {
-  //     date: "07.07.2023",
-  //     time: "12:07",
-  //     operation:
-  //       "Crediting - Personal account Comment: Payment for the order by bank card No.6212",
-  //     writedowns: "",
-  //     entrance: "1,034 rubles",
-  //   },
-  // ];
+  const handleCreateTransaction = async () => {
+    try {
+      setIsSubmitting(true);
+      await CreateDriverTransactionGQL({
+        input: {
+          driverId: profile.id,
+          amount: parseFloat(formData.amount),
+          currency: formData.currency,
+          action: formData.action,
+          rechargeType:
+            formData.action === TransactionAction.Recharge
+              ? formData.rechargeType
+              : undefined,
+          deductType:
+            formData.action === TransactionAction.Deduct
+              ? formData.deductType
+              : undefined,
+          description: formData.description,
+        },
+      });
+
+      setIsDialogOpen(false);
+      getUserFinancialData(); // Refresh the list
+      setFormData({
+        amount: "",
+        currency: "USD",
+        action: TransactionAction.Recharge,
+      });
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const renderTransactionDialog = () => (
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <DialogContent className="bg-gray-800 text-gray-100">
+        <DialogHeader>
+          <DialogTitle>{t("balance.createTransaction")}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <label>{t("balance.action")}</label>
+            <Select
+              value={formData.action}
+              onValueChange={(value: TransactionAction) =>
+                setFormData((prev) => ({ ...prev, action: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={TransactionAction.Recharge}>
+                  {t("balance.recharge")}
+                </SelectItem>
+                <SelectItem value={TransactionAction.Deduct}>
+                  {t("balance.deduct")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {formData.action === TransactionAction.Recharge && (
+            <div className="space-y-2">
+              <label>{t("balance.rechargeType")}</label>
+              <Select
+                value={formData.rechargeType}
+                onValueChange={(value: DriverRechargeTransactionType) =>
+                  setFormData((prev) => ({ ...prev, rechargeType: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={DriverRechargeTransactionType.Gift}>
+                    {t("balance.manual")}
+                  </SelectItem>
+                  <SelectItem
+                    value={DriverRechargeTransactionType.BankTransfer}
+                  >
+                    {t("balance.bankTransfer")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {formData.action === TransactionAction.Deduct && (
+            <div className="space-y-2">
+              <label>{t("balance.deductType")}</label>
+              <Select
+                value={formData.deductType}
+                onValueChange={(value: DriverDeductTransactionType) =>
+                  setFormData((prev) => ({ ...prev, deductType: value }))
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value={DriverDeductTransactionType.Withdraw}>
+                    {t("balance.withdraw")}
+                  </SelectItem>
+                  <SelectItem value={DriverDeductTransactionType.Correction}>
+                    {t("balance.correction")}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <label>{t("balance.amount")}</label>
+            <Input
+              type="number"
+              value={formData.amount}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, amount: e.target.value }))
+              }
+              className="bg-gray-700"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label>{t("balance.currency")}</label>
+            <Select
+              value={formData.currency}
+              onValueChange={(value: string) =>
+                setFormData((prev) => ({ ...prev, currency: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="USD">USD</SelectItem>
+                <SelectItem value="EUR">EUR</SelectItem>
+                <SelectItem value="GBP">GBP</SelectItem>
+                <SelectItem value="RUB">RUB</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <label>{t("balance.description")}</label>
+            <Input
+              value={formData.description}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
+              className="bg-gray-700"
+            />
+          </div>
+
+          <div className="flex justify-end gap-4 mt-4">
+            <Button
+              variant="outline"
+              onClick={() => setIsDialogOpen(false)}
+              disabled={isSubmitting}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button
+              onClick={handleCreateTransaction}
+              disabled={isSubmitting || !formData.amount}
+            >
+              {isSubmitting ? t("common.processing") : t("common.create")}
+            </Button>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
 
   return (
     <div className="space-y-6 p-6 ">
@@ -98,7 +294,12 @@ const Balance = ({ profile }: { profile: DriverType }) => {
             className="w-40 bg-neutral-800/50"
             defaultValue="2023-07-07"
           />
-          <Button className="ml-auto">Show</Button>
+          <div className="ml-auto space-x-2">
+            <Button>Show</Button>
+            <Button variant="outline" onClick={() => setIsDialogOpen(true)}>
+              Create Transaction
+            </Button>
+          </div>
         </div>
 
         <Table>
@@ -143,6 +344,7 @@ const Balance = ({ profile }: { profile: DriverType }) => {
             )}
           </TableBody>
         </Table>
+        {renderTransactionDialog()}
       </div>
     </div>
   );

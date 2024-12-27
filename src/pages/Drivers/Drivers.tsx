@@ -1,3 +1,4 @@
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "../../components/ui/button";
 import Switch from "../../components/common/Switch";
 import {
@@ -17,59 +18,167 @@ import {
 import { useLocation, useNavigate } from "react-router-dom";
 import DriverRow from "../../components/sections/drivers/DriverRow";
 import DriversFilters from "../../components/sections/drivers/DriversFilters";
-import { Driver, DriversListGQL } from "../../graphql/requests";
+import {
+  Driver,
+  DriversListGQL,
+  DriverSearchGQL,
+  DriverFilter,
+} from "../../graphql/requests";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
+
+const ITEMS_PER_PAGE = 10;
+
+const TableColumns = [
+  "Date of registration",
+  "Photo",
+  "Name",
+  "Phone number",
+  "Rating",
+  "Status",
+  "Reviews count",
+];
+
 const tabItems = [
   { value: "active", label: "Active" },
   { value: "blocked", label: "Blocked" },
   { value: "inactive", label: "Inactive" },
 ];
 
-const TableColumns = [
-  "Date of registration",
-  "Name",
-  "Phone number",
-  "Rating",
-  "Car",
-  "Status",
-  "Reviews count",
-];
-
 const Drivers = () => {
   const location = useLocation();
-  const [drivers, setDrivers] = useState<Driver[]>([]);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    const getAllDrivers = async () => {
-      const res: any = await DriversListGQL({
+  const [drivers, setDrivers] = useState<Driver[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [filters, setFilters] = useState<DriverFilter>({});
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const fetchDrivers = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const response = await DriversListGQL({
         paging: {
-          offset: 0,
-          limit: 10,
+          offset: (currentPage - 1) * ITEMS_PER_PAGE,
+          limit: ITEMS_PER_PAGE,
+        },
+        filter: {
+          ...filters,
+          ...(searchQuery && {
+            or: [
+              { firstName: { ilike: `%${searchQuery}%` } },
+              { lastName: { ilike: `%${searchQuery}%` } },
+              { phone: { ilike: `%${searchQuery}%` } },
+            ],
+          }),
         },
       });
-      console.log(res);
-      setDrivers(res?.data?.drivers?.nodes);
-    };
-    getAllDrivers();
-  }, []);
 
-  const renderPagination = () => (
-    <div className="flex items-center gap-2 mt-4">
-      <Button variant="outline" size="icon" className="w-8 h-8">
-        1
-      </Button>
-      <Button variant="outline" size="icon" className="w-8 h-8 text-gray-400">
-        2
-      </Button>
-      <span className="text-gray-400">...</span>
-      <Button variant="outline" size="icon" className="w-8 h-8 text-gray-400">
-        7
-      </Button>
-    </div>
-  );
+      if (response.data?.drivers) {
+        setDrivers(response.data.drivers.nodes);
+        setTotalCount(response.data.drivers.totalCount);
+      }
+    } catch (error) {
+      console.error("Error fetching drivers:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, filters, searchQuery]);
+
+  useEffect(() => {
+    fetchDrivers();
+  }, [fetchDrivers]);
+
+  const handleFilterChange = (newFilters: DriverFilter) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
+
+  const renderPagination = () => {
+    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+    const maxVisiblePages = 5;
+    const pages = [];
+
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    // First page
+    if (startPage > 1) {
+      pages.push(
+        <Button
+          key="1"
+          variant="outline"
+          size="icon"
+          className="w-8 h-8"
+          onClick={() => setCurrentPage(1)}
+        >
+          1
+        </Button>
+      );
+      if (startPage > 2) pages.push(<span key="dots1">...</span>);
+    }
+
+    // Page numbers
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Button
+          key={i}
+          variant="outline"
+          size="icon"
+          className={`w-8 h-8 ${
+            currentPage === i ? "bg-primary text-white" : "text-gray-400"
+          }`}
+          onClick={() => setCurrentPage(i)}
+        >
+          {i}
+        </Button>
+      );
+    }
+
+    // Last page
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) pages.push(<span key="dots2">...</span>);
+      pages.push(
+        <Button
+          key={totalPages}
+          variant="outline"
+          size="icon"
+          className="w-8 h-8"
+          onClick={() => setCurrentPage(totalPages)}
+        >
+          {totalPages}
+        </Button>
+      );
+    }
+
+    return (
+      <div className="flex items-center justify-center gap-2 mt-4">
+        <Button
+          variant="outline"
+          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+          disabled={currentPage === 1}
+        >
+          {t("common.previous")}
+        </Button>
+        {pages}
+        <Button
+          variant="outline"
+          onClick={() =>
+            setCurrentPage((prev) => Math.min(totalPages, prev + 1))
+          }
+          disabled={currentPage === totalPages}
+        >
+          {t("common.next")}
+        </Button>
+      </div>
+    );
+  };
 
   return (
     <div className="p-6 space-y-6">
@@ -103,40 +212,58 @@ const Drivers = () => {
         </TabsList>
 
         <TabsContent value={location.pathname.split("/")[3]}>
-          <DriversFilters />
-
-          {location.pathname.split("/")[3] === "active" && (
-            <div className="flex items-center gap-6 mb-6">
-              <span className="text-sm text-gray-300">
-                {t("drivers.online")}
-              </span>
-              <Switch checked={false} disabled={false} />
-            </div>
-          )}
+          <DriversFilters
+            onFilterChange={handleFilterChange}
+            onSearchChange={setSearchQuery}
+            isLoading={isLoading}
+          />
 
           <Table>
             <TableHeader>
               <TableRow className="border-none hover:bg-transparent">
                 {TableColumns.map((column) => (
                   <TableHead key={column} className="text-gray-400">
-                    {column}
+                    {t(
+                      `drivers.columns.${column
+                        .toLowerCase()
+                        .replace(/\s+/g, "_")}`
+                    )}
                   </TableHead>
                 ))}
               </TableRow>
             </TableHeader>
             <TableBody>
-              {drivers &&
-                drivers?.map((driver: Driver) => (
+              {isLoading ? (
+                <TableRow>
+                  <td
+                    colSpan={TableColumns.length}
+                    className="text-center py-8"
+                  >
+                    {t("common.loading")}
+                  </td>
+                </TableRow>
+              ) : drivers.length > 0 ? (
+                drivers.map((driver) => (
                   <DriverRow
                     key={driver.id}
                     data={driver}
                     id={String(driver.id)}
                   />
-                ))}
+                ))
+              ) : (
+                <TableRow>
+                  <td
+                    colSpan={TableColumns.length}
+                    className="text-center py-8"
+                  >
+                    {t("drivers.no_results")}
+                  </td>
+                </TableRow>
+              )}
             </TableBody>
           </Table>
 
-          {renderPagination()}
+          {drivers.length > 0 && renderPagination()}
         </TabsContent>
 
         <TabsContent value="blocked" />
@@ -145,24 +272,5 @@ const Drivers = () => {
     </div>
   );
 };
-
-// const drivers = [
-//   {
-//     id: 1,
-//     registrationDate: "06.07.2023 12:15",
-//     name: "Shamsemukhametov",
-//     fullName: "Fail Nurmukhametovich",
-//     avatar: undefined,
-//     profession: "Taxi driver",
-//     balance: "1,721.42 Rubles",
-//     status: "active",
-//     car: {
-//       model: "Hyundai Equus",
-//       number: "0333EC116",
-//     },
-//     changeDate: "06.07.2023 12:33",
-//     changedBy: "Jalalitdinov P.P.",
-//   },
-// ];
 
 export default Drivers;

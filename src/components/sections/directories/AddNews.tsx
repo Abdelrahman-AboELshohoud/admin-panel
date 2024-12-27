@@ -3,13 +3,6 @@ import { Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Input } from "../../ui/input";
 import { Textarea } from "../../ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../ui/select";
 import Switch from "../../common/Switch";
 import { Button } from "../../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
@@ -17,12 +10,74 @@ import { cn } from "../../../lib/utils";
 import { format } from "date-fns";
 import { Calendar as CalendarComponent } from "../../ui/calendar";
 import { useTranslation } from "react-i18next";
+import {
+  CreateAnnouncementGQL,
+  AnnouncementUserType,
+} from "../../../graphql/requests";
+import toast from "react-hot-toast";
 
 export default function AddNewsForm() {
   const { t } = useTranslation();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState<Date | undefined>(new Date());
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
-  const [isBlocked, _setIsBlocked] = useState(false);
+  const [userType, setUserType] = useState<AnnouncementUserType[]>([]);
+
+  const validateForm = () => {
+    if (!title.trim()) {
+      toast.error(t("Title is required"));
+      return false;
+    }
+    if (!startDate) {
+      toast.error(t("Start date is required"));
+      return false;
+    }
+    if (!endDate) {
+      toast.error(t("End date is required"));
+      return false;
+    }
+    if (startDate > endDate) {
+      toast.error(t("Start date cannot be after end date"));
+      return false;
+    }
+    if (userType.length === 0) {
+      toast.error(t("At least one user type must be selected"));
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async () => {
+    try {
+      if (!validateForm()) {
+        return;
+      }
+
+      const response = await CreateAnnouncementGQL({
+        input: {
+          title,
+          description,
+          startAt: startDate?.toISOString(),
+          expireAt: endDate?.toISOString(),
+          userType: userType,
+        },
+      });
+      console.log(response);
+
+      toast.success(t("Announcement created successfully"));
+
+      // Reset form
+      setTitle("");
+      setDescription("");
+      setStartDate(new Date());
+      setEndDate(new Date());
+      setUserType([]);
+    } catch (error) {
+      console.error(error);
+      toast.error(t("Error creating announcement"));
+    }
+  };
 
   const renderDateButton = ({
     date,
@@ -43,6 +98,16 @@ export default function AddNewsForm() {
     </Button>
   );
 
+  const toggleUserType = (type: AnnouncementUserType) => {
+    setUserType((prev) => {
+      if (prev.includes(type)) {
+        return prev.filter((t) => t !== type);
+      } else {
+        return [...prev, type];
+      }
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background p-4 dark">
       <Card className="card-shape w-2/3">
@@ -59,32 +124,29 @@ export default function AddNewsForm() {
             </label>
             <Input
               id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
               placeholder={t("addNews.titlePlaceholder")}
               className="custom-input"
             />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="branch" className="text-sm">
-              {t("addNews.branchLabel")}{" "}
-              <span className="text-destructive">*</span>
+            <label className="text-sm">
+              {t("User Type")} <span className="text-destructive">*</span>
             </label>
-            <Select>
-              <SelectTrigger className="custom-input">
-                <SelectValue placeholder={t("addNews.branchPlaceholder")} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="branch1">
-                  {t("addNews.branches")[0]}
-                </SelectItem>
-                <SelectItem value="branch2">
-                  {t("addNews.branches")[1]}
-                </SelectItem>
-                <SelectItem value="branch3">
-                  {t("addNews.branches")[2]}
-                </SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="flex gap-10">
+              {Object.values(AnnouncementUserType).map((type) => (
+                <div className="flex items-center gap-2">
+                  <Switch
+                    disabled={false}
+                    checked={userType.includes(type)}
+                    onChange={() => toggleUserType(type)}
+                  />
+                  <label className="text-sm">{type}</label>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -93,6 +155,8 @@ export default function AddNewsForm() {
             </label>
             <Textarea
               id="description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
               placeholder={t("addNews.descriptionPlaceholder")}
               className="min-h-[100px] bg-[#121212] resize-none outline-none focus:outline-none select-none"
             />
@@ -106,7 +170,7 @@ export default function AddNewsForm() {
               <Popover>
                 <PopoverTrigger
                   asChild
-                  className="bg-[#121212] hover:bg-[#666]"
+                  className="bg-[#121212] hover:bg-[#666] custom-input"
                 >
                   {renderDateButton({
                     date: startDate,
@@ -125,7 +189,7 @@ export default function AddNewsForm() {
               <Popover>
                 <PopoverTrigger
                   asChild
-                  className="bg-[#121212] hover:bg-[#666]"
+                  className="bg-[#121212] hover:bg-[#666] custom-input"
                 >
                   {renderDateButton({
                     date: endDate,
@@ -145,27 +209,22 @@ export default function AddNewsForm() {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="push" className="text-sm">
-              {t("addNews.pushLabel")}
+            <label htmlFor="url" className="text-sm">
+              {t("addNews.urlLabel")}
             </label>
-            <Textarea
-              id="push"
-              placeholder={t("addNews.pushPlaceholder")}
-              className="min-h-[100px] bg-[#121212] resize-none outline-none focus:outline-none select-none"
+            <Input
+              id="url"
+              placeholder={t("addNews.urlPlaceholder")}
+              className="custom-input"
             />
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <label>{t("addNews.blockLabel")}</label>
-              <Switch
-                checked={isBlocked}
-                // onCheckedChange={setIsBlocked}
-                disabled={false}
-              />
-            </div>
-            <button className="bg-primary text-black px-8 w-[100px] hover:bg-primary/80 transition rounded-md py-2">
-              {t("addNews.saveButton")}
+            <button
+              onClick={handleSubmit}
+              className="bg-primary text-black px-8 w-fit hover:bg-primary/80 transition rounded-md py-2 ml-auto"
+            >
+              {t("addNews.announceButton")}
             </button>
           </div>
         </CardContent>

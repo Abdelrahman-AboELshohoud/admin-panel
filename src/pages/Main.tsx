@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  ChartTimeframe,
-  IncomeChartGQL,
-  OverviewDriverPagingGQL,
-  RequestsChartGQL,
-  ViewSosGQL,
-} from "../graphql/requests";
+import { ChartTimeframe, RequestsChartGQL } from "../graphql/requests";
 import { useTranslation } from "react-i18next";
 import StackedBar from "../components/common/statistics/StackedBar";
 import Lines from "../components/common/statistics/Lines";
@@ -15,6 +9,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "../components/ui/tabs";
+import ComplicatedLines from "../components/common/statistics/ComplicatedLines";
 
 export default function Main() {
   const { t } = useTranslation();
@@ -79,18 +74,7 @@ export default function Main() {
                 </div>
               </div>
               <div className="w-1/4 aspect-[9/4] bg-gray-200 rounded-lg p-4">
-                <Lines
-                  getBy={getBy}
-                  apiData={[
-                    { count: 10, time: new Date().getTime() },
-                    { count: 15, time: new Date().getTime() - 86400000 },
-                    { count: 20, time: new Date().getTime() - 2 * 86400000 },
-                    { count: 30, time: new Date().getTime() - 4 * 86400000 },
-                    { count: 35, time: new Date().getTime() - 5 * 86400000 },
-                    { count: 25, time: new Date().getTime() - 3 * 86400000 },
-                    { count: 40, time: new Date().getTime() - 6 * 86400000 },
-                  ]}
-                />
+                <ComplicatedLines getBy={getBy} />
               </div>
               <div className="w-1/4 aspect-[9/4] bg-gray-200 rounded-lg p-4">
                 <Lines getBy={getBy} />

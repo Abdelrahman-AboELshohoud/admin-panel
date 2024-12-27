@@ -23,7 +23,7 @@ import {
 } from "../../components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
 import CarRow from "../../components/sections/drivers/CarRow";
-import { CarColor, CarModel, CarsListGQL } from "../../graphql/requests";
+import { DriversListGQL } from "../../graphql/requests";
 import { useEffect, useState } from "react";
 import { t } from "i18next";
 
@@ -36,19 +36,29 @@ const tabItems = [
 const Cars = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [carsModels, setCarsModels] = useState([]);
-  const [carsColors, setCarsColors] = useState([]);
+  const [cars, setCars] = useState([]);
 
-  const getCars = () => {
-    const cars = CarsListGQL({});
-    cars.then((data) => {
-      setCarsModels(data.data.carModels.nodes);
-      setCarsColors(data.data.carColors);
-    });
+  const getDriverCars = async () => {
+    try {
+      const response = await DriversListGQL({
+        paging: {
+          offset: 0,
+          limit: 100,
+        },
+      });
+      console.log(response.data.drivers.nodes);
+      if (response.data) {
+        setCars(response.data.drivers.nodes);
+      }
+    } catch (error) {
+      console.error("Error fetching driver cars:", error);
+    }
   };
+
   useEffect(() => {
-    getCars();
+    getDriverCars();
   }, []);
+
   return (
     <div className="p-6 space-y-6">
       <Tabs defaultValue={location.pathname.split("/")[3]} className="w-full">
@@ -146,19 +156,20 @@ const Cars = () => {
         <Table>
           <TableHeader>
             <TableRow className="border-none hover:bg-transparent">
-              <TableHead className="text-gray-400">{t("cars.model")}</TableHead>
-              <TableHead className="text-gray-400">{t("cars.color")}</TableHead>
+              <TableHead className="text-gray-400">
+                {t("cars.carPlate")}
+              </TableHead>
+              <TableHead className="text-gray-400">
+                {t("drivers.driver.title")}
+              </TableHead>
+              <TableHead className="text-gray-400">
+                {t("cars.carProductionYear")}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {carsModels.map((car: CarModel) => (
-              <CarRow
-                key={car.id}
-                carModel={car}
-                carColor={carsColors.find(
-                  (color: CarColor) => color.id === car.id
-                )}
-              />
+            {cars.map((car) => (
+              <CarRow key={car} car={car} />
             ))}
           </TableBody>
         </Table>

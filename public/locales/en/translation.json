@@ -1,7 +1,6 @@
 {
   "header": {
     "personalAccount": "Personal account",
-
     "logout": "Logout"
   },
   "links": {
@@ -48,6 +47,7 @@
       "atc": "ATC"
     }
   },
+
   "main": {
     "dateButtons": {
       "today": "Today",
@@ -71,11 +71,63 @@
       "executor": "Executor",
       "comment": "Comment"
     },
+    "actions": {
+      "cancel": "Cancel",
+      "noActions": "No actions"
+    },
     "statusFilter": {
       "all": "All",
       "inProgress": "In progress",
       "completed": "Completed",
       "cancelled": "Cancelled"
+    },
+    "filters": {
+      "status": "Status",
+      "allStatuses": "All Statuses",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "inProgress": "In Progress",
+      "driverCanceled": "Canceled by Driver",
+      "riderCanceled": "Canceled by Rider",
+      "finished": "Finished"
+    },
+    "table": {
+      "date": "Date",
+      "distance": "Distance",
+      "duration": "Duration",
+      "addresses": "Addresses",
+      "createdOn": "Created On",
+      "expectedTime": "Expected Time",
+      "orderNumber": "Order Number",
+      "client": "Client",
+      "rider": "Rider",
+      "status": "Status",
+      "cost": "Cost"
+    },
+    "noOrders": "No orders found",
+    "summary": {
+      "total": "Total Amount"
+    }
+  },
+  "clients": {
+    "orders": "Orders",
+    "totalOrders": "Total orders",
+    "balance": "Balance",
+    "noWallet": "No wallet",
+    "clientDetails": "Client Details",
+    "registeredOn": "Registered on",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "mobile": "Mobile Number",
+    "email": "Email",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "wallets": "Wallets",
+    "noClient": "No client found",
+    "online": "Online",
+    "buttons": {
+      "add": "Add Client"
     }
   },
   "drivers": {
@@ -93,6 +145,7 @@
     },
     "driver": {
       "statusTitle": "Status",
+      "title": "Driver",
       "status": {
         "pendingApproval": "Pending Approval",
         "approved": "Approved",
@@ -100,7 +153,7 @@
         "softReject": "Soft Reject",
         "hardReject": "Hard Reject",
         "offline": "Offline",
-        "WaitingDocuments": "Pending Submission",
+        "waitingDocuments": "Pending Submission",
         "inService": "In Service",
         "online": "Online"
       },
@@ -194,8 +247,41 @@
     "falseAlarm": "False Alarm",
     "resolved": "Resolved"
   },
+  "driversOrders": {
+    "noOrders": "No orders",
+    "noOrdersDescription": "No orders found for this driver.",
+    "inputs": {
+      "id": "ID",
+      "createdOn": "Created On",
+      "status": "Status",
+      "distance": "Distance",
+      "duration": "Duration",
+      "cost": "Cost",
+      "finalCost": "Final Cost",
+      "currency": "Currency",
+      "addresses": "Addresses"
+    }
+  },
+  "viewOrders": {
+    "noOrders": "No orders",
+    "noOrdersDescription": "No orders found for this driver.",
+    "rider": "Rider",
+    "driver": "Driver",
+    "name": "Name",
+    "mobile": "Mobile",
+    "noDriver": "No driver",
+    "orderDetails": "Order Details",
+    "id": "ID",
+    "status": "Status",
+    "created": "Created",
+    "cost": "Cost",
+    "finalCost": "Final Cost",
+    "addresses": "Addresses"
+  },
   "cars": {
     "title": "Cars",
+    "carPlate": "Car plate",
+    "carProductionYear": "Car production year",
     "filters": {
       "allCities": "All cities",
       "profession": "Everything is a profession",
@@ -308,7 +394,6 @@
     "shortDescription": "Short description",
     "shortDescriptionPlaceholder": "To write...",
     "typesOfCars": "Types of cars",
-
     "preOrder": "It is possible to make a pre-order",
     "addressesLabel": "The number of addresses for creating an order",
     "addressesPlaceholder": "Select address option",
@@ -562,36 +647,28 @@
       "noItems": "No items found"
     }
   },
-  "employees": {
-    "title": "Employees",
-    "tabs": {
-      "working": "Working",
-      "invitations": "Invitations have been sent",
-      "blocked": "Blocked"
-    },
-    "filters": {
-      "allCities": "All cities",
-      "kazan": "Kazan",
-      "post": "Post",
-      "allPosts": "All posts",
-      "administrator": "Administrator",
-      "partnerEmployee": "Partner's employee",
-      "partners": "Partners",
-      "allPartners": "All partners"
-    },
-    "search": {
-      "fullName": "Search by FULL name...",
-      "toFind": "To find"
-    },
-    "table": {
-      "fullName": "Full name",
-      "jobTitle": "Job title",
-      "branch": "The branch where the employee works"
-    },
-    "actions": {
-      "sendAgain": "Send Again",
-      "cancel": "Cancel"
-    }
+  "filters": {
+    "allCities": "All cities",
+    "kazan": "Kazan",
+    "post": "Post",
+    "allPosts": "All posts",
+    "administrator": "Administrator",
+    "partnerEmployee": "Partner's employee",
+    "partners": "Partners",
+    "allPartners": "All partners"
+  },
+  "search": {
+    "fullName": "Search by FULL name...",
+    "toFind": "To find"
+  },
+  "table": {
+    "fullName": "Full name",
+    "jobTitle": "Job title",
+    "branch": "The branch where the employee works"
+  },
+  "actions": {
+    "sendAgain": "Send Again",
+    "cancel": "Cancel"
   },
   "addDriver": {
     "title": "Add Driver",
@@ -1154,5 +1231,63 @@
     "executorBlockingType": "Executor blocking type",
     "consecutive": "Consecutive",
     "perShift": "Per shift"
+  },
+  "common": {
+    "loading": "Loading...",
+    "apply": "Apply",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page"
+  },
+
+  "configuration": {
+    "purchaseCode": {
+      "title": "Purchase Code",
+      "code": "Enter purchase code",
+      "email": "Email (optional)"
+    },
+    "mapsApi": {
+      "title": "Maps API Configuration",
+      "backend": "Backend Maps API Key",
+      "adminPanel": "Admin Panel Maps API Key"
+    },
+    "firebase": {
+      "title": "Firebase Configuration",
+      "keyFile": "Firebase Key File Name"
+    },
+    "server": {
+      "title": "Server Management",
+      "ip": "Server IP Address",
+      "disable": "Disable Server"
+    },
+    "success": {
+      "purchaseCode": "Purchase code updated successfully",
+      "mapsApi": "Maps API keys updated successfully",
+      "firebase": "Firebase configuration updated successfully",
+      "serverDisabled": "Server disabled successfully"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch configuration",
+      "purchaseCodeFailed": "Failed to update purchase code",
+      "mapsApiFailed": "Failed to update Maps API keys",
+      "firebaseFailed": "Failed to update Firebase configuration",
+      "serverDisableFailed": "Failed to disable server"
+    }
+  },
+  "employees": {
+    "roles": {
+      "admin": "Administrator",
+      "operator": "Operator",
+      "partner": "Partner"
+    },
+    "success": {
+      "invitationSent": "Invitation resent successfully",
+      "invitationCancelled": "Invitation cancelled successfully"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch employees",
+      "invitationFailed": "Failed to resend invitation",
+      "cancellationFailed": "Failed to cancel invitation"
+    }
   }
 }

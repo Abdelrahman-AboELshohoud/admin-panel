@@ -1,94 +1,79 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Switch from "../../common/Switch";
 import Map from "../../common/Map";
 import { Button } from "../../ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { RegionListGQL } from "../../../graphql/requests";
 
-interface District {
+interface Region {
+  id: string;
   name: string;
-  category: string;
+  enabled: boolean;
+  location: Array<Array<{ lat: number; lng: number }>>;
 }
-
-const districts: Record<string, District[]> = {
-  City: [
-    { name: "City", category: "city" },
-    { name: "Aircraft building district", category: "city" },
-    { name: "Azino", category: "city" },
-    { name: "Konstantinovka", category: "city" },
-    { name: "Tsaritsyno", category: "city" },
-    { name: "Derbyshki", category: "city" },
-    { name: "Slides", category: "city" },
-    { name: "Boriskovo", category: "city" },
-    { name: "Slides 2", category: "city" },
-    { name: "Sovetsky district", category: "city" },
-    { name: "Moskovsky district", category: "city" },
-    { name: "Kirovsky district", category: "city" },
-    { name: "Novo-Savinovsky", category: "city" },
-    { name: "Centre", category: "city" },
-  ],
-  "Suburban Areas": [
-    { name: "The countryside", category: "suburban" },
-    { name: "Suburb 1", category: "suburban" },
-    { name: "Suburb 2", category: "suburban" },
-    { name: "Tatarstan District", category: "suburban" },
-  ],
-  Transportation: [
-    { name: "An airport", category: "transport" },
-    { name: "Railway station", category: "transport" },
-  ],
-  Other: [{ name: "Order acceptance area", category: "other" }],
-};
 
 function Switches() {
   const { t } = useTranslation();
-  const [activeDistricts, _setActiveDistricts] = useState<
-    Record<string, boolean>
-  >({});
-
+  const [regions, setRegions] = useState<Region[]>([]);
+  const [activeRegions, setActiveRegions] = useState<string[]>([]);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchRegions = async () => {
+      try {
+        const response = await RegionListGQL({
+          paging: {
+            limit: 100,
+          },
+        });
+
+        if (response.data?.regions?.nodes) {
+          setRegions(response.data.regions.nodes);
+
+          // Initialize active states
+          const initialActiveRegions = response.data.regions.nodes
+            .filter((region: Region) => region.enabled)
+            .map((region: Region) => region.id);
+
+          setActiveRegions(initialActiveRegions);
+        }
+      } catch (error) {
+        console.error("Error fetching regions:", error);
+      }
+    };
+
+    fetchRegions();
+  }, []);
+
+  const handleToggleRegion = (regionId: string) => {
+    setActiveRegions((prev) =>
+      prev.includes(regionId)
+        ? prev.filter((id) => id !== regionId)
+        : [...prev, regionId]
+    );
+  };
+
   return (
-    <div className=" bg-transparent text-zinc-100 p-4 ml-4 rounded-lg flex justify-between">
-      <div className="flex flex-col w-1/2  gap-4">
-        {districts["City"].map((district) => (
-          <div
-            key={district.name}
-            className="flex items-center justify-between"
-          >
-            <label htmlFor={district.name} className="text-sm">
-              {t(`districts.${district.name}`)}
-            </label>
+    <div className="bg-transparent text-zinc-100 p-4 ml-4 rounded-lg flex justify-between">
+      <div className="flex flex-col w-full gap-4">
+        {regions.map((region) => (
+          <div key={region.id} className="flex items-center justify-between">
+            <Link
+              to={`/control-panel/directories/regions/${region.id}`}
+              className="text-sm hover:text-blue-400 transition-colors"
+            >
+              {region.name}
+            </Link>
             <Switch
               disabled={false}
-              checked={activeDistricts[district.name] || false}
+              checked={activeRegions.includes(region.id)}
+              onChange={() => handleToggleRegion(region.id)}
             />
           </div>
         ))}
-      </div>
-      <div className="flex flex-col ml-4 w-1/2  gap-4">
-        {["Suburban Areas", "Transportation", "Other"].map((category) => (
-          <div key={category} className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold text-zinc-400">
-              {t(`categories.${category}`)}
-            </h3>
-            {districts[category].map((district) => (
-              <div
-                key={district.name}
-                className="flex items-center justify-between"
-              >
-                <label htmlFor={district.name} className="text-sm">
-                  {t(`districts.${district.name}`)}
-                </label>
-                <Switch
-                  disabled={false}
-                  checked={activeDistricts[district.name] || false}
-                />
-              </div>
-            ))}
-          </div>
-        ))}
+
         <Button
           className="add-button w-fit ml-auto mt-4"
           onClick={() => {
@@ -105,6 +90,34 @@ function Switches() {
 
 export default function MapPage() {
   const { t } = useTranslation();
+  const [regions, setRegions] = useState<Region[]>([]);
+  const [activeRegions, setActiveRegions] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchRegions = async () => {
+      try {
+        const response = await RegionListGQL({
+          paging: {
+            limit: 100,
+          },
+        });
+
+        if (response.data?.regions?.nodes) {
+          setRegions(response.data.regions.nodes);
+
+          const initialActiveRegions = response.data.regions.nodes
+            .filter((region: Region) => region.enabled)
+            .map((region: Region) => region.id);
+
+          setActiveRegions(initialActiveRegions);
+        }
+      } catch (error) {
+        console.error("Error fetching regions:", error);
+      }
+    };
+
+    fetchRegions();
+  }, []);
 
   return (
     <div className="flex flex-col bg-transparent p-4">
@@ -112,7 +125,11 @@ export default function MapPage() {
         <h1 className="text-3xl font-bold text-zinc-100 mb-4 w-full pl-12">
           {t("titles.districts")}
         </h1>
-        <Map />
+        <Map
+          regions={regions.filter((region) =>
+            activeRegions.includes(region.id)
+          )}
+        />
       </div>
       <Switches />
     </div>

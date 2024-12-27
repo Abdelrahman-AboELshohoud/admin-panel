@@ -1,20 +1,13 @@
 import { TableRow, TableCell } from "../../ui/table";
 import { useNavigate } from "react-router-dom";
 
-export default function CarRow({
-  carModel,
-  carColor,
-}: {
-  carModel: any;
-  carColor: any;
-}) {
-  console.log(carModel);
-  console.log(carColor);
+export default function CarRow({ car }: { car: any }) {
+  console.log(car);
   const navigate = useNavigate();
   return (
     <TableRow
-      onClick={() => navigate(`/control-panel/cars/active/${carModel.id}/car`)}
-      key={carModel.id}
+      onClick={() => navigate(`/control-panel/cars/active/${car.id}/car`)}
+      key={car.id}
       className="bg-[#282828] border-none mb-2 hover:bg-[#2F2F2F] hover:cursor-pointer"
     >
       {/* <TableCell>
@@ -36,8 +29,14 @@ export default function CarRow({
             </div>
           </div>
         </TableCell> */}
-      <TableCell>{carModel?.name}</TableCell>
-      <TableCell>{carColor?.name || "Unknown"}</TableCell>
+      <TableCell>
+        <img src={car.carPlate} alt="car" className="w-12 h-12 rounded-md" />
+      </TableCell>
+      <TableCell className="flex gap-2 items-center pt-4">
+        <div>{car.firstName}</div>
+        <div>{car.lastName}</div>
+      </TableCell>
+      <TableCell>{car.productionYear}</TableCell>
     </TableRow>
   );
 }

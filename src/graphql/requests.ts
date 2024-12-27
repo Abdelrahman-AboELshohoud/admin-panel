@@ -52,11 +52,16 @@ export const NotificationsGQL = () => {
   });
 };
 
+// TODO: Tomorrow
 export const SosSubscriptionDocument = gql`
   subscription SOSSubscription {
     sosCreated {
       id
       status
+      location {
+        lat
+        lng
+      }
     }
   }
 `;
@@ -199,7 +204,7 @@ export const CreateDriverDocument = gql`
   }
 `;
 
-// TODO: Done
+// Done
 export const CreateDriverGQL = (variables: CreateDriverMutationVariables) => {
   return handledRequest({
     variables,
@@ -399,6 +404,7 @@ export const DriverFeedbacksDocument = gql`
     }
   }
 `;
+
 // Done
 export const DriverFeedbacksGQL = (
   variables: DriverFeedbacksQueryVariables
@@ -441,8 +447,13 @@ export const DriverOrdersDocument = gql`
   }
 `;
 
+// Done
 export const DriverOrdersGQL = (variables: DriverOrdersQueryVariables) => {
-  handledRequest({ variables, gql: DriverOrdersDocument, type: "query" });
+  return handledRequest({
+    variables,
+    gql: DriverOrdersDocument,
+    type: "query",
+  });
 };
 
 export const CreateDriverTransactionDocument = gql`
@@ -453,10 +464,11 @@ export const CreateDriverTransactionDocument = gql`
   }
 `;
 
+// Done
 export const CreateDriverTransactionGQL = (
   variables: CreateDriverTransactionMutationVariables
 ) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: CreateDriverTransactionDocument,
     type: "mutation",
@@ -471,8 +483,9 @@ export const DeleteDriverDocument = gql`
   }
 `;
 
+// Done
 export const DeleteDriverGQL = (variables: DeleteDriverMutationVariables) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: DeleteDriverDocument,
     type: "mutation",
@@ -497,6 +510,8 @@ const DriversListDocument = gql`
         carProductionYear
         carColorId
         registrationTimestamp
+        carId
+        carPlate
       }
       totalCount
     }
@@ -536,6 +551,7 @@ export const ProviderWalletsListDocument = gql`
   }
 `;
 
+// TODO: Tomorrow
 export const ProviderWalletsListGQL = (
   variables: ProviderWalletsListQueryVariables
 ) => {
@@ -581,10 +597,11 @@ export const DriverWalletsListDocument = gql`
   }
 `;
 
+// Done
 export const DriverWalletsListGQL = (
   variables: DriverWalletsListQueryVariables
 ) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: DriverWalletsListDocument,
     type: "query",
@@ -613,7 +630,7 @@ export const FleetWalletsListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const FleetWalletsListGQL = (
   variables: FleetWalletsListQueryVariables
 ) => {
@@ -646,10 +663,11 @@ export const RiderWalletsListDocument = gql`
   }
 `;
 
+// Done
 export const RiderWalletsListGQL = (
   variables: RiderWalletsListQueryVariables
 ) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: RiderWalletsListDocument,
     type: "query",
@@ -706,6 +724,7 @@ export const CreateOrderDocument = gql`
   }
 `;
 
+// Done
 export const CreateOrderGQL = (variables: CreateOrderMutationVariables) => {
   handledRequest({
     variables,
@@ -747,8 +766,9 @@ export const CancelOrderDocument = gql`
   }
 `;
 
+// Done
 export const CancelOrderGQL = (variables: CancelOrderMutationVariables) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: CancelOrderDocument,
     type: "mutation",
@@ -791,7 +811,7 @@ export const OverviewDocument = gql`
 `;
 
 export const OverviewGQL = (variables: OverviewQueryVariables) => {
-  handledRequest({ variables, gql: OverviewDocument, type: "query" });
+  return handledRequest({ variables, gql: OverviewDocument, type: "query" });
 };
 
 export const OverviewDriverPagingDocument = gql`
@@ -826,6 +846,7 @@ export const RequestsChartDocument = gql`
   }
 `;
 
+// Done
 export const RequestsChartGQL = (variables: RequestsChartQueryVariables) => {
   return handledRequest({
     variables,
@@ -844,6 +865,7 @@ export const IncomeChartDocument = gql`
   }
 `;
 
+// Done
 export const IncomeChartGQL = (variables: IncomeChartQueryVariables) => {
   return handledRequest({
     variables,
@@ -861,10 +883,11 @@ export const DriverRegistrationsDocument = gql`
   }
 `;
 
+// Done
 export const DriverRegistrationsGQL = (
   variables: DriverRegistrationsQueryVariables
 ) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: DriverRegistrationsDocument,
     type: "query",
@@ -880,146 +903,154 @@ export const RiderRegistrationsDocument = gql`
   }
 `;
 
+// Done
 export const RiderRegistrationsGQL = (
   variables: RiderRegistrationsQueryVariables
 ) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: RiderRegistrationsDocument,
     type: "query",
   });
 };
 
-export const CarsListDocument = gql`
-  query CarsList {
-    carModels(paging: { limit: 100 }) {
-      nodes {
-        id
-        name
-      }
-    }
-    carColors {
-      id
-      name
-    }
-  }
-`;
+// export const CarsListDocument = gql`
+//   query CarsList {
+//     carModels(paging: { limit: 100 }) {
+//       nodes {
+//         id
+//         name
+//       }
+//     }
+//     carColors {
+//       id
+//       name
+//     }
+//   }
+// `;
 
-export const CarsListGQL = (variables: CarsListQueryVariables) => {
-  return handledRequest({
-    variables,
-    gql: CarsListDocument,
-    type: "query",
-  });
-};
+// Not
+// export const CarsListGQL = (variables: CarsListQueryVariables) => {
+//   return handledRequest({
+//     variables,
+//     gql: CarsListDocument,
+//     type: "query",
+//   });
+// };
 
-export const DeleteCarModelDocument = gql`
-  mutation DeleteCarModel($id: ID!) {
-    deleteOneCarModel(input: { id: $id }) {
-      id
-    }
-  }
-`;
+// export const DeleteCarModelDocument = gql`
+//   mutation DeleteCarModel($id: ID!) {
+//     deleteOneCarModel(input: { id: $id }) {
+//       id
+//     }
+//   }
+// `;
 
-export const DeleteCarModelGQL = (
-  variables: DeleteCarModelMutationVariables
-) => {
-  return handledRequest({
-    variables,
-    gql: DeleteCarModelDocument,
-    type: "mutation",
-  });
-};
+// Not
+// export const DeleteCarModelGQL = (
+//   variables: DeleteCarModelMutationVariables
+// ) => {
+//   return handledRequest({
+//     variables,
+//     gql: DeleteCarModelDocument,
+//     type: "mutation",
+//   });
+// };
 
-export const DeleteCarColorDocument = gql`
-  mutation DeleteCarColor($id: ID!) {
-    deleteOneCarColor(input: { id: $id }) {
-      id
-    }
-  }
-`;
+// export const DeleteCarColorDocument = gql`
+//   mutation DeleteCarColor($id: ID!) {
+//     deleteOneCarColor(input: { id: $id }) {
+//       id
+//     }
+//   }
+// `;
 
-export const DeleteCarColorGQL = (
-  variables: DeleteCarColorMutationVariables
-) => {
-  handledRequest({
-    variables,
-    gql: DeleteCarColorDocument,
-    type: "mutation",
-  });
-};
+// Not
+// export const DeleteCarColorGQL = (
+//   variables: DeleteCarColorMutationVariables
+// ) => {
+//   handledRequest({
+//     variables,
+//     gql: DeleteCarColorDocument,
+//     type: "mutation",
+//   });
+// };
 
-export const CreateCarModelDocument = gql`
-  mutation CreateCarModel($input: CarModelInput!) {
-    createOneCarModel(input: { carModel: $input }) {
-      id
-    }
-  }
-`;
+// export const CreateCarModelDocument = gql`
+//   mutation CreateCarModel($input: CarModelInput!) {
+//     createOneCarModel(input: { carModel: $input }) {
+//       id
+//     }
+//   }
+// `;
 
-export const CreateCarModelGQL = (
-  variables: CreateCarModelMutationVariables
-) => {
-  handledRequest({
-    variables,
-    gql: CreateCarModelDocument,
-    type: "mutation",
-  });
-};
+// Not
+// export const CreateCarModelGQL = (
+//   variables: CreateCarModelMutationVariables
+// ) => {
+//   handledRequest({
+//     variables,
+//     gql: CreateCarModelDocument,
+//     type: "mutation",
+//   });
+// };
 
-export const CreateCarColorDocument = gql`
-  mutation CreateCarColor($input: CarColorInput!) {
-    createOneCarColor(input: { carColor: $input }) {
-      id
-    }
-  }
-`;
+// export const CreateCarColorDocument = gql`
+//   mutation CreateCarColor($input: CarColorInput!) {
+//     createOneCarColor(input: { carColor: $input }) {
+//       id
+//     }
+//   }
+// `;
 
-export const CreateCarColorGQL = (
-  variables: CreateCarColorMutationVariables
-) => {
-  handledRequest({
-    variables,
-    gql: CreateCarColorDocument,
-    type: "mutation",
-  });
-};
+// Not
+// export const CreateCarColorGQL = (
+//   variables: CreateCarColorMutationVariables
+// ) => {
+//   handledRequest({
+//     variables,
+//     gql: CreateCarColorDocument,
+//     type: "mutation",
+//   });
+// };
 
-export const UpdateCarModelDocument = gql`
-  mutation UpdateCarModel($id: ID!, $input: CarModelInput!) {
-    updateOneCarModel(input: { id: $id, update: $input }) {
-      id
-    }
-  }
-`;
+// export const UpdateCarModelDocument = gql`
+//   mutation UpdateCarModel($id: ID!, $input: CarModelInput!) {
+//     updateOneCarModel(input: { id: $id, update: $input }) {
+//       id
+//     }
+//   }
+// `;
 
-export const UpdateCarModelGQL = (
-  variables: UpdateCarModelMutationVariables
-) => {
-  handledRequest({
-    variables,
-    gql: UpdateCarModelDocument,
-    type: "mutation",
-  });
-};
+// Not
+// export const UpdateCarModelGQL = (
+//   variables: UpdateCarModelMutationVariables
+// ) => {
+//   handledRequest({
+//     variables,
+//     gql: UpdateCarModelDocument,
+//     type: "mutation",
+//   });
+// };
 
-export const UpdateCarColorDocument = gql`
-  mutation UpdateCarColor($id: ID!, $input: CarColorInput!) {
-    updateOneCarColor(input: { id: $id, update: $input }) {
-      id
-    }
-  }
-`;
+// export const UpdateCarColorDocument = gql`
+//   mutation UpdateCarColor($id: ID!, $input: CarColorInput!) {
+//     updateOneCarColor(input: { id: $id, update: $input }) {
+//       id
+//     }
+//   }
+// `;
 
-export const UpdateCarColorGQL = (
-  variables: UpdateCarColorMutationVariables
-) => {
-  handledRequest({
-    variables,
-    gql: UpdateCarColorDocument,
-    type: "mutation",
-  });
-};
+// Not
+// export const UpdateCarColorGQL = (
+//   variables: UpdateCarColorMutationVariables
+// ) => {
+//   handledRequest({
+//     variables,
+//     gql: UpdateCarColorDocument,
+//     type: "mutation",
+//   });
+// };
 
 export const CreateFleetDocument = gql`
   mutation CreateFleet($input: FleetInput!) {
@@ -1029,7 +1060,7 @@ export const CreateFleetDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreateFleetGQL = (variables: CreateFleetMutationVariables) => {
   return handledRequest({
     variables,
@@ -1060,7 +1091,7 @@ export const ViewFleetDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewFleetGQL = (variables: ViewFleetQueryVariables) => {
   return handledRequest({
     variables,
@@ -1105,7 +1136,7 @@ export const FleetFinancialsDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const FleetFinancialsGQL = (
   variables: FleetFinancialsQueryVariables
 ) => {
@@ -1154,12 +1185,16 @@ export const FleetDriversDocument = gql`
         firstName
         lastName
         mobileNumber
+        status
+        media {
+          address
+        }
       }
     }
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const FleetDriversGQL = (variables: FleetDriversQueryVariables) => {
   return handledRequest({
     variables,
@@ -1176,7 +1211,7 @@ export const UpdateFleetDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdateFleetGQL = (variables: UpdateFleetMutationVariables) => {
   return handledRequest({
     variables,
@@ -1193,7 +1228,7 @@ export const CreateFleetTransactionDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done with question
 export const CreateFleetTransactionGQL = (
   variables: CreateFleetTransactionMutationVariables
 ) => {
@@ -1218,7 +1253,7 @@ export const FleetsListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const FleetsListGQL = (variables: FleetsListQueryVariables) => {
   return handledRequest({
     variables,
@@ -1241,7 +1276,7 @@ export const OrderCancelReasonListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const OrderCancelReasonListGQL = (
   variables: OrderCancelReasonListQueryVariables
 ) => {
@@ -1263,7 +1298,7 @@ export const OrderCancelReasonViewDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const OrderCancelReasonViewGQL = (
   variables: OrderCancelReasonViewQueryVariables
 ) => {
@@ -1282,7 +1317,7 @@ export const UpdateOrderCancelReasonDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdateOrderCancelReasonGQL = (
   variables: UpdateOrderCancelReasonMutationVariables
 ) => {
@@ -1301,7 +1336,7 @@ export const CreateOrderCancelReasonDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreateOrderCancelReasonGQL = (
   variables: CreateOrderCancelReasonMutationVariables
 ) => {
@@ -1331,7 +1366,7 @@ export const ViewPaymentGatewayDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewPaymentGatewayGQL = (
   variables: ViewPaymentGatewayQueryVariables
 ) => {
@@ -1350,7 +1385,7 @@ export const CreatePaymentGatewayDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreatePaymentGatewayGQL = (
   variables: CreatePaymentGatewayMutationVariables
 ) => {
@@ -1369,7 +1404,7 @@ export const UpdatePaymentGatewayDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdatePaymentGatewayGQL = (
   variables: UpdatePaymentGatewayMutationVariables
 ) => {
@@ -1397,7 +1432,7 @@ export const PaymentGatewaysDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const PaymentGatewaysGQL = (
   variables: PaymentGatewaysQueryVariables
 ) => {
@@ -1582,7 +1617,7 @@ export const RolesDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const RolesGQL = (variables: RolesQueryVariables) => {
   return handledRequest({
     variables,
@@ -1601,7 +1636,7 @@ export const RoleDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const RoleGQL = (variables: RoleQueryVariables) => {
   return handledRequest({
     variables,
@@ -1620,8 +1655,8 @@ export const CreateRoleDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
-export const CreateRoleGQl = (variables: CreateRoleMutationVariables) => {
+// Done
+export const CreateRoleGQL = (variables: CreateRoleMutationVariables) => {
   return handledRequest({
     variables,
     gql: CreateRoleDocument,
@@ -1637,7 +1672,7 @@ export const UpdateRoleDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdateRoleGQL = (variables: UpdateRoleMutationVariables) => {
   return handledRequest({
     variables,
@@ -2073,7 +2108,7 @@ export const GetConfigurationDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Questionable
 export const GetConfigurationGQL = (
   variables: GetConfigurationQueryVariables
 ) => {
@@ -2096,7 +2131,7 @@ export const UpdateConfigDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Questionable
 export const UpdateConfigGQL = (variables: UpdateConfigMutationVariables) => {
   return handledRequest({
     variables,
@@ -2119,7 +2154,7 @@ export const SmsProvidersDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const SmsProvidersGQL = (variables: SmsProvidersQueryVariables) => {
   return handledRequest({
     variables,
@@ -2144,7 +2179,7 @@ export const ViewSmsProviderDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const ViewSmsProviderGQL = (
   variables: ViewSmsProviderQueryVariables
 ) => {
@@ -2163,7 +2198,7 @@ export const CreateSmsProviderDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const CreateSmsProviderGQL = (
   variables: CreateSmsProviderMutationVariables
 ) => {
@@ -2182,7 +2217,7 @@ export const UpdateSmsProviderDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const UpdateSmsProviderGQL = (
   variables: UpdateSmsProviderMutationVariables
 ) => {
@@ -2201,7 +2236,7 @@ export const MarkSmsProviderAsDefaultDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const MarkSmsProviderAsDefaultGQL = (
   variables: MarkSmsProviderAsDefaultMutationVariables
 ) => {
@@ -2220,7 +2255,7 @@ export const CreateOperatorDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreateOperatorGQL = (
   variables: CreateOperatorMutationVariables
 ) => {
@@ -2249,7 +2284,7 @@ export const ViewOperatorDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewOperatorGQL = (variables: ViewOperatorQueryVariables) => {
   return handledRequest({
     variables,
@@ -2267,7 +2302,7 @@ export const NewOperatorDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const NewOperatorGQL = (variables: NewOperatorQueryVariables) => {
   return handledRequest({
     variables,
@@ -2284,7 +2319,7 @@ export const UpdateOperatorDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdateOperatorGQL = (
   variables: UpdateOperatorMutationVariables
 ) => {
@@ -2306,13 +2341,15 @@ export const UsersListDocument = gql`
         role {
           title
         }
+        email
+        mobileNumber
       }
       totalCount
     }
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UsersListGQL = (variables: UsersListQueryVariables) => {
   return handledRequest({
     variables,
@@ -2507,7 +2544,7 @@ export const ViewAnnouncementDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewAnnouncementGQL = (
   variables: ViewAnnouncementQueryVariables
 ) => {
@@ -2526,7 +2563,7 @@ export const CreateAnnouncementDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreateAnnouncementGQL = (
   variables: CreateAnnouncementMutationVariables
 ) => {
@@ -2545,7 +2582,7 @@ export const UpdateAnnouncementDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdateAnnouncementGQL = (
   variables: UpdateAnnouncementMutationVariables
 ) => {
@@ -2564,7 +2601,7 @@ export const DeleteAnnouncementDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const DeleteAnnouncementGQL = (
   variables: DeleteAnnouncementMutationVariables
 ) => {
@@ -2584,13 +2621,14 @@ export const AnnouncementsListDocument = gql`
         description
         startAt
         expireAt
+        userType
       }
       totalCount
     }
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const AnnouncementsListGQL = (
   variables: AnnouncementsListQueryVariables
 ) => {
@@ -3365,7 +3403,7 @@ export const DriverSearchDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Not
 export const DriverSearchGQL = (variables: DriverSearchQueryVariables) => {
   return handledRequest({
     variables,
@@ -3500,7 +3538,7 @@ export const ViewOrderDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewOrderGQL = (variables: ViewOrderQueryVariables) => {
   return handledRequest({
     variables,
@@ -3523,13 +3561,22 @@ export const OrdersListDocument = gql`
         expectedTimestamp
         costAfterCoupon
         currency
+        distanceBest
+        durationBest
+        addresses
+        rider {
+          id
+          firstName
+          lastName
+          mobileNumber
+        }
       }
       totalCount
     }
   }
 `;
 
-// TODO: Tomorrow order
+// Done
 export const OrdersListGQL = (variables: OrdersListQueryVariables) => {
   return handledRequest({
     variables,
@@ -3550,7 +3597,7 @@ export const CreateRiderDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const CreateRiderGQL = (variables: CreateRiderMutationVariables) => {
   return handledRequest({
     variables,
@@ -3572,7 +3619,9 @@ export const ViewRiderDocument = gql`
       media {
         address
       }
-      mobileNumber
+      orders {
+        totalCount
+      }
       registrationTimestamp
       email
       gender
@@ -3589,7 +3638,7 @@ export const ViewRiderDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const ViewRiderGQL = (variables: ViewRiderQueryVariables) => {
   return handledRequest({
     variables,
@@ -3662,7 +3711,7 @@ export const RiderWalletDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const RiderWalletGQL = (variables: RiderWalletQueryVariables) => {
   return handledRequest({
     variables,
@@ -3702,7 +3751,7 @@ export const RiderOrdersDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const RiderOrdersGQL = (variables: RiderOrdersQueryVariables) => {
   return handledRequest({
     variables,
@@ -3719,7 +3768,7 @@ export const UpdateRiderDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdateRiderGQL = (variables: UpdateRiderMutationVariables) => {
   return handledRequest({
     variables,
@@ -3736,7 +3785,7 @@ export const CreateRiderTransactionDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreateRiderTransactionGQL = (
   variables: CreateRiderTransactionMutationVariables
 ) => {
@@ -3755,7 +3804,7 @@ export const DeleteRiderDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const DeleteRiderGQL = (variables: DeleteRiderMutationVariables) => {
   return handledRequest({
     variables,
@@ -3785,7 +3834,7 @@ export const RidersListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const RidersListGQL = (variables: RidersListQueryVariables) => {
   return handledRequest({
     variables,
@@ -3909,7 +3958,7 @@ export const CurrentConfigurationDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const CurrentConfigurationGQL = (
   variables: CurrentConfigurationQueryVariables
 ) => {
@@ -3932,7 +3981,7 @@ export const UpdatePurchaseCodeDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const UpdatePurchaseCodeGQL = (
   variables: UpdatePurchaseCodeMutationVariables
 ) => {
@@ -3952,7 +4001,7 @@ export const UpdateMapsApiKeyDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const UpdateMapsApiKeyGQL = (
   variables: UpdateMapsApiKeyMutationVariables
 ) => {
@@ -3972,7 +4021,7 @@ export const UpdateFirebaseDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const UpdateFirebaseGQL = (
   variables: UpdateFirebaseMutationVariables
 ) => {
@@ -3992,7 +4041,7 @@ export const DisableServerDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const DisableServerGQL = (variables: DisableServerMutationVariables) => {
   return handledRequest({
     variables,
