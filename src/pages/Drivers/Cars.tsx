@@ -14,7 +14,7 @@ import {
   TableHeader,
   TableRow,
 } from "../../components/ui/table";
-import { ChevronLeft, ChevronRight, UserPlus } from "lucide-react";
+import { UserPlus } from "lucide-react";
 import {
   TabsContent,
   TabsList,
@@ -22,10 +22,13 @@ import {
   Tabs,
 } from "../../components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
-import CarRow from "../../components/sections/drivers/CarRow";
+import CarRow from "../../components/pages/drivers/CarRow";
 import { DriversListGQL } from "../../graphql/requests";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { t } from "i18next";
+import Pagination from "../../components/common/Pagination";
+
+const ITEMS_PER_PAGE = 10;
 
 const tabItems = [
   { value: "active", label: "Active" },
@@ -37,27 +40,44 @@ const Cars = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [cars, setCars] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [totalCount, setTotalCount] = useState(0);
+  const [filters, setFilters] = useState({
+    page: 1,
+    limit: ITEMS_PER_PAGE,
+    city: "all",
+    company: "all",
+    carType: "all",
+    color: "all",
+    autoOption: "all",
+    rental: "all",
+    search: "",
+  });
 
-  const getDriverCars = async () => {
+  const getDriverCars = useCallback(async () => {
     try {
+      setIsLoading(true);
       const response = await DriversListGQL({
         paging: {
-          offset: 0,
-          limit: 100,
+          offset: (filters.page - 1) * filters.limit,
+          limit: filters.limit,
         },
       });
-      console.log(response.data.drivers.nodes);
+
       if (response.data) {
         setCars(response.data.drivers.nodes);
+        setTotalCount(response.data.drivers.totalCount);
       }
     } catch (error) {
       console.error("Error fetching driver cars:", error);
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, [filters]);
 
   useEffect(() => {
     getDriverCars();
-  }, []);
+  }, [getDriverCars]);
 
   return (
     <div className="p-6 space-y-6">
@@ -86,7 +106,12 @@ const Cars = () => {
         <TabsContent value={location.pathname.split("/")[3]}></TabsContent>
 
         <div className="grid grid-cols-3 gap-4 mb-6">
-          <Select>
+          <Select
+            value={filters.city}
+            onValueChange={(value) =>
+              setFilters((prev) => ({ ...prev, city: value }))
+            }
+          >
             <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
               <SelectValue placeholder="All cities" />
             </SelectTrigger>
@@ -95,7 +120,12 @@ const Cars = () => {
             </SelectContent>
           </Select>
 
-          <Select>
+          <Select
+            value={filters.company}
+            onValueChange={(value) =>
+              setFilters((prev) => ({ ...prev, company: value }))
+            }
+          >
             <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
               <SelectValue placeholder="All companies" />
             </SelectTrigger>
@@ -104,7 +134,12 @@ const Cars = () => {
             </SelectContent>
           </Select>
 
-          <Select>
+          <Select
+            value={filters.carType}
+            onValueChange={(value) =>
+              setFilters((prev) => ({ ...prev, carType: value }))
+            }
+          >
             <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
               <SelectValue placeholder="All types of cars" />
             </SelectTrigger>
@@ -113,7 +148,12 @@ const Cars = () => {
             </SelectContent>
           </Select>
 
-          <Select>
+          <Select
+            value={filters.color}
+            onValueChange={(value) =>
+              setFilters((prev) => ({ ...prev, color: value }))
+            }
+          >
             <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
               <SelectValue placeholder="All car colors" />
             </SelectTrigger>
@@ -122,7 +162,12 @@ const Cars = () => {
             </SelectContent>
           </Select>
 
-          <Select>
+          <Select
+            value={filters.autoOption}
+            onValueChange={(value) =>
+              setFilters((prev) => ({ ...prev, autoOption: value }))
+            }
+          >
             <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
               <SelectValue placeholder="All auto options" />
             </SelectTrigger>
@@ -131,7 +176,12 @@ const Cars = () => {
             </SelectContent>
           </Select>
 
-          <Select>
+          <Select
+            value={filters.rental}
+            onValueChange={(value) =>
+              setFilters((prev) => ({ ...prev, rental: value }))
+            }
+          >
             <SelectTrigger className="w-full bg-[#1E1E1E] border-none">
               <SelectValue placeholder="Rental cars" />
             </SelectTrigger>
@@ -143,64 +193,68 @@ const Cars = () => {
           <Input
             placeholder="Search by brand, model, state..."
             className="bg-[#1E1E1E] border-none"
+            value={filters.search}
+            onChange={(e) =>
+              setFilters((prev) => ({ ...prev, search: e.target.value }))
+            }
           />
 
           <div className="col-span-2 flex justify-end">
-            <Button className="bg-black text-white hover:bg-black/90 px-8">
+            <Button
+              className="bg-black text-white hover:bg-black/90 px-8"
+              onClick={() => {
+                setFilters((prev) => ({ ...prev, page: 1 }));
+                getDriverCars();
+              }}
+            >
               {t("show")}
             </Button>
           </div>
         </div>
-
-        {/* Table */}
-        <Table>
-          <TableHeader>
-            <TableRow className="border-none hover:bg-transparent">
-              <TableHead className="text-gray-400">
-                {t("cars.carPlate")}
-              </TableHead>
-              <TableHead className="text-gray-400">
-                {t("drivers.driver.title")}
-              </TableHead>
-              <TableHead className="text-gray-400">
-                {t("cars.carProductionYear")}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {cars.map((car) => (
-              <CarRow key={car} car={car} />
-            ))}
-          </TableBody>
-        </Table>
-
-        {/* Pagination */}
-        <div className="flex items-center gap-2 mt-4">
-          <Button variant="outline" size="icon" className="w-8 h-8">
-            1
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
-            className="w-8 h-8 text-gray-400"
-          >
-            2
-          </Button>
-          <span className="text-gray-400">...</span>
-          <Button
-            variant="outline"
-            size="icon"
-            className="w-8 h-8 text-gray-400"
-          >
-            7
-          </Button>
-          <Button variant="outline" size="icon" className="w-8 h-8 ml-2">
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <Button variant="outline" size="icon" className="w-8 h-8">
-            <ChevronRight className="h-4 w-4" />
-          </Button>
+        <div className="card-shape">
+          <Table>
+            <TableHeader>
+              <TableRow className="border-none hover:bg-transparent">
+                <TableHead className="text-gray-400">
+                  {t("cars.carPlate")}
+                </TableHead>
+                <TableHead className="text-gray-400">
+                  {t("drivers.driver.title")}
+                </TableHead>
+                <TableHead className="text-gray-400">
+                  {t("cars.carProductionYear")}
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <td colSpan={3} className="text-center py-14">
+                    {t("common.loading")}
+                  </td>
+                </TableRow>
+              ) : cars.length > 0 ? (
+                cars.map((car: any) => <CarRow key={car.id} car={car} />)
+              ) : (
+                <TableRow>
+                  <td colSpan={3} className="text-center py-14">
+                    {t("common.no_results")}
+                  </td>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
         </div>
+
+        {cars.length > 0 && (
+          <Pagination
+            filters={filters}
+            setFilters={setFilters}
+            totalCount={totalCount}
+            loading={isLoading}
+            t={t}
+          />
+        )}
       </Tabs>
     </div>
   );

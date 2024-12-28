@@ -4,58 +4,61 @@ import "./global.css";
 import ControlPanel from "./pages/ControlPanel";
 import Orders from "./pages/orders/Orders";
 import Main from "./pages/Main";
-import Customers from "./components/sections/customers/Customers";
-import Customer from "./components/sections/customers/Customer";
-import Drivers from "./pages/Drivers/Drivers";
-import Driver from "./pages/Drivers/Driver";
-import Cars from "./pages/Drivers/Cars";
-import Car from "./pages/Drivers/Car";
-import DriversGroups from "./components/sections/drivers/DriversGroup";
-import AddGroup from "./components/sections/drivers/AddGroup";
-import PhotoControl from "./components/sections/drivers/PhotoControl";
-import AddPhoto from "./components/sections/drivers/AddPhoto";
-import ListOfOrders from "./components/sections/reports/ListOfOrders";
-import MoneyTransaction from "./components/sections/reports/MoneyTransaction";
-import OrdersReports from "./components/sections/reports/Orders";
+import Services from "./pages/customers/Services";
+import Service from "./pages/customers/Service";
+import Drivers from "./pages/drivers/Drivers";
+import Driver from "./pages/drivers/Driver";
+import Cars from "./pages/drivers/Cars";
+import Car from "./pages/drivers/Car";
+import DriversGroups from "./components/pages/drivers/DriversGroup";
+import AddGroup from "./components/pages/drivers/AddGroup";
+import PhotoControl from "./components/pages/drivers/PhotoControl";
+import AddPhoto from "./components/pages/drivers/AddPhoto";
+import ListOfOrders from "./pages/reports/ListOfOrders";
+import MoneyTransaction from "./pages/reports/MoneyTransaction";
+import OrdersReports from "./pages/reports/Orders";
 import ProtectedRoutes from "./ProtectedRoutes";
-import CorporateClients from "./components/sections/reports/CorporateClients";
-import ForPartner from "./components/sections/reports/ForPartner";
-import Shifts from "./components/sections/reports/Shifts";
-import ForAggregator from "./components/sections/reports/PushMails";
-import PushMails from "./components/sections/reports/PushMails";
-import BranchesManager from "./components/sections/directories/Branches";
-import AddBranch from "./components/sections/directories/AddBranch";
-import Partners from "./components/sections/directories/Partners";
-import AddPartner from "./components/sections/directories/AddPartner";
-import Employees from "./components/sections/directories/Employees";
-import MapPage from "./components/sections/directories/MapPage";
-import AddInMap from "./components/sections/directories/AddInMap";
-import Addresses from "./components/sections/directories/Addresses";
-import AddAddress from "./components/sections/directories/AddAdress";
-import News from "./components/sections/directories/News";
-import AddNews from "./components/sections/directories/AddNews";
-import OrganizationDetails from "./components/sections/settings/Organization";
-import Application from "./components/sections/settings/Application";
-import OrdersSettings from "./components/sections/settings/Orders";
-import CMCSettings from "./components/sections/settings/CMC";
-import Notifications from "./components/sections/settings/CustomerNotifications";
-import CarClasses from "./components/sections/settings/CarClasses";
-import AddClass from "./components/sections/settings/AddClass";
-import OnlineCheckout from "./components/sections/settings/OnlineCheckout";
-import ATC from "./components/sections/settings/ATC";
-
-import DriverSettings from "./components/sections/settings/Drivers";
-import AddDriver from "./pages/Drivers/AddDriver";
-import ViewOrder from "./pages/Drivers/ViewOrder";
-import Clients from "./components/sections/customers/Clients";
-import AddClient from "./components/sections/customers/AddClient";
-import Client from "./components/sections/customers/Client";
-import Fleet from "./pages/Drivers/Fleet";
-import Payment from "./components/sections/settings/Payment";
-import Configuration from "./components/sections/settings/Configuration";
-import SingleNews from "./components/sections/directories/SingleNews";
-import Employee from "./components/sections/directories/Employee";
-import AddEmployee from "./components/sections/directories/AddEmployee";
+import CorporateClients from "./pages/reports/CorporateClients";
+import ForPartner from "./pages/reports/ForPartner";
+import Shifts from "./pages/reports/Shifts";
+import ForAggregator from "./pages/reports/PushMails";
+import PushMails from "./pages/reports/PushMails";
+import BranchesManager from "./pages/directories/Branches";
+import AddBranch from "./pages/directories/AddBranch";
+import Partners from "./pages/directories/Partners";
+import AddPartner from "./pages/directories/AddPartner";
+import Employees from "./pages/directories/Employees";
+import MapPage from "./pages/directories/MapPage";
+import AddInMap from "./pages/directories/AddInMap";
+import Addresses from "./pages/directories/Addresses";
+import AddAddress from "./pages/directories/AddAdress";
+import News from "./pages/directories/News";
+import AddNews from "./pages/directories/AddNews";
+import OrganizationDetails from "./pages/settings/Organization";
+import Application from "./pages/settings/Application";
+import OrdersSettings from "./pages/settings/Orders";
+import CMCSettings from "./pages/settings/CMC";
+import Notifications from "./pages/settings/CustomerNotifications";
+import CarClasses from "./pages/settings/CarClasses";
+import AddClass from "./pages/settings/AddClass";
+import OnlineCheckout from "./pages/settings/OnlineCheckout";
+import ATC from "./pages/settings/ATC";
+import DriverSettings from "./pages/settings/Drivers";
+import AddDriver from "./pages/drivers/AddDriver";
+import ViewOrder from "./pages/drivers/ViewOrder";
+import Clients from "./pages/customers/Clients";
+import AddClient from "./pages/customers/AddClient";
+import Client from "./pages/customers/Client";
+import Fleet from "./pages/drivers/Fleet";
+import Payment from "./pages/settings/Payment";
+import Configuration from "./pages/settings/Configuration";
+import SingleNews from "./pages/directories/SingleNews";
+import Employee from "./pages/directories/Employee";
+import AddEmployee from "./pages/directories/AddEmployee";
+import RolesManagement from "./pages/directories/RolesManagement";
+import CreateOrder from "./pages/orders/CreateOrder";
+import AddService from "./pages/customers/AddService";
+import Complaints from "./pages/directories/Complaints";
 
 function App() {
   return (
@@ -72,20 +75,21 @@ function App() {
             element={<ControlPanel children={<Orders />} />}
           />
           <Route
-            path="/control-panel/customers"
-            element={<ControlPanel children={<Customers />} />}
+            path="/control-panel/orders/create"
+            element={<ControlPanel children={<CreateOrder />} />}
           />
           <Route
-            path="/control-panel/customers/active"
-            element={<ControlPanel children={<Customers />} />}
+            path="/control-panel/services/add"
+            element={<ControlPanel children={<AddService />} />}
           />
           <Route
-            path="/control-panel/customers/blocked"
-            element={<ControlPanel children={<Customers />} />}
+            path="/control-panel/services/:status"
+            element={<ControlPanel children={<Services />} />}
           />
+
           <Route
-            path="/control-panel/customers/active/:id"
-            element={<ControlPanel children={<Customer />} />}
+            path="/control-panel/services/:status/:id"
+            element={<ControlPanel children={<Service />} />}
           />
           <Route
             path="/control-panel/clients/:status"
@@ -172,6 +176,10 @@ function App() {
             element={<ControlPanel children={<ForAggregator />} />}
           />
           <Route
+            path="/control-panel/reports/complaints"
+            element={<ControlPanel children={<Complaints />} />}
+          />
+          <Route
             path="/control-panel/reports/push-mails"
             element={<ControlPanel children={<PushMails />} />}
           />
@@ -206,6 +214,11 @@ function App() {
           <Route
             path="/control-panel/directories/employees/:id"
             element={<ControlPanel children={<Employee />} />}
+          />
+
+          <Route
+            path="/control-panel/directories/roles-management"
+            element={<ControlPanel children={<RolesManagement />} />}
           />
           <Route
             path="/control-panel/directories/map"

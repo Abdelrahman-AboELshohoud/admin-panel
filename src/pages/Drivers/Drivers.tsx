@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "../../components/ui/button";
-import Switch from "../../components/common/Switch";
 import {
   Table,
   TableBody,
@@ -16,15 +15,11 @@ import {
   TabsTrigger,
 } from "../../components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
-import DriverRow from "../../components/sections/drivers/DriverRow";
-import DriversFilters from "../../components/sections/drivers/DriversFilters";
-import {
-  Driver,
-  DriversListGQL,
-  DriverSearchGQL,
-  DriverFilter,
-} from "../../graphql/requests";
+import DriverRow from "../../components/pages/drivers/DriverRow";
+import DriversFilters from "../../components/pages/drivers/DriversFilters";
+import { Driver, DriversListGQL, DriverFilter } from "../../graphql/requests";
 import { useTranslation } from "react-i18next";
+import Pagination from "../../components/common/Pagination";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -64,16 +59,6 @@ const Drivers = () => {
           offset: (currentPage - 1) * ITEMS_PER_PAGE,
           limit: ITEMS_PER_PAGE,
         },
-        filter: {
-          ...filters,
-          ...(searchQuery && {
-            or: [
-              { firstName: { ilike: `%${searchQuery}%` } },
-              { lastName: { ilike: `%${searchQuery}%` } },
-              { phone: { ilike: `%${searchQuery}%` } },
-            ],
-          }),
-        },
       });
 
       if (response.data?.drivers) {
@@ -94,90 +79,6 @@ const Drivers = () => {
   const handleFilterChange = (newFilters: DriverFilter) => {
     setFilters(newFilters);
     setCurrentPage(1);
-  };
-
-  const renderPagination = () => {
-    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-    const maxVisiblePages = 5;
-    const pages = [];
-
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-
-    // First page
-    if (startPage > 1) {
-      pages.push(
-        <Button
-          key="1"
-          variant="outline"
-          size="icon"
-          className="w-8 h-8"
-          onClick={() => setCurrentPage(1)}
-        >
-          1
-        </Button>
-      );
-      if (startPage > 2) pages.push(<span key="dots1">...</span>);
-    }
-
-    // Page numbers
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <Button
-          key={i}
-          variant="outline"
-          size="icon"
-          className={`w-8 h-8 ${
-            currentPage === i ? "bg-primary text-white" : "text-gray-400"
-          }`}
-          onClick={() => setCurrentPage(i)}
-        >
-          {i}
-        </Button>
-      );
-    }
-
-    // Last page
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) pages.push(<span key="dots2">...</span>);
-      pages.push(
-        <Button
-          key={totalPages}
-          variant="outline"
-          size="icon"
-          className="w-8 h-8"
-          onClick={() => setCurrentPage(totalPages)}
-        >
-          {totalPages}
-        </Button>
-      );
-    }
-
-    return (
-      <div className="flex items-center justify-center gap-2 mt-4">
-        <Button
-          variant="outline"
-          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-          disabled={currentPage === 1}
-        >
-          {t("common.previous")}
-        </Button>
-        {pages}
-        <Button
-          variant="outline"
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-          }
-          disabled={currentPage === totalPages}
-        >
-          {t("common.next")}
-        </Button>
-      </div>
-    );
   };
 
   return (
@@ -217,53 +118,62 @@ const Drivers = () => {
             onSearchChange={setSearchQuery}
             isLoading={isLoading}
           />
-
-          <Table>
-            <TableHeader>
-              <TableRow className="border-none hover:bg-transparent">
-                {TableColumns.map((column) => (
-                  <TableHead key={column} className="text-gray-400">
-                    {t(
-                      `drivers.columns.${column
-                        .toLowerCase()
-                        .replace(/\s+/g, "_")}`
-                    )}
-                  </TableHead>
-                ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <td
-                    colSpan={TableColumns.length}
-                    className="text-center py-8"
-                  >
-                    {t("common.loading")}
-                  </td>
+          <div className="card-shape">
+            <Table>
+              <TableHeader>
+                <TableRow className="border-none hover:bg-transparent">
+                  {TableColumns.map((column) => (
+                    <TableHead key={column} className="text-gray-400">
+                      {t(
+                        `drivers.columns.${column
+                          .toLowerCase()
+                          .replace(/\s+/g, "_")}`
+                      )}
+                    </TableHead>
+                  ))}
                 </TableRow>
-              ) : drivers.length > 0 ? (
-                drivers.map((driver) => (
-                  <DriverRow
-                    key={driver.id}
-                    data={driver}
-                    id={String(driver.id)}
-                  />
-                ))
-              ) : (
-                <TableRow>
-                  <td
-                    colSpan={TableColumns.length}
-                    className="text-center py-8"
-                  >
-                    {t("drivers.no_results")}
-                  </td>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {isLoading ? (
+                  <TableRow>
+                    <td
+                      colSpan={TableColumns.length}
+                      className="text-center py-8"
+                    >
+                      {t("common.loading")}
+                    </td>
+                  </TableRow>
+                ) : drivers.length > 0 ? (
+                  drivers.map((driver) => (
+                    <DriverRow
+                      key={driver.id}
+                      data={driver}
+                      id={String(driver.id)}
+                    />
+                  ))
+                ) : (
+                  <TableRow>
+                    <td
+                      colSpan={TableColumns.length}
+                      className="text-center py-8"
+                    >
+                      {t("drivers.no_results")}
+                    </td>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
 
-          {drivers.length > 0 && renderPagination()}
+          {drivers.length > 0 && (
+            <Pagination
+              filters={filters}
+              setFilters={setFilters}
+              totalCount={totalCount}
+              loading={isLoading}
+              t={t}
+            />
+          )}
         </TabsContent>
 
         <TabsContent value="blocked" />

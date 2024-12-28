@@ -38,8 +38,8 @@ const MySidebar = () => {
       icon: <FaUsers />,
       links: [
         {
-          name: t("links.customers.title"),
-          path: "/control-panel/customers/active",
+          name: t("links.customers.services"),
+          path: "/control-panel/services/active",
         },
         {
           name: t("links.customers.clients"),
@@ -90,6 +90,10 @@ const MySidebar = () => {
         {
           name: t("links.reports.forAggregator"),
           path: "/control-panel/reports/for-aggregator",
+        },
+        {
+          name: t("links.reports.complaints"),
+          path: "/control-panel/reports/complaints",
         },
         {
           name: t("links.reports.shifts"),

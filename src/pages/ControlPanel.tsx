@@ -1,4 +1,4 @@
-import SectionsLayout from "../components/sections/SectionsLayout";
+import SectionsLayout from "../components/pages/SectionsLayout";
 
 import Header from "../components/common/MyHeader";
 import MySidebar from "../components/common/MySidebar";

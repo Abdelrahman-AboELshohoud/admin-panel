@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaMapLocationDot } from "react-icons/fa6";
+// import { FaMapLocationDot } from "react-icons/fa6";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useTranslation } from "react-i18next";
 import {
@@ -154,16 +154,19 @@ export default function Orders() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 flex flex-col gap-10">
       {/* Header Section */}
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-semibold">{t("orders.orderHeader")}</h2>
         <div className="flex gap-4">
-          <Button variant="outline" className="gap-2">
+          {/* <Button variant="outline" className="gap-2">
             <FaMapLocationDot size={20} />
             {t("orders.mapButton")}
-          </Button>
-          <Button className="gap-2">
+          </Button> */}
+          <Button
+            onClick={() => navigate("/control-panel/orders/create")}
+            className="gap-2"
+          >
             <IoIosAddCircleOutline size={20} />
             {t("orders.newOrderButton")}
           </Button>
@@ -226,69 +229,70 @@ export default function Orders() {
         </Button>
       </div>
 
-      {/* Orders Table */}
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            <TableHead>{t("orders.table.createdOn")}</TableHead>
-            <TableHead>{t("orders.table.expectedTime")}</TableHead>
-            <TableHead>{t("orders.table.status")}</TableHead>
-            <TableHead>{t("orders.inputs.client")}</TableHead>
-            <TableHead>{t("orders.table.cost")}</TableHead>
-            <TableHead>{t("orders.inputs.address")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.length === 0 && (
-            <TableRow className="hover:bg-transparent">
-              <TableCell
-                colSpan={7}
-                className="text-center py-14 text-lg font-medium"
-              >
-                {t("orders.noOrders")}
-              </TableCell>
+      <div className="text-gray-100 h-full flex card-shape">
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent border-none h-12">
+              <TableHead>{t("orders.table.createdOn")}</TableHead>
+              <TableHead>{t("orders.table.expectedTime")}</TableHead>
+              <TableHead>{t("orders.table.status")}</TableHead>
+              <TableHead>{t("orders.inputs.client")}</TableHead>
+              <TableHead>{t("orders.table.cost")}</TableHead>
+              <TableHead>{t("orders.inputs.address")}</TableHead>
             </TableRow>
-          )}
-          {orders.map((order) => (
-            <TableRow
-              key={order.id}
-              className="hover:bg-transparent"
-              onClick={() => {
-                navigate(`/control-panel/orders/${order.id}`);
-              }}
-            >
-              <TableCell>
-                {new Date(order.createdOn).toLocaleString()}
-              </TableCell>
-              <TableCell>
-                {new Date(order.expectedTimestamp).toLocaleString()}
-              </TableCell>
-              <TableCell>
-                <Badge
-                  variant={
-                    order.status === OrderStatus.Finished
-                      ? "default"
-                      : "destructive"
-                  }
+          </TableHeader>
+          <TableBody>
+            {orders.length === 0 && (
+              <TableRow className="hover:bg-transparent mb-4">
+                <TableCell
+                  colSpan={7}
+                  className="text-center py-14 text-lg font-medium"
                 >
-                  {order.status}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                {order.rider?.firstName} {order.rider?.lastName}
-              </TableCell>
-              <TableCell>
-                {order.costAfterCoupon} {order.currency}
-              </TableCell>
-              <TableCell>
-                <div className="max-w-xs truncate">
-                  {order.addresses?.join(" → ")}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                  {t("orders.noOrders")}
+                </TableCell>
+              </TableRow>
+            )}
+            {orders.map((order) => (
+              <TableRow
+                key={order.id}
+                className="hover:bg-transparent border-none h-12"
+                onClick={() => {
+                  navigate(`/control-panel/orders/${order.id}`);
+                }}
+              >
+                <TableCell>
+                  {new Date(order.createdOn).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  {new Date(order.expectedTimestamp).toLocaleString()}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant={
+                      order.status === OrderStatus.Finished
+                        ? "default"
+                        : "destructive"
+                    }
+                  >
+                    {order.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  {order.rider?.firstName} {order.rider?.lastName}
+                </TableCell>
+                <TableCell>
+                  {order.costAfterCoupon} {order.currency}
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-xs truncate">
+                    {order.addresses?.join(" → ")}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       {/* Pagination */}
       <div className="flex justify-between items-center">

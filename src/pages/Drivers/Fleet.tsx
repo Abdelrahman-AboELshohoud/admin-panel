@@ -72,98 +72,6 @@ type FleetFinancialsData = {
   };
 };
 
-// Dummy data for fleet financials
-// const dummyFleetFinancials: FleetFinancialsData = {
-//   fleet: {
-//     transactions: {
-//       nodes: [
-//         {
-//           transactionTimestamp: "2024-01-15T10:30:00Z",
-//           amount: 500,
-//           currency: "USD",
-//           action: "RECHARGE",
-//           rechargeType: "BANK_TRANSFER",
-//           refrenceNumber: "REF123",
-//           status: "COMPLETED",
-//         },
-//         {
-//           transactionTimestamp: "2024-01-10T15:45:00Z",
-//           amount: -200,
-//           currency: "USD",
-//           action: "DEDUCT",
-//           deductType: "WITHDRAWAL",
-//           refrenceNumber: "REF124",
-//           status: "COMPLETED",
-//         },
-//         {
-//           transactionTimestamp: "2024-02-01T09:15:00Z",
-//           amount: 750,
-//           currency: "USD",
-//           action: "RECHARGE",
-//           rechargeType: "CASH",
-//           refrenceNumber: "REF125",
-//           status: "COMPLETED",
-//         },
-//         {
-//           transactionTimestamp: "2024-02-05T14:20:00Z",
-//           amount: 1000,
-//           currency: "EUR",
-//           action: "RECHARGE",
-//           rechargeType: "CREDIT_CARD",
-//           refrenceNumber: "REF126",
-//           status: "COMPLETED",
-//         },
-//         {
-//           transactionTimestamp: "2024-02-10T11:30:00Z",
-//           amount: -300,
-//           currency: "EUR",
-//           action: "DEDUCT",
-//           deductType: "SERVICE_FEE",
-//           refrenceNumber: "REF127",
-//           status: "PENDING",
-//         },
-//         {
-//           transactionTimestamp: "2024-02-15T16:45:00Z",
-//           amount: 250,
-//           currency: "USD",
-//           action: "RECHARGE",
-//           rechargeType: "BANK_TRANSFER",
-//           refrenceNumber: "REF128",
-//           status: "COMPLETED",
-//         },
-//       ],
-//       totalCount: 6,
-//     },
-//     wallets: [
-//       {
-//         currency: "USD",
-//         balance: 1300,
-//       },
-//       {
-//         currency: "EUR",
-//         balance: 700,
-//       },
-//       {
-//         currency: "GBP",
-//         balance: 500,
-//       },
-//     ],
-//   },
-//   regions: {
-//     nodes: [
-//       {
-//         currency: "USD",
-//       },
-//       {
-//         currency: "EUR",
-//       },
-//       {
-//         currency: "GBP",
-//       },
-//     ],
-//   },
-// };
-
 const getChartData = (financials: FleetFinancialsData | undefined) => {
   if (!financials?.fleet?.transactions?.nodes) return null;
 
@@ -262,21 +170,23 @@ export default function Fleet() {
   const validateForm = (): boolean => {
     const newErrors: any = {};
 
-    if (!formData.name) newErrors.name = "Name is required";
-    if (!formData.address) newErrors.address = "Address is required";
+    if (!formData.name) newErrors.name = t("fleet.errors.nameRequired");
+    if (!formData.address)
+      newErrors.address = t("fleet.errors.addressRequired");
     if (!formData.phoneNumber)
-      newErrors.phoneNumber = "Phone number is required";
+      newErrors.phoneNumber = t("fleet.errors.phoneRequired");
     if (!formData.accountNumber)
-      newErrors.accountNumber = "Account number is required";
+      newErrors.accountNumber = t("fleet.errors.accountRequired");
     if (
       formData.commissionSharePercent < 0 ||
       formData.commissionSharePercent > 100
     ) {
-      newErrors.commissionSharePercent =
-        "Commission percentage must be between 0 and 100";
+      newErrors.commissionSharePercent = t(
+        "fleet.errors.commissionPercentRange"
+      );
     }
     if (formData.commissionShareFlat < 0) {
-      newErrors.commissionShareFlat = "Commission flat rate must be positive";
+      newErrors.commissionShareFlat = t("fleet.errors.commissionFlatPositive");
     }
 
     setErrors(newErrors);
@@ -307,6 +217,9 @@ export default function Fleet() {
 
   const renderFleetDetails = () => (
     <form onSubmit={handleSubmit} className="space-y-6">
+      <h3 className="text-xl font-semibold text-gray-200">
+        {t("fleet.fields.details")}
+      </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label htmlFor="name">{t("fleet.fields.name")}</label>
@@ -402,9 +315,23 @@ export default function Fleet() {
       </div>
 
       <div className="flex justify-end gap-4">
-        <Button type="submit" onClick={() => setEditing((prev) => !prev)}>
-          {editing ? t("common.save") : t("common.edit")}
-        </Button>
+        {editing ? (
+          <Button
+            className="bg-yellow-500 border-yellow-600 hover:bg-yellow-600"
+            type="submit"
+            onClick={() => setEditing((prev) => !prev)}
+          >
+            {t("common.save")}
+          </Button>
+        ) : (
+          <Button
+            className="bg-gray-900 border-gray-800 hover:bg-gray-800"
+            type="submit"
+            onClick={() => setEditing((prev) => !prev)}
+          >
+            {t("common.edit")}
+          </Button>
+        )}
       </div>
     </form>
   );
@@ -412,15 +339,15 @@ export default function Fleet() {
   const renderDrivers = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-xl font-semibold text-gray-200">Fleet Drivers</h3>
-        <Button className="text-gray-200 bg-gray-900 border-gray-800 hover:bg-gray-800">
-          {t("fleet.drivers.add")}
-        </Button>
+        <h3 className="text-xl font-semibold text-gray-200">
+          {t("fleet.drivers.title")}
+        </h3>
+        <Button className="add-button">{t("fleet.drivers.add")}</Button>
       </div>
 
       <Table>
         <TableHeader>
-          <TableRow className="hover:bg-transparent border-gray-800">
+          <TableRow className="hover:bg-transparent border-transparent">
             <TableHead className="text-gray-400">
               {t("fleet.drivers.name")}
             </TableHead>
@@ -466,7 +393,7 @@ export default function Fleet() {
             <TableRow className="hover:bg-transparent border-gray-800">
               <TableCell
                 colSpan={5}
-                className="text-center hover:bg-transparent text-gray-400 py-14"
+                className="text-center hover:bg-transparent text-gray-400 py-20 "
               >
                 {t("fleet.drivers.noDrivers")}
               </TableCell>
@@ -480,8 +407,8 @@ export default function Fleet() {
   const renderFinancials = () => (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h3 className="text-xl font-semibold text-gray-200">
-          Fleet Financials
+        <h3 className="text-lg font-medium text-gray-200">
+          {t("fleet.financials.title")}
         </h3>
         <FleetTransactionDialog
           fleetId={fleetId!}
@@ -491,59 +418,61 @@ export default function Fleet() {
           onSuccess={fetchFleetData}
         />
       </div>
-
-      {/* Wallets Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {fleetFinancials?.fleet?.wallets?.map((wallet, index) => (
-          <Card key={index} className="bg-white border-gray-200">
-            <CardHeader>
-              <CardTitle className="text-sm text-gray-600">
-                {wallet.currency} {t("fleet.financials.balance")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-gray-800">
-                {wallet.balance.toLocaleString()}
-              </div>
-            </CardContent>
-          </Card>
+          <div key={index} className="card-shape">
+            <Card className="bg-white border-gray-200">
+              <CardHeader>
+                <CardTitle className="text-sm text-gray-600">
+                  {wallet.currency} {t("fleet.financials.balance")}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-gray-800">
+                  {wallet.balance.toLocaleString()}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         ))}
       </div>
 
       {/* Chart */}
       {getChartData(fleetFinancials) && (
-        <Card className="bg-white border-gray-200">
-          <CardHeader>
-            <CardTitle className="text-gray-800">
-              {t("fleet.financials.revenue")}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Bar
-              data={getChartData(fleetFinancials)!}
-              options={{
-                plugins: {
-                  legend: {
-                    display: false,
+        <div className=" flex flex-col gap-4">
+          <h3 className="text-lg font-medium text-gray-200">
+            {t("fleet.financials.revenue")}
+          </h3>
+          <Card className="bg-white border-gray-200">
+            <CardHeader>
+              <CardTitle className="text-gray-800">
+                {t("fleet.financials.revenue")}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Bar
+                data={getChartData(fleetFinancials)!}
+                options={{
+                  plugins: {
+                    legend: {
+                      display: false,
+                    },
                   },
-                },
-              }}
-            />
-          </CardContent>
-        </Card>
+                }}
+              />
+            </CardContent>
+          </Card>
+        </div>
       )}
 
-      {/* Transactions */}
-      <Card className="bg-white border-gray-200">
-        <CardHeader>
-          <CardTitle className="text-gray-800">
-            {t("fleet.financials.transactions")}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+      <div className="flex flex-col gap-4">
+        <h3 className="text-lg font-medium text-gray-200">
+          {t("fleet.financials.transactions")}
+        </h3>
+        <div className="">
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-transparent border-gray-200">
+              <TableRow className="hover:bg-transparent border-transparent">
                 <TableHead className="text-gray-600">
                   {t("common.date")}
                 </TableHead>
@@ -567,7 +496,7 @@ export default function Fleet() {
                 fleetFinancials?.fleet?.transactions?.nodes.map((tx) => (
                   <TableRow
                     key={tx.refrenceNumber}
-                    className="hover:bg-gray-100 border-gray-200"
+                    className="hover:bg-[#262626] border-transparent"
                   >
                     <TableCell className="text-gray-800">
                       {new Date(tx.transactionTimestamp).toLocaleDateString()}
@@ -590,7 +519,7 @@ export default function Fleet() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="secondary" className="bg-gray-100">
-                        {tx.status || "Completed"}
+                        {tx.status || t("common.completed")}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-gray-600">
@@ -610,40 +539,42 @@ export default function Fleet() {
               )}
             </TableBody>
           </Table>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 
   return (
-    <Tabs defaultValue="details" className="w-full">
-      <div className="container mx-auto p-6">
-        <Card className="bg-background border-none text-foreground card-shape">
-          <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-3xl font-bold text-gray-400">
-              Fleet Management
-            </CardTitle>
-          </CardHeader>
-
-          <CardContent className="bg-transparent border-transparent">
-            <TabsList className="grid grid-cols-3 w-1/3 mb-8 bg-transparent">
-              <TabsTrigger value="details" className="custom-tabs">
-                Details
-              </TabsTrigger>
-              <TabsTrigger value="drivers" className="custom-tabs">
-                Drivers
-              </TabsTrigger>
-              <TabsTrigger value="financials" className="custom-tabs">
-                Financials
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="details">{renderFleetDetails()}</TabsContent>
-            <TabsContent value="drivers">{renderDrivers()}</TabsContent>
-            <TabsContent value="financials">{renderFinancials()}</TabsContent>
-          </CardContent>
-        </Card>
-      </div>
-    </Tabs>
+    <div>
+      <h3 className="text-3xl font-semibold pl-6 mb-3 text-gray-300">
+        {t("fleet.title")}
+      </h3>
+      <Tabs defaultValue="details" className="w-full">
+        <TabsList className="flex gap-6 pl-6 w-fit mt-6 bg-transparent">
+          <TabsTrigger value="details" className="custom-tabs">
+            {t("fleet.tabs.details")}
+          </TabsTrigger>
+          <TabsTrigger value="drivers" className="custom-tabs">
+            {t("fleet.tabs.drivers")}
+          </TabsTrigger>
+          <TabsTrigger value="financials" className="custom-tabs">
+            {t("fleet.tabs.financials")}
+          </TabsTrigger>
+        </TabsList>
+        <div className="container w-2/3 p-6">
+          <Card className="bg-background border-none text-foreground card-shape">
+            <CardContent className="bg-transparent border-transparent">
+              <TabsContent value="details">{renderFleetDetails()}</TabsContent>
+              <TabsContent value="drivers">{renderDrivers()}</TabsContent>
+              <TabsContent value="financials">{renderFinancials()}</TabsContent>
+            </CardContent>
+          </Card>
+        </div>
+      </Tabs>
+    </div>
   );
+}
+
+// translation.json
+{
 }

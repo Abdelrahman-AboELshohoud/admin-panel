@@ -1,22 +1,42 @@
-import { useState } from "react";
-import { GoogleMap, LoadScript, Marker, Polygon } from "@react-google-maps/api";
+import { useState, useCallback } from "react";
+import {
+  GoogleMap,
+  LoadScript,
+  Marker,
+  Polygon,
+  DrawingManager,
+} from "@react-google-maps/api";
 import { iconUrl } from "./Mark";
+
+interface MapLocation {
+  lat: number;
+  lng: number;
+}
+
+interface MapProps {
+  selectedLocations?: MapLocation[];
+  setSelectedLocations?: (locations: MapLocation[]) => void;
+  center?: MapLocation;
+  children?: React.ReactNode;
+  showDrawingTools?: boolean;
+  onPolygonComplete?: (polygon: google.maps.Polygon) => void;
+  polygons?: Array<{
+    id: string;
+    coordinates: MapLocation[];
+    options?: google.maps.PolygonOptions;
+  }>;
+}
 
 const MapWithClusters = ({
   selectedLocations,
   setSelectedLocations,
   center = { lat: 0, lng: 0 },
   children,
-  regions,
+  showDrawingTools = false,
+  onPolygonComplete,
+  polygons = [],
   ...props
-}: {
-  selectedLocations?: { lat: number; lng: number }[];
-  setSelectedLocations?: any;
-  center?: { lat: number; lng: number };
-  props?: object;
-  children?: React.ReactNode;
-  regions?: any;
-}) => {
+}: MapProps) => {
   const mapContainerStyle = {
     width: "100%",
     height: "400px",
@@ -24,29 +44,23 @@ const MapWithClusters = ({
 
   const [googleMapsLoaded, setGoogleMapsLoaded] = useState(false);
 
+  const handlePolygonComplete = useCallback(
+    (polygon: google.maps.Polygon) => {
+      if (onPolygonComplete) {
+        onPolygonComplete(polygon);
+      }
+    },
+    [onPolygonComplete]
+  );
+
   return (
     <LoadScript
       googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
       onLoad={() => setGoogleMapsLoaded(true)}
+      libraries={["drawing"]}
     >
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
-        onClick={(e) => {
-          e.domEvent;
-          if (e.latLng && selectedLocations) {
-            if (selectedLocations.length === 2) {
-              setSelectedLocations((prev: any) => [
-                prev[0],
-                { lat: e.latLng?.lat() ?? 0, lng: e.latLng?.lng() ?? 0 },
-              ]);
-            } else {
-              setSelectedLocations((prev: any) => [
-                ...prev,
-                { lat: e.latLng?.lat() ?? 0, lng: e.latLng?.lng() ?? 0 },
-              ]);
-            }
-          }
-        }}
         center={center}
         zoom={10}
         {...props}
@@ -54,11 +68,6 @@ const MapWithClusters = ({
         {googleMapsLoaded &&
           selectedLocations?.map((location, index) => (
             <Marker
-              onClick={() => {
-                setSelectedLocations((prev: any) =>
-                  prev.filter((_: any, i: number) => i !== index)
-                );
-              }}
               key={`dynamic-${index}`}
               position={location}
               icon={{
@@ -67,11 +76,32 @@ const MapWithClusters = ({
               }}
             />
           ))}
-        {regions?.map((region: any) => (
+        {showDrawingTools && (
+          <DrawingManager
+            onPolygonComplete={handlePolygonComplete}
+            options={{
+              drawingControl: true,
+              drawingControlOptions: {
+                position: google.maps.ControlPosition.TOP_CENTER,
+                drawingModes: [google.maps.drawing.OverlayType.POLYGON],
+              },
+              polygonOptions: {
+                fillColor: "#B69F7D",
+                fillOpacity: 0.4,
+                strokeColor: "#B69F7D",
+                strokeWeight: 2,
+                clickable: true,
+                editable: true,
+                draggable: true,
+              },
+            }}
+          />
+        )}
+        {polygons.map((polygon) => (
           <Polygon
-            key={region.id}
-            paths={region.location}
-            options={{ fillColor: "#0000FF", strokeColor: "#0000FF" }}
+            key={polygon.id}
+            paths={polygon.coordinates}
+            options={polygon.options}
           />
         ))}
         {children}

@@ -29,7 +29,7 @@ const Driver: React.FC = () => {
   const navigate = useNavigate();
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteCountdown, setDeleteCountdown] = useState(5);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [_isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -105,8 +105,6 @@ const Driver: React.FC = () => {
           <TabsList className="bg-transparent hover:bg-transparent flex flex-wrap gap-4 justify-start mb-6 w-full">
             {[
               "Profile",
-              "Work",
-              "Call sign and password",
               "Orders",
               "Balance",
               "Reviews",

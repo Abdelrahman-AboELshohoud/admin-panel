@@ -35,10 +35,17 @@ export default function DeletionDialog({
     if (isOpen && countdown > 0) {
       timer = setInterval(() => {
         setCountdown((prev) => prev - 1);
+        if (countdown === 0) {
+          clearInterval(timer);
+          setCountdown(0);
+        }
       }, 1000);
     }
     return () => {
-      if (timer) clearInterval(timer);
+      if (timer === 0) {
+        clearInterval(timer);
+      }
+      clearInterval(timer);
       setCountdown(countdownSeconds);
       setIsDeleting(false);
     };
@@ -64,13 +71,13 @@ export default function DeletionDialog({
           <DialogDescription>
             {description}
             <div className="mt-4">
-              {countdown > 0 && (
-                <p>
-                  {t("common.pleaseWait")}{" "}
-                  <span className="text-red-500 font-bold">{countdown}</span>{" "}
-                  {t("common.seconds")}
-                </p>
-              )}
+              <p>
+                {t("common.pleaseWait")}{" "}
+                <span className="text-red-500 font-bold">
+                  {countdown > 0 ? countdown : "0"}
+                </span>{" "}
+                {t("common.seconds")}
+              </p>
             </div>
           </DialogDescription>
         </DialogHeader>

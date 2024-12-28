@@ -7,7 +7,9 @@
     "main": "Main",
     "orders": "Orders",
     "customers": {
-      "title": "Customers"
+      "title": "Clients",
+      "clients": "Clients",
+      "services": "Services"
     },
     "drivers": {
       "title": "Drivers",
@@ -39,12 +41,14 @@
       "organizationDetails": "Organization details",
       "application": "Application for clients",
       "orders": "Orders settings",
-      "cmc": "CMC",
+      "cmc": "SMS",
       "notifications": "Notifications to clients",
       "drivers": "Drivers",
       "carClasses": "Car classes",
       "onlineCheckout": "Online checkout",
-      "atc": "ATC"
+      "atc": "ATC",
+      "payment": "Payments",
+      "configuration": "Configuration"
     }
   },
 
@@ -70,6 +74,26 @@
       "client": "Client",
       "executor": "Executor",
       "comment": "Comment"
+    },
+    "create": {
+      "title": "Create New Order",
+      "addresses": "Addresses",
+      "addressPlaceholder": "Enter address",
+      "addAddress": "Add Another Address",
+      "service": "Service",
+      "selectService": "Select a service",
+      "expectedTime": "Expected Time",
+      "waitTime": "Wait Time (minutes)",
+      "submit": "Create Order",
+      "confirmTitle": "Confirm Order Creation",
+      "confirmDescription": "Are you sure you want to create this order?"
+    },
+    "success": {
+      "created": "Order created successfully"
+    },
+    "errors": {
+      "fetchServicesFailed": "Failed to fetch services",
+      "createFailed": "Failed to create order"
     },
     "actions": {
       "cancel": "Cancel",
@@ -109,6 +133,62 @@
       "total": "Total Amount"
     }
   },
+  "leftCustomerEdit": {
+    "baseFare": "Base Fare",
+    "perMinuteDrive": "Per Minute Drive",
+    "perMinuteWait": "Per Minute Wait",
+    "regions": "Regions",
+    "regionsDescription": "Regions Description",
+    "regionsPlaceholder": "Enter regions",
+    "addRegion": "Add Region",
+    "addTimeMultiplier": "Add Time Multiplier",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "multiply": "Multiply",
+    "twoWayAvailable": "Two-way available",
+    "paymentMethod": "Payment Method",
+    "minimumFee": "Minimum Fee",
+    "perHundredMeters": "Per Hundred Meters",
+    "name": "Name"
+  },
+  "rightCustomerEdit": {
+    "description": "Description",
+    "searchRadius": "Search Radius",
+    "maximumDistance": "Maximum Distance",
+    "options": "Options",
+    "option": "Option",
+    "addOption": "Add Option",
+    "optionName": "Option Name",
+    "prepayPercent": "Prepay Percentage",
+    "providerSharePercent": "Provider Share Percentage",
+    "providerShareFlat": "Provider Share Flat"
+  },
+  "bottomCustomerEdit": {
+    "cancellationFee": "Cancellation Fee",
+    "driverShare": "Driver Share",
+    "providerShare": "Provider Share",
+    "distanceMultiplier": "Distance Multiplier",
+    "addTimeMultiplier": "Add Time Multiplier",
+    "startTime": "Start Time",
+    "endTime": "End Time",
+    "multiply": "Multiply",
+    "category": "Category",
+    "regions": "Regions",
+    "regionName": "Region name",
+    "regionDescription": "Region Description",
+    "addRegion": "Add Region",
+    "currency": "Currency",
+    "status": "Status",
+    "block": "Block",
+    "timeMultiplier": "Time multiplier",
+    "addDistanceMultiplier": "Add Distance Multiplier",
+    "multipliers": "Multipliers",
+    "distanceMultipliers": "Distance Multipliers",
+    "timeMultipliers": "Time Multipliers",
+    "from": "From",
+    "to": "To",
+    "multiplier": "Multiplier"
+  },
   "clients": {
     "orders": "Orders",
     "totalOrders": "Total orders",
@@ -124,10 +204,26 @@
     "male": "Male",
     "female": "Female",
     "wallets": "Wallets",
+    "wallet": "Wallet",
     "noClient": "No client found",
     "online": "Online",
+    "addTransaction": "Add transaction",
+    "noTransactions": "No transactions",
+    "profile": "Profile",
     "buttons": {
       "add": "Add Client"
+    },
+    "client": {
+      "status": {
+        "enabled": "Enabled",
+        "disabled": "Disabled"
+      }
+    }
+  },
+  "services": {
+    "addService": "Add Service",
+    "create": {
+      "title": "Create New Service"
     }
   },
   "drivers": {
@@ -142,6 +238,15 @@
       "carColor": "The color of the car",
       "autoOptions": "Auto Options",
       "driversOptions": "Drivers's Options"
+    },
+    "columns": {
+      "name": "Name",
+      "date_of_registration": "Date of registration",
+      "photo": "Photo",
+      "phone_number": "Phone number",
+      "rating": "Rating",
+      "status": "Status",
+      "reviews_count": "Reviews count"
     },
     "driver": {
       "statusTitle": "Status",
@@ -390,55 +495,8 @@
   "exceptions": "Exceptions",
   "addException": "Add an exception",
   "tariffsForCustomers": "Tarrifs for customers",
-  "rightCustomerEdit": {
-    "shortDescription": "Short description",
-    "shortDescriptionPlaceholder": "To write...",
-    "typesOfCars": "Types of cars",
-    "preOrder": "It is possible to make a pre-order",
-    "addressesLabel": "The number of addresses for creating an order",
-    "addressesPlaceholder": "Select address option",
-    "addressesOption": "Allow multiple addresses to be selected, but only 1 is required",
-    "tariffLabel": "The tariff is available",
-    "tariffPlaceholder": "Select availability",
-    "tariffOption": "To everyone",
-    "standbyMode": "Enabling the standby mode in the performer's application",
-    "standbyModes": {
-      "auto": "Automatically by GPS",
-      "manual": "Manually using the button"
-    },
-    "hours": "hours",
-    "tariffAvailability": "Tariff is available if the order is more than"
-  },
+
   "hours": "hours",
-  "leftCustomerEdit": {
-    "branchLabel": "The branch where to staff work",
-    "branchPlaceholder": "Select city",
-    "kazan": "Kazan",
-    "professionLabel": "Profession",
-    "professionPlaceholder": "Select profession",
-    "taxiDriver": "Taxi driver",
-    "carClassLabel": "Car class",
-    "carClassPlaceholder": "Select class",
-    "business": "Business",
-    "fareTypeLabel": "Fare type for taxi",
-    "fareTypePlaceholder": "Select type",
-    "selectType": "Select type",
-    "tariffAvailabilityLabel": "Where is the tariff available?",
-    "tariffAvailabilityPlaceholder": "Select availability",
-    "all": "All",
-    "name": "Name",
-    "namePlaceholder": "BUSINESS Light",
-    "website": "Website",
-    "application": "Application",
-    "dispatcher": "Dispatcher",
-    "driverCurb": "Driver (curb)",
-    "personalAccount": "Personal account",
-    "advancePayment": "To demand an advance payment",
-    "sorting": "Sorting",
-    "fineCustomer": "Fine the customer for canceling the order when the contractor has already left",
-    "fineAfterXMinutes": "A fine after X minutes from when the driver left for the client",
-    "fineOn": "Fine on"
-  },
   "addAddress": "Add Address",
   "formSubmitted": "Form submitted:",
   "save": "Save",
@@ -466,7 +524,8 @@
     "latRequired": "Latitude is required",
     "latInvalid": "Latitude must be a number between -90 and 90",
     "lonRequired": "Longitude is required",
-    "lonInvalid": "Longitude must be a number between -180 and 180"
+    "lonInvalid": "Longitude must be a number between -180 and 180",
+    "noAccess": "You do not have access to this page"
   },
   "addresses": {
     "title": "Addresses",
@@ -707,7 +766,16 @@
     "carClass": "Car class",
     "tariffs": "Tariffs",
     "orderClass": "What classes of orders will the group see?",
-    "priority": "Priority when distribution of orders?"
+    "priority": "Priority when distribution of orders?",
+    "name": "Name",
+    "phoneNumber": "Phone number",
+    "address": "Address",
+    "commissionSharePercent": "Commission share percentage",
+    "commissionShareFlat": "Commission share flat",
+    "mobileNumber": "Mobile number",
+    "userName": "Username",
+    "password": "Password",
+    "accountNumber": "Account number"
   },
   "options": {
     "kazan": "Kazan",
@@ -1237,28 +1305,52 @@
     "apply": "Apply",
     "previous": "Previous",
     "next": "Next",
-    "page": "Page"
+    "page": "Page",
+    "delete": "Delete",
+    "update": "Update",
+    "remove": "Remove",
+    "search": "Search",
+    "allCities": "All cities",
+    "save": "Save",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "processing": "Processing",
+    "phoneNumber": "Phone number",
+    "name": "Name",
+    "address": "Address",
+    "commission": "Commission",
+    "view": "View",
+    "actions": "Actions",
+    "date": "Date",
+    "type": "Type",
+    "amount": "Amount",
+    "status": "Status",
+    "reference": "Reference",
+    "completed": "Completed",
+    "newTransaction": "New Transaction",
+    "createTransaction": "Create Transaction"
   },
-
   "configuration": {
+    "title": "Configuration",
     "purchaseCode": {
-      "title": "Purchase Code",
+      "title": "Purchase code",
       "code": "Enter purchase code",
       "email": "Email (optional)"
     },
     "mapsApi": {
-      "title": "Maps API Configuration",
-      "backend": "Backend Maps API Key",
-      "adminPanel": "Admin Panel Maps API Key"
+      "title": "Maps API configuration",
+      "backend": "Backend maps API key",
+      "adminPanel": "Admin panel maps API key"
     },
     "firebase": {
-      "title": "Firebase Configuration",
-      "keyFile": "Firebase Key File Name"
+      "title": "Firebase configuration",
+      "keyFile": "Firebase key file name"
     },
     "server": {
-      "title": "Server Management",
-      "ip": "Server IP Address",
-      "disable": "Disable Server"
+      "title": "Server management",
+      "ip": "Server IP address",
+      "disable": "Disable server"
     },
     "success": {
       "purchaseCode": "Purchase code updated successfully",
@@ -1275,6 +1367,8 @@
     }
   },
   "employees": {
+    "manageRoles": "Manage roles",
+    "addNew": "Add new",
     "roles": {
       "admin": "Administrator",
       "operator": "Operator",
@@ -1289,5 +1383,101 @@
       "invitationFailed": "Failed to resend invitation",
       "cancellationFailed": "Failed to cancel invitation"
     }
+  },
+  "balance": {
+    "currency": "Currency",
+    "description": "Description",
+    "amount": "Amount",
+    "date": "Date",
+    "type": "Type",
+    "status": "Status",
+    "action": "Action",
+    "rechargeType": "Recharge type",
+    "recharge": "Recharge",
+    "withdraw": "Withdraw",
+    "deduct": "Deduct",
+    "add": "Add",
+    "deductType": "Deduct type",
+    "recharged": "Recharged",
+    "manual": "Manual",
+    "bankTransfer": "Bank Transfer",
+    "correction": "Correction"
+  },
+  "paymentMethods": {
+    "cashcredit": "Cash/Credit",
+    "onlycash": "Only cash",
+    "onlycredit": "Only credit",
+    "bankCard": "Bank card",
+    "fastPayment": "Fast payment system",
+    "personalAccount": "Personal account",
+    "bonusAccount": "Bonus account",
+    "terminal": "Terminal",
+    "corporateBalance": "Corporate balance"
+  },
+  "fleet": {
+    "title": "Fleet Management",
+    "tabs": {
+      "details": "Details",
+      "drivers": "Drivers",
+      "financials": "Financials"
+    },
+    "fields": {
+      "details": "Fleet Details",
+      "name": "Name",
+      "address": "Address",
+      "phoneNumber": "Phone Number",
+      "accountNumber": "Account Number",
+      "commissionPercent": "Commission Percentage",
+      "commissionFlat": "Commission Flat Rate"
+    },
+    "errors": {
+      "nameRequired": "Name is required",
+      "addressRequired": "Address is required",
+      "phoneRequired": "Phone number is required",
+      "accountRequired": "Account number is required",
+      "commissionPercentRange": "Commission percentage must be between 0 and 100",
+      "commissionFlatPositive": "Commission flat rate must be positive"
+    },
+    "drivers": {
+      "title": "Fleet Drivers",
+      "add": "Add Driver",
+      "name": "Name",
+      "status": "Status",
+      "noDrivers": "No drivers found"
+    },
+    "financials": {
+      "title": "Fleet Financials",
+      "balance": "Balance",
+      "revenue": "Revenue",
+      "transactions": "Transactions",
+      "noTransactions": "No transactions found",
+      "createTransaction": "Create Transaction"
+    }
+  },
+  "formErrors": {
+    "nameRequired": "Name is required",
+    "phoneRequired": "Phone number is required",
+    "invalidPhone": "Invalid phone number format",
+    "addressRequired": "Address is required",
+    "commissionSharePercent": "Commission share percentage must be between 0 and 100",
+    "commissionShareFlat": "Commission share flat must be positive",
+    "invalidCommissionFlat": "Commission share flat must be positive",
+    "invalidCommissionPercent": "Commission share percentage must be between 0 and 100",
+    "mobileRequired": "Mobile number is required",
+    "invalidMobile": "Invalid mobile number format",
+    "accountRequired": "Account number is required",
+    "usernameRequired": "Username is required",
+    "passwordRequired": "Password is required",
+    "passwordTooShort": "Password must be at least 8 characters long"
+  },
+  "messages": {
+    "errorCreatingFleet": "Failed to create fleet",
+    "errorCreatingDriver": "Failed to create driver",
+    "errorCreatingGroup": "Failed to create group",
+    "errorCreatingFleetGroup": "Failed to create fleet group",
+    "successCreatingFleet": "Fleet created successfully",
+    "successCreatingDriver": "Driver created successfully",
+    "successCreatingGroup": "Group created successfully",
+    "successCreatingFleetGroup": "Fleet group created successfully"
   }
 }

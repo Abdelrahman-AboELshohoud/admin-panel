@@ -118,7 +118,7 @@ export function FleetTransactionDialog({
   return (
     <MyDialog
       trigger={
-        <Button variant="outline">
+        <Button variant="outline" className="w-fit add-button">
           {t("fleet.financials.createTransaction")}
         </Button>
       }

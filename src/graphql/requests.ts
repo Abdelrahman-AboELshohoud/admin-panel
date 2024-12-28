@@ -66,6 +66,110 @@ export const SosSubscriptionDocument = gql`
   }
 `;
 
+export const SosListDocument = gql`
+  query SOSList($paging: OffsetPaging) {
+    distressSignals(paging: $paging) {
+      nodes {
+        id
+        createdAt
+        status
+        location {
+          lat
+          lng
+        }
+      }
+      totalCount
+    }
+  }
+`;
+
+// TODO: Tomorrow
+export const SosListGQL = (variables: SosListQueryVariables) => {
+  return handledRequest({
+    variables,
+    gql: SosListDocument,
+    type: "query",
+  });
+};
+
+export const ViewSosDocument = gql`
+  query ViewSOS($id: ID!) {
+    distressSignal(id: $id) {
+      id
+      createdAt
+      status
+      submittedByRider
+      location {
+        lat
+        lng
+      }
+      activities {
+        action
+        createdAt
+        note
+        operator {
+          id
+          firstName
+          lastName
+        }
+      }
+      order {
+        id
+        status
+        createdOn
+        startTimestamp
+        finishTimestamp
+        expectedTimestamp
+        costBest
+        costAfterCoupon
+        addresses
+        currency
+        rider {
+          id
+          mobileNumber
+          status
+          firstName
+          lastName
+          registrationTimestamp
+        }
+        driver {
+          id
+          mobileNumber
+          status
+          firstName
+          lastName
+          registrationTimestamp
+        }
+      }
+    }
+  }
+`;
+
+// TODO: Tomorrow
+export const ViewSosGQL = (variables: ViewSosQueryVariables) => {
+  return handledRequest({ variables, gql: ViewSosDocument, type: "query" });
+};
+
+export const CreateSosActivityDocument = gql`
+  mutation CreateSOSActivity($activity: CreateSOSAcitivtyInput!) {
+    createOneSOSActivity(input: { sOSActivity: $activity }) {
+      id
+      action
+    }
+  }
+`;
+
+// TODO: ??
+export const CreateSosActivityGQL = (
+  variables: CreateSosActivityMutationVariables
+) => {
+  return handledRequest({
+    variables,
+    gql: CreateSosActivityDocument,
+    type: "mutation",
+  });
+};
+
 // TODO: Tomorrow
 export const SosSubscriptionGQL = () => {
   return handledRequest({
@@ -83,7 +187,7 @@ export const ComplaintSubscriptionDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ComplaintSubscriptionGQL = () => {
   return handledRequest({
     gql: ComplaintSubscriptionDocument,
@@ -144,7 +248,7 @@ export const ViewComplaintDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewComplaintGQL = (variables: ViewComplaintQueryVariables) => {
   return handledRequest({
     variables,
@@ -161,7 +265,7 @@ export const UpdateComplaintStatusDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdateComplaintStatusGQL = (
   variables: UpdateComplaintStatusMutationVariables
 ) => {
@@ -187,7 +291,7 @@ export const ComplaintsListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ComplaintsListGQL = (variables: ComplaintsListQueryVariables) => {
   return handledRequest({
     variables,
@@ -726,7 +830,7 @@ export const CreateOrderDocument = gql`
 
 // Done
 export const CreateOrderGQL = (variables: CreateOrderMutationVariables) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: CreateOrderDocument,
     type: "mutation",
@@ -1538,7 +1642,7 @@ export const ReviewParameterViewDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ReviewParameterViewGQL = (
   variables: ReviewParameterViewQueryVariables
 ) => {
@@ -1557,7 +1661,7 @@ export const UpdateReviewParameterDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdateReviewParameterGQL = (
   variables: UpdateReviewParameterMutationVariables
 ) => {
@@ -1576,7 +1680,7 @@ export const CreateReviewParameterDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreateReviewParameterGQL = (
   variables: CreateReviewParameterMutationVariables
 ) => {
@@ -1597,7 +1701,7 @@ export const ReviewParametersListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ReviewParametersListGQL = (
   variables: ReviewParametersListQueryVariables
 ) => {
@@ -1858,7 +1962,7 @@ export const ServicesListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const ServicesListGQL = (variables: ServicesListQueryVariables) => {
   return handledRequest({
     variables,
@@ -1947,7 +2051,7 @@ export const ViewServiceDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const ViewServiceGQL = (variables: ViewServiceQueryVariables) => {
   return handledRequest({
     variables,
@@ -1979,7 +2083,7 @@ export const NewServiceDocument = gql`
   }
 `;
 
-// TODO: Tomorrow......known!?
+// Not
 export const NewServiceGQL = (variables: NewServiceQueryVariables) => {
   return handledRequest({
     variables,
@@ -1996,7 +2100,7 @@ export const CreateServiceDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const CreateServiceGQL = (variables: CreateServiceMutationVariables) => {
   return handledRequest({
     variables,
@@ -2013,7 +2117,7 @@ export const DeleteServiceDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const DeleteServiceGQL = (variables: DeleteServiceMutationVariables) => {
   return handledRequest({
     variables,
@@ -2030,7 +2134,7 @@ export const UpdateServiceDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const UpdateServiceGQL = (variables: UpdateServiceMutationVariables) => {
   return handledRequest({
     variables,
@@ -2047,7 +2151,7 @@ export const SetRegionsOnServiceDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const SetRegionsOnServiceGQL = (
   variables: SetRegionsOnServiceMutationVariables
 ) => {
@@ -2108,7 +2212,7 @@ export const GetConfigurationDocument = gql`
   }
 `;
 
-// Questionable
+// Not
 export const GetConfigurationGQL = (
   variables: GetConfigurationQueryVariables
 ) => {
@@ -2131,7 +2235,7 @@ export const UpdateConfigDocument = gql`
   }
 `;
 
-// Questionable
+// Not
 export const UpdateConfigGQL = (variables: UpdateConfigMutationVariables) => {
   return handledRequest({
     variables,
@@ -2421,7 +2525,7 @@ export const ZonePriceNewDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Not
 export const ZonePriceNewGQL = (variables: ZonePriceNewQueryVariables) => {
   return handledRequest({
     variables,
@@ -2666,7 +2770,7 @@ export const ViewCouponDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewCouponGQL = (variables: ViewCouponQueryVariables) => {
   return handledRequest({
     variables,
@@ -2683,7 +2787,7 @@ export const CreateCouponDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreateCouponGQL = (variables: CreateCouponMutationVariables) => {
   return handledRequest({
     variables,
@@ -2700,7 +2804,7 @@ export const UpdateCouponDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const UpdateCouponGQL = (variables: UpdateCouponMutationVariables) => {
   return handledRequest({
     variables,
@@ -2717,7 +2821,7 @@ export const DeleteCouponDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const DeleteCouponGQL = (variables: DeleteCouponMutationVariables) => {
   return handledRequest({
     variables,
@@ -2743,7 +2847,7 @@ export const CouponListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CouponListGQL = (variables: CouponListQueryVariables) => {
   return handledRequest({
     variables,
@@ -2778,7 +2882,7 @@ export const GiftBatchListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const GiftBatchListGQL = (variables: GiftBatchListQueryVariables) => {
   return handledRequest({
     variables,
@@ -2796,7 +2900,7 @@ export const CreateGiftBachDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreateGiftBachGQL = (
   variables: CreateGiftBachMutationVariables
 ) => {
@@ -2830,7 +2934,7 @@ export const ViewGiftBatchDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewGiftBatchGQL = (variables: ViewGiftBatchQueryVariables) => {
   return handledRequest({
     variables,
@@ -2868,7 +2972,7 @@ export const GiftCodeListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const GiftCodeListGQL = (variables: GiftCodeListQueryVariables) => {
   return handledRequest({
     variables,
@@ -2883,7 +2987,7 @@ export const ExportGiftBatchToCsvDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ExportGiftBatchToCsvGQL = (
   variables: ExportGiftBatchToCsvMutationVariables
 ) => {
@@ -2910,7 +3014,7 @@ export const RewardListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const RewardListGQL = (variables: RewardListQueryVariables) => {
   return handledRequest({
     variables,
@@ -2938,7 +3042,7 @@ export const ViewRewardDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewRewardGQL = (variables: ViewRewardQueryVariables) => {
   return handledRequest({
     variables,
@@ -2955,7 +3059,7 @@ export const CreateRewardDocument = gql`
   }
 `;
 
-// TODO: ??
+// Done
 export const CreateRewardGQL = (variables: CreateRewardMutationVariables) => {
   return handledRequest({
     variables,
@@ -2972,7 +3076,7 @@ export const UpdateRewardDocument = gql`
   }
 `;
 
-// TODO: ??
+// Done
 export const UpdateRewardGQL = (variables: UpdateRewardMutationVariables) => {
   return handledRequest({
     variables,
@@ -2991,7 +3095,7 @@ export const CreatePayoutSessionFieldsDocument = gql`
   }
 `;
 
-// TODO: ??
+// Done
 export const CreatePayoutSessionFieldsGQL = (
   variables: CreatePayoutSessionFieldsQueryVariables
 ) => {
@@ -3010,7 +3114,7 @@ export const CreatePayoutSessionDocument = gql`
   }
 `;
 
-// TODO: ??
+// Done
 export const CreatePayoutSessionGQL = (
   variables: CreatePayoutSessionMutationVariables
 ) => {
@@ -3036,7 +3140,7 @@ export const PayoutMethodsDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const PayoutMethodsGQL = () => {
   return handledRequest({
     gql: PayoutMethodsDocument,
@@ -3063,7 +3167,7 @@ export const ViewPayoutMethodDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewPayoutMethodGQL = (
   variables: ViewPayoutMethodQueryVariables
 ) => {
@@ -3082,7 +3186,7 @@ export const CreatePayoutMethodDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const CreatePayoutMethodGQL = (
   variables: CreatePayoutMethodMutationVariables
 ) => {
@@ -3101,7 +3205,7 @@ export const UpdatePayoutMethodDocument = gql`
   }
 `;
 
-// TODO: ??
+// Done
 export const UpdatePayoutMethodGQL = (
   variables: UpdatePayoutMethodMutationVariables
 ) => {
@@ -3141,7 +3245,7 @@ export const PayoutsDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const PayoutsGQL = (variables: PayoutsQueryVariables) => {
   return handledRequest({
     variables,
@@ -3270,7 +3374,7 @@ export const PayooutSessionTransactionsDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const PayooutSessionTransactionsGQL = (
   variables: PayooutSessionTransactionsQueryVariables
 ) => {
@@ -3287,7 +3391,7 @@ export const ExportToCsvDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ExportToCsvGQL = (variables: ExportToCsvMutationVariables) => {
   return handledRequest({
     variables,
@@ -3302,7 +3406,7 @@ export const RunAutoPayoutDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const RunAutoPayoutGQL = (variables: RunAutoPayoutMutationVariables) => {
   return handledRequest({
     variables,
@@ -3319,7 +3423,7 @@ export const SaveManualPayoutItemDocument = gql`
   }
 `;
 
-// TODO: ??
+// Done
 export const SaveManualPayoutItemGQL = (
   variables: SaveManualPayoutItemMutationVariables
 ) => {
@@ -3339,7 +3443,7 @@ export const UpdatePayoutSessionDocument = gql`
   }
 `;
 
-// TODO: ??
+// Done
 export const UpdatePayoutSessionGQL = (
   variables: UpdatePayoutSessionMutationVariables
 ) => {
@@ -3840,110 +3944,6 @@ export const RidersListGQL = (variables: RidersListQueryVariables) => {
     variables,
     gql: RidersListDocument,
     type: "query",
-  });
-};
-
-export const SosListDocument = gql`
-  query SOSList($paging: OffsetPaging) {
-    distressSignals(paging: $paging) {
-      nodes {
-        id
-        createdAt
-        status
-        location {
-          lat
-          lng
-        }
-      }
-      totalCount
-    }
-  }
-`;
-
-// TODO: Tomorrow
-export const SosListGQL = (variables: SosListQueryVariables) => {
-  return handledRequest({
-    variables,
-    gql: SosListDocument,
-    type: "query",
-  });
-};
-
-export const ViewSosDocument = gql`
-  query ViewSOS($id: ID!) {
-    distressSignal(id: $id) {
-      id
-      createdAt
-      status
-      submittedByRider
-      location {
-        lat
-        lng
-      }
-      activities {
-        action
-        createdAt
-        note
-        operator {
-          id
-          firstName
-          lastName
-        }
-      }
-      order {
-        id
-        status
-        createdOn
-        startTimestamp
-        finishTimestamp
-        expectedTimestamp
-        costBest
-        costAfterCoupon
-        addresses
-        currency
-        rider {
-          id
-          mobileNumber
-          status
-          firstName
-          lastName
-          registrationTimestamp
-        }
-        driver {
-          id
-          mobileNumber
-          status
-          firstName
-          lastName
-          registrationTimestamp
-        }
-      }
-    }
-  }
-`;
-
-// TODO: Tomorrow
-export const ViewSosGQL = (variables: ViewSosQueryVariables) => {
-  return handledRequest({ variables, gql: ViewSosDocument, type: "query" });
-};
-
-export const CreateSosActivityDocument = gql`
-  mutation CreateSOSActivity($activity: CreateSOSAcitivtyInput!) {
-    createOneSOSActivity(input: { sOSActivity: $activity }) {
-      id
-      action
-    }
-  }
-`;
-
-// TODO: ??
-export const CreateSosActivityGQL = (
-  variables: CreateSosActivityMutationVariables
-) => {
-  return handledRequest({
-    variables,
-    gql: CreateSosActivityDocument,
-    type: "mutation",
   });
 };
 

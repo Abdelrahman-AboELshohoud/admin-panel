@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../../ui/button";
 import { Input } from "../../ui/input";
 import {
@@ -20,6 +20,7 @@ import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import Pagination from "../../common/Pagination";
 
 enum FleetStatus {
   Active = "Active",
@@ -153,7 +154,9 @@ export default function DriversGroups() {
 
       <Tabs
         value={filters.status}
-        onValueChange={handleTabChange}
+        onValueChange={(value: string) =>
+          handleTabChange(value as FleetStatus | "all")
+        }
         className="w-full"
       >
         <TabsList className="bg-transparent flex justify-start gap-4 mb-6">
@@ -234,39 +237,13 @@ export default function DriversGroups() {
       {!loading && fleets.length === 0 && (
         <div className="text-center py-4 text-gray-500">{t("noFleets")}</div>
       )}
-
-      <div className="flex justify-between items-center mt-4">
-        <Button
-          variant="outline"
-          onClick={() =>
-            setFilters((prev: FleetFilters) => ({
-              ...prev,
-              page: prev.page - 1,
-            }))
-          }
-          disabled={filters.page === 1 || loading}
-        >
-          {t("common.previous")}
-        </Button>
-        <span>
-          {t("common.page")} {filters.page} /{" "}
-          {Math.ceil(totalCount / filters.limit)}
-        </span>
-        <Button
-          variant="outline"
-          onClick={() =>
-            setFilters((prev: FleetFilters) => ({
-              ...prev,
-              page: prev.page + 1,
-            }))
-          }
-          disabled={
-            filters.page >= Math.ceil(totalCount / filters.limit) || loading
-          }
-        >
-          {t("common.next")}
-        </Button>
-      </div>
+      <Pagination
+        filters={filters}
+        setFilters={setFilters}
+        totalCount={totalCount}
+        loading={loading}
+        t={t}
+      />
     </div>
   );
 }
