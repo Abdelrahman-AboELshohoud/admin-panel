@@ -200,28 +200,3 @@ export default function MoneyTransaction() {
     </div>
   );
 }
-
-const moneyTransactionTranslations = {
-  moneyTransaction: {
-    allClassesOfCars: "All classes of cars",
-    allTypesOfOperations: "All types of operations",
-    allDriversClients: "All drivers/clients",
-    replenishmentOfBalance: "Replenishment of the balance",
-    updatedOn: "Updated on {{date}}",
-    economy: "Economy",
-    withdrawal: "Withdrawal",
-    monetaryTransactions: "Monetary transactions",
-    selectCity: "Select city",
-    selectCarClass: "Select car class",
-    selectOperationType: "Select operation type",
-    selectDriverClient: "Select driver/client",
-    kazan: "Kazan",
-    all: "All",
-    today: "Today",
-    yesterday: "Yesterday",
-    june: "June",
-    pickDateRange: "Pick a date range",
-    show: "Show",
-    total: "Total",
-  },
-};

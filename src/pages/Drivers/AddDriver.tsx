@@ -45,9 +45,9 @@ export default function AddDriver() {
     });
     console.log(res);
 
-    // if (res?.status === true) {
-    //   navigate("/drivers");
-    // }
+    if (res?.status === true) {
+      navigate("/control-panel/drivers/active");
+    }
   };
 
   return (

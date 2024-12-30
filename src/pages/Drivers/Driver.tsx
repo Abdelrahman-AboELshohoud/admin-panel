@@ -148,7 +148,7 @@ const Driver: React.FC = () => {
             <Orders driverProfile={profile as DriverType} />
           </TabsContent>
           <TabsContent value={"Wallets"} className="space-y-6">
-            <Wallets driverProfile={profile as DriverType} />
+            <Wallets />
           </TabsContent>
         </Tabs>
       </div>

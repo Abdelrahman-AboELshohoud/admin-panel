@@ -201,10 +201,12 @@ export default function ClientOrders({ riderId }: ClientOrdersProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id} className="hover:bg-neutral-800">
-              <TableCell>
-                {new Date(order.createdOn).toLocaleDateString()}
+          {orders &&
+            orders.length > 0 &&
+            orders.map((order) => (
+              <TableRow key={order.id} className="hover:bg-neutral-800">
+                <TableCell>
+                  {new Date(order.createdOn).toLocaleDateString()}
                 <br />
                 <span className="text-sm text-gray-400">
                   {new Date(order.createdOn).toLocaleTimeString()}

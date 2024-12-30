@@ -4,8 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { LoginGQL } from "../graphql/requests";
 import useLogin from "../hooks/useLogin";
 import ChangeLanguageBtn from "../components/common/ChangeLanguageBtn";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
+  const { t } = useTranslation();
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
@@ -16,13 +18,13 @@ export default function Login() {
   const inputs = [
     {
       type: "text",
-      placeholder: "Email",
+      placeholder: t("login.email"),
       input: email,
       setInput: setEmail,
     },
     {
       type: "password",
-      placeholder: "Password",
+      placeholder: t("login.password"),
       input: password,
       setInput: setPassword,
     },
@@ -31,7 +33,7 @@ export default function Login() {
   const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (email.trim() === "" || password.trim() === "") {
-      return setError("inputs can't be empty");
+      return setError(t("login.emptyInputs"));
     }
 
     const res: any = await LoginGQL({
@@ -45,7 +47,7 @@ export default function Login() {
       setError("");
       navigate("/control-panel/main", { replace: true });
     } else {
-      setError("Invalid credentials!");
+      setError(t("login.invalidCredentials"));
     }
   };
 
@@ -60,7 +62,7 @@ export default function Login() {
       <div className="flex flex-col items-center justify-around h-screen min-w-[25%] max-w-[25%] px-6 bg-tertiary shadow-lg rounded-r-2xl">
         <img src="/logo.svg" alt="logo" className="w-32" />
         <form className="flex flex-col items-center justify-center w-full gap-4">
-          {inputs.map((input) => (
+          { inputs.map((input) => (
             <label
               className="flex flex-col items-center justify-center input-login font-medium text-lg px-4 w-full"
               key={input.placeholder}
@@ -75,7 +77,7 @@ export default function Login() {
             </label>
           ))}
           <div className="flex flex-row justify-between w-full px-3">
-            <div className="flex flex-row items-center gap-2  text-slate-300 text-sm">
+            <div className="flex flex-row items-center gap-2 text-slate-300 text-sm">
               <button
                 type="button"
                 className="flex flex-row items-center justify-center p-1 bg-black bg-opacity-50 rounded-full focus:outline-none text-slate-200"
@@ -87,17 +89,17 @@ export default function Login() {
                   }`}
                 />
               </button>
-              Remember me
+              {t("login.rememberMe")}
             </div>
             <Link to="/forgot-password" className="text-primary text-sm">
-              Forgot password?
+              {t("login.forgotPassword")}
             </Link>
           </div>
           <button
             onClick={handleClick}
             className="w-full bg-primary text-tertiary font-semibold py-3 text-lg mt-4 rounded-full"
           >
-            Login
+            {t("login.login")}
           </button>
           {error && <p className="text-red-500 text-sm">{error}</p>}
         </form>

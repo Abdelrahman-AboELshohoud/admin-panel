@@ -29,25 +29,27 @@ export default function Feedbacks({ profile }: { profile: Driver }) {
           : "No feedbacks currently"}
       </h1>
       <div className="flex flex-col gap-4">
-        {feedbacks.map((feedback: Feedback) => (
-          <Card className="card-shape flex flex-col gap-2">
-            <CardHeader className="py-2">
-              <CardTitle className="flex flex-row text-yellow-500 gap-2 font-semibold text-xl">
-                <div className="font-medium">{feedback.score}</div>
-                <StarIcon className="w-6 h-6" />
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <CardDescription className="text-gray-300">
-                {feedback.description}
-              </CardDescription>
-            </CardContent>
+        {feedbacks &&
+          feedbacks.length > 0 &&
+          feedbacks.map((feedback: Feedback) => (
+            <Card className="card-shape flex flex-col gap-2">
+              <CardHeader className="py-2">
+                <CardTitle className="flex flex-row text-yellow-500 gap-2 font-semibold text-xl">
+                  <div className="font-medium">{feedback.score}</div>
+                  <StarIcon className="w-6 h-6" />
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-gray-300">
+                  {feedback.description}
+                </CardDescription>
+              </CardContent>
 
-            <div className="text-sm font-medium ml-auto w-fit bg-gray-900 text-gray-100 rounded-md px-2 py-1">
-              {moment(feedback.reviewTimestamp).format("DD MMM YYYY")}
-            </div>
-          </Card>
-        ))}
+              <div className="text-sm font-medium ml-auto w-fit bg-gray-900 text-gray-100 rounded-md px-2 py-1">
+                {moment(feedback.reviewTimestamp).format("DD MMM YYYY")}
+              </div>
+            </Card>
+          ))}
       </div>
     </div>
   );

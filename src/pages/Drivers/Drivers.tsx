@@ -30,7 +30,6 @@ const TableColumns = [
   "Phone number",
   "Rating",
   "Status",
-  "Reviews count",
 ];
 
 const tabItems = [
@@ -143,7 +142,8 @@ const Drivers = () => {
                       {t("common.loading")}
                     </td>
                   </TableRow>
-                ) : drivers.length > 0 ? (
+                ) : drivers &&
+                  drivers.length > 0 ? (
                   drivers.map((driver) => (
                     <DriverRow
                       key={driver.id}
@@ -165,7 +165,7 @@ const Drivers = () => {
             </Table>
           </div>
 
-          {drivers.length > 0 && (
+          {drivers && drivers.length > 0 && (
             <Pagination
               filters={filters}
               setFilters={setFilters}

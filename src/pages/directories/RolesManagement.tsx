@@ -7,70 +7,100 @@ import {
   OperatorPermission,
   OperatorRole,
 } from "../../graphql/requests";
-import { Dialog } from "../../components/ui/dialog";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
+import { Switch } from "../../components/ui/switch";
+import { Card, CardHeader, CardTitle } from "../../components/ui/card";
 import toast from "react-hot-toast";
-import Switch from "../../components/common/Switch";
 import { t } from "i18next";
+import { MyDialog } from "../../components/common/MyDialog";
 
 export const RolesManagement = () => {
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState<string>("");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isUpdateDialogOpen, setIsUpdateDialogOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [permissions, setPermissions] = useState<OperatorPermission[]>([]);
   const [roles, setRoles] = useState<OperatorRole[]>([]);
+  const [hasAccess, setHasAccess] = useState(true);
 
-  useEffect(() => {
-    RolesGQL({}).then((res) => {
-      setRoles(res.data.operatorRoles);
-    });
-  }, []);
-
-  useEffect(() => {
-    if (selectedRole) {
-      RoleGQL({ id: selectedRole }).then((res) => {
-        const role = res.data.operatorRole;
-        setTitle(role.title);
-        setPermissions(role.permissions);
-      });
-    }
-  }, [selectedRole]);
-
-  const handleCreateRole = async () => {
+  const getRoles = async () => {
     try {
-      await CreateRoleGQL({
-        input: {
-          title,
-          permissions: permissions,
-        },
-      });
-      toast.success("Role created successfully");
-      setIsCreateDialogOpen(false);
-      const res = await RolesGQL({});
-      setRoles(res.data.operatorRoles);
+      const roles = await RolesGQL({});
+      if (roles?.data?.operatorRoles) {
+        setRoles(roles?.data?.operatorRoles);
+      } else {
+        setHasAccess(false);
+      }
     } catch (error) {
-      toast.error("Failed to create role");
+      setHasAccess(false);
+      toast.error(t("common.error"));
     }
   };
 
-  const handleUpdateRole = async () => {
+  const getRole = async (id: string) => {
     try {
-      const res1 = await UpdateRoleGQL({
-        id: selectedRole!,
+      const res = await RoleGQL({ id });
+      if (res?.data?.operatorRole) {
+        setTitle(res?.data?.operatorRole?.title);
+        setPermissions(res?.data?.operatorRole?.permissions);
+      } else {
+        toast.error(t("common.error"));
+      }
+    } catch (error) {
+      toast.error(t("common.error"));
+    }
+  };
+
+  useEffect(() => {
+    getRoles();
+  }, []);
+
+  useEffect(() => {
+    getRole(selectedRole);
+  }, [selectedRole]);
+
+  const handleCreateRole = async () => {
+    if (title.trim().length === 0) {
+      toast.error(t("common.nameRequired"));
+      return;
+    }
+    try {
+      const res = await CreateRoleGQL({
         input: {
           title,
-          permissions: permissions,
+          permissions,
         },
       });
-      console.log(res1);
-      toast.success("Role updated successfully");
-      setIsUpdateDialogOpen(false);
-      const res = await RolesGQL({});
-      setRoles(res.data.operatorRoles);
+      if (res?.data?.createOperatorRole) {
+        toast.success(t("common.created"));
+        setIsCreateDialogOpen(false);
+        setRoles((prev) => [...prev, res?.data?.createOperatorRole]);
+      } else {
+        toast.error(t("common.error"));
+      }
     } catch (error) {
-      toast.error("Failed to update role");
+      toast.error(t("common.error"));
+    }
+  };
+
+  const handleUpdateRole = async (id: string) => {
+    try {
+      const res = await UpdateRoleGQL({
+        id,
+        input: {
+          title,
+          permissions,
+        },
+      });
+      if (res?.data?.updateOperatorRole) {
+        toast.success(t("common.updated"));
+        setIsUpdateDialogOpen(false);
+      } else {
+        toast.error(t("common.error"));
+      }
+    } catch (error) {
+      toast.error(t("common.error"));
     }
   };
 
@@ -99,19 +129,17 @@ export const RolesManagement = () => {
 
     return Object.entries(permissionGroups).map(([group, groupPermissions]) => (
       <div key={group} className="mb-6">
-        <h3 className="text-lg font-semibold mb-3">{group}</h3>
-        <div className="grid grid-cols-2 gap-4">
+        <h6 className="mb-3">{t(`permissions.${group.toLowerCase()}`)}</h6>
+        <div className="flex flex-wrap -mx-2">
           {groupPermissions.map((permission) => (
-            <div
-              key={permission}
-              className="flex items-center justify-between p-2 border rounded"
-            >
-              <span className="text-sm">{t(permission)}</span>
-              <Switch
-                disabled={false}
-                checked={permissions.includes(permission)}
-                onChange={() => handlePermissionToggle(permission)}
-              />
+            <div className="w-1/2 px-2 mb-4" key={permission}>
+              <Card className="p-2 flex items-center justify-between">
+                <span>{t(`permissions.${permission}`)}</span>
+                <Switch
+                  checked={permissions.includes(permission)}
+                  onCheckedChange={() => handlePermissionToggle(permission)}
+                />
+              </Card>
             </div>
           ))}
         </div>
@@ -119,60 +147,107 @@ export const RolesManagement = () => {
     ));
   };
 
+  if (!hasAccess) {
+    return (
+      <div className="flex-1 p-6 flex flex-col h-[80vh] justify-center items-center">
+        <div className="text-center text-zinc-100 text-4xl font-bold">
+          {t("errors.noAccess")}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-4">
-      <Button onClick={() => setIsCreateDialogOpen(true)}>
-        Create New Role
-      </Button>
+      <div className="flex justify-between items-center">
+        <h3 className="text-2xl font-bold mb-4">{t("roles.title")}</h3>
+        <Button
+          onClick={() => setIsCreateDialogOpen(true)}
+          className="add-button"
+        >
+          {t("employees.addNew")}
+        </Button>
+      </div>
 
-      <div className="grid grid-cols-3 gap-4 mt-4">
+      <div className="flex flex-wrap mt-4 -mx-2">
         {roles.map((role) => (
-          <div
-            key={role.id}
-            className="p-4 border rounded-lg cursor-pointer hover:shadow-lg"
-            onClick={() => {
-              setSelectedRole(role.id);
-              setIsUpdateDialogOpen(true);
-            }}
-          >
-            <h3 className="text-lg font-semibold">{role.title}</h3>
+          <div className="w-1/3 px-2 mb-4" key={role.id}>
+            <Card
+              className="p-4 cursor-pointer hover:shadow-lg"
+              onClick={() => {
+                setSelectedRole(role.id);
+                setIsUpdateDialogOpen(true);
+              }}
+            >
+              <CardHeader>
+                <CardTitle>{role.title}</CardTitle>
+              </CardHeader>
+            </Card>
           </div>
         ))}
       </div>
 
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <div className="p-6 max-h-[80vh] overflow-y-auto">
-          <h2 className="text-xl font-bold mb-4">Create New Role</h2>
+      <MyDialog
+        isOpen={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+        title={t("roles.create")}
+        showCloseButton={false}
+        className=" min-w-[50vw]"
+      >
+        <div
+          className="p-6 w-full custom-scrollbar"
+          style={{ maxHeight: "80vh", overflowY: "auto" }}
+        >
           <Input
-            placeholder="Role Title"
+            placeholder={t("common.name")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="mb-4"
           />
           <div className="mb-4">
-            <h3 className="text-lg font-semibold mb-3">Permissions</h3>
+            <h6 className="mb-3">{t("permissions.title")}</h6>
             {renderPermissionSwitches()}
           </div>
-          <Button onClick={handleCreateRole}>Create</Button>
+          <div className="flex justify-between">
+            <Button onClick={() => setIsCreateDialogOpen(false)}>
+              {t("common.cancel")}
+            </Button>
+            <Button onClick={handleCreateRole}>{t("common.create")}</Button>
+          </div>
         </div>
-      </Dialog>
+      </MyDialog>
 
-      <Dialog open={isUpdateDialogOpen} onOpenChange={setIsUpdateDialogOpen}>
-        <div className="p-6 max-h-[80vh] overflow-y-auto">
-          <h2 className="text-xl font-bold mb-4">Update Role</h2>
+      <MyDialog
+        isOpen={isUpdateDialogOpen}
+        onOpenChange={setIsUpdateDialogOpen}
+        title={t("roles.update")}
+        showCloseButton={false}
+        className=" min-w-[50vw]"
+      >
+        <div
+          className="p-6 w-full custom-scrollbar"
+          style={{ maxHeight: "80vh", overflowY: "auto" }}
+        >
           <Input
-            placeholder="Role Title"
+            placeholder={t("common.name")}
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             className="mb-4"
           />
           <div className="mb-4">
-            <h3 className="text-lg font-semibold mb-3">Permissions</h3>
+            <h6 className="mb-3">{t("permissions.title")}</h6>
             {renderPermissionSwitches()}
           </div>
-          <Button onClick={handleUpdateRole}>Update</Button>
+          <div className="flex justify-between">
+            <Button onClick={() => setIsUpdateDialogOpen(false)}>
+              {t("common.cancel")}
+            </Button>
+            <Button onClick={() => handleUpdateRole(selectedRole)}>
+              {t("common.update")}
+            </Button>
+          </div>
         </div>
-      </Dialog>
+      </MyDialog>
     </div>
   );
 };

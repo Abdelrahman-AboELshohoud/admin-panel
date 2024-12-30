@@ -34,7 +34,7 @@ export default function Employees() {
     searchBy: "",
   });
   const [users, setUsers] = useState<Operator[]>([]);
-  const [hasAccess, setHasAccess] = useState(false);
+  const [hasAccess, setHasAccess] = useState(true);
 
   const AllUsers = async () => {
     try {

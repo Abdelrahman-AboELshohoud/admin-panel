@@ -235,7 +235,8 @@ export default function Complaints() {
                   {t("common.loading")}
                 </TableCell>
               </TableRow>
-            ) : complaints.length > 0 ? (
+            ) : complaints &&
+              complaints.length > 0 ? (
               complaints.map((complaint) => (
                 <TableRow
                   key={complaint.id}
@@ -354,10 +355,15 @@ export default function Complaints() {
                     {t("complaints.details.activities")}
                   </h3>
                   <div className="space-y-2">
-                    {selectedComplaint.activities.map((activity, index) => (
-                      <div key={index} className="p-2 bg-gray-800 rounded">
-                        <p>
-                          {t(
+                    {selectedComplaint.activities &&
+                      selectedComplaint.activities.length > 0 &&
+                      selectedComplaint.activities.map((activity, index) => (
+                        <div
+                          key={index}
+                          className="p-2 bg-gray-800 rounded"
+                        >
+                          <p>
+                            {t(
                             `complaints.activities.${activity.type.toLowerCase()}`
                           )}
                         </p>

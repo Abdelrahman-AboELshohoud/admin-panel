@@ -153,14 +153,6 @@ export default function StackedBar({ getBy }: StackedBarProps) {
         },
         ticks: {
           color: "#9ca3af",
-          callback: function (value: any): any {
-            return `${value}${
-              this.chart.getDatasetMeta(1) ===
-              this.chart.getDatasetMeta(this.datasetIndex)
-                ? "%"
-                : ""
-            }`;
-          },
         },
       },
     },

@@ -33,7 +33,9 @@ export const MyDialog = ({
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-      <DialogContent className={`min-h-[200px] flex flex-col ${className}`}>
+      <DialogContent
+        className={`min-h-[200px] flex flex-col ${className} card-shape text-gray-200`}
+      >
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           {description && (

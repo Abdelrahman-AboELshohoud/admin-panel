@@ -196,11 +196,13 @@ const FormSelect: React.FC<FormSelectProps> = ({
         <SelectValue placeholder={`Select ${id}`} />
       </SelectTrigger>
       <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.label}
-          </SelectItem>
-        ))}
+        {options &&
+          options.length > 0 &&
+          options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
       </SelectContent>
     </Select>
   </div>

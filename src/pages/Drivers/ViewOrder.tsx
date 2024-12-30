@@ -7,8 +7,6 @@ import {
   UpdateOrderCancelReasonGQL,
   CreateOrderCancelReasonGQL,
   OrderCancelReason,
-  RiderStatus,
-  DriverStatus,
   AnnouncementUserType,
 } from "../../graphql/requests";
 import {
@@ -36,7 +34,7 @@ import { Textarea } from "../../components/ui/textarea";
 import { Badge } from "../../components/ui/badge";
 import { t } from "i18next";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Switch } from "../../components/ui/switch";
 
 import { FaComments } from "react-icons/fa";
@@ -76,89 +74,17 @@ export default function ViewOrder() {
       isEnabled: true,
     },
   });
+  const [hasAccess, setHasAccess] = useState(true);
 
   const fetchOrder = async () => {
     const response = await ViewOrderGQL({
       id: orderId!,
     });
     console.log(response);
-
-    setOrder({
-      id: "ORD-123456",
-      status: OrderStatus.Started,
-      createdOn: new Date().toISOString(),
-      expectedTimestamp: new Date(Date.now() + 30 * 60000).toISOString(), // 30 mins from now
-      startTimestamp: new Date(Date.now() - 10 * 60000).toISOString(), // 10 mins ago
-      finishTimestamp: null,
-      costBest: 35.5,
-      costAfterCoupon: 32.5,
-      currency: "USD",
-      distanceBest: 8.5,
-      durationBest: 25,
-      addresses: ["123 Pickup Street, Downtown", "456 Delivery Avenue, Uptown"],
-      points: [
-        { lat: 42.7128, lng: -74.006 }, // New York coordinates
-        { lat: 42.758, lng: -74.9855 },
-      ],
-      rider: {
-        firstName: "John",
-        lastName: "Smith",
-        mobileNumber: "+1234567890",
-        status: RiderStatus.Enabled,
-        registrationTimestamp: new Date(2023, 1, 1).toISOString(),
-        wallets: {
-          nodes: [],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-          totalCount: 0,
-        },
-        addresses: {
-          nodes: [],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-          totalCount: 0,
-        },
-        orders: {
-          nodes: [],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-          totalCount: 0,
-        },
-        transactions: {
-          nodes: [],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-          totalCount: 0,
-        },
-      },
-      driver: {
-        firstName: "Michael",
-        lastName: "Johnson",
-        mobileNumber: "+1987654321",
-        status: DriverStatus.Online,
-        registrationTimestamp: new Date(2023, 6, 15).toISOString(),
-        wallets: {
-          nodes: [],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-          totalCount: 0,
-        },
-        addresses: {
-          nodes: [],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-          totalCount: 0,
-        },
-        orders: {
-          nodes: [],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-          totalCount: 0,
-        },
-        transactions: {
-          nodes: [],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-          totalCount: 0,
-        },
-      },
-    });
-
-    // Only set the actual response data if it exists
     if (response.data?.order) {
       setOrder(response.data.order);
+    } else {
+      setHasAccess(false);
     }
   };
 
@@ -167,6 +93,8 @@ export default function ViewOrder() {
       const response = await OrderCancelReasonListGQL({});
       if (response.data?.orderCancelReasons?.nodes) {
         setCancelReasons(response.data.orderCancelReasons.nodes);
+      } else {
+        setHasAccess(false);
       }
       console.log(response);
     } catch (error) {
@@ -259,9 +187,8 @@ export default function ViewOrder() {
       [OrderStatus.WaitingForPrePay]: "default",
       [OrderStatus.WaitingForReview]: "default",
     } as const;
-
     return (
-      <Badge variant={variants[status] ?? "default"}>
+      <Badge variant={variants[status] ? "outline" : variants[status]}>
         {t(`orders.status.${status.toLowerCase()}`)}
       </Badge>
     );
@@ -319,6 +246,15 @@ export default function ViewOrder() {
     );
   }
 
+  if (!hasAccess) {
+    return (
+      <div className="flex-1 p-6 flex flex-col h-[80vh] justify-center items-center">
+        <div className="text-center text-zinc-100 text-4xl font-bold">
+          {t("errors.noAccess")}
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="container mx-auto p-6">
       <Card className="card-shape text-gray-100">
@@ -428,11 +364,13 @@ export default function ViewOrder() {
               {t("viewOrders.addresses")}
             </h3>
             <ul className="space-y-2">
-              {order.addresses.map((address, index) => (
-                <li key={index} className="bg-secondary p-2 rounded">
-                  {address}
-                </li>
-              ))}
+              {order.addresses &&
+                order.addresses.length > 0 &&
+                order.addresses.map((address, index) => (
+                  <li key={index} className="bg-secondary p-2 rounded">
+                    {address}
+                  </li>
+                ))}
             </ul>
           </div>
 
@@ -603,11 +541,13 @@ export default function ViewOrder() {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {cancelReasons.map((reason) => (
-                        <SelectItem key={reason.id} value={reason.title}>
-                          {t(`${reason.title}`)}
-                        </SelectItem>
-                      ))}
+                      {cancelReasons &&
+                        cancelReasons.length > 0 &&
+                        cancelReasons.map((reason) => (
+                          <SelectItem key={reason.id} value={reason.title}>
+                            {t(`${reason.title}`)}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 ) : (
@@ -700,7 +640,9 @@ export default function ViewOrder() {
 
             {showChat && (
               <div className="bg-transparent rounded-lg p-4 max-h-[400px] overflow-y-auto">
-                {order?.conversations?.map(renderChatMessage)}
+                {order?.conversations &&
+                  order?.conversations.length > 0 &&
+                  order?.conversations.map(renderChatMessage)}
                 {(!order?.conversations ||
                   order.conversations.length === 0) && (
                   <div className="text-center text-gray-400 py-4 bg-transparent">

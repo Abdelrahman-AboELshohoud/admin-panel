@@ -14,7 +14,7 @@ import ComplicatedLines from "../components/common/statistics/ComplicatedLines";
 export default function Main() {
   const { t } = useTranslation();
   const [getBy, setGetBy] = useState<ChartTimeframe>(ChartTimeframe.Daily);
-  const [requestsCount, setRequestsCount] = useState();
+  const [_requestsCount, setRequestsCount] = useState();
 
   const func = async () => {
     const res = await RequestsChartGQL({ timeframe: getBy });
@@ -81,22 +81,6 @@ export default function Main() {
               </div>
               <div className="w-1/4 h-full flex flex-col text-sm font-semibold justify-stretch bg-gray-200 rounded-lg px-4 py-2 ">
                 <StackedBar getBy={getBy} />
-              </div>
-            </div>
-            <div className="flex gap-3 items-stretch h-[250px]">
-              <div className="w-1/2 aspect-[9/4] bg-gray-200 rounded-lg p-4">
-                <Lines getBy={getBy} />
-              </div>
-              <div className="w-1/2 aspect-[9/4] bg-gray-200 rounded-lg p-4">
-                <Lines getBy={getBy} />
-              </div>
-            </div>
-            <div className="flex gap-3 items-stretch h-[250px]">
-              <div className="w-1/2 aspect-[9/4] bg-gray-200 rounded-lg p-4">
-                <Lines getBy={getBy} />
-              </div>
-              <div className="w-1/2 aspect-[9/4] bg-gray-200 rounded-lg p-4">
-                <Lines getBy={getBy} />
               </div>
             </div>
           </div>

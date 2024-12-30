@@ -23,7 +23,7 @@ const DriverRow = ({ data, id }: { data: Driver; id: string }) => {
       <TableCell>
         <img
           className="w-12 h-12 rounded-full object-cover"
-          src={data.media?.address}
+          src={data.media?.address || "/placeholder-image.jpg"}
           alt="driver"
         />
       </TableCell>
@@ -35,9 +35,6 @@ const DriverRow = ({ data, id }: { data: Driver; id: string }) => {
       </TableCell>
       <TableCell>{data.mobileNumber || t("notAssigned")}</TableCell>
       <TableCell>{data.rating || 0}</TableCell>
-      <TableCell>
-        <div>{data?.status || t("common.notAssigned")}</div>
-      </TableCell>
 
       <TableCell>
         {t(

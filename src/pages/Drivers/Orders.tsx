@@ -97,11 +97,13 @@ export default function Orders({ driverProfile }: { driverProfile: Driver }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {orders.map((order) => (
-            <TableRow
-              key={order.id}
-              className="hover:bg-gray-200"
-              onClick={() => {
+          {orders &&
+            orders.length > 0 &&
+            orders.map((order) => (
+              <TableRow
+                key={order.id}
+                className="hover:bg-gray-200"
+                onClick={() => {
                 navigate(`/control-panel/orders/${order.id}`);
               }}
             >

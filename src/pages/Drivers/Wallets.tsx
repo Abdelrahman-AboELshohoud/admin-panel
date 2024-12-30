@@ -1,5 +1,4 @@
 import {
-  Driver,
   DriverWalletsListGQL,
   DriverWalletsListQuery,
 } from "../../graphql/requests";
@@ -15,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-export default function Wallets({ driverProfile }: { driverProfile: Driver }) {
+export default function Wallets() {
   const { t } = useTranslation();
   const [wallets, setWallets] = useState<
     DriverWalletsListQuery["driverWallets"]["nodes"]

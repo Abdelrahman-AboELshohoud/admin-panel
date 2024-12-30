@@ -233,7 +233,8 @@ const Cars = () => {
                     {t("common.loading")}
                   </td>
                 </TableRow>
-              ) : cars.length > 0 ? (
+              ) : cars &&
+                cars.length > 0 ? (
                 cars.map((car: any) => <CarRow key={car.id} car={car} />)
               ) : (
                 <TableRow>

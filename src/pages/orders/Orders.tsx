@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-// import { FaMapLocationDot } from "react-icons/fa6";
+import { FaMapLocationDot } from "react-icons/fa6";
 import { IoIosAddCircleOutline } from "react-icons/io";
 import { useTranslation } from "react-i18next";
 import {
@@ -23,7 +23,7 @@ import { Badge } from "../../components/ui/badge";
 import {
   OrderStatus,
   OrdersListGQL,
-  CancelOrderGQL,
+  // CancelOrderGQL,
   OrderSortFields,
   SortDirection,
 } from "../../graphql/requests";
@@ -46,6 +46,7 @@ export default function Orders() {
   const [orders, setOrders] = useState<any[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [hasAccess, setHasAccess] = useState(false);
   const [filters, setFilters] = useState<OrderFilters>({
     page: 1,
     limit: 10,
@@ -89,43 +90,14 @@ export default function Orders() {
           },
         ],
       });
-      console.log(response);
-      setOrders([
-        {
-          id: "1",
-          status: "Finished",
-          createdOn: "2024-01-15T10:30:00Z",
-          expectedTimestamp: "2024-01-15T11:00:00Z",
-          costAfterCoupon: 25.5,
-          rider: {
-            firstName: "John",
-            lastName: "Doe",
-          },
-          currency: "USD",
-          distanceBest: 5.2,
-          durationBest: 15,
-          addresses: ["123 Main St", "456 Oak Ave"],
-        },
-        {
-          id: "2",
-          status: "IN_PROGRESS",
-          createdOn: "2024-01-15T11:45:00Z",
-          expectedTimestamp: "2024-01-15T12:15:00Z",
-          costAfterCoupon: 18.75,
-          rider: {
-            firstName: "Jane",
-            lastName: "Smith",
-          },
-          currency: "USD",
-          distanceBest: 3.8,
-          durationBest: 12,
-          addresses: ["789 Pine St", "321 Elm St"],
-        },
-      ]);
       if (response?.data?.orders) {
+        setOrders(response.data.orders.items);
         setTotalCount(response.data.orders.totalCount);
+        setHasAccess(true);
       }
+      setHasAccess(false);
     } catch (error) {
+      setHasAccess(false);
       console.error("Error fetching orders:", error);
     } finally {
       setLoading(false);
@@ -144,25 +116,34 @@ export default function Orders() {
     }));
   };
 
-  const handleCancelOrder = async (orderId: string) => {
-    try {
-      await CancelOrderGQL({ orderId });
-      fetchOrders(); // Refresh the list
-    } catch (error) {
-      console.error("Error canceling order:", error);
-    }
-  };
+  // const handleCancelOrder = async (orderId: string) => {
+  //   try {
+  //     await CancelOrderGQL({ orderId });
+  //     fetchOrders(); // Refresh the list
+  //   } catch (error) {
+  //     console.error("Error canceling order:", error);
+  //   }
+  // };
+
+  if (!hasAccess) {
+    return (
+      <div className="flex-1 p-6 flex flex-col h-[80vh] justify-center items-center">
+        <div className="text-center text-zinc-100 text-4xl font-bold">
+          {t("errors.noAccess")}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 flex flex-col gap-10">
-      {/* Header Section */}
       <div className="flex justify-between items-center">
         <h2 className="text-3xl font-semibold">{t("orders.orderHeader")}</h2>
         <div className="flex gap-4">
-          {/* <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2">
             <FaMapLocationDot size={20} />
             {t("orders.mapButton")}
-          </Button> */}
+          </Button>
           <Button
             onClick={() => navigate("/control-panel/orders/create")}
             className="gap-2"
@@ -252,44 +233,46 @@ export default function Orders() {
                 </TableCell>
               </TableRow>
             )}
-            {orders.map((order) => (
-              <TableRow
-                key={order.id}
-                className="hover:bg-transparent border-none h-12"
-                onClick={() => {
-                  navigate(`/control-panel/orders/${order.id}`);
-                }}
-              >
-                <TableCell>
-                  {new Date(order.createdOn).toLocaleString()}
-                </TableCell>
-                <TableCell>
-                  {new Date(order.expectedTimestamp).toLocaleString()}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant={
-                      order.status === OrderStatus.Finished
-                        ? "default"
-                        : "destructive"
-                    }
-                  >
-                    {order.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {order.rider?.firstName} {order.rider?.lastName}
-                </TableCell>
-                <TableCell>
-                  {order.costAfterCoupon} {order.currency}
-                </TableCell>
-                <TableCell>
-                  <div className="max-w-xs truncate">
-                    {order.addresses?.join(" → ")}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+            {orders &&
+              orders.length > 0 &&
+              orders.map((order) => (
+                <TableRow
+                  key={order.id}
+                  className="hover:bg-transparent border-none h-12"
+                  onClick={() => {
+                    navigate(`/control-panel/orders/${order.id}`);
+                  }}
+                >
+                  <TableCell>
+                    {new Date(order.createdOn).toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    {new Date(order.expectedTimestamp).toLocaleString()}
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={
+                        order.status === OrderStatus.Finished
+                          ? "default"
+                          : "destructive"
+                      }
+                    >
+                      {order.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {order.rider?.firstName} {order.rider?.lastName}
+                  </TableCell>
+                  <TableCell>
+                    {order.costAfterCoupon} {order.currency}
+                  </TableCell>
+                  <TableCell>
+                    <div className="max-w-xs truncate">
+                      {order.addresses?.join(" → ")}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>

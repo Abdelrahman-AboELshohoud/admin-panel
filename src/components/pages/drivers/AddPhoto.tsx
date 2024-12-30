@@ -46,11 +46,13 @@ const FormSelect: React.FC<FormSelectProps> = ({
         <SelectValue placeholder={`Select ${label.toLowerCase()}`} />
       </SelectTrigger>
       <SelectContent>
-        {options.map((option) => (
-          <SelectItem key={option.value} value={option.value}>
-            {option.label}
-          </SelectItem>
-        ))}
+        {options &&
+          options.length > 0 &&
+          options.map((option) => (
+            <SelectItem key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
       </SelectContent>
     </Select>
   </div>
@@ -101,13 +103,15 @@ export default function DriverForm() {
           </h1>
 
           <div className="space-y-6">
-            {formSelects.map((select, index) => (
-              <FormSelect
-                key={index}
-                label={select.label}
-                options={select.options}
-                defaultValue={select.defaultValue}
-                onChange={(value) =>
+            {formSelects &&
+              formSelects.length > 0 &&
+              formSelects.map((select, index) => (
+                <FormSelect
+                  key={index}
+                  label={select.label}
+                  options={select.options}
+                  defaultValue={select.defaultValue}
+                  onChange={(value) =>
                   handleSelectChange(select.label.toLowerCase(), value)
                 }
               />
@@ -118,10 +122,12 @@ export default function DriverForm() {
                 {t("addPhoto.requirePhotos")}
               </label>
 
-              {photoRequirements.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex items-center justify-between gap-4"
+              {photoRequirements &&
+                photoRequirements.length > 0 &&
+                photoRequirements.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between gap-4"
                 >
                   <div className="flex items-center gap-2">
                     <label htmlFor={item.id} className="text-sm text-slate-200">

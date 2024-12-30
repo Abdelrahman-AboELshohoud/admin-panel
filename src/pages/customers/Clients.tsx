@@ -74,18 +74,20 @@ const Clients = () => {
     <div className="p-6 space-y-6">
       <Tabs defaultValue={location.pathname.split("/")[3]} className="w-full">
         <TabsList className="bg-transparent hover:bg-transparent mb-6 w-full">
-          {tabItems.map((tab) => (
-            <TabsTrigger
-              onClick={() => {
-                navigate(`/control-panel/clients/${tab.value}`);
-              }}
-              key={tab.value}
-              value={tab.value}
-              className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-            >
-              {t(`tabs.${tab.value}`)}
-            </TabsTrigger>
-          ))}
+          {tabItems &&
+            tabItems.length > 0 &&
+            tabItems.map((tab) => (
+              <TabsTrigger
+                onClick={() => {
+                  navigate(`/control-panel/clients/${tab.value}`);
+                }}
+                key={tab.value}
+                value={tab.value}
+                className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
+              >
+                {t(`tabs.${tab.value}`)}
+              </TabsTrigger>
+            ))}
           <div className="ml-auto">
             <Button
               variant="outline"

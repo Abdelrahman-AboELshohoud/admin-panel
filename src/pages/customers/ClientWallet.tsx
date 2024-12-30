@@ -268,6 +268,8 @@ export const ClientWallet = ({ riderId }: ClientWalletProps) => {
                 {t("clients.noTransactions")}
               </p>
             ) : (
+              transactions &&
+              transactions.length > 0 &&
               transactions.map((transaction, index) => (
                 <div key={index} className="border-b pb-3">
                   <div className="flex justify-between items-center">

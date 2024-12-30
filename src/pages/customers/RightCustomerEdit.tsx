@@ -1,20 +1,10 @@
 import { Textarea } from "../../components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
+
 import { useTranslation } from "react-i18next";
-import {
-  ServiceOptionType,
-  ServiceOptionIcon,
-  type Service as ServiceType,
-} from "../../graphql/requests";
+import { type Service as ServiceType } from "../../graphql/requests";
 import { Input } from "../../components/ui/input";
-import { Button } from "../../components/ui/button";
-import { FaPlus, FaImage, FaTimes, FaUpload } from "react-icons/fa";
+
+import { FaImage, FaTimes, FaUpload } from "react-icons/fa";
 
 interface RightCustomerEditProps {
   editing: boolean;
@@ -61,7 +51,7 @@ export default function RightCustomerEdit({
           {service.media ? (
             <div className="relative">
               <img
-                src={service.media.address}
+                src={service?.media?.address || "/placeholder-image.jpg"}
                 alt={service.name}
                 className="w-64 h-64 object-cover rounded-xl shadow-lg"
               />
@@ -189,70 +179,6 @@ export default function RightCustomerEdit({
           readOnly={!editing}
           className="px-4 w-1/2 rounded-full custom-input text-gray-100"
         />
-      </div>
-
-      <div className="flex flex-row justify-between items-start">
-        <label className="flex w-1/3">{t("rightCustomerEdit.options")}</label>
-        <div className="w-2/3 space-y-2">
-          {service.options?.map((option, index) => (
-            <div key={index} className="flex gap-2">
-              <Input
-                value={option.name}
-                onChange={(e) => {
-                  const newOptions = [...(service.options || [])];
-                  newOptions[index] = {
-                    ...newOptions[index],
-                    name: e.target.value,
-                  };
-                  handleInputChange("options", newOptions);
-                }}
-                readOnly={!editing}
-                className="custom-input text-gray-100"
-              />
-              <Select
-                value={option.icon}
-                onValueChange={(value) => {
-                  const newOptions = [...(service.options || [])];
-                  newOptions[index] = {
-                    ...newOptions[index],
-                    icon: value as ServiceOptionIcon,
-                  };
-                  handleInputChange("options", newOptions);
-                }}
-                disabled={!editing}
-              >
-                <SelectTrigger className="border-transparent bg-[#262628] h-full border-0 outline-transparent text-gray-100">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.values(ServiceOptionIcon).map((icon) => (
-                    <SelectItem key={icon} value={icon}>
-                      {icon}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          ))}
-          {editing && (
-            <Button
-              onClick={() => {
-                const newOptions = [...(service.options || [])];
-                newOptions.push({
-                  id: `new_${Date.now()}`,
-                  name: "",
-                  icon: ServiceOptionIcon.Custom1,
-                  type: ServiceOptionType.Free,
-                });
-                handleInputChange("options", newOptions);
-              }}
-              className="mt-2"
-            >
-              <FaPlus className="mr-2" />
-              {t("rightCustomerEdit.addOption")}
-            </Button>
-          )}
-        </div>
       </div>
     </div>
   );

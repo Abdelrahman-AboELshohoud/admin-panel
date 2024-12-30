@@ -171,11 +171,13 @@ export default function CreateOrder() {
                 <SelectValue placeholder={t("orders.create.selectService")} />
               </SelectTrigger>
               <SelectContent>
-                {services.map((service) => (
-                  <SelectItem key={service.id} value={service.id}>
-                    {service.name}
-                  </SelectItem>
-                ))}
+                {services &&
+                  services.length > 0 &&
+                  services.map((service) => (
+                    <SelectItem key={service.id} value={service.id}>
+                      {service.name}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>

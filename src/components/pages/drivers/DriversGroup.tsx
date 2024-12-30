@@ -214,11 +214,13 @@ export default function DriversGroups() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {fleets.map((fleet: Fleet) => (
-              <TableRow
-                key={fleet.id}
-                className="bg-transparent border-none mb-2 hover:bg-[#262626] hover:cursor-pointer h-12"
-                onClick={() =>
+            {fleets &&
+              fleets.length > 0 &&
+              fleets.map((fleet: Fleet) => (
+                <TableRow
+                  key={fleet.id}
+                  className="bg-transparent border-none mb-2 hover:bg-[#262626] hover:cursor-pointer h-12"
+                  onClick={() =>
                   navigate(`/control-panel/drivers-groups/fleet/${fleet.id}`)
                 }
               >

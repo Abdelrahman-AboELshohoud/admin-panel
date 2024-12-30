@@ -34,52 +34,12 @@ export default function Services() {
   const fetchServices = async () => {
     try {
       setLoading(true);
-      // Simulated API response
-      const mockResponse = {
-        data: {
-          serviceCategories: [
-            {
-              id: "1",
-              name: "Transportation",
-              services: [
-                {
-                  id: "101",
-                  name: "Standard Ride",
-                  description: "Comfortable ride for up to 4 passengers",
-                  media: {
-                    address: "https://placehold.co/600x400?text=Standard+Ride",
-                  },
-                },
-                {
-                  id: "102",
-                  name: "Premium Ride",
-                  description: "Luxury vehicle with professional driver",
-                  media: {
-                    address: "https://placehold.co/600x400?text=Premium+Ride",
-                  },
-                },
-              ],
-            },
-            {
-              id: "2",
-              name: "Delivery",
-              services: [
-                {
-                  id: "201",
-                  name: "Express Delivery",
-                  description: "Same day delivery service",
-                  media: {
-                    address:
-                      "https://placehold.co/600x400?text=Express+Delivery",
-                  },
-                },
-              ],
-            },
-          ],
-        },
-      };
-      setCategories(mockResponse.data.serviceCategories);
-      toast.success(t("services.fetchSuccess"));
+      const response = await ServicesListGQL({});
+      if (response.data?.serviceCategories) {
+        setCategories(response.data.serviceCategories);
+        toast.success(t("services.fetchSuccess"));
+        setHasAccess(true);
+      }
     } catch (error) {
       setHasAccess(false);
       toast.error(t("errors.fetchError"));
@@ -133,23 +93,15 @@ export default function Services() {
       const input: ServiceCategoryInput = {
         name: newCategoryName,
       };
-      // Simulated API response
-      const mockResponse = {
-        data: {
-          createServiceCategory: {
-            id: Math.random().toString(),
-            name: newCategoryName,
-            services: [],
-          },
-        },
-      };
-      setCategories((prev) => [
-        ...prev,
-        mockResponse.data.createServiceCategory,
-      ]);
-      setIsAddDialogOpen(false);
-      setNewCategoryName("");
-      toast.success(t("services.createSuccess"));
+      const response = await CreateServiceCategoryGQL({
+        input,
+      });
+      if (response.data?.createServiceCategory) {
+        setCategories((prev) => [...prev, response.data.createServiceCategory]);
+        setIsAddDialogOpen(false);
+        setNewCategoryName("");
+        toast.success(t("services.createSuccess"));
+      }
     } catch (error) {
       toast.error(t("errors.createError"));
       console.error("Error creating category:", error);
@@ -248,29 +200,31 @@ export default function Services() {
                   </div>
                 ) : (
                   <div className="grid grid-cols-4 gap-6">
-                    {category.services.map((service) => (
-                      <div
-                        key={service.id}
-                        className="p-4 card-shape rounded-lg cursor-pointer flex flex-col gap-4"
-                        onClick={() =>
-                          navigate(
-                            `/control-panel/services/active/${service.id}`
-                          )
-                        }
-                      >
-                        <img
-                          src={service?.media?.address}
-                          alt={service.name}
-                          className="w-full h-48 object-cover rounded mt-2"
-                        />
-                        <h3 className="text-lg font-semibold mb-2 text-gray-100">
-                          {service.name}
-                        </h3>
-                        <p className="text-sm text-gray-400 min-h-14 line-clamp-3 break-words">
-                          {service.description}
-                        </p>
-                      </div>
-                    ))}
+                    {category.services &&
+                      category.services.length > 0 &&
+                      category.services.map((service) => (
+                        <div
+                          key={service.id}
+                          className="p-4 card-shape rounded-lg cursor-pointer flex flex-col gap-4"
+                          onClick={() =>
+                            navigate(
+                              `/control-panel/services/active/${service.id}`
+                            )
+                          }
+                        >
+                          <img
+                            src={service?.media?.address || "/placeholder-image.jpg"}
+                            alt={service.name}
+                            className="w-full h-48 object-cover rounded mt-2"
+                          />
+                          <h3 className="text-lg font-semibold mb-2 text-gray-100">
+                            {service.name}
+                          </h3>
+                          <p className="text-sm text-gray-400 min-h-14 line-clamp-3 break-words">
+                            {service.description}
+                          </p>
+                        </div>
+                      ))}
                   </div>
                 )}
               </div>
@@ -283,6 +237,7 @@ export default function Services() {
         isOpen={isAddDialogOpen}
         onOpenChange={setIsAddDialogOpen}
         title={t("services.addCategory")}
+        showCloseButton={false}
       >
         <Input
           value={newCategoryName}

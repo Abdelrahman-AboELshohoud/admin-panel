@@ -24,7 +24,7 @@ const ClientRow = ({ data, id }: { data: Rider; id: string }) => {
       <TableCell>
         <img
           className="w-12 h-12 rounded-full object-cover"
-          src={data.media?.address}
+          src={data.media?.address || "/placeholder-image.jpg"}
           alt="client"
         />
       </TableCell>

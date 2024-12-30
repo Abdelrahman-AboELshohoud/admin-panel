@@ -12,7 +12,7 @@ import { Button } from "../ui/button";
 interface DeletionDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => Promise<void>;
+  onConfirm: () => Promise<void> | void;
   title: string;
   description: string;
   countdownSeconds?: number;

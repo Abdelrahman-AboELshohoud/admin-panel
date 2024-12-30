@@ -312,7 +312,8 @@ const Balance = ({ profile }: { profile: DriverType }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {financialData?.driver?.transactions?.nodes?.length > 0 ? (
+            {financialData?.driver?.transactions?.nodes &&
+            financialData?.driver?.transactions?.nodes.length > 0 ? (
               financialData?.driver?.transactions?.nodes?.map(
                 (transaction: any, index: number) => (
                   <TableRow key={index}>

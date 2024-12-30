@@ -29,7 +29,6 @@ import Partners from "./pages/directories/Partners";
 import AddPartner from "./pages/directories/AddPartner";
 import Employees from "./pages/directories/Employees";
 import MapPage from "./pages/directories/MapPage";
-import AddInMap from "./pages/directories/AddInMap";
 import Addresses from "./pages/directories/Addresses";
 import AddAddress from "./pages/directories/AddAdress";
 import News from "./pages/directories/News";
@@ -59,6 +58,9 @@ import RolesManagement from "./pages/directories/RolesManagement";
 import CreateOrder from "./pages/orders/CreateOrder";
 import AddService from "./pages/customers/AddService";
 import Complaints from "./pages/directories/Complaints";
+import ReviewsParams from "./pages/directories/ReviewsParams";
+import SOSPage from "./pages/reports/SOS";
+import ZonesPrices from "./pages/directories/ZonesPrices";
 
 function App() {
   return (
@@ -152,6 +154,10 @@ function App() {
             element={<ControlPanel children={<ListOfOrders />} />}
           />
           <Route
+            path="/control-panel/reports/sos"
+            element={<ControlPanel children={<SOSPage />} />}
+          />
+          <Route
             path="/control-panel/reports/orders/:status"
             element={<ControlPanel children={<OrdersReports />} />}
           />
@@ -200,6 +206,10 @@ function App() {
             element={<ControlPanel children={<Partners />} />}
           />
           <Route
+            path="/control-panel/directories/zones-prices"
+            element={<ControlPanel children={<ZonesPrices />} />}
+          />
+          <Route
             path="/control-panel/directories/add-partner"
             element={<ControlPanel children={<AddPartner />} />}
           />
@@ -212,10 +222,13 @@ function App() {
             element={<ControlPanel children={<AddEmployee />} />}
           />
           <Route
+            path="/control-panel/directories/reviews-params"
+            element={<ControlPanel children={<ReviewsParams />} />}
+          />
+          <Route
             path="/control-panel/directories/employees/:id"
             element={<ControlPanel children={<Employee />} />}
           />
-
           <Route
             path="/control-panel/directories/roles-management"
             element={<ControlPanel children={<RolesManagement />} />}
@@ -228,10 +241,6 @@ function App() {
         <Route
           path="/control-panel/directories/news/:id"
           element={<ControlPanel children={<SingleNews />} />}
-        />
-        <Route
-          path="/control-panel/directories/add-in-map"
-          element={<ControlPanel children={<AddInMap />} />}
         />
         <Route
           path="/control-panel/directories/news"

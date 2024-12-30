@@ -29,54 +29,24 @@ import {
 } from "../../graphql/requests";
 import { format } from "date-fns";
 import { MyDialog } from "../../components/common/MyDialog";
+import Pagination from "../../components/common/Pagination";
 
 const ITEMS_PER_PAGE = 10;
-
-interface ComplaintDetails extends Omit<Complaint, "activities" | "order"> {
-  order?: {
-    id: string;
-    status: string;
-    addresses: string[];
-    costBest: number;
-    costAfterCoupon: number;
-    currency: string;
-    rider?: {
-      firstName?: string;
-      lastName?: string;
-      mobileNumber: string;
-    };
-    driver?: {
-      firstName?: string;
-      lastName?: string;
-      mobileNumber: string;
-    };
-  };
-  activities?: Array<{
-    type: string;
-    comment?: string;
-    actor?: {
-      firstName?: string;
-      lastName?: string;
-    };
-    assignedTo?: {
-      firstName?: string;
-      lastName?: string;
-    };
-  }>;
-}
 
 export default function Complaints() {
   const { t } = useTranslation();
   //   const navigate = useNavigate();
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, _setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedComplaint, setSelectedComplaint] =
-    useState<ComplaintDetails | null>(null);
+  const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
+    null
+  );
   const [showDetailsDialog, setShowDetailsDialog] = useState(false);
   const [statusFilter, setStatusFilter] = useState<ComplaintStatus | "">("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [hasAccess, setHasAccess] = useState(true);
 
   // Fetch complaints
   const fetchComplaints = async () => {
@@ -93,10 +63,13 @@ export default function Complaints() {
       if (response.data?.complaints) {
         setComplaints(response.data.complaints.nodes);
         setTotalCount(response.data.complaints.totalCount);
+      } else {
+        setHasAccess(false);
       }
     } catch (error) {
       console.error("Error fetching complaints:", error);
       toast.error(t("complaints.errors.fetchFailed"));
+      setHasAccess(false);
     } finally {
       setIsLoading(false);
     }
@@ -104,6 +77,7 @@ export default function Complaints() {
   const ComplaintSub = async () => {
     const subscription = await ComplaintSubscriptionGQL();
     console.log("Complaint subscription:", subscription);
+    console.log("Mock Complaint subscription");
   };
 
   // Fetch complaints on page change or filter change
@@ -127,7 +101,6 @@ export default function Complaints() {
     }
   };
 
-  // Update complaint status
   const handleUpdateStatus = async (id: string, status: ComplaintStatus) => {
     try {
       const response = await UpdateComplaintStatusGQL({
@@ -143,46 +116,15 @@ export default function Complaints() {
     }
   };
 
-  // Render pagination
-  const renderPagination = () => {
-    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-    const pages = [];
-
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <Button
-          key={i}
-          variant={currentPage === i ? "default" : "outline"}
-          onClick={() => setCurrentPage(i)}
-          className="w-10 h-10"
-        >
-          {i}
-        </Button>
-      );
-    }
-
+  if (!hasAccess) {
     return (
-      <div className="flex justify-center gap-2 mt-4">
-        <Button
-          variant="outline"
-          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-          disabled={currentPage === 1}
-        >
-          {t("common.previous")}
-        </Button>
-        {pages}
-        <Button
-          variant="outline"
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-          }
-          disabled={currentPage === totalPages}
-        >
-          {t("common.next")}
-        </Button>
+      <div className="flex-1 p-6 flex flex-col h-[80vh] justify-center items-center">
+        <div className="text-center text-zinc-100 text-4xl font-bold">
+          {t("errors.noAccess")}
+        </div>
       </div>
     );
-  };
+  }
 
   return (
     <div className="p-6">
@@ -217,7 +159,6 @@ export default function Complaints() {
         />
       </div>
 
-      {/* Complaints Table */}
       <div className="card-shape">
         <Table>
           <TableHeader>
@@ -231,11 +172,12 @@ export default function Complaints() {
           <TableBody>
             {isLoading ? (
               <TableRow className="hover:bg-transparent h-96">
-                <TableCell colSpan={4} className="text-center">
+                <TableCell colSpan={4} className="text-center ">
                   {t("common.loading")}
                 </TableCell>
               </TableRow>
-            ) : complaints.length > 0 ? (
+            ) : complaints &&
+              complaints.length > 0 ? (
               complaints.map((complaint) => (
                 <TableRow
                   key={complaint.id}
@@ -279,7 +221,13 @@ export default function Complaints() {
                         </SelectTrigger>
                         <SelectContent>
                           {Object.values(ComplaintStatus).map((status) => (
-                            <SelectItem key={status} value={status}>
+                            <SelectItem
+                              key={status}
+                              value={status}
+                              onClick={() =>
+                                handleUpdateStatus(complaint.id, status)
+                              }
+                            >
                               {t(`complaints.status.${status.toLowerCase()}`)}
                             </SelectItem>
                           ))}
@@ -298,83 +246,188 @@ export default function Complaints() {
             )}
           </TableBody>
         </Table>
-
-        {complaints.length > 0 && renderPagination()}
       </div>
+      <Pagination
+        t={t}
+        filters={{}}
+        setFilters={() => {}}
+        totalCount={totalCount}
+        loading={isLoading}
+      />
 
-      {/* Complaint Details Dialog */}
       <MyDialog
         isOpen={showDetailsDialog}
         onOpenChange={setShowDetailsDialog}
         title={t("complaints.details.title")}
+        showCloseButton={false}
+        className="min-w-[50vw]"
       >
         {selectedComplaint && (
-          <div className="space-y-4">
-            <div>
-              <h3 className="font-medium mb-2">
-                {t("complaints.details.subject")}
-              </h3>
-              <p>{selectedComplaint.subject}</p>
-            </div>
-
-            <div>
-              <h3 className="font-medium mb-2">
-                {t("complaints.details.content")}
-              </h3>
-              <p>{selectedComplaint.content}</p>
-            </div>
-
-            {selectedComplaint.order && (
-              <div>
-                <h3 className="font-medium mb-2">
-                  {t("complaints.details.order")}
-                </h3>
-                <div className="space-y-2">
-                  <p>
-                    {t("complaints.details.orderStatus")}:{" "}
-                    {selectedComplaint.order.status}
-                  </p>
-                  <p>
-                    {t("complaints.details.cost")}:{" "}
-                    {selectedComplaint.order.costAfterCoupon}{" "}
-                    {selectedComplaint.order.currency}
-                  </p>
-                  <p>
-                    {t("complaints.details.addresses")}:{" "}
-                    {selectedComplaint.order.addresses.join(" → ")}
+          <div className="flex flex-col gap-6">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="flex flex-col gap-6">
+                <div>
+                  <h3 className="font-medium text-xl mb-4">
+                    {t("complaints.details.subject")}
+                  </h3>
+                  <p>{selectedComplaint.subject}</p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-xl mb-4">
+                    {t("complaints.details.content")}
+                  </h3>
+                  <p className="text-gray-300">{selectedComplaint.content}</p>
+                </div>
+                <div>
+                  <h3 className="font-medium text-xl mb-4">
+                    {t("complaints.details.time")}
+                  </h3>
+                  <p className="text-gray-300">
+                    {selectedComplaint.inscriptionTimestamp &&
+                    !isNaN(
+                      new Date(selectedComplaint.inscriptionTimestamp).getTime()
+                    )
+                      ? format(
+                          new Date(selectedComplaint.inscriptionTimestamp),
+                          "PPpp"
+                        )
+                      : t("complaints.details.invalidDate")}
                   </p>
                 </div>
               </div>
-            )}
 
+              <div className="flex flex-col gap-6">
+                {selectedComplaint.order && (
+                  <div>
+                    <h3 className="font-medium text-xl mb-4">
+                      {t("complaints.details.order")}
+                    </h3>
+                    <div className="flex flex-col gap-3">
+                      <p className="text-gray-300">
+                        {t("complaints.details.orderId")}:{" "}
+                        {selectedComplaint.order.id}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.orderStatus")}:{" "}
+                        {selectedComplaint.order.status}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.createdOn")}:{" "}
+                        {selectedComplaint.order.createdOn &&
+                        !isNaN(
+                          new Date(selectedComplaint.order.createdOn).getTime()
+                        )
+                          ? format(
+                              new Date(selectedComplaint.order.createdOn),
+                              "Ppp"
+                            )
+                          : t("complaints.details.invalidDate")}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.cost")}:{" "}
+                        {selectedComplaint.order.costAfterCoupon}{" "}
+                        {selectedComplaint.order.currency}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.addresses")}:{" "}
+                        {selectedComplaint.order.addresses.join(" → ")}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-col gap-6">
+                {selectedComplaint.order?.rider && (
+                  <div>
+                    <h3 className="font-medium text-xl mb-4">
+                      {t("complaints.details.rider")}
+                    </h3>
+                    <div className="space-y-4">
+                      <p className="text-gray-300">
+                        {t("complaints.details.riderId")}:{" "}
+                        {selectedComplaint.order.rider.id}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.riderName")}:{" "}
+                        {`${selectedComplaint.order.rider.firstName} ${selectedComplaint.order.rider.lastName}`}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.riderMobile")}:{" "}
+                        {selectedComplaint.order.rider.mobileNumber}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.riderStatus")}:{" "}
+                        {selectedComplaint.order.rider.status}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {selectedComplaint.order?.driver && (
+                  <div>
+                    <h3 className="font-medium text-xl mb-4">
+                      {t("complaints.details.driver")}
+                    </h3>
+                    <div className="space-y-4">
+                      <p className="text-gray-300">
+                        {t("complaints.details.driverId")}:{" "}
+                        {selectedComplaint.order.driver.id}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.driverName")}:{" "}
+                        {`${selectedComplaint.order.driver.firstName} ${selectedComplaint.order.driver.lastName}`}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.driverMobile")}:{" "}
+                        {selectedComplaint.order.driver.mobileNumber}
+                      </p>
+                      <p className="text-gray-300">
+                        {t("complaints.details.driverStatus")}:{" "}
+                        {selectedComplaint.order.driver.status}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
             {selectedComplaint.activities &&
               selectedComplaint.activities.length > 0 && (
-                <div>
-                  <h3 className="font-medium mb-2">
-                    {t("complaints.details.activities")}
-                  </h3>
-                  <div className="space-y-2">
-                    {selectedComplaint.activities.map((activity, index) => (
-                      <div key={index} className="p-2 bg-gray-800 rounded">
-                        <p>
-                          {t(
-                            `complaints.activities.${activity.type.toLowerCase()}`
-                          )}
-                        </p>
-                        {activity.comment && <p>{activity.comment}</p>}
-                        {activity.actor && (
-                          <p className="text-sm text-gray-400">
-                            {t("complaints.details.by")}{" "}
-                            {`${activity.actor.firstName} ${activity.actor.lastName}`}
-                          </p>
+                <div className="grid grid-cols-3 gap-4">
+                  {selectedComplaint.activities.map((activity, index) => (
+                    <div key={index} className="p-4 bg-gray-800 rounded">
+                      <p className="text-gray-300">
+                        {t(
+                          `complaints.activities.${activity.type.toLowerCase()}`
                         )}
-                      </div>
-                    ))}
-                  </div>
+                      </p>
+                      {activity.comment && (
+                        <p className="mt-2">{activity.comment}</p>
+                      )}
+                      {activity.actor && (
+                        <p className="text-sm text-gray-400 mt-2">
+                          {t("complaints.details.by")}{" "}
+                          {`${activity.actor.firstName} ${activity.actor.lastName}`}
+                        </p>
+                      )}
+                      {activity.assignedTo && (
+                        <p className="text-sm text-gray-400">
+                          {t("complaints.details.assignedTo")}{" "}
+                          {`${activity.assignedTo.firstName} ${activity.assignedTo.lastName}`}
+                        </p>
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
           </div>
         )}
+        <Button
+          className="w-fit mt-8 mx-auto"
+          onClick={() => setShowDetailsDialog(false)}
+        >
+          {t("common.close")}
+        </Button>
       </MyDialog>
     </div>
   );

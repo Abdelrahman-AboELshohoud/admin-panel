@@ -9,7 +9,7 @@ import {
   DisableServerGQL,
   UpdateConfigStatus,
   UpdateConfigGQL,
-  UsersListGQL,
+  UpdatePasswordGQL,
 } from "../../graphql/requests";
 import {
   Card,
@@ -38,7 +38,7 @@ interface ConfigurationData {
 export default function Configuration() {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
-  const [configData, setConfigData] = useState<ConfigurationData>({});
+  const [_configData, setConfigData] = useState<ConfigurationData>({});
   const [formData, setFormData] = useState({
     purchaseCode: "",
     purchaseEmail: "",
@@ -46,6 +46,8 @@ export default function Configuration() {
     adminPanelMapsKey: "",
     firebaseKeyFile: "",
     serverIp: "",
+    currentPassword: "",
+    newPassword: "",
   });
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogAction, setDialogAction] = useState<() => void>(() => {});
@@ -62,11 +64,9 @@ export default function Configuration() {
           backendMapsAPIKey: "123",
         },
       });
-      const res4 = await UsersListGQL({});
       console.log(response);
       console.log(response2);
       console.log(res3);
-      console.log(res4);
       if (response.data?.currentConfiguration) {
         setConfigData(response.data.currentConfiguration);
         setFormData((prev) => ({
@@ -94,6 +94,35 @@ export default function Configuration() {
   useEffect(() => {
     fetchConfiguration();
   }, []);
+
+  const handleUpdatePassword = async () => {
+    try {
+      setIsLoading(true);
+      const response = await UpdatePasswordGQL({
+        input: {
+          oldPassword: formData.currentPassword,
+          newPasswod: formData.newPassword,
+        },
+      });
+
+      if (response.data?.updatePassword.status === UpdateConfigStatus.Ok) {
+        toast.success(t("configuration.success.password"));
+        setFormData((prev) => ({
+          ...prev,
+          currentPassword: "",
+          newPassword: "",
+        }));
+        setDialogOpen(false);
+      } else {
+        toast.error(response.data?.updatePassword.message);
+      }
+    } catch (error) {
+      console.error("Error updating password:", error);
+      toast.error(t("configuration.errors.passwordFailed"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleUpdatePurchaseCode = async () => {
     try {
@@ -222,6 +251,57 @@ export default function Configuration() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-200">
+              {t("configuration.password.title")}
+            </h2>
+            <div className="flex flex-col gap-2 mb-auto">
+              <label className="text-gray-200">
+                {t("configuration.password.current")}
+              </label>
+              <Input
+                type="password"
+                placeholder={t("configuration.password.current")}
+                value={formData.currentPassword}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    currentPassword: e.target.value,
+                  }))
+                }
+                className="bg-gray-700"
+              />
+              <label className="text-gray-200">
+                {t("configuration.password.new")}
+              </label>
+              <Input
+                type="password"
+                placeholder={t("configuration.password.new")}
+                value={formData.newPassword}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    newPassword: e.target.value,
+                  }))
+                }
+                className="bg-gray-700"
+              />
+            </div>
+            <div className="flex justify-end mt-4">
+              <Button
+                className="w-fit ml-auto"
+                onClick={() => openDialog(handleUpdatePassword)}
+                disabled={
+                  isLoading ||
+                  !formData.currentPassword ||
+                  !formData.newPassword
+                }
+              >
+                {t("common.update")}
+              </Button>
+            </div>
+          </div>
+
           <div>
             <h2 className="text-xl font-semibold text-gray-200">
               {t("configuration.purchaseCode.title")}

@@ -105,7 +105,6 @@ export default function Fleet() {
   const { t } = useTranslation();
   const { fleetId } = useParams();
   const [editing, setEditing] = useState(false);
-  const [activeTab, setActiveTab] = useState("details");
   const navigate = useNavigate();
   const [fleetDrivers, setFleetDrivers] = useState<
     FleetDriversQuery["drivers"]["nodes"]
@@ -360,10 +359,12 @@ export default function Fleet() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {fleetDrivers?.map((driver) => (
-            <TableRow
-              key={driver.id}
-              className="hover:bg-gray-900 border-gray-800"
+          {fleetDrivers &&
+            fleetDrivers.length > 0 &&
+            fleetDrivers.map((driver) => (
+              <TableRow
+                key={driver.id}
+                className="hover:bg-gray-900 border-gray-800"
             >
               <TableCell className="font-medium">
                 <div>
@@ -413,16 +414,20 @@ export default function Fleet() {
         <FleetTransactionDialog
           fleetId={fleetId!}
           currencies={
+            fleetFinancials?.regions?.nodes &&
+            fleetFinancials?.regions?.nodes.length > 0 &&
             fleetFinancials?.regions?.nodes?.map((n) => n.currency) || []
           }
           onSuccess={fetchFleetData}
         />
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {fleetFinancials?.fleet?.wallets?.map((wallet, index) => (
-          <div key={index} className="card-shape">
-            <Card className="bg-white border-gray-200">
-              <CardHeader>
+        {fleetFinancials?.fleet?.wallets &&
+          fleetFinancials?.fleet?.wallets.length > 0 &&
+          fleetFinancials?.fleet?.wallets.map((wallet, index) => (
+            <div key={index} className="card-shape">
+              <Card className="bg-white border-gray-200">
+                <CardHeader>
                 <CardTitle className="text-sm text-gray-600">
                   {wallet.currency} {t("fleet.financials.balance")}
                 </CardTitle>

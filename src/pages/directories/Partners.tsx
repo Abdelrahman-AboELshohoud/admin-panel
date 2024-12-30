@@ -85,19 +85,21 @@ export default function Partners() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredPartners.map((partner) => (
-                  <TableRow
-                    key={partner.id}
-                    className="hover:bg-transparent border-transparent"
-                  >
-                    <TableCell>
-                      <Link to={`#`} className="text-primary hover:underline">
-                        {partner.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{partner.sort}</TableCell>
-                  </TableRow>
-                ))}
+                {filteredPartners &&
+                  filteredPartners.length > 0 &&
+                  filteredPartners.map((partner) => (
+                    <TableRow
+                      key={partner.id}
+                      className="hover:bg-transparent border-transparent"
+                    >
+                      <TableCell>
+                        <Link to={`#`} className="text-primary hover:underline">
+                          {partner.name}
+                        </Link>
+                      </TableCell>
+                      <TableCell>{partner.sort}</TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </div>

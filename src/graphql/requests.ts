@@ -52,7 +52,7 @@ export const NotificationsGQL = () => {
   });
 };
 
-// TODO: Tomorrow
+// Done
 export const SosSubscriptionDocument = gql`
   subscription SOSSubscription {
     sosCreated {
@@ -83,7 +83,7 @@ export const SosListDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const SosListGQL = (variables: SosListQueryVariables) => {
   return handledRequest({
     variables,
@@ -145,7 +145,7 @@ export const ViewSosDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewSosGQL = (variables: ViewSosQueryVariables) => {
   return handledRequest({ variables, gql: ViewSosDocument, type: "query" });
 };
@@ -159,7 +159,7 @@ export const CreateSosActivityDocument = gql`
   }
 `;
 
-// TODO: ??
+// Done
 export const CreateSosActivityGQL = (
   variables: CreateSosActivityMutationVariables
 ) => {
@@ -170,7 +170,7 @@ export const CreateSosActivityGQL = (
   });
 };
 
-// TODO: Tomorrow
+// Done
 export const SosSubscriptionGQL = () => {
   return handledRequest({
     gql: SosSubscriptionDocument,
@@ -659,7 +659,7 @@ export const ProviderWalletsListDocument = gql`
 export const ProviderWalletsListGQL = (
   variables: ProviderWalletsListQueryVariables
 ) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: ProviderWalletsListDocument,
     type: "query",
@@ -675,7 +675,7 @@ export const ExportDocument = gql`
 `;
 
 export const ExportGQL = (variables: ExportQueryVariables) => {
-  handledRequest({ variables, gql: ExportDocument, type: "query" });
+  return handledRequest({ variables, gql: ExportDocument, type: "query" });
 };
 
 export const DriverWalletsListDocument = gql`
@@ -799,7 +799,7 @@ export const DispatcherCalculateFareDocument = gql`
 export const DispatcherCalculateFareGQL = (
   variables: DispatcherCalculateFareQueryVariables
 ) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: DispatcherCalculateFareDocument,
     type: "query",
@@ -854,7 +854,7 @@ export const OrderUpdatedDocument = gql`
 export const OrderUpdatedGQL = (
   variables: OrderUpdatedSubscriptionVariables
 ) => {
-  handledRequest({
+  return handledRequest({
     variables,
     gql: OrderUpdatedDocument,
     type: "subscription",
@@ -1868,6 +1868,25 @@ export const ServiceOptionsListGQL = (
   });
 };
 
+export const SetOptionsOnServiceDocument = gql`
+  mutation SetOptionsOnService($id: ID!, $relationIds: [ID!]!) {
+    setOptionsOnService(input: { id: $id, relationIds: $relationIds }) {
+      id
+    }
+  }
+`;
+
+// TODO: Tomorrow known
+export const SetOptionsOnServiceGQL = (
+  variables: SetOptionsOnServiceMutationVariables
+) => {
+  return handledRequest({
+    variables,
+    gql: SetOptionsOnServiceDocument,
+    type: "mutation",
+  });
+};
+
 export const ViewServiceCategoryDocument = gql`
   query ViewServiceCategory($id: ID!) {
     serviceCategory(id: $id) {
@@ -1877,7 +1896,7 @@ export const ViewServiceCategoryDocument = gql`
   }
 `;
 
-// TODO: Tomorrow
+// Done
 export const ViewServiceCategoryGQL = (
   variables: ViewServiceCategoryQueryVariables
 ) => {
@@ -1896,7 +1915,7 @@ export const CreateServiceCategoryDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const CreateServiceCategoryGQL = (
   variables: CreateServiceCategoryMutationVariables
 ) => {
@@ -1915,7 +1934,7 @@ export const UpdateServiceCategoryDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const UpdateServiceCategoryGQL = (
   variables: UpdateServiceCategoryMutationVariables
 ) => {
@@ -1934,7 +1953,7 @@ export const DeleteServiceCategoryDocument = gql`
   }
 `;
 
-// TODO: Tomorrow known
+// Done
 export const DeleteServiceCategoryGQL = (
   variables: DeleteServiceCategoryMutationVariables
 ) => {
@@ -2158,25 +2177,6 @@ export const SetRegionsOnServiceGQL = (
   return handledRequest({
     variables,
     gql: SetRegionsOnServiceDocument,
-    type: "mutation",
-  });
-};
-
-export const SetOptionsOnServiceDocument = gql`
-  mutation SetOptionsOnService($id: ID!, $relationIds: [ID!]!) {
-    setOptionsOnService(input: { id: $id, relationIds: $relationIds }) {
-      id
-    }
-  }
-`;
-
-// TODO: Tomorrow known
-export const SetOptionsOnServiceGQL = (
-  variables: SetOptionsOnServiceMutationVariables
-) => {
-  return handledRequest({
-    variables,
-    gql: SetOptionsOnServiceDocument,
     type: "mutation",
   });
 };

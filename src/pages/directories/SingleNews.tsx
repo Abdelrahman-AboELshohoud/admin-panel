@@ -69,7 +69,7 @@ export default function SingleNews() {
       setShowDeleteDialog(false);
       navigate(`/control-panel/directories/news`);
     } catch (error) {
-      console.error("Error deleting announcement:", error);
+      console.error(t("errors.deleteError"), error);
     } finally {
       setIsDeleting(false);
     }
@@ -86,7 +86,7 @@ export default function SingleNews() {
       const data = await ViewAnnouncementGQL({ id: id! });
       setFormData(data.data.announcement);
     } catch (error) {
-      console.error("Error updating announcement:", error);
+      console.error(t("errors.updateError"), error);
     }
   };
 
@@ -122,14 +122,14 @@ export default function SingleNews() {
   };
   return (
     <div className="container  w-1/2 p-6">
-      <h2 className="text-2xl font-bold mb-6">Announcement Details</h2>
+      <h2 className="text-2xl font-bold mb-6">{t("announcements.details")}</h2>
 
       <div className="card-shape">
         <div className="space-y-6 p-6">
           <div className="grid gap-6">
             <div className="border-b pb-4">
               <label className="text-sm font-medium text-muted-foreground">
-                Title
+                {t("announcements.title")}
               </label>
               <input
                 name="title"
@@ -168,7 +168,7 @@ export default function SingleNews() {
 
             <div className="border-b pb-4">
               <label className="text-sm font-medium text-muted-foreground">
-                Description
+                {t("announcements.description")}
               </label>
               <textarea
                 name="description"
@@ -183,7 +183,7 @@ export default function SingleNews() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium text-muted-foreground">
-                  Start Date
+                  {t("announcements.startDate")}
                 </label>
 
                 <input
@@ -198,7 +198,7 @@ export default function SingleNews() {
 
               <div>
                 <label className="text-sm font-medium text-muted-foreground">
-                  Expiry Date
+                  {t("announcements.expiryDate")}
                 </label>
 
                 <input

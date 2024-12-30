@@ -53,7 +53,7 @@ export default function News() {
 
       // Filter based on active/blocked status
       const filteredAnnouncements = fetchedAnnouncements.filter(
-        (announcement) => {
+        (announcement: Announcement) => {
           const now = new Date();
           const startDate = new Date(announcement.startAt);
           const endDate = new Date(announcement.expireAt);
@@ -92,10 +92,10 @@ export default function News() {
       >
         <TabsList className="mb-4 bg-transparent">
           <TabsTrigger value="active" className="custom-tabs">
-            {t("news.tabs.active")}
+            {t("common.active")}
           </TabsTrigger>
           <TabsTrigger value="blocked" className="custom-tabs">
-            {t("news.tabs.blocked")}
+            {t("common.blocked")}
           </TabsTrigger>
         </TabsList>
         <TabsContent value="active">
@@ -157,8 +157,8 @@ function NewsTable({ items }: { items: Announcement[] }) {
                 <TableCell>
                   {new Date() >= new Date(item.startAt) &&
                   new Date() <= new Date(item.expireAt)
-                    ? t("news.status.active")
-                    : t("news.status.blocked")}
+                    ? t("common.active")
+                    : t("common.blocked")}
                 </TableCell>
               </TableRow>
             ))

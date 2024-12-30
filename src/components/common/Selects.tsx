@@ -32,11 +32,12 @@ export default function Selects({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className="bg-[#3A3A3C] border-[#48484A] text-white">
-        {options.map((option) => (
-          <SelectItem key={option} value={option}>
-            {option}
-          </SelectItem>
-        ))}
+        {options && options.length > 0 &&
+          options.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
       </SelectContent>
     </Select>
   );

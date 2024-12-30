@@ -80,6 +80,10 @@ const MySidebar = () => {
           path: "/control-panel/reports/money-transactions",
         },
         {
+          name: t("links.reports.sos"),
+          path: "/control-panel/reports/sos",
+        },
+        {
           name: t("links.reports.corporationClients"),
           path: "/control-panel/reports/corporation-clients",
         },
@@ -114,8 +118,16 @@ const MySidebar = () => {
           path: "/control-panel/directories/partners",
         },
         {
+          name: t("links.directories.zonesPrices"),
+          path: "/control-panel/directories/zones-prices",
+        },
+        {
           name: t("links.directories.employees"),
           path: "/control-panel/directories/employees",
+        },
+        {
+          name: t("links.directories.reviewsParams"),
+          path: "/control-panel/directories/reviews-params",
         },
         {
           name: t("links.directories.map"),

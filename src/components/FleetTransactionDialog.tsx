@@ -192,11 +192,12 @@ export function FleetTransactionDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {uniqueCurrencies.map((currency) => (
-                  <SelectItem key={currency} value={currency}>
-                    {currency}
-                  </SelectItem>
-                ))}
+                {uniqueCurrencies &&  uniqueCurrencies.length > 0 &&
+                  uniqueCurrencies.map((currency) => (
+                    <SelectItem key={currency} value={currency}>
+                      {currency}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>

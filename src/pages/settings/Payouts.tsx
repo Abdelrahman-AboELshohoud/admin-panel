@@ -32,11 +32,13 @@ import {
   PayooutSessionTransactionsGQL,
   ExportToCsvGQL,
   RunAutoPayoutGQL,
-  SaveManualPayoutItemGQL,
+  // SaveManualPayoutItemGQL,
   UpdatePayoutSessionGQL,
   CreatePayoutSessionGQL,
   CreatePayoutSessionFieldsGQL,
+  PayoutMethod,
 } from "../../graphql/requests";
+import Pagination from "../../components/common/Pagination";
 
 interface PayoutSession {
   id: string;
@@ -73,21 +75,6 @@ interface PayoutSession {
   };
 }
 
-interface PayoutMethod {
-  id: string;
-  name: string;
-  description?: string;
-  type: PayoutMethodType;
-  currency: string;
-  privateKey?: string;
-  publicKey?: string;
-  saltKey?: string;
-  merchantId?: string;
-  media?: {
-    address: string;
-  };
-}
-
 interface PayoutFilters {
   status?: string;
   dateRange?: {
@@ -95,6 +82,12 @@ interface PayoutFilters {
     end: Date;
   };
   currency?: string;
+}
+
+interface CreateSessionFields {
+  currencies: string[];
+  minimumAmount: number;
+  payoutMethods: PayoutMethod[];
 }
 
 export default function Payouts() {
@@ -110,14 +103,31 @@ export default function Payouts() {
   const [isLoading, setIsLoading] = useState(false);
   const [showSessionDialog, setShowSessionDialog] = useState(false);
   const [showMethodDialog, setShowMethodDialog] = useState(false);
+  const [showCreateSessionDialog, setShowCreateSessionDialog] = useState(false);
+  const [showAutoPayoutDialog, setShowAutoPayoutDialog] = useState(false);
   const [filters, setFilters] = useState<PayoutFilters>({});
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, _setCurrentPage] = useState(1);
   const [supportedCurrencies, setSupportedCurrencies] = useState<string[]>([]);
   const [statistics, setStatistics] = useState<{
     pendingAmount: number;
     lastPayoutAmount: number;
     currency: string;
   } | null>(null);
+  const [createSessionFields, setCreateSessionFields] =
+    useState<CreateSessionFields | null>(null);
+  const [newSession, setNewSession] = useState({
+    currency: "",
+    minimumAmount: 0,
+    description: "",
+    payoutMethodIds: [] as string[],
+  });
+  const [autoPayoutData, setAutoPayoutData] = useState({
+    payoutMethodId: "",
+    payoutSessionId: "",
+  });
+  const [showTransactionsDialog, setShowTransactionsDialog] = useState(false);
+  const [transactions, setTransactions] = useState<any[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
 
   // Fetch payout data
   const fetchPayoutData = async () => {
@@ -128,13 +138,16 @@ export default function Payouts() {
           offset: (currentPage - 1) * 10,
           limit: 10,
         },
-        currency: filters.currency,
       });
-
-      if (response.data) {
-        setSupportedCurrencies(response.data.supportedCurrencies);
-        setStatistics(response.data.payoutStatistics);
+      if (response.data?.payoutSessions) {
         setPayoutSessions(response.data.payoutSessions.nodes);
+        setTotalCount(response.data.payoutSessions.totalCount);
+        setSupportedCurrencies(response.data.supportedCurrencies);
+        setStatistics({
+          pendingAmount: response.data.statistics.pendingAmount,
+          lastPayoutAmount: response.data.statistics.lastPayoutAmount,
+          currency: response.data.statistics.currency,
+        });
       }
     } catch (error) {
       console.error("Error fetching payout data:", error);
@@ -162,27 +175,61 @@ export default function Payouts() {
     fetchPayoutMethods();
   }, [currentPage, filters]);
 
+  // Fetch create session fields
+  const fetchCreateSessionFields = async () => {
+    try {
+      const response = await CreatePayoutSessionFieldsGQL({});
+      if (response.data?.createPayoutSessionFields) {
+        setCreateSessionFields(response.data.createPayoutSessionFields);
+      }
+    } catch (error) {
+      console.error("Error fetching create session fields:", error);
+      toast.error(t("payouts.errors.sessionFieldsFetchFailed"));
+    }
+  };
+
   // Create new payout session
   const handleCreateSession = async () => {
     try {
-      const fieldsResponse = await CreatePayoutSessionFieldsGQL({});
+      if (
+        !newSession.currency ||
+        !newSession.minimumAmount ||
+        newSession.payoutMethodIds.length === 0
+      ) {
+        toast.error(t("payouts.errors.requiredFields"));
+        return;
+      }
+
       const sessionResponse = await CreatePayoutSessionGQL({
         input: {
-          currency: "USD",
-          minimumAmount: 100,
-          description: "",
-          payoutMethodIds: payoutMethods.map((method) => method.id),
+          currency: newSession.currency,
+          minimumAmount: newSession.minimumAmount,
+          description: newSession.description,
+          payoutMethodIds: newSession.payoutMethodIds,
         },
       });
 
       if (sessionResponse.data?.createPayoutSession) {
         toast.success(t("payouts.success.sessionCreated"));
+        setShowCreateSessionDialog(false);
+        setNewSession({
+          currency: "",
+          minimumAmount: 0,
+          description: "",
+          payoutMethodIds: [],
+        });
         fetchPayoutData();
       }
     } catch (error) {
       console.error("Error creating payout session:", error);
       toast.error(t("payouts.errors.sessionCreateFailed"));
     }
+  };
+
+  // Open create session dialog
+  const openCreateSessionDialog = async () => {
+    await fetchCreateSessionFields();
+    setShowCreateSessionDialog(true);
   };
 
   // Update payout session
@@ -205,36 +252,25 @@ export default function Payouts() {
     }
   };
 
-  // Handle manual payout
-  const handleManualPayout = async (
-    driverId: string,
-    amount: number,
-    currency: string
-  ) => {
-    try {
-      await SaveManualPayoutItemGQL({
-        driverIds: [driverId],
-        payoutAmount: amount,
-        currency,
-      });
-      toast.success(t("payouts.success.manualPayoutCreated"));
-      fetchPayoutData();
-    } catch (error) {
-      console.error("Error creating manual payout:", error);
-      toast.error(t("payouts.errors.manualPayoutFailed"));
-    }
-  };
-
-  // Run auto payout
   const handleAutoPayout = async () => {
     try {
+      if (!autoPayoutData.payoutMethodId || !autoPayoutData.payoutSessionId) {
+        toast.error(t("payouts.errors.requiredFields"));
+        return;
+      }
+
       await RunAutoPayoutGQL({
         input: {
-          payoutMethodId: payoutMethods[0]?.id,
-          payoutSessionId: payoutSessions[0]?.id,
+          payoutMethodId: autoPayoutData.payoutMethodId,
+          payoutSessionId: autoPayoutData.payoutSessionId,
         },
       });
       toast.success(t("payouts.success.autoPayoutStarted"));
+      setShowAutoPayoutDialog(false);
+      setAutoPayoutData({
+        payoutMethodId: "",
+        payoutSessionId: "",
+      });
       fetchPayoutData();
     } catch (error) {
       console.error("Error running auto payout:", error);
@@ -275,16 +311,19 @@ export default function Payouts() {
   };
 
   // Fetch session transactions
-  const handleFetchTransactions = async (sessionId: string) => {
+  const handleFetchTransactions = async (methodId: string) => {
     try {
       const response = await PayooutSessionTransactionsGQL({
-        id: sessionId,
+        id: methodId,
         paging: {
           limit: 10,
           offset: 0,
         },
       });
-      // Handle transactions data
+      if (response.data?.transactions) {
+        setTransactions(response.data.transactions);
+        setShowTransactionsDialog(true);
+      }
     } catch (error) {
       console.error("Error fetching transactions:", error);
       toast.error(t("payouts.errors.transactionsFetchFailed"));
@@ -292,25 +331,16 @@ export default function Payouts() {
   };
 
   // Create payout method
-  const handleCreatePayoutMethod = async (method: Partial<PayoutMethod>) => {
+  const handleCreatePayoutMethod = async () => {
     try {
-      if (!method.name || !method.type || !method.currency) {
-        throw new Error("Required fields missing");
-      }
-
       const response = await CreatePayoutMethodGQL({
         input: {
-          name: method.name,
-          type: method.type,
-          currency: method.currency,
-          description: method.description || "",
-          merchantId: method.merchantId || "",
-          privateKey: method.privateKey || "",
-          publicKey: method.publicKey || "",
-          saltKey: method.saltKey || "",
+          name: selectedMethod?.name || "",
+          type: selectedMethod?.type || PayoutMethodType.BankTransfer,
+          currency: selectedMethod?.currency || "",
+          description: selectedMethod?.description || "",
         },
       });
-
       if (response.data?.createPayoutMethod) {
         toast.success(t("payouts.success.methodCreated"));
         fetchPayoutMethods();
@@ -321,11 +351,21 @@ export default function Payouts() {
     }
   };
 
-  // Update payout method
-  const handleUpdatePayoutMethod = async (
-    id: string,
-    updates: Partial<PayoutMethod>
-  ) => {
+  // View payout method details
+  const handleViewPayoutMethod = async (methodId: string) => {
+    try {
+      const response = await ViewPayoutMethodGQL({ id: methodId });
+      if (response.data?.payoutMethod) {
+        setSelectedMethod(response.data.payoutMethod);
+        setShowMethodDialog(true);
+      }
+    } catch (error) {
+      console.error("Error fetching method details:", error);
+      toast.error(t("payouts.errors.methodDetailsFailed"));
+    }
+  };
+
+  const handleUpdatePayoutMethod = async (id: string, updates: any) => {
     try {
       const response = await UpdatePayoutMethodGQL({
         id,
@@ -341,20 +381,6 @@ export default function Payouts() {
     } catch (error) {
       console.error("Error updating payout method:", error);
       toast.error(t("payouts.errors.methodUpdateFailed"));
-    }
-  };
-
-  // View payout method details
-  const handleViewPayoutMethod = async (methodId: string) => {
-    try {
-      const response = await ViewPayoutMethodGQL({ id: methodId });
-      if (response.data?.payoutMethod) {
-        setSelectedMethod(response.data.payoutMethod);
-        setShowMethodDialog(true);
-      }
-    } catch (error) {
-      console.error("Error fetching method details:", error);
-      toast.error(t("payouts.errors.methodDetailsFailed"));
     }
   };
 
@@ -383,41 +409,124 @@ export default function Payouts() {
       )}
 
       {/* Actions Section */}
-      <div className="flex gap-4 mb-6">
-        <Button onClick={handleCreateSession} className="custom-input">
+      <div className="flex gap-4 mb-2 justify-start">
+        <Button onClick={openCreateSessionDialog} className="custom-input">
           {t("payouts.actions.createSession")}
         </Button>
-        <Button onClick={handleAutoPayout} className="custom-input">
+        <Button
+          onClick={() => setShowAutoPayoutDialog(true)}
+          className="custom-input"
+        >
           {t("payouts.actions.runAutoPayout")}
         </Button>
+
+        <div className="flex gap-4 mb-6">
+          <Select
+            value={filters.currency}
+            onValueChange={(value) =>
+              setFilters((prev) => ({ ...prev, currency: value }))
+            }
+          >
+            <SelectTrigger className="custom-input w-[200px]">
+              <SelectValue placeholder={t("payouts.filters.currency")} />
+            </SelectTrigger>
+            <SelectContent>
+              {supportedCurrencies &&
+                supportedCurrencies.length > 0 &&
+                supportedCurrencies.map((currency) => (
+                  <SelectItem key={currency} value={currency}>
+                    {currency}
+                  </SelectItem>
+                ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
-      {/* Filters Section */}
-      <div className="flex gap-4 mb-6">
-        <Select
-          value={filters.currency}
-          onValueChange={(value) =>
-            setFilters((prev) => ({ ...prev, currency: value }))
-          }
-        >
-          <SelectTrigger className="custom-input w-[200px]">
-            <SelectValue placeholder={t("payouts.filters.currency")} />
-          </SelectTrigger>
-          <SelectContent>
-            {supportedCurrencies.map((currency) => (
-              <SelectItem key={currency} value={currency}>
-                {currency}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {/* Add Payout Methods Section */}
+      <div className="card-shape mb-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">
+            {t("payouts.methods.title")}
+          </h2>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              setSelectedMethod(null);
+              setShowMethodDialog(true);
+            }}
+          >
+            {t("payouts.methods.create")}
+          </Button>
+        </div>
+
+        <Table>
+          <TableHeader>
+            <TableRow className="hover:bg-transparent border-transparent">
+              <TableHead>{t("payouts.methods.name")}</TableHead>
+              <TableHead>{t("payouts.methods.type")}</TableHead>
+              <TableHead>{t("payouts.methods.currency")}</TableHead>
+              <TableHead>{t("payouts.methods.balance")}</TableHead>
+              <TableHead className="text-right">
+                {t("common.actions")}
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {payoutMethods && payoutMethods.length > 0 ? (
+              payoutMethods.map((method) => (
+                <TableRow key={method.id}>
+                  <TableCell>{method.name}</TableCell>
+                  <TableCell>{method.type}</TableCell>
+                  <TableCell>{method.currency}</TableCell>
+                  <TableCell>{method.balance}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleViewPayoutMethod(method.id)}
+                      >
+                        {t("common.view")}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedMethod(method);
+                          setShowMethodDialog(true);
+                        }}
+                      >
+                        {t("common.edit")}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleFetchTransactions(method.id)}
+                      >
+                        {t("payouts.methods.transactions")}
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-14">
+                  {t("payouts.methods.noMethods")}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </div>
 
-      {/* Payout Sessions Table */}
+      {/* Payout Sessions Table with Pagination */}
       <div className="card-shape">
         <Table>
           <TableHeader>
-            <TableRow>
+            <TableRow className="hover:bg-transparent border-transparent">
               <TableHead>{t("payouts.table.date")}</TableHead>
               <TableHead>{t("payouts.table.amount")}</TableHead>
               <TableHead>{t("payouts.table.status")}</TableHead>
@@ -426,14 +535,17 @@ export default function Payouts() {
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              <TableRow>
+              <TableRow className="hover:bg-transparent border-transparent">
                 <TableCell colSpan={4} className="text-center">
                   {t("common.loading")}
                 </TableCell>
               </TableRow>
-            ) : payoutSessions.length > 0 ? (
+            ) : payoutSessions && payoutSessions.length > 0 ? (
               payoutSessions.map((session) => (
-                <TableRow key={session.id}>
+                <TableRow
+                  key={session.id}
+                  className="hover:bg-[#262626] border-transparent text-gray-200"
+                >
                   <TableCell>
                     {format(new Date(session.createdAt), "PPp")}
                   </TableCell>
@@ -457,19 +569,61 @@ export default function Payouts() {
                       >
                         {t("common.export")}
                       </Button>
+                      {/* Add Update Status Button */}
+                      {session.status === PayoutSessionStatus.Pending && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            handleUpdateSession(
+                              session.id,
+                              PayoutSessionStatus.Paid
+                            )
+                          }
+                        >
+                          {t("payouts.complete")}
+                        </Button>
+                      )}
+                      {session.status === PayoutSessionStatus.Paid && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() =>
+                            handleUpdateSession(
+                              session.id,
+                              PayoutSessionStatus.Pending
+                            )
+                          }
+                        >
+                          {t("payouts.reopen")}
+                        </Button>
+                      )}
                     </div>
                   </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} className="text-center">
+                <TableCell colSpan={4} className="text-center py-14">
                   {t("payouts.noSessions")}
                 </TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
+
+        {/* Add Pagination Component */}
+        {payoutSessions.length > 0 && (
+          <div className="mt-4 flex justify-end">
+            <Pagination
+              totalCount={totalCount}
+              filters={filters}
+              setFilters={setFilters}
+              t={t}
+              loading={isLoading}
+            />
+          </div>
+        )}
       </div>
 
       {/* Session Details Dialog */}
@@ -477,6 +631,7 @@ export default function Payouts() {
         title={t("payouts.sessionDetails.title")}
         isOpen={showSessionDialog}
         onOpenChange={setShowSessionDialog}
+        showCloseButton={false}
       >
         {selectedSession && (
           <div className="space-y-4">
@@ -549,44 +704,364 @@ export default function Payouts() {
         )}
       </MyDialog>
 
+      {/* Create Session Dialog */}
+      <MyDialog
+        title={t("payouts.createSession.title")}
+        isOpen={showCreateSessionDialog}
+        onOpenChange={setShowCreateSessionDialog}
+        showCloseButton={false}
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              {t("payouts.createSession.currency")}
+            </label>
+            <Select
+              value={newSession.currency}
+              onValueChange={(value) =>
+                setNewSession((prev) => ({ ...prev, currency: value }))
+              }
+            >
+              <SelectTrigger className="w-full custom-input">
+                <SelectValue
+                  placeholder={t("payouts.createSession.selectCurrency")}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {createSessionFields?.currencies.map((currency) => (
+                  <SelectItem key={currency} value={currency}>
+                    {currency}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              {t("payouts.createSession.minimumAmount")}
+            </label>
+            <Input
+              type="number"
+              value={newSession.minimumAmount}
+              onChange={(e) =>
+                setNewSession((prev) => ({
+                  ...prev,
+                  minimumAmount: parseFloat(e.target.value),
+                }))
+              }
+              className="w-full custom-input"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              {t("payouts.createSession.description")}
+            </label>
+            <Input
+              value={newSession.description}
+              onChange={(e) =>
+                setNewSession((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }))
+              }
+              className="w-full custom-input"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              {t("payouts.createSession.payoutMethods")}
+            </label>
+            <Select
+              value={newSession.payoutMethodIds.join(",")}
+              onValueChange={(value) =>
+                setNewSession((prev) => ({
+                  ...prev,
+                  payoutMethodIds: value.split(",").filter(Boolean),
+                }))
+              }
+            >
+              <SelectTrigger className="w-full custom-input">
+                <SelectValue
+                  placeholder={t("payouts.createSession.selectMethods")}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {createSessionFields?.payoutMethods.map((method) => (
+                  <SelectItem key={method.id} value={method.id}>
+                    {method.name} ({method.currency})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex justify-end gap-2 mt-6">
+            <Button
+              variant="outline"
+              className="text-gray-600"
+              onClick={() => setShowCreateSessionDialog(false)}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button onClick={handleCreateSession}>{t("common.create")}</Button>
+          </div>
+        </div>
+      </MyDialog>
+
+      {/* Auto Payout Dialog */}
+      <MyDialog
+        title={t("payouts.autoPayout.title")}
+        isOpen={showAutoPayoutDialog}
+        onOpenChange={setShowAutoPayoutDialog}
+        showCloseButton={false}
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              {t("payouts.autoPayout.session")}
+            </label>
+            <Select
+              value={autoPayoutData.payoutSessionId}
+              onValueChange={(value) =>
+                setAutoPayoutData((prev) => ({
+                  ...prev,
+                  payoutSessionId: value,
+                }))
+              }
+            >
+              <SelectTrigger className="w-full custom-input">
+                <SelectValue
+                  placeholder={t("payouts.autoPayout.selectSession")}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {payoutSessions
+                  .filter((session) => session.status === "PENDING")
+                  .map((session) => (
+                    <SelectItem key={session.id} value={session.id}>
+                      {session.totalAmount} {session.currency} -{" "}
+                      {format(new Date(session.createdAt), "PPp")}
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-1">
+              {t("payouts.autoPayout.method")}
+            </label>
+            <Select
+              value={autoPayoutData.payoutMethodId}
+              onValueChange={(value) =>
+                setAutoPayoutData((prev) => ({
+                  ...prev,
+                  payoutMethodId: value,
+                }))
+              }
+            >
+              <SelectTrigger className="w-full custom-input">
+                <SelectValue
+                  placeholder={t("payouts.autoPayout.selectMethod")}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {payoutMethods
+                  .filter(
+                    (method) =>
+                      method.currency ===
+                      payoutSessions.find(
+                        (s) => s.id === autoPayoutData.payoutSessionId
+                      )?.currency
+                  )
+                  .map((method) => (
+                    <SelectItem key={method.id} value={method.id}>
+                      {method.name} ({method.currency})
+                    </SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex justify-end gap-2 mt-6">
+            <Button
+              variant="outline"
+              className="text-gray-600"
+              onClick={() => setShowAutoPayoutDialog(false)}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button onClick={handleAutoPayout}>{t("common.start")}</Button>
+          </div>
+        </div>
+      </MyDialog>
+
       {/* Payout Method Dialog */}
       <MyDialog
-        title={t("payouts.methodDialog.title")}
+        title={
+          !selectedMethod
+            ? t("payouts.methods.create")
+            : selectedMethod
+            ? t("payouts.methods.edit")
+            : t("payouts.methods.view")
+        }
         isOpen={showMethodDialog}
         onOpenChange={setShowMethodDialog}
+        showCloseButton={false}
       >
-        {selectedMethod && (
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <h4 className="font-medium text-gray-400">
-                  {t("payouts.methodDialog.name")}
-                </h4>
-                <p>{selectedMethod.name}</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-400">
-                  {t("payouts.methodDialog.type")}
-                </h4>
-                <p>{selectedMethod.type}</p>
-              </div>
-              <div>
-                <h4 className="font-medium text-gray-400">
-                  {t("payouts.methodDialog.currency")}
-                </h4>
-                <p>{selectedMethod.currency}</p>
-              </div>
-              {selectedMethod.description && (
-                <div>
-                  <h4 className="font-medium text-gray-400">
-                    {t("payouts.methodDialog.description")}
-                  </h4>
-                  <p>{selectedMethod.description}</p>
-                </div>
-              )}
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                {t("payouts.methods.name")}
+              </label>
+              <Input
+                value={selectedMethod?.name || ""}
+                onChange={(e) =>
+                  setSelectedMethod((prev) => ({
+                    ...prev!,
+                    name: e.target.value,
+                  }))
+                }
+                className="w-full custom-input"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                {t("payouts.methods.type")}
+              </label>
+              <Select
+                value={selectedMethod?.type || PayoutMethodType.BankTransfer}
+                onValueChange={(value: PayoutMethodType) =>
+                  setSelectedMethod((prev) => ({
+                    ...prev!,
+                    type: value,
+                  }))
+                }
+              >
+                <SelectTrigger className="w-full custom-input">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.values(PayoutMethodType).map((type) => (
+                    <SelectItem key={type} value={type}>
+                      {type}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                {t("payouts.methods.currency")}
+              </label>
+              <Select
+                value={selectedMethod?.currency || ""}
+                onValueChange={(value) =>
+                  setSelectedMethod((prev) => ({
+                    ...prev!,
+                    currency: value,
+                  }))
+                }
+              >
+                <SelectTrigger className="w-full custom-input">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {supportedCurrencies.map((currency) => (
+                    <SelectItem key={currency} value={currency}>
+                      {currency}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-400 mb-1">
+                {t("payouts.methods.description")}
+              </label>
+              <Input
+                value={selectedMethod?.description || ""}
+                onChange={(e) =>
+                  setSelectedMethod((prev) => ({
+                    ...prev!,
+                    description: e.target.value,
+                  }))
+                }
+                className="w-full custom-input"
+              />
             </div>
           </div>
-        )}
+          <div className="flex justify-end gap-2 mt-6">
+            <Button
+              variant="outline"
+              onClick={() => setShowMethodDialog(false)}
+            >
+              {t("common.cancel")}
+            </Button>
+            <Button
+              onClick={() => {
+                if (!selectedMethod) {
+                  handleCreatePayoutMethod();
+                } else {
+                  handleUpdatePayoutMethod(selectedMethod.id, selectedMethod);
+                }
+                setShowMethodDialog(false);
+              }}
+            >
+              {!selectedMethod ? t("common.create") : t("common.save")}
+            </Button>
+          </div>
+        </div>
+      </MyDialog>
+
+      {/* Add Transactions Dialog */}
+      <MyDialog
+        title={t("payouts.methods.transactions")}
+        isOpen={showTransactionsDialog}
+        onOpenChange={setShowTransactionsDialog}
+        showCloseButton={false}
+      >
+        <div className="space-y-4">
+          {transactions.length > 0 ? (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>{t("payouts.transactions.date")}</TableHead>
+                  <TableHead>{t("payouts.transactions.amount")}</TableHead>
+                  <TableHead>{t("payouts.transactions.status")}</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {transactions &&
+                  transactions.length > 0 &&
+                  transactions.map((transaction) => (
+                    <TableRow key={transaction.id}>
+                      <TableCell>
+                        {format(new Date(transaction.createdAt), "PPp")}
+                      </TableCell>
+                      <TableCell>
+                        {transaction.amount} {transaction.currency}
+                      </TableCell>
+                      <TableCell>{transaction.status}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          ) : (
+            <div className="text-center py-4">
+              {t("payouts.transactions.noData")}
+            </div>
+          )}
+          <div className="flex justify-end">
+            <Button onClick={() => setShowTransactionsDialog(false)}>
+              {t("common.close")}
+            </Button>
+          </div>
+        </div>
       </MyDialog>
     </div>
   );

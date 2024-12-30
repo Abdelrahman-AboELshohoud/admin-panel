@@ -3,6 +3,15 @@
     "personalAccount": "Personal account",
     "logout": "Logout"
   },
+  "login": {
+    "email": "Email",
+    "password": "Password",
+    "emptyInputs": "Inputs can't be empty",
+    "invalidCredentials": "Invalid credentials!",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "login": "Login"
+  },
   "links": {
     "main": "Main",
     "orders": "Orders",
@@ -25,33 +34,106 @@
       "shifts": "Shifts of employees",
       "listOfOrders": "List of orders",
       "moneyTransactions": "Money transactions",
-      "corporationClients": "Corporate clients"
+      "corporationClients": "Corporate clients",
+      "sos": "SOS",
+      "complaints": "Complaints"
     },
     "directories": {
       "title": "Directories",
       "branches": "Branches",
       "partners": "Partners",
+      "zonesPrices": "Zone Prices",
       "employees": "Employees",
+      "reviewsParams": "Review parameters",
       "map": "Map",
       "news": "News",
       "addresses": "Addresses"
     },
     "settings": {
       "title": "Settings",
-      "organizationDetails": "Organization details",
-      "application": "Application for clients",
-      "orders": "Orders settings",
-      "cmc": "SMS",
-      "notifications": "Notifications to clients",
+      "payment": "Payment",
+      "application": "Application",
+      "orders": "Orders",
+      "cmc": "CMC",
+      "notifications": "Notifications",
       "drivers": "Drivers",
-      "carClasses": "Car classes",
-      "onlineCheckout": "Online checkout",
+      "carClasses": "Car Classes",
+      "onlineCheckout": "Online Checkout",
       "atc": "ATC",
-      "payment": "Payments",
       "configuration": "Configuration"
+    },
+    "zonePrices": {
+      "title": "Zone Prices",
+      "create": "Create Zone Price",
+      "edit": "Edit Zone Price",
+      "view": "View Zone Price",
+      "fields": {
+        "name": "Name",
+        "from": "From",
+        "to": "To",
+        "cost": "Cost",
+        "services": "Services",
+        "fleets": "Fleets",
+        "timeMultipliers": "Time Multipliers"
+      },
+      "timeMultiplier": {
+        "title": "Time Multiplier",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "multiply": "Multiply",
+        "add": "Add Time Multiplier"
+      },
+      "actions": {
+        "save": "Save Changes",
+        "delete": "Delete Zone",
+        "edit": "Edit Zone",
+        "create": "Create Zone"
+      },
+      "messages": {
+        "createSuccess": "Zone price created successfully",
+        "updateSuccess": "Zone price updated successfully",
+        "deleteSuccess": "Zone price deleted successfully",
+        "error": {
+          "create": "Failed to create zone price",
+          "update": "Failed to update zone price",
+          "delete": "Failed to delete zone price",
+          "fetch": "Failed to fetch zone prices",
+          "required": "This field is required",
+          "invalidPoints": "Please select both points on the map"
+        }
+      },
+      "map": {
+        "instructions": "Click on the map to set points",
+        "fromPoint": "From Point",
+        "toPoint": "To Point",
+        "clear": "Clear Points"
+      },
+      "filters": {
+        "search": "Search zones",
+        "service": "Filter by service",
+        "fleet": "Filter by fleet"
+      },
+      "noZones": "No zone prices found",
+      "deleteConfirm": {
+        "title": "Delete Zone Price",
+        "message": "Are you sure you want to delete this zone price? This action cannot be undone."
+      }
     }
   },
-
+  "settings": {
+    "title": "Settings",
+    "organizationDetails": "Organization details",
+    "application": "Application for clients",
+    "orders": "Orders settings",
+    "cmc": "SMS",
+    "notifications": "Notifications to clients",
+    "drivers": "Drivers",
+    "carClasses": "Car classes",
+    "onlineCheckout": "Online checkout",
+    "atc": "ATC",
+    "payment": "Payments",
+    "configuration": "Configuration"
+  },
   "main": {
     "dateButtons": {
       "today": "Today",
@@ -73,7 +155,19 @@
       "address": "Address",
       "client": "Client",
       "executor": "Executor",
-      "comment": "Comment"
+      "comment": "Comment",
+      "cancel": {
+        "updateReasons": "Update reasons",
+        "addReason": "Add reason",
+        "createReason": "Create reason",
+        "editReason": "Edit reason",
+        "selectUserType": "Select user type",
+        "driver": "Driver",
+        "rider": "Rider",
+        "selectReason": "Select reason",
+        "enterReason": "Enter reason",
+        "commentPlaceholder": "Enter comment"
+      }
     },
     "create": {
       "title": "Create New Order",
@@ -134,22 +228,58 @@
     }
   },
   "leftCustomerEdit": {
+    "name": "Name",
     "baseFare": "Base Fare",
+    "perHundredMeters": "Per 100 Meters",
     "perMinuteDrive": "Per Minute Drive",
     "perMinuteWait": "Per Minute Wait",
-    "regions": "Regions",
-    "regionsDescription": "Regions Description",
-    "regionsPlaceholder": "Enter regions",
-    "addRegion": "Add Region",
-    "addTimeMultiplier": "Add Time Multiplier",
-    "startTime": "Start Time",
-    "endTime": "End Time",
-    "multiply": "Multiply",
-    "twoWayAvailable": "Two-way available",
-    "paymentMethod": "Payment Method",
     "minimumFee": "Minimum Fee",
-    "perHundredMeters": "Per Hundred Meters",
-    "name": "Name"
+    "paymentMethod": "Payment Method",
+    "twoWayAvailable": "Two Way Available",
+    "serviceOptions": {
+      "title": "Service Options",
+      "manage": "Manage Options",
+      "create": "Create Option",
+      "edit": "Edit Option",
+      "delete": "Delete Option",
+      "view": "View Option",
+      "noOptions": "No options available",
+      "fields": {
+        "name": "Option Name",
+        "type": "Option Type",
+        "icon": "Icon",
+        "fee": "Additional Fee",
+        "description": "Description"
+      },
+      "types": {
+        "free": "Free",
+        "paid": "Paid",
+        "required": "Required",
+        "twoway": "Two way"
+      },
+      "actions": {
+        "add": "Add Option",
+        "save": "Save Changes",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+      },
+      "messages": {
+        "createSuccess": "Service option created successfully",
+        "updateSuccess": "Service option updated successfully",
+        "deleteSuccess": "Service option deleted successfully",
+        "error": {
+          "create": "Failed to create service option",
+          "update": "Failed to update service option",
+          "delete": "Failed to delete service option",
+          "fetch": "Failed to fetch service options",
+          "required": "This field is required"
+        }
+      },
+      "deleteConfirm": {
+        "title": "Delete Service Option",
+        "message": "Are you sure you want to delete this service option? This action cannot be undone."
+      }
+    }
   },
   "rightCustomerEdit": {
     "description": "Description",
@@ -161,7 +291,8 @@
     "optionName": "Option Name",
     "prepayPercent": "Prepay Percentage",
     "providerSharePercent": "Provider Share Percentage",
-    "providerShareFlat": "Provider Share Flat"
+    "providerShareFlat": "Provider Share Flat",
+    "media": "Media"
   },
   "bottomCustomerEdit": {
     "cancellationFee": "Cancellation Fee",
@@ -187,7 +318,8 @@
     "timeMultipliers": "Time Multipliers",
     "from": "From",
     "to": "To",
-    "multiplier": "Multiplier"
+    "multiplier": "Multiplier",
+    "showOnMap": "Show on map"
   },
   "clients": {
     "orders": "Orders",
@@ -205,7 +337,50 @@
     "female": "Female",
     "wallets": "Wallets",
     "wallet": "Wallet",
+    "fareCalculator": {
+      "title": "Fare Calculator",
+      "pickupLocation": "Pickup Location",
+      "dropoffLocation": "Dropoff Location",
+      "searchPlaceholder": "Search for a location...",
+      "calculateFare": "Calculate Fare",
+      "estimatedFare": "Estimated Fare",
+      "distance": "Distance",
+      "duration": "Duration",
+      "basePrice": "Base Price",
+      "perKm": "Per Kilometer",
+      "perMinute": "Per Minute",
+      "total": "Total",
+      "clearRoute": "Clear Route",
+      "errors": {
+        "pickupRequired": "Pickup location is required",
+        "dropoffRequired": "Dropoff location is required",
+        "calculationFailed": "Failed to calculate fare",
+        "locationNotFound": "Location not found"
+      },
+      "dragMarker": "Drag marker to adjust location"
+    },
+    "dispatcherCalculator": {
+      "title": "Dispatcher Calculator",
+      "pickupPoint": "Pickup Point",
+      "dropoffPoint": "Dropoff Point",
+      "calculate": "Calculate Fare",
+      "clear": "Clear Points",
+      "results": {
+        "title": "Fare Results",
+        "distance": "Distance",
+        "duration": "Duration",
+        "cost": "Estimated Cost",
+        "currency": "Currency"
+      },
+      "errors": {
+        "pickupRequired": "Please select a pickup point",
+        "dropoffRequired": "Please select a dropoff point",
+        "calculationFailed": "Failed to calculate fare"
+      },
+      "instructions": "Click on the map to set pickup and dropoff points"
+    },
     "noClient": "No client found",
+    "deleteConfirmation": "Delete Client",
     "online": "Online",
     "addTransaction": "Add transaction",
     "noTransactions": "No transactions",
@@ -222,6 +397,9 @@
   },
   "services": {
     "addService": "Add Service",
+    "addCategory": "Add Category",
+    "categoryName": "Category Name",
+    "noServices": "No services",
     "create": {
       "title": "Create New Service"
     }
@@ -362,18 +540,23 @@
       "distance": "Distance",
       "duration": "Duration",
       "cost": "Cost",
-      "finalCost": "Final Cost",
-      "currency": "Currency",
-      "addresses": "Addresses"
+      "client": "Client",
+      "rider": "Rider",
+      "driver": "Driver",
+      "actions": "Actions"
     }
   },
   "viewOrders": {
     "noOrders": "No orders",
     "noOrdersDescription": "No orders found for this driver.",
     "rider": "Rider",
+    "noMessages": "No messages",
+    "route": "Route",
+    "chat": "Chat",
     "driver": "Driver",
     "name": "Name",
     "mobile": "Mobile",
+    "noRider": "No rider",
     "noDriver": "No driver",
     "orderDetails": "Order Details",
     "id": "ID",
@@ -381,7 +564,29 @@
     "created": "Created",
     "cost": "Cost",
     "finalCost": "Final Cost",
-    "addresses": "Addresses"
+    "addresses": "Addresses",
+    "orderNumber": "Order Number",
+    "expectedTime": "Expected Time",
+    "waitTime": "Wait Time",
+    "service": "Service",
+    "paymentMethod": "Payment Method",
+    "paymentStatus": "Payment Status",
+    "distance": "Distance",
+    "duration": "Duration",
+    "startTime": "Start Time",
+    "finishTime": "Finish Time",
+    "actions": {
+      "cancel": "Cancel Order",
+      "createReason": "Create reason",
+      "viewDetails": "View Details"
+    },
+    "messages": {
+      "cancelConfirm": "Are you sure you want to cancel this order?",
+      "cancelSuccess": "Order cancelled successfully",
+      "cancelError": "Failed to cancel order",
+      "assignSuccess": "Driver assigned successfully",
+      "assignError": "Failed to assign driver"
+    }
   },
   "cars": {
     "title": "Cars",
@@ -533,6 +738,21 @@
     "name": "Name",
     "address": "Address"
   },
+  "announcements": {
+    "title": "Announcements",
+    "addButton": "Add Announcement",
+    "edit": "Edit Announcement",
+    "delete": "Delete Announcement",
+    "details": "Announcement Details",
+    "description": "Description",
+    "startDate": "Start Date",
+    "expiryDate": "Expiry Date",
+    "userType": {
+      "driver": "Driver",
+      "operator": "Operator",
+      "rider": "Rider"
+    }
+  },
   "addNews": {
     "title": "Add News",
     "titleLabel": "Title",
@@ -547,24 +767,42 @@
     "pushLabel": "Push Notification",
     "pushPlaceholder": "Write push notification...",
     "blockLabel": "Block",
-    "saveButton": "Save"
+    "saveButton": "Save",
+    "urlLabel": "URL",
+    "urlPlaceholder": "Enter URL",
+    "announceButton": "Announce"
   },
+
   "addInMap": {
-    "add": "Add",
-    "typeOfArea": "Type of area *",
+    "add": "Add New Region",
+    "typeOfArea": "Type of Area",
     "selectType": "Select type",
     "city": "City",
-    "countryside": "The countryside",
-    "airport": "An airport",
-    "railway": "Railway station",
+    "countryside": "Countryside",
+    "airport": "Airport",
+    "railway": "Railway",
     "title": "Title",
-    "enterTitle": "Enter...",
+    "enterTitle": "Enter title",
     "sorting": "Sorting",
-    "districtRatio": "District ratio",
+    "districtRatio": "District Ratio",
     "from": "from",
     "to": "to",
-    "showAllDistricts": "Show all districts on the map",
-    "save": "Save"
+    "currency": "Currency",
+    "selectCurrency": "Select currency",
+    "priority": "Priority",
+    "description": "Description",
+    "enterDescription": "Enter description",
+    "color": "Color",
+    "minOrderAmount": "Minimum Order Amount",
+    "enabled": "Enabled",
+    "visible": "Visible",
+    "showAllDistricts": "Show All Districts",
+    "save": "Save",
+    "errors": {
+      "notEnoughPoints": "Please draw a polygon with at least 3 points",
+      "createFailed": "Failed to create region"
+    },
+    "success": "Region created successfully"
   },
   "addBranch": {
     "title": "Add a branch",
@@ -678,9 +916,7 @@
   "buttonsAdd": {
     "addInMap": "Add in map"
   },
-  "titles": {
-    "districts": "Districts"
-  },
+
   "partners": {
     "title": "Partners",
     "addNewPartner": "Add new partner",
@@ -700,7 +936,7 @@
     },
     "table": {
       "name": "Name",
-      "branch": "Branch",
+      "userType": "User type",
       "activityPeriod": "Activity Period",
       "status": "Status",
       "noItems": "No items found"
@@ -723,11 +959,16 @@
   "table": {
     "fullName": "Full name",
     "jobTitle": "Job title",
-    "branch": "The branch where the employee works"
+    "branch": "The branch where the employee works",
+    "id": "ID",
+    "createdAt": "Created At",
+    "status": "Status",
+    "actions": "Actions"
   },
   "actions": {
     "sendAgain": "Send Again",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "viewDetails": "View Details"
   },
   "addDriver": {
     "title": "Add Driver",
@@ -1305,15 +1546,20 @@
     "apply": "Apply",
     "previous": "Previous",
     "next": "Next",
+    "hide": "Hide",
+    "show": "Show",
+    "notAssigned": "Not assigned",
+    "confirm": "Confirm",
+    "confirmAction": "Confirm Action",
+    "seconds": "Seconds",
     "page": "Page",
     "delete": "Delete",
     "update": "Update",
+    "all": "All",
     "remove": "Remove",
     "search": "Search",
     "allCities": "All cities",
-    "save": "Save",
-    "edit": "Edit",
-    "cancel": "Cancel",
+
     "submit": "Submit",
     "processing": "Processing",
     "phoneNumber": "Phone number",
@@ -1327,12 +1573,42 @@
     "amount": "Amount",
     "status": "Status",
     "reference": "Reference",
+    "export": "Export",
+    "actionIn": "Action in",
     "completed": "Completed",
     "newTransaction": "New Transaction",
-    "createTransaction": "Create Transaction"
+    "createTransaction": "Create Transaction",
+    "disabled": "Disabled",
+    "enabled": "Enabled",
+    "manage": "Manage",
+    "create": "Create",
+    "error": "An error occurred",
+    "deleted": "Deleted successfully",
+    "created": "Created successfully",
+    "updated": "Updated successfully",
+
+    "active": "Active",
+    "inactive": "Inactive",
+    "start": "Start",
+    "end": "End",
+    "close": "Close",
+    "edit": "Edit",
+    "save": "Save",
+    "cancel": "Cancel",
+    "clear": "Clear",
+
+    "startEditing": "Start Editing",
+    "stopEditing": "Stop Editing",
+    "polygonError": "Please draw a polygon with at least 3 points",
+    "noData": "No data available"
   },
   "configuration": {
     "title": "Configuration",
+    "password": {
+      "title": "Password",
+      "current": "Current password",
+      "new": "New password"
+    },
     "purchaseCode": {
       "title": "Purchase code",
       "code": "Enter purchase code",
@@ -1367,13 +1643,56 @@
     }
   },
   "employees": {
+    "addSuccess": "Employee added successfully",
+    "addError": "Failed to add employee",
     "manageRoles": "Manage roles",
     "addNew": "Add new",
-    "roles": {
-      "admin": "Administrator",
-      "operator": "Operator",
-      "partner": "Partner"
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "username": "Username",
+      "password": "Password",
+      "phone": "Phone",
+      "email": "Email",
+      "role": "Role",
+      "roles": {
+        "admin": "Administrator",
+        "operator": "Operator"
+      },
+      "active": "Active"
     },
+    "tabs": {
+      "working": "Working",
+      "invitations": "Invitations",
+      "blocked": "Blocked"
+    },
+    "filters": {
+      "allCities": "All cities",
+      "kazan": "Kazan",
+      "administrator": "Administrator",
+      "partnerEmployee": "Partner Employee",
+      "allPosts": "All posts",
+      "post": "Post",
+      "partners": "Partners",
+      "allPartners": "All partners",
+      "partner": "Partner",
+      "fullName": "Full name",
+      "toFind": "To find"
+    },
+    "table": {
+      "fullName": "Full name",
+      "jobTitle": "Job title",
+      "email": "Email",
+      "phone": "Phone",
+      "actions": "Actions"
+    },
+    "actions": {
+      "sendAgain": "Send again",
+      "cancel": "Cancel",
+      "block": "Block",
+      "unblock": "Unblock"
+    },
+
     "success": {
       "invitationSent": "Invitation resent successfully",
       "invitationCancelled": "Invitation cancelled successfully"
@@ -1401,7 +1720,8 @@
     "recharged": "Recharged",
     "manual": "Manual",
     "bankTransfer": "Bank Transfer",
-    "correction": "Correction"
+    "correction": "Correction",
+    "createTransaction": "Create Transaction"
   },
   "paymentMethods": {
     "cashcredit": "Cash/Credit",
@@ -1454,6 +1774,10 @@
       "createTransaction": "Create Transaction"
     }
   },
+  "driversWallets": {
+    "noWallets": "No wallets found",
+    "noWalletsDescription": "No wallets found for this driver"
+  },
   "formErrors": {
     "nameRequired": "Name is required",
     "phoneRequired": "Phone number is required",
@@ -1478,6 +1802,618 @@
     "successCreatingFleet": "Fleet created successfully",
     "successCreatingDriver": "Driver created successfully",
     "successCreatingGroup": "Group created successfully",
-    "successCreatingFleetGroup": "Fleet group created successfully"
+    "successCreatingFleetGroup": "Fleet group created successfully",
+    "formValidationError": "Please fill in all required fields"
+  },
+  "payment": {
+    "title": "Payment",
+    "createdAt": "Created at",
+    "gateways": "Gateways",
+    "privateKey": "Private key",
+    "sandboxMode": "Sandbox mode",
+    "ipnUrl": "IPN URL",
+    "publicKey": "Public key",
+    "merchantId": "Merchant ID",
+    "merchantSecret": "Merchant secret",
+    "enableGateway": "Enable gateway",
+    "type": "Type",
+    "supportedCurrencies": "Supported currencies",
+    "lastUsed": "Last used",
+    "sandBoxMode": "Sandbox mode",
+    "status": "Status",
+    "enabledGateway": "Enabled",
+    "noGateway": "No gateway found",
+    "noGateways": "No gateways found",
+    "stats": {
+      "successRate": "Success rate",
+      "transactions": "Transactions",
+      "payments": "Payments",
+      "refunds": "Refunds",
+      "charges": "Charges"
+    },
+    "webhookUrl": "Webhook URL",
+    "addGateway": "Add Gateway",
+    "payouts": "Payouts",
+    "promotions": "Promotions",
+    "labels": {
+      "default": "Default",
+      "sandbox": "Sandbox",
+      "production": "Production"
+    },
+    "fees": {
+      "title": "Fees",
+      "fixed": "Fixed",
+      "percent": "Percent"
+    },
+    "errors": {
+      "methodCreateFailed": "Failed to create payment method",
+      "methodUpdateFailed": "Failed to update payment method",
+      "methodDetailsFailed": "Failed to fetch method details",
+      "transactionsFetchFailed": "Failed to fetch transactions"
+    },
+    "success": {
+      "methodCreated": "Payment method created successfully",
+      "methodUpdated": "Payment method updated successfully"
+    },
+    "common": {
+      "manage": "Manage",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "edit": "Edit",
+      "save": "Save",
+      "cancel": "Cancel",
+      "create": "Create",
+      "loading": "Loading..."
+    }
+  },
+  "payouts": {
+    "title": "Payouts",
+    "stats": {
+      "pending": "Pending",
+      "lastPayout": "Last payout"
+    },
+    "table": {
+      "id": "ID",
+      "amount": "Amount",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "noSessions": "No sessions found",
+    "filters": {
+      "currency": "Currency"
+    },
+    "actions": {
+      "create": "Create payout",
+      "runAutoPayout": "Run auto payout",
+      "createSession": "Create session"
+    },
+    "autoPayout": {
+      "title": "Auto Payout",
+      "description": "Sessions will be paid out automatically",
+      "methods": "Methods",
+      "selectMethod": "Select method",
+      "selectSession": "Select session",
+      "method": "Method",
+      "session": "Session",
+      "amount": "Amount",
+      "currency": "Currency"
+    },
+    "createSession": {
+      "title": "Create Session",
+      "description": "Description",
+      "method": "Method",
+      "session": "Session",
+      "amount": "Amount",
+      "currency": "Currency",
+      "minimumAmount": "Minimum amount",
+      "maximumAmount": "Maximum amount",
+      "payoutMethods": "Payout methods",
+      "selectCurrency": "Select currency",
+      "selectMethods": "Select methods"
+    },
+    "methods": {
+      "title": "Payout Methods",
+      "name": "Name",
+      "type": "Type",
+      "currency": "Currency",
+      "balance": "Balance",
+      "description": "Description",
+      "edit": "Edit Payout Method",
+      "view": "View Payout Method",
+      "create": "Create Payout Method",
+      "transactions": "View Transactions",
+      "noMethods": "No payout methods found"
+    },
+    "transactions": {
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "noData": "No transactions found"
+    },
+    "complete": "Complete",
+    "reopen": "Reopen",
+    "errors": {
+      "fetchFailed": "Failed to fetch payout data",
+      "methodsFetchFailed": "Failed to fetch payout methods",
+      "sessionFieldsFetchFailed": "Failed to fetch session fields",
+      "requiredFields": "Please fill in all required fields",
+      "sessionCreateFailed": "Failed to create payout session",
+      "sessionUpdateFailed": "Failed to update payout session",
+      "methodCreateFailed": "Failed to create payout method",
+      "methodUpdateFailed": "Failed to update payout method",
+      "transactionsFetchFailed": "Failed to fetch transactions",
+      "autoPayoutFailed": "Failed to start auto payout"
+    },
+    "success": {
+      "sessionCreated": "Payout session created successfully",
+      "sessionUpdated": "Payout session updated successfully",
+      "methodCreated": "Payout method created successfully",
+      "methodUpdated": "Payout method updated successfully",
+      "autoPayoutStarted": "Auto payout started successfully"
+    },
+    "sessionDetails": {
+      "title": "Session Details",
+      "transactions": "Transactions",
+      "methods": "Methods",
+      "info": "Session Information"
+    },
+    "status": {
+      "pending": "Pending",
+      "paid": "Paid",
+      "failed": "Failed",
+      "processing": "Processing"
+    }
+  },
+  "promotions": {
+    "title": "Promotions",
+    "filters": {
+      "status": "Status"
+    },
+    "create": "Create",
+    "giftCards": "Gift Cards",
+    "coupons": "Coupons",
+    "code": "Code",
+
+    "startDate": "Start Date",
+    "expireDate": "Expire Date",
+    "status": "Status",
+    "editCoupon": "Edit Coupon",
+    "createCoupon": "Create Coupon",
+    "description": "Description",
+    "creditGift": "Credit Gift",
+    "discountFlat": "Discount Flat",
+    "discountPercent": "Discount Percent",
+    "isFirstTravelOnly": "First Travel Only",
+    "manyTimesUserCanUse": "Times User Can Use",
+    "maximumCost": "Maximum Cost",
+    "minimumCost": "Minimum Cost",
+    "manyUsersCanUse": "Users Can Use",
+    "name": "Name",
+    "amount": "Amount",
+    "used": "Used",
+    "unused": "Unused",
+    "actions": "Actions",
+    "createGiftBatch": "Create Gift Batch",
+    "quantity": "Quantity",
+    "availableFrom": "Available From",
+    "expireAt": "Expire At",
+    "currency": "Currency"
+  },
+  "permissions": {
+    "title": "Permissions",
+    "permissions": "Permissions",
+    "Announcements_Edit": "Announcements edit",
+    "Announcements_View": "Announcements view",
+    "Cars_Edit": "Cars edit",
+    "Cars_View": "Cars view",
+    "Complaints_Edit": "Complaints edit",
+    "Complaints_View": "Complaints view",
+    "Coupons_Edit": "Coupons edit",
+    "Coupons_View": "Coupons view",
+    "DriverWallet_Edit": "Driver Wallet edit",
+    "DriverWallet_View": "Driver Wallet view",
+    "Drivers_Edit": "Drivers edit",
+    "Drivers_View": "Drivers view",
+    "FleetWallet_Edit": "Fleet Wallet edit",
+    "FleetWallet_View": "Fleet Wallet view",
+    "Fleets_Edit": "Fleets edit",
+    "Fleets_View": "Fleets view",
+    "Gateways_Edit": "Gateways edit",
+    "Gateways_View": "Gateways view",
+    "GiftBatch_Create": "Gift Batch create",
+    "GiftBatch_View": "Gift Batch view",
+    "GiftBatch_ViewCodes": "Gift Batch view codes",
+    "Payouts_Edit": "Payouts edit",
+    "Payouts_View": "Payouts view",
+    "ProviderWallet_Edit": "Provider Wallet edit",
+    "ProviderWallet_View": "Provider Wallet view",
+    "Regions_Edit": "Regions edit",
+    "Regions_View": "Regions view",
+    "Requests_View": "Requests view",
+    "ReviewParameter_Edit": "Review Parameter edit",
+    "RiderWallet_Edit": "Rider Wallet edit",
+    "RiderWallet_View": "Rider Wallet view",
+    "Riders_Edit": "Riders edit",
+    "Riders_View": "Riders view",
+    "SMSProviders_Edit": "SMS Providers edit",
+    "SMSProviders_View": "SMS Providers view",
+    "Services_Edit": "Services edit",
+    "Services_View": "Services view",
+    "Users_Edit": "Users edit",
+    "Users_View": "Users view",
+    "riderwallet": "Rider Wallet",
+    "riders": "Riders",
+    "requests": "Requests",
+    "regions": "Regions",
+    "reviewparameter": "Review Parameter",
+    "roles": "Roles",
+    "smsproviders": "SMS Providers",
+    "users": "Users",
+    "services": "Services",
+    "payouts": "Payouts",
+    "providerwallet": "Provider Wallet",
+    "fleetwallet": "Fleet Wallet",
+    "fleets": "Fleets",
+    "driverwallet": "Driver Wallet",
+    "drivers": "Drivers",
+    "coupons": "Coupons",
+    "giftbatch": "Gift Batch",
+    "gateways": "Gateways",
+    "complaints": "Complaints",
+    "cars": "Cars",
+    "announcements": "Announcements",
+    "fleetgroup": "Fleet Group",
+    "group": "Group"
+  },
+  "roles": {
+    "title": "Roles",
+    "create": "Create",
+    "update": "Update"
+  },
+  "complaints": {
+    "title": "Complaints",
+    "create": "Create",
+    "update": "Update",
+    "filters": {
+      "status": "Status",
+      "search": "Search"
+    },
+    "table": {
+      "subject": "Subject",
+      "status": "Status",
+      "date": "Date",
+      "actions": "Actions"
+    },
+    "noComplaints": "No complaints found",
+    "status": {
+      "resolved": "Resolved",
+      "pending": "Pending",
+      "submitted": "Submitted",
+      "underinvestigation": "Under Investigation"
+    },
+    "details": {
+      "title": "Complaint Details",
+      "subject": "Subject",
+      "content": "Content",
+      "date": "Date",
+      "status": "Status",
+      "order": "Order Details",
+      "orderId": "Order ID",
+      "orderStatus": "Order Status",
+      "createdOn": "Created On",
+      "cost": "Cost",
+      "addresses": "Addresses",
+      "rider": "Rider",
+      "riderId": "Rider ID",
+      "riderName": "Rider Name",
+      "riderMobile": "Rider Mobile",
+      "riderStatus": "Rider Status",
+      "driver": "Driver",
+      "driverId": "Driver ID",
+      "driverName": "Driver Name",
+      "driverMobile": "Driver Mobile",
+      "driverStatus": "Driver Status",
+      "invalidDate": "Invalid Date",
+      "by": "By",
+      "assignedTo": "Assigned To",
+      "time": "Time"
+    },
+    "activities": {
+      "assigned": "Assigned",
+      "updated": "Updated",
+      "resolved": "Resolved",
+      "submitted": "Submitted",
+      "underInvestigation": "Under Investigation"
+    }
+  },
+  "reviews": {
+    "parameters": "Parameters",
+    "addParameter": "Add Parameter",
+    "isGood": "Is Good?",
+    "title": "Title",
+    "parameterTitle": "Enter parameter title",
+    "editParameter": "Edit Parameter"
+  },
+  "sos": {
+    "title": "SOS Signals",
+    "detailsTitle": "SOS Details",
+    "status": "Status",
+    "createdAt": "Created At",
+    "orderDetails": "Order Details",
+    "orderId": "Order ID",
+    "orderStatus": "Status",
+    "rider": "Rider",
+    "driver": "Driver",
+    "activities": "Activities",
+    "by": "By",
+    "addActivityNote": "Add activity note...",
+    "selectAction": "Select Action",
+    "adding": "Adding...",
+    "addActivity": "Add Activity",
+    "newSOSReceived": "New SOS signal received!"
+  },
+  "noSOSFound": "No SOS signals found",
+  "error": {
+    "fetchSOSList": "Failed to fetch SOS list",
+    "fetchSOSDetails": "Failed to fetch SOS details",
+    "addActivity": "Failed to add activity"
+  },
+  "success": {
+    "activityAdded": "Activity added successfully"
+  },
+  "ordersSettings": {
+    "title": "Order Distribution Settings",
+    "tabs": {
+      "taxiDriver": "Taxi Driver",
+      "driver": "Driver"
+    },
+    "distribution": {
+      "title": "Distribution Settings"
+    },
+    "rules": {
+      "first": "First Rule",
+      "firstTooltip": "This is the first rule tooltip.",
+      "second": "Second Rule",
+      "secondTooltip": "This is the second rule tooltip.",
+      "third": "Third Rule",
+      "forth": "Fourth Rule"
+    },
+    "circles": "Circles",
+    "searchRadius": "Search Radius",
+    "repeatCount": "Repeat Count",
+    "circle": "Circle {index}",
+    "addCircle": "Add Circle",
+    "ordersSettingstatus": "Order Status",
+    "delayBetweenAttempts": "Delay Between Attempts",
+    "offerordersSettingsimultaneously": "Offer Order Simultaneously",
+    "toSingleExecutor": "To Single Executor",
+    "neworder": "New Order",
+    "freeorder": "Free Order",
+    "seconds": "sec.",
+    "meters": "m",
+    "andorderCostGreaterThan": "And Order Cost Greater Than",
+    "distanceCalculationToExecutor": "Distance Calculation to Executor",
+    "byRoads": "By Roads",
+    "straightLine": "Straight Line",
+    "executorDisplayOnMap": "Executor Display on Map",
+    "showOnMapAs": "Show on Map as",
+    "executor": "Executor",
+    "vehicle": "Vehicle",
+    "orders": "Orders",
+    "sendPushNotification": "Send Push Notification",
+    "freeordersVisibilityRadius": "Free Orders Visibility Radius",
+    "standardSearchTime": "Standard Search Time",
+    "orderOfferTime": "Order Offer Time",
+    "autoCompleteordersSettingstatusAfter": "Auto Complete Order Status After",
+    "completed": "Completed",
+    "notFound": "Not Found",
+    "executorBlockingType": "Executor Blocking Type",
+    "numberOfRejectedOffers": "Number of Rejected Offers",
+    "blockingDuration": "Blocking Duration",
+    "pcs": "pcs.",
+    "orderForm": "Order Form",
+    "addPhoneField": "Add Phone Field",
+    "addCommentField": "Add Comment Field",
+    "dispatcherComment": "Dispatcher Comment",
+    "driverPayment": "Driver Payment",
+    "displayTerminalPaymentType": "Display Terminal Payment Type",
+    "showChatBetweenClientAndDriver": "Show Chat Between Client and Driver",
+    "preliminaryordersSettings": "Preliminary Orders",
+    "sendPushNotificationPreliminaryOrder": "Send Push Notification for Preliminary Order",
+    "considerorderPreliminary": "Consider Order Preliminary",
+    "limitVisibilityTime": "Limit Visibility Time",
+    "automaticallyEntersDistributionAfter": "Automatically Enters Distribution After",
+    "notifyExecutorAfter": "Notify Executor After",
+    "preliminaryorderRejectionWithoutBlocking": "Preliminary Order Rejection Without Blocking",
+    "blockExecutorForPreliminaryordersSettings": "Block Executor for Preliminary Orders",
+    "allowExecutorToStartPreliminaryOrderAfter": "Allow Executor to Start Preliminary Order After",
+    "doNotAllowTakingNewordersSettingsForXMinutesBefore": "Do Not Allow Taking New Orders for X Minutes Before",
+    "orderExchange": "Order Exchange",
+    "transferorderToAnotherSystem": "Transfer Order to Another System",
+    "manually": "Manually",
+    "automatic": "Automatic",
+    "notifications": "Notifications",
+    "numberOfCallAttemptsIfClientDoesNotAnswer": "Number of Call Attempts if Client Doesn't Answer",
+    "timeAfterWhichClientIsConsideredToHaveListened": "Time After Which Client is Considered to Have Listened to Notification",
+    "sendorderReportToClientVia": "Send Order Report to Client via",
+    "email": "Email",
+    "sms": "SMS",
+    "reviews": "Reviews",
+    "minimumClientRatingToCreateorder": "Minimum Client Rating to Create an Order",
+    "add5StarRatingToClient": "Add 5-Star Rating to Client",
+    "numberOfRecentClientReviewsConsideredInRating": "Number of Recent Client Reviews Considered in Rating",
+    "clientPersonalAccountModule": "Client Personal Account Module",
+    "allowClientToSuggestTheirPrice": "Allow Client to Suggest Their Price",
+    "showExecutorsPhoneNumberToClient": "Show Executor's Phone Number to Client",
+    "save": "Save",
+    "minutes": "Minutes",
+    "considerOrderPreliminary": "Consider Order Preliminary",
+    "ShowOrderCard": "Show Order Card",
+    "showInOrderCard": "Show in Order Card",
+    "maximumNumberOfClientsDebts": "Maximum Number of Clients Debts",
+    "AssignOfflineExectors": "Assign Offline Exectutor",
+    "currentOrderAmount": "Current Order Amount",
+    "end": "End",
+    "start": "Start",
+    "percentage": "Percentage",
+    "interval": "Interval",
+    "freeordersSettingsVisibilityRadius": "Free Orders Settings Visibility Radius",
+    "ordersSettings": "Orders Settings ",
+    "andOrderCostGreaterThan": "And Order Cost Greater Than",
+    "ifOrderClassMatches": "If Order Class Matches",
+    "orderClass": "Order Class",
+    "orderClassMatches": "Order Class Matches",
+    "orderClassDoesNotMatch": "Order Class Does Not Match",
+    "orderClassMatchesAny": "Order Class Matches Any",
+    "timeCalculationUntilSubmission": "Time Calculation Until Submission",
+    "adjustSubmissionTime": "Adjust Submission Time",
+    "useordersSettingsumHolding": "Use Orders Settings Sum Holding",
+    "assignOfflineExecutors": "Assign Offline Executors",
+    "preliminaryOrderRejectionWithoutBlocking": "Preliminary Order Rejection Without Blocking",
+    "transferOrderToAnotherSystem": "Transfer Order to Another System",
+    "sendOrderReportToClientVia": "Send Order Report to Client via",
+    "minimumClientRatingToCreateOrder": "Minimum Client Rating to Create an Order"
+  },
+  "driversSettings": {
+    "taxiDriver": "Taxi Driver",
+    "driver": "Driver",
+    "arrivalTime": "Arrival Time (minutes)",
+    "allowWithoutGPS": "Allow driver to work without GPS?",
+    "minBalance": "Minimum balance for shift start (₽)",
+    "minRating": "Minimum rating for system access",
+    "add5StarRatings": "Add 5-star ratings to driver",
+    "recentReviews": "Number of recent reviews for rating",
+    "showNotPaidButton": "Show 'Not Paid' button at end of ride",
+    "showPaymentViaSBP": "Show payment via SBP",
+    "showPreliminaryCalculation": "Show preliminary calculation",
+    "allowEditOrderAddresses": "Allow editing order addresses",
+    "allowEditOrderCost": "Allow editing order cost",
+    "showDestinationToDriver": "Show destination to driver",
+    "selectStatus": "Select status",
+    "hideStepsDuringOrder": "Hide steps during order execution (statuses)",
+    "showPriceAndAreaFilter": "Show price and area filter",
+    "minSoundVolume": "Minimum sound volume level",
+    "clientCommunication": "Client communication",
+    "showFullName": "Show Full Name",
+    "firstNameOnly": "First Name Only",
+    "dontShow": "Don't Show",
+    "showClientNameToDriver": "Show client name to driver",
+    "showUrgentOrderTime": "Show urgent order submission time to driver",
+    "showDispatcherChatBeforeShift": "Show dispatcher chat before shift?",
+    "showDispatcherChatDuringShift": "Show dispatcher chat during shift?",
+    "showGeneralChatDuringShift": "Show general chat during shift?",
+    "showEventsSection": "Show Events section",
+    "showOtherCarsOnMap": "Show other cars on map",
+    "withinRadius": "Within radius (meters)",
+    "allowTopUpViaBankCard": "Allow driver to top up balance via bank card?",
+    "autoEndShiftIfCoordinatesNotCurrent": "Automatically end shift if driver coordinates are not current",
+    "autoEndShiftIfOutsideCity": "Automatically end shift if driver is outside city or order acceptance zone",
+    "showAvailableOrdersInTabs": "Show available and preliminary orders in application tabs",
+    "prohibitFakeGPS": "Prohibit use of fake GPS?",
+    "preventArrivedButtonAdvance": "Prevent driver from pressing 'Arrived' button in advance?",
+    "requirePasswordForLogin": "Require password for each application login",
+    "showPrivacyPolicy": "Show privacy policy?",
+    "monitorMileage": "Monitor your cars' mileage?",
+    "allowReserveUrgentOrders": "Allow driver to reserve urgent orders",
+    "hidePriceAndRoutePoints": "Hide price and route points (except point A)",
+    "speakTextAfterTaximeterStart": "Speak text after taximeter start",
+    "speakTextAfterRideCompletion": "Speak text after ride completion",
+    "autoStartTaximeterAfterFreeWait": "Automatically start taximeter after free waiting time ends",
+    "allowOrderTypeSelection": "Allow driver to choose which types of orders to receive",
+    "allowSOSButton": "Allow driver to use SOS button",
+    "allowCancelOrder": "Allow driver to cancel order",
+    "pickedUpGoingToClient": "Picked up and going to client",
+    "arrivedWaitingBeforePaid": "Arrived and waiting for client (before paid waiting)",
+    "arrivedWaitingAfterPaid": "Arrived and waiting for client (after paid waiting starts)",
+    "showClientRatingWindow": "Show client rating window after order completion",
+    "commissionForPenalties": "Commission for penalties",
+    "whatDataToShow": "What data to show for order:",
+    "inOrderList": "In order list:",
+    "clientRating": "Client rating",
+    "routePoints": "Route points",
+    "comments": "Comments",
+    "cost": "Cost",
+    "paymentMethod": "Payment method",
+    "timeForUrgentOrders": "Time for urgent orders",
+    "inDetailedOrderCard": "In detailed order card:",
+    "showAllPoints": "Show all points",
+    "partialPoints": "Partial points",
+    "timeUntilUrgentOrders": "Time until urgent orders",
+    "duringOrderExecution": "During order execution",
+    "saveChanges": "Save Changes"
+  },
+  "directories": {
+    "zonePrices": {
+      "edit": "Edit Zone Price",
+      "view": "View Zone Price",
+      "noZones": "No zones found",
+      "map": {
+        "clear": "Clear",
+        "title": "Zone Map",
+        "addPoint": "Add Point",
+        "fromPoint": "From Point",
+        "toPoint": "To Point"
+      },
+      "title": "Zone Prices",
+      "create": "Create Zone Price",
+      "fields": {
+        "name": "Name",
+        "cost": "Cost",
+        "services": "Services",
+        "fleets": "Fleets"
+      },
+      "timeMultiplier": {
+        "title": "Time Multiplier",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "multiply": "Multiply",
+        "add": "Add Time Multiplier"
+      },
+      "actions": {
+        "save": "Save Changes",
+        "delete": "Delete Zone",
+        "edit": "Edit Zone",
+        "create": "Create Zone"
+      },
+      "filters": {
+        "search": "Search zones",
+        "service": "Filter by service",
+        "fleet": "Filter by fleet"
+      },
+      "messages": {
+        "createSuccess": "Zone price created successfully",
+        "updateSuccess": "Zone price updated successfully",
+        "deleteSuccess": "Zone price deleted successfully"
+      }
+    }
+  },
+  "regions": {
+    "list": "Regions List",
+    "points": "points",
+    "showOnMap": "Show on Map",
+    "status": "Status",
+    "save": "Save",
+
+    "addNew": "Add New Region",
+    "createNew": "Create New Region",
+    "add": "Add Region",
+    "edit": "Edit Region",
+    "name": "Name",
+    "currency": "Currency",
+    "enabled": "Enabled",
+    "visible": "Visible",
+    "drawInstructions": "Click on the map to draw a new region. Click points to create a polygon shape.",
+    "errors": {
+      "fetchFailed": "Failed to fetch regions",
+      "updateFailed": "Failed to update region",
+      "deleteFailed": "Failed to delete region"
+    },
+    "deleteSuccess": "Region deleted successfully",
+    "changesSaved": "Changes saved successfully",
+    "updateSuccess": "Region updated successfully"
+  },
+  "titles": {
+    "districts": "Districts"
   }
 }

@@ -21,7 +21,9 @@ export default function BottomCustomerEdit({
   type = "edit",
 }: BottomCustomerEditProps) {
   const { t } = useTranslation();
-  const [showOnMap, setShowOnMap] = useState(true);
+  const [visibleRegions, setVisibleRegions] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const handleInputChange = (key: keyof ServiceType, value: any) => {
     setService({
@@ -43,32 +45,59 @@ export default function BottomCustomerEdit({
     }
 
     const newRegions = [...(service.regions || [])];
+    const newRegionId = `new_${Date.now()}`;
     newRegions.push({
-      id: `new_${Date.now()}`,
+      id: newRegionId,
       name: `Region ${newRegions.length + 1}`,
       enabled: true,
       location: [coordinates],
       currency: "USD",
     });
 
+    setVisibleRegions((prev) => ({
+      ...prev,
+      [newRegionId]: true,
+    }));
+
     handleInputChange("regions", newRegions);
     polygon.setMap(null);
   };
 
+  const handlePolygonUpdate = (
+    id: string,
+    coordinates: { lat: number; lng: number }[]
+  ) => {
+    const newRegions = service.regions?.map((region) => {
+      if (region.id === id) {
+        return {
+          ...region,
+          location: [coordinates],
+        };
+      }
+      return region;
+    });
+    handleInputChange("regions", newRegions);
+  };
+
   const mapPolygons = useMemo(() => {
-    return service.regions?.map((region) => ({
-      id: region.id,
-      coordinates: region.location[0],
-      options: {
-        fillColor: "#B69F7D",
-        fillOpacity: 0.4,
-        strokeColor: "#B69F7D",
-        strokeWeight: 2,
-        editable: editing,
-        draggable: editing,
-      },
-    }));
-  }, [service.regions, editing]);
+    return (
+      service.regions?.map((region) => ({
+        id: region.id,
+        coordinates: region.location[0],
+        options: {
+          fillColor: "#B69F7D",
+          fillOpacity: 0.4,
+          strokeColor: "#B69F7D",
+          strokeWeight: 2,
+          editable: editing,
+          draggable: editing,
+          visible: visibleRegions[region.id] || false,
+        },
+        onUpdate: (coords: { lat: number; lng: number }[]) =>
+          handlePolygonUpdate(region.id, coords),
+      })) || []
+    );
+  }, [service.regions, editing, visibleRegions]);
 
   return (
     <div className="mt-8">
@@ -146,100 +175,110 @@ export default function BottomCustomerEdit({
                 showDrawingTools={editing}
                 onPolygonComplete={handlePolygonComplete}
                 polygons={mapPolygons}
+                center={{ lat: 55.7887, lng: 49.1221 }} // Kazan coordinates
+                zoom={11}
               />
             </div>
           </div>
 
-          {/* Region List */}
-          <div className="flex flex-col items-center gap-4 bg-transparent">
-            {service.regions?.map((region, index) => (
-              <div
-                className={`grid gap-4 w-full ${
-                  editing
-                    ? "grid-cols-[3fr_1fr_0.2fr_0.2fr_0.2fr]"
-                    : "grid-cols-[3fr_1fr_0.2fr_0.2fr]"
-                }`}
-                key={region.id}
-              >
-                <label className="text-sm text-gray-400 mb-1 flex flex-col gap-2">
-                  {t("bottomCustomerEdit.regionName")}
+          {/* Region Controls */}
+          <div className="flex flex-col items-center gap-4 bg-transparent mt-36">
+            {service.regions &&
+              service.regions.length > 0 &&
+              service.regions.map((region, index) => (
+                <div
+                  className={`grid gap-4 w-full ${
+                    editing
+                      ? "grid-cols-[3fr_1fr_0.2fr_0.2fr_0.2fr]"
+                      : "grid-cols-[3fr_1fr_0.2fr_0.2fr]"
+                  }`}
+                  key={region.id}
+                >
+                  <label className="text-sm text-gray-400 mb-1 flex flex-col gap-2">
+                    {t("bottomCustomerEdit.regionName")}
 
-                  <Input
-                    value={region.name}
-                    onChange={(e) => {
-                      const newRegions = [...(service.regions || [])];
-                      newRegions[index] = {
-                        ...newRegions[index],
-                        name: e.target.value,
-                      };
-                      handleInputChange("regions", newRegions);
-                    }}
-                    readOnly={!editing}
-                    className="custom-input w-full"
-                  />
-                </label>
-                <label className="text-sm text-gray-400 mb-1 flex flex-col gap-2">
-                  {t("bottomCustomerEdit.currency")}
-
-                  <Input
-                    value={region.currency}
-                    onChange={(e) => {
-                      const newRegions = [...(service.regions || [])];
-                      newRegions[index] = {
-                        ...newRegions[index],
-                        currency: e.target.value,
-                      };
-                      handleInputChange("regions", newRegions);
-                    }}
-                    readOnly={!editing}
-                    className="custom-input"
-                  />
-                </label>
-                <label className="text-sm text-gray-400 mb-1 flex flex-col gap-3">
-                  {t("bottomCustomerEdit.status")}
-                  <Switch
-                    checked={region.enabled}
-                    disabled={!editing}
-                    onChange={(checked) => {
-                      const newRegions = [...(service.regions || [])];
-                      newRegions[index] = {
-                        ...newRegions[index],
-                        enabled: checked,
-                      };
-                      handleInputChange("regions", newRegions);
-                    }}
-                  />
-                </label>
-                <label className="text-sm text-gray-400 mb-1 flex flex-col gap-3">
-                  {t("bottomCustomerEdit.showOnMap")}
-                  <Switch
-                    disabled={false}
-                    checked={showOnMap}
-                    onChange={() => {
-                      setShowOnMap(!showOnMap);
-                    }}
-                  />
-                </label>
-
-                {editing && (
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      className="mt-auto mb-2"
-                      onClick={() => {
-                        const newRegions = service.regions?.filter(
-                          (_, i) => i !== index
-                        );
+                    <Input
+                      value={region.name}
+                      onChange={(e) => {
+                        const newRegions = [...(service.regions || [])];
+                        newRegions[index] = {
+                          ...newRegions[index],
+                          name: e.target.value,
+                        };
                         handleInputChange("regions", newRegions);
                       }}
-                    >
-                      {t("common.remove")}
-                    </Button>
-                  </div>
-                )}
-              </div>
-            ))}
+                      readOnly={!editing}
+                      className="custom-input w-full"
+                    />
+                  </label>
+                  <label className="text-sm text-gray-400 mb-1 flex flex-col gap-2">
+                    {t("bottomCustomerEdit.currency")}
+
+                    <Input
+                      value={region.currency}
+                      onChange={(e) => {
+                        const newRegions = [...(service.regions || [])];
+                        newRegions[index] = {
+                          ...newRegions[index],
+                          currency: e.target.value,
+                        };
+                        handleInputChange("regions", newRegions);
+                      }}
+                      readOnly={!editing}
+                      className="custom-input"
+                    />
+                  </label>
+                  <label className="text-sm text-gray-400 mb-1 flex flex-col gap-3">
+                    {t("bottomCustomerEdit.status")}
+                    <Switch
+                      checked={region.enabled}
+                      disabled={!editing}
+                      onChange={(checked) => {
+                        const newRegions = [...(service.regions || [])];
+                        newRegions[index] = {
+                          ...newRegions[index],
+                          enabled: checked,
+                        };
+                        handleInputChange("regions", newRegions);
+                      }}
+                    />
+                  </label>
+                  <label className="text-sm text-gray-400 mb-1 flex flex-col gap-3">
+                    {t("bottomCustomerEdit.showOnMap")}
+                    <Switch
+                      disabled={false}
+                      checked={visibleRegions[region.id] || false}
+                      onChange={() => {
+                        setVisibleRegions((prev) => ({
+                          ...prev,
+                          [region.id]: !prev[region.id],
+                        }));
+                      }}
+                    />
+                  </label>
+
+                  {editing && (
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        className="mt-auto mb-2"
+                        onClick={() => {
+                          const newRegions = service.regions?.filter(
+                            (_, i) => i !== index
+                          );
+                          handleInputChange("regions", newRegions);
+                          const newVisibleRegions = { ...visibleRegions };
+                          delete newVisibleRegions[region.id];
+                          setVisibleRegions(newVisibleRegions);
+                        }}
+                      >
+                        {t("common.remove")}
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              ))}
           </div>
         </div>
       )}
@@ -255,97 +294,102 @@ export default function BottomCustomerEdit({
           <h5 className="font-medium">
             {t("bottomCustomerEdit.distanceMultipliers")}
           </h5>
-          {service.distanceMultipliers?.map((multiplier, index) => (
-            <div
-              key={index}
-              className={`grid  gap-4 ${
-                editing
-                  ? "grid-cols-[1fr_1fr_1fr_0.2fr]"
-                  : "grid-cols-[1fr_1fr_1fr]"
-              }`}
-            >
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">
-                  {t("bottomCustomerEdit.from")}
-                </label>
-                <Input
-                  type="number"
-                  value={multiplier.distanceFrom}
-                  onChange={(e) => {
-                    const newMultipliers = [
-                      ...(service.distanceMultipliers || []),
-                    ];
-                    newMultipliers[index] = {
-                      ...newMultipliers[index],
-                      distanceFrom: Number(e.target.value),
-                    };
-                    handleInputChange("distanceMultipliers", newMultipliers);
-                  }}
-                  readOnly={!editing}
-                  className="bg-[#282828] text-gray-100"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">
-                  {t("bottomCustomerEdit.to")}
-                </label>
-                <Input
-                  type="number"
-                  value={multiplier.distanceTo}
-                  onChange={(e) => {
-                    const newMultipliers = [
-                      ...(service.distanceMultipliers || []),
-                    ];
-                    newMultipliers[index] = {
-                      ...newMultipliers[index],
-                      distanceTo: Number(e.target.value),
-                    };
-                    handleInputChange("distanceMultipliers", newMultipliers);
-                  }}
-                  readOnly={!editing}
-                  className="bg-[#282828] text-gray-100"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">
-                  {t("bottomCustomerEdit.multiplier")}
-                </label>
-                <Input
-                  type="number"
-                  value={multiplier.multiply}
-                  onChange={(e) => {
-                    const newMultipliers = [
-                      ...(service.distanceMultipliers || []),
-                    ];
-                    newMultipliers[index] = {
-                      ...newMultipliers[index],
-                      multiply: Number(e.target.value),
-                    };
-                    handleInputChange("distanceMultipliers", newMultipliers);
-                  }}
-                  readOnly={!editing}
-                  className="bg-[#282828] text-gray-100"
-                />
-              </div>
-              {editing && (
-                <div className="flex items-end gap-2">
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => {
-                      const newMultipliers =
-                        service.distanceMultipliers?.filter(
-                          (_, i) => i !== index
-                        );
+          {service.distanceMultipliers &&
+            service.distanceMultipliers.length > 0 &&
+            service.distanceMultipliers.map((multiplier, index) => (
+              <div
+                key={index}
+                className={`grid  gap-4 ${
+                  editing
+                    ? "grid-cols-[1fr_1fr_1fr_0.2fr]"
+                    : "grid-cols-[1fr_1fr_1fr]"
+                }`}
+              >
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    {t("bottomCustomerEdit.from")}
+                  </label>
+                  <Input
+                    type="number"
+                    value={multiplier.distanceFrom}
+                    onChange={(e) => {
+                      const newMultipliers = [
+                        ...(service.distanceMultipliers || []),
+                      ];
+                      newMultipliers[index] = {
+                        ...newMultipliers[index],
+                        distanceFrom: Number(e.target.value),
+                      };
                       handleInputChange("distanceMultipliers", newMultipliers);
                     }}
-                  >
-                    {t("common.remove")}
-                  </Button>
+                    readOnly={!editing}
+                    className="bg-[#282828] text-gray-100"
+                  />
                 </div>
-              )}
-            </div>
-          ))}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    {t("bottomCustomerEdit.to")}
+                  </label>
+                  <Input
+                    type="number"
+                    value={multiplier.distanceTo}
+                    onChange={(e) => {
+                      const newMultipliers = [
+                        ...(service.distanceMultipliers || []),
+                      ];
+                      newMultipliers[index] = {
+                        ...newMultipliers[index],
+                        distanceTo: Number(e.target.value),
+                      };
+                      handleInputChange("distanceMultipliers", newMultipliers);
+                    }}
+                    readOnly={!editing}
+                    className="bg-[#282828] text-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    {t("bottomCustomerEdit.multiplier")}
+                  </label>
+                  <Input
+                    type="number"
+                    value={multiplier.multiply}
+                    onChange={(e) => {
+                      const newMultipliers = [
+                        ...(service.distanceMultipliers || []),
+                      ];
+                      newMultipliers[index] = {
+                        ...newMultipliers[index],
+                        multiply: Number(e.target.value),
+                      };
+                      handleInputChange("distanceMultipliers", newMultipliers);
+                    }}
+                    readOnly={!editing}
+                    className="bg-[#282828] text-gray-100"
+                  />
+                </div>
+                {editing && (
+                  <div className="flex items-end gap-2">
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => {
+                        const newMultipliers =
+                          service.distanceMultipliers?.filter(
+                            (_, i) => i !== index
+                          );
+                        handleInputChange(
+                          "distanceMultipliers",
+                          newMultipliers
+                        );
+                      }}
+                    >
+                      {t("common.remove")}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))}
           {editing && (
             <Button
               onClick={() => {
@@ -370,90 +414,98 @@ export default function BottomCustomerEdit({
           <h5 className="font-medium">
             {t("bottomCustomerEdit.timeMultipliers")}
           </h5>
-          {service.timeMultipliers?.map((multiplier, index) => (
-            <div
-              key={index}
-              className={`grid gap-4 ${
-                editing
-                  ? "grid-cols-[1fr_1fr_1fr_0.2fr]"
-                  : "grid-cols-[1fr_1fr_1fr]"
-              }`}
-            >
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">
-                  {t("bottomCustomerEdit.startTime")}
-                </label>
-                <Input
-                  type="time"
-                  value={multiplier.startTime}
-                  onChange={(e) => {
-                    const newMultipliers = [...(service.timeMultipliers || [])];
-                    newMultipliers[index] = {
-                      ...newMultipliers[index],
-                      startTime: e.target.value,
-                    };
-                    handleInputChange("timeMultipliers", newMultipliers);
-                  }}
-                  readOnly={!editing}
-                  className="bg-[#282828] text-gray-100"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">
-                  {t("bottomCustomerEdit.endTime")}
-                </label>
-                <Input
-                  type="time"
-                  value={multiplier.endTime}
-                  onChange={(e) => {
-                    const newMultipliers = [...(service.timeMultipliers || [])];
-                    newMultipliers[index] = {
-                      ...newMultipliers[index],
-                      endTime: e.target.value,
-                    };
-                    handleInputChange("timeMultipliers", newMultipliers);
-                  }}
-                  readOnly={!editing}
-                  className="bg-[#282828] text-gray-100"
-                />
-              </div>
-              <div>
-                <label className="block text-sm text-gray-400 mb-1">
-                  {t("bottomCustomerEdit.multiplier")}
-                </label>
-                <Input
-                  type="number"
-                  value={multiplier.multiply}
-                  onChange={(e) => {
-                    const newMultipliers = [...(service.timeMultipliers || [])];
-                    newMultipliers[index] = {
-                      ...newMultipliers[index],
-                      multiply: Number(e.target.value),
-                    };
-                    handleInputChange("timeMultipliers", newMultipliers);
-                  }}
-                  readOnly={!editing}
-                  className="bg-[#282828] text-gray-100"
-                />
-              </div>
-              {editing && (
-                <div className="flex items-end">
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => {
-                      const newMultipliers = service.timeMultipliers?.filter(
-                        (_, i) => i !== index
-                      );
+          {service.timeMultipliers &&
+            service.timeMultipliers.length > 0 &&
+            service.timeMultipliers.map((multiplier, index) => (
+              <div
+                key={index}
+                className={`grid gap-4 ${
+                  editing
+                    ? "grid-cols-[1fr_1fr_1fr_0.2fr]"
+                    : "grid-cols-[1fr_1fr_1fr]"
+                }`}
+              >
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    {t("bottomCustomerEdit.startTime")}
+                  </label>
+                  <Input
+                    type="time"
+                    value={multiplier.startTime}
+                    onChange={(e) => {
+                      const newMultipliers = [
+                        ...(service.timeMultipliers || []),
+                      ];
+                      newMultipliers[index] = {
+                        ...newMultipliers[index],
+                        startTime: e.target.value,
+                      };
                       handleInputChange("timeMultipliers", newMultipliers);
                     }}
-                  >
-                    {t("common.remove")}
-                  </Button>
+                    readOnly={!editing}
+                    className="bg-[#282828] text-gray-100"
+                  />
                 </div>
-              )}
-            </div>
-          ))}
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    {t("bottomCustomerEdit.endTime")}
+                  </label>
+                  <Input
+                    type="time"
+                    value={multiplier.endTime}
+                    onChange={(e) => {
+                      const newMultipliers = [
+                        ...(service.timeMultipliers || []),
+                      ];
+                      newMultipliers[index] = {
+                        ...newMultipliers[index],
+                        endTime: e.target.value,
+                      };
+                      handleInputChange("timeMultipliers", newMultipliers);
+                    }}
+                    readOnly={!editing}
+                    className="bg-[#282828] text-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">
+                    {t("bottomCustomerEdit.multiplier")}
+                  </label>
+                  <Input
+                    type="number"
+                    value={multiplier.multiply}
+                    onChange={(e) => {
+                      const newMultipliers = [
+                        ...(service.timeMultipliers || []),
+                      ];
+                      newMultipliers[index] = {
+                        ...newMultipliers[index],
+                        multiply: Number(e.target.value),
+                      };
+                      handleInputChange("timeMultipliers", newMultipliers);
+                    }}
+                    readOnly={!editing}
+                    className="bg-[#282828] text-gray-100"
+                  />
+                </div>
+                {editing && (
+                  <div className="flex items-end">
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => {
+                        const newMultipliers = service.timeMultipliers?.filter(
+                          (_, i) => i !== index
+                        );
+                        handleInputChange("timeMultipliers", newMultipliers);
+                      }}
+                    >
+                      {t("common.remove")}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            ))}
           {editing && (
             <Button
               onClick={() => {

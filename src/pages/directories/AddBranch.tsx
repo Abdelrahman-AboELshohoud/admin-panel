@@ -262,10 +262,12 @@ export default function AddBranch() {
               {t("addBranch.contacts")}
             </label>
             <div className="flex flex-col gap-4">
-              {contacts.map((contact) => (
-                <div
-                  key={contact.id}
-                  className="grid grid-cols-12 gap-4 items-center"
+              {contacts &&
+                contacts.length > 0 &&
+                contacts.map((contact) => (
+                  <div
+                    key={contact.id}
+                    className="grid grid-cols-12 gap-4 items-center"
                 >
                   <div className="col-span-2">
                     <Select defaultValue={contact.type}>

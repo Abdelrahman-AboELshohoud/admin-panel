@@ -8,8 +8,11 @@ import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import { Plus, X } from "lucide-react";
 import ToolTip from "../../components/common/ToolTip";
 import SelectsWithLabel from "../../components/common/SelectsWithLabel";
+import { useTranslation } from "react-i18next";
 
 export default function OrderDistributionSettings() {
+  const { t } = useTranslation();
+
   const [circles, setCircles] = React.useState([
     { radius: 3000, repeats: 1 },
     { radius: 5000, repeats: 1 },
@@ -29,18 +32,20 @@ export default function OrderDistributionSettings() {
 
   return (
     <div className="min-h-screen flex flex-col gap-6 bg-transparent p-4 text-white">
-      <div className="max-w-4xl mx-auto space-y-6 ">
+      <div className=" mx-auto space-y-6 ">
         <div className="flex items-center justify-between text-white">
-          <h1 className="text-2xl font-semibold">Orders</h1>
+          <h1 className="text-2xl font-semibold">
+            {t("ordersSettings.title")}
+          </h1>
         </div>
 
         <Tabs defaultValue="taxi" className="w-full">
           <TabsList className="bg-transparent ">
             <TabsTrigger value="taxi" className="custom-tabs">
-              Taxi Driver
+              {t("ordersSettings.tabs.taxiDriver")}
             </TabsTrigger>
             <TabsTrigger value="driver" className="custom-tabs">
-              Driver
+              {t("ordersSettings.tabs.driver")}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -48,27 +53,30 @@ export default function OrderDistributionSettings() {
         <Card className="bg-[#2C2C2E] border-[#3A3A3C]">
           <CardContent className="p-6 space-y-6 text-gray-100">
             <div className="space-y-4">
-              <h2 className="text-lg font-medium">Distribution</h2>
+              <h2 className="text-lg font-medium">
+                {t("ordersSettings.distribution.title")}
+              </h2>
 
               <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <label>First Rule</label>
-                  <ToolTip
-                    text={`Distance: the proximity of the car to the client is taken into account.\nArea: cars located in the same area as the client participate.`}
-                  />
+                  <label>{t("ordersSettings.rules.first")}</label>
+                  <ToolTip text={t("ordersSettings.rules.firstTooltip")} />
                 </div>
                 <Selects
                   value="distance"
-                  placeholder="distance"
-                  options={["distance", "district"]}
+                  placeholder={t("ordersSettings.selects.distance")}
+                  options={[
+                    t("ordersSettings.selects.distance"),
+                    t("ordersSettings.selects.district"),
+                  ]}
                 />
               </div>
 
               <div className="space-y-4">
                 <div className="grid grid-cols-[1fr,2fr,2fr] gap-4 items-center">
-                  <div>Circles</div>
-                  <div>Search Radius</div>
-                  <div>Repeat Count</div>
+                  <div>{t("ordersSettings.circles")}</div>
+                  <div>{t("ordersSettings.searchRadius")}</div>
+                  <div>{t("ordersSettings.repeatCount")}</div>
                 </div>
 
                 {circles.map((circle, index) => (
@@ -76,14 +84,16 @@ export default function OrderDistributionSettings() {
                     key={index}
                     className="grid grid-cols-[1fr,2fr,2fr] gap-4 items-center"
                   >
-                    <div>Circle {index + 1}</div>
+                    <div>
+                      {t("ordersSettings.circle", { index: index + 1 })}
+                    </div>
                     <div className="flex items-center gap-2">
                       <Input
                         type="number"
                         value={circle.radius}
                         className="bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>m</span>
+                      <span>{t("ordersSettings.meters")}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <Input
@@ -112,73 +122,88 @@ export default function OrderDistributionSettings() {
                   disabled={circles.length >= 5}
                 >
                   <Plus className="h-4 w-4 mr-2" />
-                  Add Circle
+                  {t("ordersSettings.addCircle")}
                 </Button>
               </div>
 
               <div className="space-y-4">
                 <SelectsWithLabel
-                  label="Order status between distribution attempts"
+                  label={t("ordersSettings.ordersSettingstatus")}
                   value="order"
-                  placeholder="To single executor"
-                  options={["New order", "Free order"]}
+                  placeholder={t("ordersSettings.toSingleExecutor")}
+                  options={[
+                    t("ordersSettings.newOrder"),
+                    t("ordersSettings.freeOrder"),
+                  ]}
                 />
 
                 <div className="flex items-center justify-between">
-                  <label>Delay between distribution attempts</label>
+                  <label>{t("ordersSettings.delayBetweenAttempts")}</label>
                   <div className="flex items-center gap-2">
                     <Input
                       type="number"
                       value="1"
                       className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                     />
-                    <span>sec.</span>
+                    <span>{t("ordersSettings.seconds")}</span>
                   </div>
                 </div>
 
                 <SelectsWithLabel
-                  label="Offer order simultaneously"
+                  label={t("ordersSettings.offerordersSettingsimultaneously")}
                   value="single"
-                  placeholder="To single executor"
-                  options={["To single executor", "To multiple executors"]}
+                  placeholder={t("ordersSettings.toSingleExecutor")}
+                  options={[
+                    t("ordersSettings.toSingleExecutor"),
+                    t("ordersSettings.toMultipleExecutors"),
+                  ]}
                 />
 
                 <div className="flex items-center justify-between">
-                  <label>Second Rule</label>
+                  <label>{t("ordersSettings.rules.second")}</label>
                   <div className="flex items-center gap-2 w-1/2">
                     <Switch disabled={false} checked={true} />
                     <label className="text-xs text-gray-400">
-                      Consider executor rating during distribution. Rating is
-                      calculated for each shift using the formula: average
-                      executor rating × 10 + sum of additional options
+                      {t("ordersSettings.rules.secondTooltip")}
                     </label>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <SelectsWithLabel
-                    label="Third Rule"
+                    label={t("ordersSettings.rules.third")}
                     value="distance"
-                    placeholder="distance"
-                    options={["distance", "time"]}
+                    placeholder={t("ordersSettings.selects.distance")}
+                    options={[
+                      t("ordersSettings.selects.distance"),
+                      t("ordersSettings.selects.time"),
+                    ]}
                   />
                   <SelectsWithLabel
-                    label="Forth Rule"
+                    label={t("ordersSettings.rules.forth")}
                     value="no"
-                    placeholder="No"
-                    options={["No", "Business + sober driver"]}
+                    placeholder={t("ordersSettings.selects.no")}
+                    options={[
+                      t("ordersSettings.selects.no"),
+                      t("ordersSettings.selects.businessSoberDriver"),
+                    ]}
                   />
 
                   <div className="space-y-4">
                     <div className="flex items-center gap-4 justify-between">
                       <SelectsWithLabel
-                        label="if order class matches"
+                        label={t("ordersSettings.ifOrderClassMatches")}
                         value="businessplus"
-                        placeholder="Bussiness+"
-                        options={["Bussiness+", "Premium"]}
+                        placeholder={t("ordersSettings.selects.businessPlus")}
+                        options={[
+                          t("ordersSettings.selects.businessPlus"),
+                          t("ordersSettings.selects.premium"),
+                        ]}
                       />
                       <div className="flex items-center gap-10">
-                        <span>and order cost is greater than</span>
+                        <span>
+                          {t("ordersSettings.andOrderCostGreaterThan")}
+                        </span>
                         <Input
                           type="number"
                           value="1000"
@@ -190,116 +215,136 @@ export default function OrderDistributionSettings() {
                 </div>
 
                 <SelectsWithLabel
-                  label="Distance calculation to executor"
+                  label={t("ordersSettings.distanceCalculationToExecutor")}
                   value="roads"
-                  placeholder="By roads"
-                  options={["By roads", "Straight line"]}
+                  placeholder={t("ordersSettings.byRoads")}
+                  options={[
+                    t("ordersSettings.byRoads"),
+                    t("ordersSettings.straightLine"),
+                  ]}
                 />
               </div>
 
               <div className="space-y-6 pt-6 border-t border-[#3A3A3C]">
-                <h2 className="text-lg font-medium">Executor Display on Map</h2>
+                <h2 className="text-lg font-medium">
+                  {t("ordersSettings.executorDisplayOnMap")}
+                </h2>
                 <SelectsWithLabel
-                  label="Show on map as"
+                  label={t("ordersSettings.showOnMapAs")}
                   value="executor"
-                  placeholder="Executor"
-                  options={["Executor", "Vehicle"]}
+                  placeholder={t("ordersSettings.executor")}
+                  options={[
+                    t("ordersSettings.executor"),
+                    t("ordersSettings.vehicle"),
+                  ]}
                 />
 
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Orders</h3>
+                  <h3 className="text-lg font-medium">
+                    {t("ordersSettings.ordersSettings")}
+                  </h3>
 
                   <SelectsWithLabel
-                    label="Send PUSH notification about free order to executors not on shift"
+                    label={t("ordersSettings.sendPushNotification")}
                     value="no"
-                    placeholder="No"
-                    options={["No", "Yes"]}
+                    placeholder={t("ordersSettings.no")}
+                    options={[t("ordersSettings.no"), t("ordersSettings.yes")]}
                   />
 
                   <div className="flex items-center justify-between">
-                    <label>Free orders visibility radius for executor</label>
+                    <label>
+                      {t("ordersSettings.freeordersSettingsVisibilityRadius")}
+                    </label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="number"
                         value="50000"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>m.</span>
+                      <span>{t("ordersSettings.meters")}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <label>
-                      Standard search time before order becomes overdue
-                    </label>
+                    <label>{t("ordersSettings.standardSearchTime")}</label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="number"
                         value="600"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>sec.</span>
+                      <span>{t("ordersSettings.seconds")}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <label>Order offer time to executor</label>
+                    <label>{t("ordersSettings.orderOfferTime")}</label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="number"
                         value="12"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>sec.</span>
+                      <span>{t("ordersSettings.seconds")}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <label>Auto-complete order with status after</label>
+                    <label>
+                      {t("ordersSettings.autoCompleteordersSettingstatusAfter")}
+                    </label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="number"
                         value="60"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>min.</span>
+                      <span>{t("ordersSettings.minutes")}</span>
                     </div>
                     <Selects
                       value="completed"
-                      placeholder="completed"
-                      options={["completed", "not_found"]}
+                      placeholder={t("ordersSettings.completed")}
+                      options={[
+                        t("ordersSettings.completed"),
+                        t("ordersSettings.notFound"),
+                      ]}
                     />
                   </div>
 
                   <div className="space-y-4">
                     <SelectsWithLabel
-                      label="Executor blocking type for ignored orders"
+                      label={t("ordersSettings.executorBlockingType")}
                       value="consecutive"
-                      placeholder="consecutive"
-                      options={["consecutive", "per_shift"]}
+                      placeholder={t("ordersSettings.consecutive")}
+                      options={[
+                        t("ordersSettings.consecutive"),
+                        t("ordersSettings.perShift"),
+                      ]}
                     />
 
                     <div className="flex items-center justify-between">
-                      <label>Number of rejected offers before blocking</label>
+                      <label>
+                        {t("ordersSettings.numberOfRejectedOffers")}
+                      </label>
                       <div className="flex items-center gap-2">
                         <Input
                           type="number"
                           value="5"
                           className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                         />
-                        <span>pcs.</span>
+                        <span>{t("ordersSettings.pcs")}</span>
                       </div>
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label>Blocking duration</label>
+                      <label>{t("ordersSettings.blockingDuration")}</label>
                       <div className="flex items-center gap-2">
                         <Input
                           type="number"
                           value="60"
                           className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                         />
-                        <span>min.</span>
+                        <span>{t("ordersSettings.minutes")}</span>
                       </div>
                     </div>
                   </div>
@@ -307,24 +352,27 @@ export default function OrderDistributionSettings() {
                   <div className="flex flex-col gap-6">
                     <SelectsWithLabel
                       value="Automatically"
-                      placeholder="Automatically"
-                      options={["Automatically", "Manually by the driver"]}
-                      label="Time calculation until submission"
+                      placeholder={t("ordersSettings.automatically")}
+                      options={[
+                        t("ordersSettings.automatically"),
+                        t("ordersSettings.manuallyByDriver"),
+                      ]}
+                      label={t("ordersSettings.timeCalculationUntilSubmission")}
                     />
 
                     <div className="flex items-center gap-2 ml-auto">
                       <Switch disabled={false} checked={true} />
                       <label className="text-xs text-gray-400 ">
-                        Adjust submission time
+                        {t("ordersSettings.adjustSubmissionTime")}
                       </label>
                     </div>
 
                     <div className="space-y-4">
                       <div className="grid grid-cols-[1fr,2fr,2fr,1fr] gap-4 items-center">
-                        <div>Interval</div>
-                        <div>Start</div>
-                        <div>End</div>
-                        <div>Percentage</div>
+                        <div>{t("ordersSettings.interval")}</div>
+                        <div>{t("ordersSettings.start")}</div>
+                        <div>{t("ordersSettings.end")}</div>
+                        <div>{t("ordersSettings.percentage")}</div>
                       </div>
 
                       {[
@@ -338,7 +386,9 @@ export default function OrderDistributionSettings() {
                           key={index}
                           className="grid grid-cols-[1fr,2fr,2fr,1fr] gap-4 items-center"
                         >
-                          <div>Interval {index + 1}</div>
+                          <div>
+                            {t("ordersSettings.interval", { index: index + 1 })}
+                          </div>
                           <Input
                             type="time"
                             value={interval.start}
@@ -375,14 +425,12 @@ export default function OrderDistributionSettings() {
                     <div className="flex items-center gap-2 ml-auto">
                       <Switch disabled={false} checked={true} />
                       <label className="text-xs text-gray-400">
-                        Use order sum holding
+                        {t("ordersSettings.useordersSettingsumHolding")}
                       </label>
                     </div>
 
                     <div className="flex items-center justify-between">
-                      <label>
-                        Current order amount to show in Attention tab
-                      </label>
+                      <label>{t("ordersSettings.currentOrderAmount")}</label>
                       <div className="flex items-center gap-2">
                         <Input
                           type="number"
@@ -394,27 +442,30 @@ export default function OrderDistributionSettings() {
                     </div>
 
                     <SelectsWithLabel
-                      label="Assign offline executors to order"
+                      label={t("ordersSettings.assignOfflineExecutors")}
                       value="no"
-                      placeholder="No"
-                      options={["No", "Yes"]}
+                      placeholder={t("ordersSettings.no")}
+                      options={[
+                        t("ordersSettings.no"),
+                        t("ordersSettings.yes"),
+                      ]}
                     />
 
                     <SelectsWithLabel
-                      label="Maximum number of clients debts"
+                      label={t("ordersSettings.maximumNumberOfClientsDebts")}
                       value="3"
                       placeholder="3"
                       options={["3", "5", "10"]}
                     />
 
                     <SelectsWithLabel
-                      label="Show in order card in app, website, and to executors"
+                      label={t("ordersSettings.showInOrderCard")}
                       value="order_number"
-                      placeholder="Order number"
+                      placeholder={t("ordersSettings.orderNumber")}
                       options={[
-                        "Order serial number",
-                        "Alphanumeric order code",
-                        "Order number from external system",
+                        t("ordersSettings.ordersSettingserialNumber"),
+                        t("ordersSettings.alphanumericOrderCode"),
+                        t("ordersSettings.orderNumberFromExternalSystem"),
                       ]}
                     />
                   </div>
@@ -423,67 +474,72 @@ export default function OrderDistributionSettings() {
 
               {/* Add new sections */}
               <div className=" pt-6 space-y-6 border-t border-[#3A3A3C]">
-                <h2 className="text-lg font-medium">Order Form</h2>
+                <h2 className="text-lg font-medium">
+                  {t("ordersSettings.orderForm")}
+                </h2>
 
                 <div className="flex flex-col gap-6">
                   <SelectsWithLabel
-                    label={`Add "phone" field to each order point`}
+                    label={t("ordersSettings.addPhoneField")}
                     value="no"
-                    placeholder="No"
-                    options={["No", "Yes"]}
+                    placeholder={t("ordersSettings.no")}
+                    options={[t("ordersSettings.no"), t("ordersSettings.yes")]}
                   />
 
                   <SelectsWithLabel
-                    label='Add "comment" field to each order point'
+                    label={t("ordersSettings.addCommentField")}
                     value="no"
-                    placeholder="No"
-                    options={["No", "Yes"]}
+                    placeholder={t("ordersSettings.no")}
+                    options={[t("ordersSettings.no"), t("ordersSettings.yes")]}
                   />
                   <SelectsWithLabel
-                    label="Dispatcher comment"
+                    label={t("ordersSettings.dispatcherComment")}
                     value="no"
-                    placeholder="No"
-                    options={["No", "Yes"]}
-                  />
-
-                  <SelectsWithLabel
-                    label="Driver payment"
-                    value="no"
-                    placeholder="No"
-                    options={["No", "Yes"]}
+                    placeholder={t("ordersSettings.no")}
+                    options={[t("ordersSettings.no"), t("ordersSettings.yes")]}
                   />
 
                   <SelectsWithLabel
-                    label="Display 'Terminal' payment type in order card in admin panel and client's account"
+                    label={t("ordersSettings.driverPayment")}
                     value="no"
-                    placeholder="No"
-                    options={["No", "Yes"]}
+                    placeholder={t("ordersSettings.no")}
+                    options={[t("ordersSettings.no"), t("ordersSettings.yes")]}
+                  />
+
+                  <SelectsWithLabel
+                    label={t("ordersSettings.displayTerminalPaymentType")}
+                    value="no"
+                    placeholder={t("ordersSettings.no")}
+                    options={[t("ordersSettings.no"), t("ordersSettings.yes")]}
                   />
 
                   <div className="flex items-center gap-2 ml-auto">
                     <Switch disabled={false} checked={true} />
                     <label className="text-xs text-gray-400">
-                      Show chat between client and driver
+                      {t("ordersSettings.showChatBetweenClientAndDriver")}
                     </label>
                   </div>
                 </div>
               </div>
 
               <div className=" pt-6 border-t border-[#3A3A3C]">
-                <h2 className="text-lg font-medium">Preliminary Orders</h2>
+                <h2 className="text-lg font-medium">
+                  {t("ordersSettings.preliminaryordersSettings")}
+                </h2>
 
                 <div className="flex flex-col gap-6">
                   <SelectsWithLabel
-                    label="Send PUSH notification about preliminary order to executors not on shift"
+                    label={t(
+                      "ordersSettings.sendPushNotificationPreliminaryOrder"
+                    )}
                     value="yes"
-                    placeholder="Yes"
-                    options={["Yes", "No"]}
+                    placeholder={t("ordersSettings.yes")}
+                    options={[t("ordersSettings.yes"), t("ordersSettings.no")]}
                   />
 
                   <div className="flex items-center justify-between">
                     <label>
-                      Consider order preliminary if time until submission is
-                      more than
+                      {t("ordersSettings.considerOrderPreliminary")}
                     </label>
                     <div className="flex items-center gap-2">
                       <Input
@@ -491,31 +547,33 @@ export default function OrderDistributionSettings() {
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>min.</span>
+                      <span>{t("ordersSettings.minutes")}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <Switch disabled={false} checked={true} />
                     <label className="text-xs text-gray-400">
-                      Limit visibility time of preliminary orders for executor
+                      {t("ordersSettings.limitVisibilityTime")}
                     </label>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <label>Automatically enters distribution after</label>
+                    <label>
+                      {t("ordersSettings.automaticallyEntersDistributionAfter")}
+                    </label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="number"
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>min.</span>
+                      <span>{t("ordersSettings.minutes")}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <label>Notify executor after</label>
+                    <label>{t("ordersSettings.notifyExecutorAfter")}</label>
                     <div className="grid grid-cols-3 gap-4">
                       <div className="flex items-center gap-2">
                         <Input
@@ -523,7 +581,7 @@ export default function OrderDistributionSettings() {
                           value="20"
                           className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                         />
-                        <span>min.</span>
+                        <span>{t("ordersSettings.minutes")}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Input
@@ -531,7 +589,7 @@ export default function OrderDistributionSettings() {
                           value="20"
                           className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                         />
-                        <span>min.</span>
+                        <span>{t("ordersSettings.minutes")}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Input
@@ -539,14 +597,16 @@ export default function OrderDistributionSettings() {
                           value="20"
                           className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                         />
-                        <span>min.</span>
+                        <span>{t("ordersSettings.minutes")}</span>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <label>
-                      Preliminary order rejection without blocking for
+                      {t(
+                        "ordersSettings.preliminaryOrderRejectionWithoutBlocking"
+                      )}
                     </label>
                     <div className="flex items-center gap-2">
                       <Input
@@ -554,25 +614,15 @@ export default function OrderDistributionSettings() {
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>min.</span>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between">
-                    <label>Block executor for preliminary orders for</label>
-                    <div className="flex items-center gap-2">
-                      <Input
-                        type="number"
-                        value="20"
-                        className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
-                      />
-                      <span>min.</span>
+                      <span>{t("ordersSettings.minutes")}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <label>
-                      Allow executor to start preliminary order after
+                      {t(
+                        "ordersSettings.blockExecutorForPreliminaryordersSettings"
+                      )}
                     </label>
                     <div className="flex items-center gap-2">
                       <Input
@@ -580,14 +630,15 @@ export default function OrderDistributionSettings() {
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>min.</span>
+                      <span>{t("ordersSettings.minutes")}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <label>
-                      Do not allow taking new orders for X minutes before
-                      nearest preliminary order
+                      {t(
+                        "ordersSettings.allowExecutorToStartPreliminaryOrderAfter"
+                      )}
                     </label>
                     <div className="flex items-center gap-2">
                       <Input
@@ -595,30 +646,55 @@ export default function OrderDistributionSettings() {
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>min.</span>
+                      <span>{t("ordersSettings.minutes")}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <label>
+                      {t(
+                        "ordersSettings.doNotAllowTakingNewordersSettingsForXMinutesBefore"
+                      )}
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        value="20"
+                        className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
+                      />
+                      <span>{t("ordersSettings.minutes")}</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-6 pt-6 border-t border-[#3A3A3C]">
-                <h2 className="text-lg font-medium">Order Exchange</h2>
+                <h2 className="text-lg font-medium">
+                  {t("ordersSettings.orderExchange")}
+                </h2>
 
                 <SelectsWithLabel
-                  label="Transfer order to another system"
-                  placeholder="Manually"
-                  options={["Manually", "Automatic"]}
+                  label={t("ordersSettings.transferOrderToAnotherSystem")}
+                  placeholder={t("ordersSettings.manually")}
+                  options={[
+                    t("ordersSettings.manually"),
+                    t("ordersSettings.automatic"),
+                  ]}
                   value="manual"
                 />
               </div>
 
               <div className="space-y-6 pt-6 border-t border-[#3A3A3C]">
-                <h2 className="text-lg font-medium">Notifications</h2>
+                <h2 className="text-lg font-medium">
+                  {t("ordersSettings.notifications")}
+                </h2>
 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <label>
-                      Number of call attempts if client doesn't answer
+                      {t(
+                        "ordersSettings.numberOfCallAttemptsIfClientDoesNotAnswer"
+                      )}
                     </label>
                     <div className="flex items-center gap-2">
                       <Input
@@ -626,14 +702,15 @@ export default function OrderDistributionSettings() {
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>pcs.</span>
+                      <span>{t("ordersSettings.pcs")}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <label>
-                      Time after which client is considered to have listened to
-                      notification
+                      {t(
+                        "ordersSettings.timeAfterWhichClientIsConsideredToHaveListened"
+                      )}
                     </label>
                     <div className="flex items-center gap-2">
                       <Input
@@ -641,14 +718,17 @@ export default function OrderDistributionSettings() {
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>sec.</span>
+                      <span>{t("ordersSettings.seconds")}</span>
                     </div>
                   </div>
 
                   <SelectsWithLabel
-                    label="Send order report to client via"
-                    placeholder="Email"
-                    options={["Email", "SMS"]}
+                    label={t("ordersSettings.sendOrderReportToClientVia")}
+                    placeholder={t("ordersSettings.email")}
+                    options={[
+                      t("ordersSettings.email"),
+                      t("ordersSettings.sms"),
+                    ]}
                     value="email"
                   />
                 </div>
@@ -656,36 +736,44 @@ export default function OrderDistributionSettings() {
 
               {/* Add Reviews section */}
               <div className="space-y-6 pt-6 border-t border-[#3A3A3C]">
-                <h2 className="text-lg font-medium">Reviews</h2>
+                <h2 className="text-lg font-medium">
+                  {t("ordersSettings.reviews")}
+                </h2>
 
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <label>Minimum client rating to create an order</label>
+                    <label>
+                      {t("ordersSettings.minimumClientRatingToCreateOrder")}
+                    </label>
                     <div className="flex items-center gap-2">
                       <Input
                         type="number"
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span className="text-transparent select-none">pcs.</span>
+                      <span className="text-transparent select-none">
+                        {t("ordersSettings.pcs")}
+                      </span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
-                    <label>Add 5-star rating to client</label>
+                    <label>{t("ordersSettings.add5StarRatingToClient")}</label>
                     <div className="flex items-center gap-2 ">
                       <Input
                         type="number"
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span>pcs.</span>
+                      <span>{t("ordersSettings.pcs")}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <label>
-                      Number of recent client reviews considered in rating
+                      {t(
+                        "ordersSettings.numberOfRecentClientReviewsConsideredInRating"
+                      )}
                     </label>
                     <div className="flex items-center gap-2">
                       <Input
@@ -693,27 +781,31 @@ export default function OrderDistributionSettings() {
                         value="20"
                         className="w-[100px] bg-[#3A3A3C] border-[#48484A] text-white"
                       />
-                      <span className="text-transparent select-none">pcs.</span>
+                      <span className="text-transparent select-none">
+                        {t("ordersSettings.pcs")}
+                      </span>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="flex justify-between pt-6 border-t border-[#3A3A3C]">
-                <h2 className="text-lg">Client Personal Account Module</h2>
+                <h2 className="text-lg">
+                  {t("ordersSettings.clientPersonalAccountModule")}
+                </h2>
 
                 <div className="space-y-4">
                   <div className="flex items-center gap-2">
                     <Switch disabled={false} checked={true} />
                     <label className="text-xs text-gray-400">
-                      Allow client to suggest their price
+                      {t("ordersSettings.allowClientToSuggestTheirPrice")}
                     </label>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <Switch disabled={false} checked={true} />
                     <label className="text-xs text-gray-400">
-                      Show executor's phone number to client
+                      {t("ordersSettings.showExecutorsPhoneNumberToClient")}
                     </label>
                   </div>
                 </div>
@@ -723,8 +815,9 @@ export default function OrderDistributionSettings() {
         </Card>
       </div>
       <button className=" ml-auto py-2 px-6 bg-primary hover:bg-primary/80 text-black hover:text-gray-100 rounded-md transition">
-        Save
+        {t("ordersSettings.save")}
       </button>
+      <pre style={{ display: "none" }}>{JSON.stringify({}, null, 2)}</pre>
     </div>
   );
 }

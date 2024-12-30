@@ -192,12 +192,9 @@ export default function Profile({
       <div className="col-span-1 overflow-hidden rounded-lg">
         <Card className="card-shape border-none w-full mb-6">
           <CardContent className="pt-6">
-            <div className="rounded-full aspect-square overflow-hidden">
+            <div className="rounded-full overflow-hidden">
               <img
-                src={
-                  profile?.media?.address ||
-                  "https://up.yimg.com/ib/th?id=OIP.HxV79tFMPfBAIo0BBF-sOgHaEy&pid=Api&rs=1&c=1&qlt=95&w=151&h=97"
-                }
+                src={profile?.media?.address || "/placeholder-image.jpg"}
                 alt="Driver Media"
                 className="w-full h-full object-cover"
               />

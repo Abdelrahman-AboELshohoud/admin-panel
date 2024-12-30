@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import i18n from "../../translation/i18n";
 
 export default function ChangeLanguageBtn() {

@@ -370,38 +370,40 @@ export default function CMCSettings() {
                 Configured Providers
               </h3>
               <div className="space-y-4">
-                {providers.map((provider) => (
-                  <div
-                    key={provider.id}
-                    className="flex items-center justify-between p-4 bg-gray-800 rounded-md"
-                  >
-                    <div>
-                      <p className="font-medium">{provider.name}</p>
-                      <p className="text-sm text-gray-400">{provider.type}</p>
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleEditProvider(provider.id)}
-                        className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                      >
-                        Edit
-                      </button>
-                      {!provider.isDefault && (
+                {providers &&
+                  providers.length > 0 &&
+                  providers.map((provider) => (
+                    <div
+                      key={provider.id}
+                      className="flex items-center justify-between p-4 bg-gray-800 rounded-md"
+                    >
+                      <div>
+                        <p className="font-medium">{provider.name}</p>
+                        <p className="text-sm text-gray-400">{provider.type}</p>
+                      </div>
+                      <div className="flex gap-2">
                         <button
-                          onClick={() => handleSetDefault(provider.id)}
+                          onClick={() => handleEditProvider(provider.id)}
                           className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
                         >
-                          Set Default
+                          Edit
                         </button>
-                      )}
-                      {provider.isDefault && (
-                        <span className="px-3 py-1 text-sm bg-green-500 text-white rounded-md">
-                          Default
-                        </span>
-                      )}
+                        {!provider.isDefault && (
+                          <button
+                            onClick={() => handleSetDefault(provider.id)}
+                            className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                          >
+                            Set Default
+                          </button>
+                        )}
+                        {provider.isDefault && (
+                          <span className="px-3 py-1 text-sm bg-green-500 text-white rounded-md">
+                            Default
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
           )}

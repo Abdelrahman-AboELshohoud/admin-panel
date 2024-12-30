@@ -1,137 +1,307 @@
-import { useState, useEffect } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Switch from "../../components/common/Switch";
-import Map from "../../components/common/Map";
 import { Button } from "../../components/ui/button";
-import { useNavigate, Link } from "react-router-dom";
-import { Plus } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { RegionListGQL } from "../../graphql/requests";
+import { toast } from "react-hot-toast";
+import { GoogleMap, Polygon, useLoadScript } from "@react-google-maps/api";
+import {
+  RegionListGQL,
+  UpdateRegionGQL,
+  type Region,
+} from "../../graphql/requests";
+import EditRegionDialog from "../../components/regions/EditRegionDialog";
+import AddInMap from "./AddInMap";
 
-interface Region {
-  id: string;
-  name: string;
-  enabled: boolean;
-  location: Array<Array<{ lat: number; lng: number }>>;
-}
+const mapContainerStyle = {
+  width: "100%",
+  height: "500px",
+};
 
-function Switches() {
-  const { t } = useTranslation();
-  const [regions, setRegions] = useState<Region[]>([]);
-  const [activeRegions, setActiveRegions] = useState<string[]>([]);
-  const navigate = useNavigate();
+const defaultCenter = {
+  lat: 55.7887,
+  lng: 49.1221,
+};
 
-  useEffect(() => {
-    const fetchRegions = async () => {
-      try {
-        const response = await RegionListGQL({
-          paging: {
-            limit: 100,
-          },
-        });
-
-        if (response.data?.regions?.nodes) {
-          setRegions(response.data.regions.nodes);
-
-          // Initialize active states
-          const initialActiveRegions = response.data.regions.nodes
-            .filter((region: Region) => region.enabled)
-            .map((region: Region) => region.id);
-
-          setActiveRegions(initialActiveRegions);
-        }
-      } catch (error) {
-        console.error("Error fetching regions:", error);
-      }
-    };
-
-    fetchRegions();
-  }, []);
-
-  const handleToggleRegion = (regionId: string) => {
-    setActiveRegions((prev) =>
-      prev.includes(regionId)
-        ? prev.filter((id) => id !== regionId)
-        : [...prev, regionId]
-    );
-  };
-
-  return (
-    <div className="bg-transparent text-zinc-100 p-4 ml-4 rounded-lg flex justify-between">
-      <div className="flex flex-col w-full gap-4">
-        {regions.map((region) => (
-          <div key={region.id} className="flex items-center justify-between">
-            <Link
-              to={`/control-panel/directories/regions/${region.id}`}
-              className="text-sm hover:text-blue-400 transition-colors"
-            >
-              {region.name}
-            </Link>
-            <Switch
-              disabled={false}
-              checked={activeRegions.includes(region.id)}
-              onChange={() => handleToggleRegion(region.id)}
-            />
-          </div>
-        ))}
-
-        <Button
-          className="add-button w-fit ml-auto mt-4"
-          onClick={() => {
-            navigate("/control-panel/directories/add-in-map");
-          }}
-        >
-          <Plus className="mr-2" />
-          {t("buttonsAdd.addInMap")}
-        </Button>
-      </div>
-    </div>
-  );
-}
+const libraries: ("drawing" | "geometry" | "places" | "visualization")[] = [
+  "drawing",
+  "geometry",
+];
 
 export default function MapPage() {
   const { t } = useTranslation();
   const [regions, setRegions] = useState<Region[]>([]);
-  const [activeRegions, setActiveRegions] = useState<string[]>([]);
+  const [showDialog, setShowDialog] = useState(false);
+  const [showAddInMap, setShowAddInMap] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [_map, setMap] = useState<google.maps.Map | null>(null);
+  const [visibleRegions, setVisibleRegions] = useState<Set<string>>(new Set());
+  const [editingRegion, setEditingRegion] = useState<Region | null>(null);
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
+    libraries,
+  });
+
+  // Initialize visible regions
+  useEffect(() => {
+    const initialVisible = new Set(regions.map((r) => r.id));
+    setVisibleRegions(initialVisible);
+  }, [regions]);
+
+  const fetchRegions = useCallback(async () => {
+    try {
+      const response = await RegionListGQL({});
+      if (response.data?.regions) {
+        setRegions(response.data.regions);
+      }
+    } catch (error) {
+      console.error("Error fetching regions:", error);
+      toast.error(t("regions.errors.fetchFailed"));
+    }
+  }, [t]);
 
   useEffect(() => {
-    const fetchRegions = async () => {
-      try {
-        const response = await RegionListGQL({
-          paging: {
-            limit: 100,
-          },
-        });
-
-        if (response.data?.regions?.nodes) {
-          setRegions(response.data.regions.nodes);
-
-          const initialActiveRegions = response.data.regions.nodes
-            .filter((region: Region) => region.enabled)
-            .map((region: Region) => region.id);
-
-          setActiveRegions(initialActiveRegions);
-        }
-      } catch (error) {
-        console.error("Error fetching regions:", error);
-      }
-    };
-
     fetchRegions();
-  }, []);
+  }, [fetchRegions]);
+
+  const handleToggleVisibility = (regionId: string) => {
+    setVisibleRegions((prev) => {
+      const next = new Set(prev);
+      if (next.has(regionId)) {
+        next.delete(regionId);
+      } else {
+        next.add(regionId);
+      }
+      return next;
+    });
+  };
+
+  const handleToggleEnabled = async (regionId: string) => {
+    try {
+      const region = regions.find((r) => r.id === regionId);
+      if (!region) return;
+
+      await UpdateRegionGQL({
+        id: regionId,
+        update: {
+          enabled: region.enabled,
+          name: region.name,
+          currency: region.currency,
+          location: region.location,
+        },
+      });
+
+      setRegions((prev) =>
+        prev.map((r) => (r.id === regionId ? { ...r, enabled: !r.enabled } : r))
+      );
+    } catch (error) {
+      console.error("Error updating region:", error);
+      toast.error(t("regions.errors.updateFailed"));
+    }
+  };
+
+  const handleSave = () => {
+    setIsEditing(false);
+    toast.success(t("regions.changesSaved"));
+  };
+
+  const handleEdit = (region: Region) => {
+    setEditingRegion(region);
+    setShowDialog(true);
+  };
+
+  if (!isLoaded) return <div>Loading...</div>;
 
   return (
-    <div className="flex flex-col bg-transparent p-4">
-      <div className="flex-grow flex flex-col items-center mb-4">
-        <h1 className="text-3xl font-bold text-zinc-100 mb-4 w-full pl-12">
+    <div className="flex flex-col p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-200">
           {t("titles.districts")}
         </h1>
-        <Map
-          regions={regions.filter((region) =>
-            activeRegions.includes(region.id)
+        <div className="flex gap-2">
+          {isEditing && (
+            <Button
+              variant="outline"
+              onClick={() => setIsEditing(false)}
+              className="custom-input"
+            >
+              {t("common.cancel")}
+            </Button>
           )}
-        />
+          <Button
+            onClick={() => {
+              if (isEditing) {
+                handleSave();
+              } else {
+                setIsEditing(true);
+              }
+            }}
+            variant={isEditing ? "default" : "outline"}
+            className="custom-input"
+          >
+            {isEditing ? t("common.save") : t("common.edit")}
+          </Button>
+        </div>
       </div>
-      <Switches />
+
+      <div className="card-shape h-[600px] mb-6">
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          center={defaultCenter}
+          zoom={12}
+          onLoad={setMap}
+          options={{
+            streetViewControl: false,
+            mapTypeControl: false,
+          }}
+        >
+          {regions
+            .filter((region) => visibleRegions.has(region.id))
+            .map((region) => {
+              const polygonPath = region.location?.[0];
+              if (!polygonPath || polygonPath.length < 3) return null;
+
+              return (
+                <Polygon
+                  key={region.id}
+                  paths={polygonPath}
+                  options={{
+                    fillColor: region.enabled ? "#00FF00" : "#FF0000",
+                    fillOpacity: 0.35,
+                    strokeColor: region.enabled ? "#00FF00" : "#FF0000",
+                    strokeWeight: 2,
+                  }}
+                />
+              );
+            })}
+        </GoogleMap>
+      </div>
+
+      <div className="card-shape p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold text-gray-200">
+            {t("regions.list")}
+          </h2>
+          {isEditing && (
+            <Button
+              onClick={() => setShowAddInMap(true)}
+              variant="outline"
+              className="custom-input"
+            >
+              {t("regions.addNew")}
+            </Button>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 gap-4">
+          {regions.map((region) => (
+            <div
+              key={region.id}
+              className="flex items-center justify-between p-4 bg-[#1E1E1E] rounded-lg hover:bg-[#2A2A2A] transition-colors"
+            >
+              <div className="flex items-center gap-4">
+                <div
+                  className="w-4 h-4 rounded-full"
+                  style={{
+                    backgroundColor: region.enabled ? "#00FF00" : "#FF0000",
+                    opacity: 0.6,
+                  }}
+                />
+                <div>
+                  <h3 className="text-gray-200 font-medium">{region.name}</h3>
+                  <p className="text-sm text-gray-400">
+                    {region.location?.[0]?.length || 0} {t("regions.points")}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-400">
+                    {t("regions.showOnMap")}
+                  </span>
+                  <Switch
+                    disabled={false}
+                    checked={visibleRegions.has(region.id)}
+                    onChange={() => handleToggleVisibility(region.id)}
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-400">
+                    {t("regions.status")}
+                  </span>
+                  <Switch
+                    checked={region.enabled}
+                    disabled={false}
+                    onChange={(e) => {
+                      e.stopPropagation();
+                      handleToggleEnabled(region.id);
+                    }}
+                  />
+                </div>
+                {isEditing && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleEdit(region)}
+                  >
+                    {t("common.edit")}
+                  </Button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {showAddInMap && (
+        <AddInMap
+          isOpen={showAddInMap}
+          onClose={() => setShowAddInMap(false)}
+          onSave={async (region: Region) => {
+            setRegions((prev) => [...prev, region]);
+          }}
+        />
+      )}
+
+      <EditRegionDialog
+        region={editingRegion}
+        isOpen={showDialog}
+        onClose={() => {
+          setShowDialog(false);
+          setEditingRegion(null);
+        }}
+        onSave={async (updatedRegion) => {
+          try {
+            await UpdateRegionGQL({
+              id: editingRegion?.id || "",
+              update: updatedRegion,
+            });
+
+            if (editingRegion) {
+              // Update existing region
+              setRegions((prev) =>
+                prev.map((r) =>
+                  r.id === editingRegion.id
+                    ? { ...updatedRegion, id: editingRegion.id }
+                    : r
+                )
+              );
+            } else {
+              // Add new region
+              setRegions((prev) => [
+                ...prev,
+                { ...updatedRegion, id: String(Date.now()) },
+              ]);
+            }
+            setShowDialog(false);
+            setEditingRegion(null);
+            toast.success(t("regions.updateSuccess"));
+          } catch (error) {
+            toast.error(t("regions.errors.updateFailed"));
+          }
+        }}
+      />
     </div>
   );
 }

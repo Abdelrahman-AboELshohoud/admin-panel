@@ -3,17 +3,28 @@
     "personalAccount": "Личный кабинет",
     "logout": "Выйти"
   },
+  "login": {
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "emptyInputs": "Поля не могут быть пустыми",
+    "invalidCredentials": "Неверные учетные данные!",
+    "rememberMe": "Запомнить меня",
+    "forgotPassword": "Забыли пароль?",
+    "login": "Войти"
+  },
   "links": {
     "main": "Главная",
     "orders": "Заказы",
     "customers": {
-      "title": "Клиенты"
+      "title": "Клиенты",
+      "clients": "Клиенты",
+      "services": "Услуги"
     },
     "drivers": {
       "title": "Водители",
-      "cars": "Машины",
+      "cars": "Автомобили",
       "groups": "Группы водителей",
-      "photoControl": "Контроль фото"
+      "photoControl": "Фотоконтроль"
     },
     "reports": {
       "title": "Отчеты",
@@ -22,30 +33,106 @@
       "forPartner": "Для партнера",
       "shifts": "Смены сотрудников",
       "listOfOrders": "Список заказов",
-      "moneyTransactions": "Денежные транзакции",
-      "corporationClients": "Корпоративные клиенты"
+      "moneyTransactions": "Денежные операции",
+      "corporationClients": "Корпоративные клиенты",
+      "sos": "SOS",
+      "complaints": "Жалобы"
     },
     "directories": {
       "title": "Справочники",
       "branches": "Филиалы",
       "partners": "Партнеры",
+      "zonesPrices": "Зональные цены",
       "employees": "Сотрудники",
+      "reviewsParams": "Параметры отзывов",
       "map": "Карта",
       "news": "Новости",
       "addresses": "Адреса"
     },
     "settings": {
       "title": "Настройки",
-      "organizationDetails": "Данные организации",
-      "application": "Приложение для клиентов",
-      "orders": "Настройки заказов",
+      "payment": "Оплата",
+      "application": "Приложение",
+      "orders": "Заказы",
       "cmc": "СМС",
-      "notifications": "Уведомления клиентам",
+      "notifications": "Уведомления",
       "drivers": "Водители",
       "carClasses": "Классы автомобилей",
-      "onlineCheckout": "Онлайн касса",
-      "atc": "АТС"
+      "onlineCheckout": "Онлайн оплата",
+      "atc": "АТС",
+      "configuration": "Конфигурация"
+    },
+    "zonePrices": {
+      "title": "Зональные цены",
+      "create": "Создать зональную цену",
+      "edit": "Редактировать зональную цену",
+      "view": "Просмотр зональной цены",
+      "fields": {
+        "name": "Название",
+        "from": "Откуда",
+        "to": "Куда",
+        "cost": "Стоимость",
+        "services": "Услуги",
+        "fleets": "Автопарки",
+        "timeMultipliers": "Временные множители"
+      },
+      "timeMultiplier": {
+        "title": "Временной множитель",
+        "startTime": "Время начала",
+        "endTime": "Время окончания",
+        "multiply": "Множитель",
+        "add": "Добавить временной множитель"
+      },
+      "actions": {
+        "save": "Сохранить изменения",
+        "delete": "Удалить зону",
+        "edit": "Редактировать зону",
+        "create": "Создать зону"
+      },
+      "messages": {
+        "createSuccess": "Зональная цена успешно создана",
+        "updateSuccess": "Зональная цена успешно обновлена",
+        "deleteSuccess": "Зональная цена успешно удалена",
+        "error": {
+          "create": "Не удалось создать зональную цену",
+          "update": "Не удалось обновить зональную цену",
+          "delete": "Не удалось удалить зональную цену",
+          "fetch": "Не удалось получить зональные цены",
+          "required": "Это поле обязательно",
+          "invalidPoints": "Пожалуйста, выберите обе точки на карте"
+        }
+      },
+      "map": {
+        "instructions": "Нажмите на карту, чтобы установить точки",
+        "fromPoint": "Точка отправления",
+        "toPoint": "Точка назначения",
+        "clear": "Очистить точки"
+      },
+      "filters": {
+        "search": "Поиск зон",
+        "service": "Фильтр по услуге",
+        "fleet": "Фильтр по автопарку"
+      },
+      "noZones": "Зональные цены не найдены",
+      "deleteConfirm": {
+        "title": "Удалить зональную цену",
+        "message": "Вы уверены, что хотите удалить эту зональную цену? Это действие нельзя отменить."
+      }
     }
+  },
+  "settings": {
+    "title": "Настройки",
+    "organizationDetails": "Данные организации",
+    "application": "Приложение для клиентов",
+    "orders": "Настройки заказов",
+    "cmc": "СМС",
+    "notifications": "Уведомления клиентам",
+    "drivers": "Водители",
+    "carClasses": "Классы автомобилей",
+    "onlineCheckout": "Онлайн оплата",
+    "atc": "АТС",
+    "payment": "Оплата",
+    "configuration": "Конфигурация"
   },
   "main": {
     "dateButtons": {
@@ -53,7 +140,7 @@
       "week": "Неделя",
       "month": "Месяц"
     },
-    "online": "В сети",
+    "online": "Онлайн",
     "onOrder": "На заказе",
     "free": "Свободен",
     "onPause": "На паузе"
@@ -68,35 +155,253 @@
       "address": "Адрес",
       "client": "Клиент",
       "executor": "Исполнитель",
-      "comment": "Комментарий"
+      "comment": "Комментарий",
+      "cancel": {
+        "updateReasons": "Обновить причины",
+        "addReason": "Добавить причину",
+        "createReason": "Создать причину",
+        "editReason": "Редактировать причину",
+        "selectUserType": "Выберите тип пользователя",
+        "driver": "Водитель",
+        "rider": "Пассажир",
+        "selectReason": "Выберите причину",
+        "enterReason": "Введите причину",
+        "commentPlaceholder": "Введите комментарий"
+      }
+    },
+    "create": {
+      "title": "Создать новый заказ",
+      "addresses": "Адреса",
+      "addressPlaceholder": "Введите адрес",
+      "addAddress": "Добавить еще адрес",
+      "service": "Услуга",
+      "selectService": "Выберите услугу",
+      "expectedTime": "Ожидаемое время",
+      "waitTime": "Время ожидания (минуты)",
+      "submit": "Создать заказ",
+      "confirmTitle": "Подтвердить создание заказа",
+      "confirmDescription": "Вы уверены, что хотите создать этот заказ?"
+    },
+    "success": {
+      "created": "Заказ успешно создан"
+    },
+    "errors": {
+      "fetchServicesFailed": "Не удалось получить услуги",
+      "createFailed": "Не удалось создать заказ"
+    },
+    "actions": {
+      "cancel": "Отменить",
+      "noActions": "Нет действий"
     },
     "statusFilter": {
       "all": "Все",
       "inProgress": "В процессе",
-      "completed": "Завершено",
-      "cancelled": "Отменено"
+      "completed": "Завершен",
+      "cancelled": "Отменен"
     },
     "filters": {
       "status": "Статус",
       "allStatuses": "Все статусы",
-      "completed": "Завершено",
-      "cancelled": "Отменено",
+      "completed": "Завершен",
+      "cancelled": "Отменен",
       "inProgress": "В процессе",
-      "driverCanceled": "Отменено водителем",
-      "riderCanceled": "Отменено клиентом",
-      "finished": "Завершено"
+      "driverCanceled": "Отменен водителем",
+      "riderCanceled": "Отменен пассажиром",
+      "finished": "Завершен"
     },
     "table": {
       "date": "Дата",
-      "status": "Статус",
       "distance": "Расстояние",
       "duration": "Длительность",
-      "cost": "Стоимость",
-      "addresses": "Адреса"
+      "addresses": "Адреса",
+      "createdOn": "Создан",
+      "expectedTime": "Ожидаемое время",
+      "orderNumber": "Номер заказа",
+      "client": "Клиент",
+      "rider": "Пассажир",
+      "status": "Статус",
+      "cost": "Стоимость"
     },
     "noOrders": "Заказы не найдены",
     "summary": {
-      "total": "Итоговая сумма"
+      "total": "Общая сумма"
+    }
+  },
+  "leftCustomerEdit": {
+    "name": "Название",
+    "baseFare": "Базовый тариф",
+    "perHundredMeters": "За 100 метров",
+    "perMinuteDrive": "За минуту поездки",
+    "perMinuteWait": "За минуту ожидания",
+    "minimumFee": "Минимальная стоимость",
+    "paymentMethod": "Способ оплаты",
+    "twoWayAvailable": "Доступна поездка туда-обратно",
+    "serviceOptions": {
+      "title": "Опции услуги",
+      "manage": "Управление опциями",
+      "create": "Создать опцию",
+      "edit": "Редактировать опцию",
+      "delete": "Удалить опцию",
+      "view": "Просмотр опции",
+      "noOptions": "Нет доступных опций",
+      "fields": {
+        "name": "Название опции",
+        "type": "Тип опции",
+        "icon": "Иконка",
+        "fee": "Дополнительная плата",
+        "description": "Описание"
+      },
+      "types": {
+        "free": "Бесплатно",
+        "paid": "Платно",
+        "required": "Обязательно",
+        "twoway": "Туда-обратно"
+      },
+      "actions": {
+        "add": "Добавить опцию",
+        "save": "Сохранить изменения",
+        "cancel": "Отмена",
+        "confirm": "Подтвердить"
+      },
+      "messages": {
+        "createSuccess": "Опция услуги успешно создана",
+        "updateSuccess": "Опция услуги успешно обновлена",
+        "deleteSuccess": "Опция услуги успешно удалена",
+        "error": {
+          "create": "Не удалось создать опцию услуги",
+          "update": "Не удалось обновить опцию услуги",
+          "delete": "Не удалось удалить опцию услуги",
+          "fetch": "Не удалось получить опции услуги",
+          "required": "Это поле обязательно"
+        }
+      },
+      "deleteConfirm": {
+        "title": "Удалить опцию услуги",
+        "message": "Вы уверены, что хотите удалить эту опцию услуги? Это действие нельзя отменить."
+      }
+    }
+  },
+  "rightCustomerEdit": {
+    "description": "Описание",
+    "searchRadius": "Радиус поиска",
+    "maximumDistance": "Максимальное расстояние",
+    "options": "Опции",
+    "option": "Опция",
+    "addOption": "Добавить опцию",
+    "optionName": "Название опции",
+    "prepayPercent": "Процент предоплаты",
+    "providerSharePercent": "Процент доли провайдера",
+    "providerShareFlat": "Фиксированная доля провайдера",
+    "media": "Медиа"
+  },
+  "bottomCustomerEdit": {
+    "cancellationFee": "Плата за отмену",
+    "driverShare": "Доля водителя",
+    "providerShare": "Доля провайдера",
+    "distanceMultiplier": "Множитель расстояния",
+    "addTimeMultiplier": "Добавить временной множитель",
+    "startTime": "Время начала",
+    "endTime": "Время окончания",
+    "multiply": "Множитель",
+    "category": "Категория",
+    "regions": "Регионы",
+    "regionName": "Название региона",
+    "regionDescription": "Описание региона",
+    "addRegion": "Добавить регион",
+    "currency": "Валюта",
+    "status": "Статус",
+    "block": "Блокировать",
+    "timeMultiplier": "Временной множитель",
+    "addDistanceMultiplier": "Добавить множитель расстояния",
+    "multipliers": "Множители",
+    "distanceMultipliers": "Множители расстояния",
+    "timeMultipliers": "Временные множители",
+    "from": "От",
+    "to": "До",
+    "multiplier": "Множитель",
+    "showOnMap": "Показать на карте"
+  },
+  "clients": {
+    "orders": "Заказы",
+    "totalOrders": "Всего заказов",
+    "balance": "Баланс",
+    "noWallet": "Нет кошелька",
+    "clientDetails": "Детали клиента",
+    "registeredOn": "Зарегистрирован",
+    "firstName": "Имя",
+    "lastName": "Фамилия",
+    "mobile": "Мобильный телефон",
+    "email": "Электронная почта",
+    "gender": "Пол",
+    "male": "Мужской",
+    "female": "Женский",
+    "wallets": "Кошельки",
+    "wallet": "Кошелек",
+    "fareCalculator": {
+      "title": "Калькулятор стоимости",
+      "pickupLocation": "Место посадки",
+      "dropoffLocation": "Место высадки",
+      "searchPlaceholder": "Поиск места...",
+      "calculateFare": "Рассчитать стоимость",
+      "estimatedFare": "Примерная стоимость",
+      "distance": "Расстояние",
+      "duration": "Длительность",
+      "basePrice": "Базовая цена",
+      "perKm": "За километр",
+      "perMinute": "За минуту",
+      "total": "Итого",
+      "clearRoute": "Очистить маршрут",
+      "errors": {
+        "pickupRequired": "Необходимо указать место посадки",
+        "dropoffRequired": "Необходимо указать место высадки",
+        "calculationFailed": "Не удалось рассчитать стоимость",
+        "locationNotFound": "Место не найдено"
+      },
+      "dragMarker": "Перетащите маркер для уточнения места"
+    },
+    "dispatcherCalculator": {
+      "title": "Калькулятор диспетчера",
+      "pickupPoint": "Точка посадки",
+      "dropoffPoint": "Точка высадки",
+      "calculate": "Рассчитать стоимость",
+      "clear": "Очистить точки",
+      "results": {
+        "title": "Результаты расчета",
+        "distance": "Расстояние",
+        "duration": "Длительность",
+        "cost": "Примерная стоимость",
+        "currency": "Валюта"
+      },
+      "errors": {
+        "pickupRequired": "Пожалуйста, выберите точку посадки",
+        "dropoffRequired": "Пожалуйста, выберите точку высадки",
+        "calculationFailed": "Не удалось рассчитать стоимость"
+      },
+      "instructions": "Нажмите на карту, чтобы установить точки посадки и высадки"
+    },
+    "noClient": "Клиент не найден",
+    "deleteConfirmation": "Удалить клиента",
+    "online": "Онлайн",
+    "addTransaction": "Добавить транзакцию",
+    "noTransactions": "Нет транзакций",
+    "profile": "Профиль",
+    "buttons": {
+      "add": "Добавить клиента"
+    },
+    "client": {
+      "status": {
+        "enabled": "Активен",
+        "disabled": "Отключен"
+      }
+    }
+  },
+  "services": {
+    "addService": "Добавить услугу",
+    "addCategory": "Добавить категорию",
+    "categoryName": "Название категории",
+    "noServices": "Нет услуг",
+    "create": {
+      "title": "Создать новую услугу"
     }
   },
   "drivers": {
@@ -109,21 +414,31 @@
       "partners": "Партнеры",
       "carClass": "Класс автомобиля",
       "carColor": "Цвет автомобиля",
-      "autoOptions": "Настройки автомобиля",
-      "driversOptions": "Настройки водителя"
+      "autoOptions": "Опции автомобиля",
+      "driversOptions": "Опции водителя"
+    },
+    "columns": {
+      "name": "Имя",
+      "date_of_registration": "Дата регистрации",
+      "photo": "Фото",
+      "phone_number": "Номер телефона",
+      "rating": "Рейтинг",
+      "status": "Статус",
+      "reviews_count": "Количество отзывов"
     },
     "driver": {
       "statusTitle": "Статус",
+      "title": "Водитель",
       "status": {
-        "pendingApproval": "Ожидает одобрения",
-        "approved": "Одобрено",
+        "pendingApproval": "Ожидает подтверждения",
+        "approved": "Подтвержден",
         "blocked": "Заблокирован",
         "softReject": "Мягкий отказ",
         "hardReject": "Жесткий отказ",
-        "offline": "Не в сети",
-        "WaitingDocuments": "Ожидает документов",
-        "inService": "На смене",
-        "online": "В сети"
+        "offline": "Оффлайн",
+        "waitingDocuments": "Ожидает документы",
+        "inService": "На службе",
+        "online": "Онлайн"
       },
       "profile": {
         "personalInformation": "Личная информация",
@@ -136,22 +451,22 @@
         "bankInformation": "Банковская информация",
         "bankName": "Название банка",
         "bankAccountNumber": "Номер счета",
-        "bankSwift": "SWIFT банка",
+        "bankSwift": "SWIFT код",
         "blocked": "Заблокирован",
         "save": "Сохранить",
         "edit": "Редактировать",
-        "noDocuments": "Документы отсутствуют.",
-        "cars": "Машина",
-        "carModel": "Модель машины",
-        "carColor": "Цвет машины",
-        "carPlateNumber": "Госномер",
-        "carProductionYear": "Год выпуска"
+        "noDocuments": "В настоящее время документы не предоставлены.",
+        "cars": "Автомобиль",
+        "carModel": "Модель автомобиля",
+        "carColor": "Цвет автомобиля",
+        "carPlateNumber": "Номер автомобиля",
+        "carProductionYear": "Год выпуска автомобиля"
       }
     },
     "buttons": {
       "add": "Добавить"
     },
-    "online": "Водители в сети"
+    "online": "Водители онлайн"
   },
   "tabs": {
     "active": "Активные",
@@ -166,34 +481,34 @@
     "edit": "Редактировать"
   },
   "request": {
-    "Requested": "Запрошено",
-    "NotFound": "Не найдено",
-    "NoCloseFound": "Ближайшие не найдены",
-    "Found": "Найдено",
+    "Requested": "Запрошен",
+    "NotFound": "Не найден",
+    "NoCloseFound": "Близких не найдено",
+    "Found": "Найден",
     "DriverAccepted": "Водитель принял",
     "Arrived": "Прибыл",
     "WaitingForPrefy": "Ожидание предоплаты",
     "DriverCanceled": "Водитель отменил",
-    "RiderCanceled": "Клиент отменил",
-    "Started": "Начато",
-    "WaitingForPostPay": "Ожидание постоплаты",
+    "RiderCanceled": "Пассажир отменил",
+    "Started": "Начат",
+    "WaitingForPostPay": "Ожидание оплаты",
     "WaitingForReview": "Ожидание отзыва",
-    "Finished": "Завершено",
-    "Booked": "Забронировано",
-    "Expired": "Истекло"
+    "Finished": "Завершен",
+    "Booked": "Забронирован",
+    "Expired": "Истек"
   },
   "transactionType": {
-    "OrderFee": "Комиссия за заказ",
+    "OrderFee": "Плата за заказ",
     "Cash": "Наличные",
     "BankTransfer": "Банковский перевод",
     "Gift": "Подарок",
     "Commission": "Комиссия",
-    "Correction": "Коррекция",
+    "Correction": "Корректировка",
     "InAppPayment": "Оплата в приложении",
     "Withdraw": "Вывод"
   },
   "transactionStatus": {
-    "Processing": "Обрабатывается",
+    "Processing": "В обработке",
     "Done": "Выполнено",
     "Canceled": "Отменено",
     "Rejected": "Отклонено"
@@ -201,7 +516,7 @@
   "gender": {
     "male": "Мужской",
     "female": "Женский",
-    "genderless": "Без пола"
+    "genderless": "Не указан"
   },
   "complaintStatus": {
     "submitted": "Отправлено",
@@ -214,15 +529,75 @@
     "falseAlarm": "Ложная тревога",
     "resolved": "Решено"
   },
+  "driversOrders": {
+    "noOrders": "Нет заказов",
+    "noOrdersDescription": "Для этого водителя заказы не найдены.",
+    "inputs": {
+      "id": "ID",
+      "createdOn": "Создан",
+      "status": "Статус",
+      "distance": "Расстояние",
+      "duration": "Длительность",
+      "cost": "Стоимость",
+      "client": "Клиент",
+      "rider": "Пассажир",
+      "driver": "Водитель",
+      "actions": "Действия"
+    }
+  },
+  "viewOrders": {
+    "noOrders": "Нет заказов",
+    "noOrdersDescription": "Для этого водителя заказы не найдены.",
+    "rider": "Пассажир",
+    "noMessages": "Нет сообщений",
+    "route": "Маршрут",
+    "chat": "Чат",
+    "driver": "Водитель",
+    "name": "Имя",
+    "mobile": "Мобильный",
+    "noRider": "Нет пассажира",
+    "noDriver": "Нет водителя",
+    "orderDetails": "Детали заказа",
+    "id": "ID",
+    "status": "Статус",
+    "created": "Создан",
+    "cost": "Стоимость",
+    "finalCost": "Итоговая стоимость",
+    "addresses": "Адреса",
+    "orderNumber": "Номер заказа",
+    "expectedTime": "Ожидаемое время",
+    "waitTime": "Время ожидания",
+    "service": "Услуга",
+    "paymentMethod": "Способ оплаты",
+    "paymentStatus": "Статус оплаты",
+    "distance": "Расстояние",
+    "duration": "Длительность",
+    "startTime": "Время начала",
+    "finishTime": "Время окончания",
+    "actions": {
+      "cancel": "Отменить заказ",
+      "createReason": "Создать причину",
+      "viewDetails": "Просмотр деталей"
+    },
+    "messages": {
+      "cancelConfirm": "Вы уверены, что хотите отменить этот заказ?",
+      "cancelSuccess": "Заказ успешно отменен",
+      "cancelError": "Не удалось отменить заказ",
+      "assignSuccess": "Водитель успешно назначен",
+      "assignError": "Не удалось назначить водителя"
+    }
+  },
   "cars": {
-    "title": "Машины",
+    "title": "Автомобили",
+    "carPlate": "Номер автомобиля",
+    "carProductionYear": "Год выпуска",
     "filters": {
       "allCities": "Все города",
       "profession": "Все профессии",
       "partners": "Партнеры"
     },
     "details": {
-      "carName": "Название машины",
+      "carName": "Название автомобиля",
       "callSign": "Позывной",
       "branch": "Филиал",
       "owner": "Владелец",
@@ -231,10 +606,10 @@
         "driver": "Водитель",
         "company": "Компания"
       },
-      "selectBrand": "Выберите бренд",
+      "selectBrand": "Выберите марку",
       "selectModel": "Выберите модель",
       "models": {
-        "eClass": "Е-класс"
+        "eClass": "E-Class"
       },
       "year": "Год",
       "selectYear": "Выберите год",
@@ -248,25 +623,25 @@
       "colors": {
         "black": "Черный"
       },
-      "stateNumber": "Госномер",
+      "stateNumber": "Государственный номер",
       "additionalInfo": "Дополнительная информация",
       "partners": "Партнеры",
       "selectPartner": "Выберите партнера",
       "ctp": {
         "title": "ОСАГО",
         "number": "Номер",
-        "seriesNumber": "Серия",
+        "seriesNumber": "Серия номера",
         "startDate": "Дата начала",
         "endDate": "Дата окончания",
         "insuranceCompany": "Страховая компания",
         "selectInsuranceCompany": "Выберите страховую компанию"
       },
       "ptsd": {
-        "title": "ДК",
+        "title": "ОСГОП",
         "number": "Номер",
         "startDate": "Дата начала",
         "endDate": "Дата окончания",
-        "seriesNumber": "Серия",
+        "seriesNumber": "Серия номера",
         "insuranceCompany": "Страховая компания",
         "selectInsuranceCompany": "Выберите страховую компанию"
       },
@@ -275,16 +650,16 @@
         "number": "Номер",
         "startDate": "Дата начала",
         "endDate": "Дата окончания",
-        "issuedBy": "Выдано",
-        "selectIssuer": "Выберите выдавшего"
+        "issuedBy": "Кем выдана",
+        "selectIssuer": "Выберите организацию"
       },
       "scan": "Скан"
     },
     "car": {
-      "title": "Машина"
+      "title": "Автомобиль"
     },
-    "model": "Модель машины",
-    "color": "Цвет машины",
+    "model": "Модель автомобиля",
+    "color": "Цвет автомобиля",
     "dateButtons": {
       "today": "Сегодня",
       "yesterday": "Вчера",
@@ -294,10 +669,10 @@
     "table": {
       "time": "Время",
       "totalOrders": "Всего заказов",
-      "numberOfPaid": "Оплаченные",
+      "numberOfPaid": "Количество оплаченных",
       "amountPaid": "Сумма оплаченных",
-      "quantityUnpaid": "Неоплаченные",
-      "amountUnpaidCancelled": "Сумма отмененных",
+      "quantityUnpaid": "Количество неоплаченных",
+      "amountUnpaidCancelled": "Сумма неоплаченных",
       "quantity": "Количество",
       "effectiveness": "Эффективность"
     },
@@ -310,69 +685,22 @@
   "show": "Показать",
   "add": "Добавить",
   "block": "Заблокировать",
-  "calculationOfDelivery": "Расчёт доставки",
-  "basicOptions": "Основные настройки",
+  "calculationOfDelivery": "Расчет доставки",
+  "basicOptions": "Основные параметры",
   "workingHours": "Часы работы",
-  "workingHoursValue": "Всё время, кроме исключений",
-  "typeOfCalculationCity": "Тип расчёта (Город)",
-  "typeOfCalculationOutOfTown": "Тип расчёта (За городом)",
+  "workingHoursValue": "Всегда, кроме исключений",
+  "typeOfCalculationCity": "Тип расчета (Город)",
+  "typeOfCalculationOutOfTown": "Тип расчета (За городом)",
   "typeOfCalculationValue": "По расстоянию и времени",
   "anAirport": "Аэропорт",
-  "anAirportValue": "Самолёт",
+  "anAirportValue": "Самолет",
   "railway": "Железная дорога",
   "railwayValue": "Нет",
   "exceptions": "Исключения",
   "addException": "Добавить исключение",
   "tariffsForCustomers": "Тарифы для клиентов",
-  "rightCustomerEdit": {
-    "shortDescription": "Краткое описание",
-    "shortDescriptionPlaceholder": "Написать...",
-    "typesOfCars": "Типы автомобилей",
-    "preOrder": "Возможность предварительного заказа",
-    "addressesLabel": "Количество адресов для создания заказа",
-    "addressesPlaceholder": "Выберите вариант адреса",
-    "addressesOption": "Разрешить выбор нескольких адресов, но обязателен только один",
-    "tariffLabel": "Тариф доступен",
-    "tariffPlaceholder": "Выберите доступность",
-    "tariffOption": "Для всех",
-    "standbyMode": "Включение режима ожидания в приложении исполнителя",
-    "standbyModes": {
-      "auto": "Автоматически по GPS",
-      "manual": "Вручную с помощью кнопки"
-    },
-    "hours": "часы",
-    "tariffAvailability": "Тариф доступен, если заказ более"
-  },
-  "hours": "часы",
-  "leftCustomerEdit": {
-    "branchLabel": "Филиал, где работают сотрудники",
-    "branchPlaceholder": "Выберите город",
-    "kazan": "Казань",
-    "professionLabel": "Профессия",
-    "professionPlaceholder": "Выберите профессию",
-    "taxiDriver": "Водитель такси",
-    "carClassLabel": "Класс автомобиля",
-    "carClassPlaceholder": "Выберите класс",
-    "business": "Бизнес",
-    "fareTypeLabel": "Тип тарифа для такси",
-    "fareTypePlaceholder": "Выберите тип",
-    "selectType": "Выберите тип",
-    "tariffAvailabilityLabel": "Где доступен тариф?",
-    "tariffAvailabilityPlaceholder": "Выберите доступность",
-    "all": "Все",
-    "name": "Название",
-    "namePlaceholder": "BUSINESS Light",
-    "website": "Веб-сайт",
-    "application": "Приложение",
-    "dispatcher": "Диспетчер",
-    "driverCurb": "Водитель (бордюр)",
-    "personalAccount": "Личный кабинет",
-    "advancePayment": "Требовать предоплату",
-    "sorting": "Сортировка",
-    "fineCustomer": "Штрафовать клиента за отмену заказа, когда исполнитель уже выехал",
-    "fineAfterXMinutes": "Штраф через X минут после выезда водителя к клиенту",
-    "fineOn": "Штраф включён"
-  },
+
+  "hours": "часов",
   "addAddress": "Добавить адрес",
   "formSubmitted": "Форма отправлена:",
   "save": "Сохранить",
@@ -393,14 +721,15 @@
     "lon": "Введите долготу..."
   },
   "errors": {
-    "cityRequired": "Город обязателен",
-    "placeNameRequired": "Название места обязательно",
-    "streetRequired": "Улица обязательна",
-    "houseNumberRequired": "Номер дома обязателен",
-    "latRequired": "Широта обязательна",
+    "cityRequired": "Необходимо указать город",
+    "placeNameRequired": "Необходимо указать название места",
+    "streetRequired": "Необходимо указать улицу",
+    "houseNumberRequired": "Необходимо указать номер дома",
+    "latRequired": "Необходимо указать широту",
     "latInvalid": "Широта должна быть числом от -90 до 90",
-    "lonRequired": "Долгота обязательна",
-    "lonInvalid": "Долгота должна быть числом от -180 до 180"
+    "lonRequired": "Необходимо указать долготу",
+    "lonInvalid": "Долгота должна быть числом от -180 до 180",
+    "noAccess": "У вас нет доступа к этой странице"
   },
   "addresses": {
     "title": "Адреса",
@@ -408,12 +737,27 @@
     "name": "Название",
     "address": "Адрес"
   },
+  "announcements": {
+    "title": "Объявления",
+    "addButton": "Добавить объявление",
+    "edit": "Редактировать объявление",
+    "delete": "Удалить объявление",
+    "details": "Детали объявления",
+    "description": "Описание",
+    "startDate": "Дата начала",
+    "expiryDate": "Дата окончания",
+    "userType": {
+      "driver": "Водитель",
+      "operator": "Оператор",
+      "rider": "Пассажир"
+    }
+  },
   "addNews": {
-    "title": "Добавить новости",
+    "title": "Добавить новость",
     "titleLabel": "Заголовок",
     "titlePlaceholder": "Введите заголовок",
     "branchLabel": "Филиал",
-    "branchPlaceholder": "Не выбран",
+    "branchPlaceholder": "Не выбрано",
     "branches": ["Филиал 1", "Филиал 2", "Филиал 3"],
     "descriptionLabel": "Описание",
     "descriptionPlaceholder": "Напишите описание...",
@@ -421,25 +765,43 @@
     "datePlaceholders": ["Дата начала", "Дата окончания"],
     "pushLabel": "Push-уведомление",
     "pushPlaceholder": "Напишите push-уведомление...",
-    "blockLabel": "Заблокировать",
-    "saveButton": "Сохранить"
+    "blockLabel": "Блок",
+    "saveButton": "Сохранить",
+    "urlLabel": "URL",
+    "urlPlaceholder": "Введите URL",
+    "announceButton": "Анонсировать"
   },
+
   "addInMap": {
-    "add": "Добавить",
-    "typeOfArea": "Тип района *",
+    "add": "Добавить новый регион",
+    "typeOfArea": "Тип территории",
     "selectType": "Выберите тип",
     "city": "Город",
-    "countryside": "Пригород",
+    "countryside": "За городом",
     "airport": "Аэропорт",
-    "railway": "Железнодорожная станция",
+    "railway": "Железная дорога",
     "title": "Название",
-    "enterTitle": "Введите...",
+    "enterTitle": "Введите название",
     "sorting": "Сортировка",
     "districtRatio": "Коэффициент района",
     "from": "от",
     "to": "до",
-    "showAllDistricts": "Показать все районы на карте",
-    "save": "Сохранить"
+    "currency": "Валюта",
+    "selectCurrency": "Выберите валюту",
+    "priority": "Приоритет",
+    "description": "Описание",
+    "enterDescription": "Введите описание",
+    "color": "Цвет",
+    "minOrderAmount": "Минимальная сумма заказа",
+    "enabled": "Включено",
+    "visible": "Видимо",
+    "showAllDistricts": "Показать все районы",
+    "save": "Сохранить",
+    "errors": {
+      "notEnoughPoints": "Пожалуйста, нарисуйте полигон с минимум 3 точками",
+      "createFailed": "Не удалось создать регион"
+    },
+    "success": "Регион успешно создан"
   },
   "addBranch": {
     "title": "Добавить филиал",
@@ -456,10 +818,10 @@
     "currency": "Валюта",
     "currencyPlaceholder": "Российский рубль",
     "currencyOption": "Российский рубль",
-    "priceFormat": "Формат отображения цен",
+    "priceFormat": "Формат отображения цены",
     "priceFormatPlaceholder": "₽:копейки-100.00",
     "priceFormatOption": "₽:копейки-100.00",
-    "soundSignal": "Проигрывать звуковой сигнал, когда",
+    "soundSignal": "Подавать звуковой сигнал когда",
     "newOrder": "поступает новый заказ",
     "soundSignalPlaceholder": "Нет",
     "soundSignalOptionNo": "Нет",
@@ -469,12 +831,12 @@
     "professions": "Текущие профессии",
     "professionsPlaceholder": "Водитель такси",
     "professionsOption": "Водитель такси",
-    "languages": "Языки перевода",
+    "languages": "Языки для переводов",
     "languagesPlaceholder": "Не выбрано",
     "languagesOption": "Не выбрано",
     "contacts": "Контакты",
     "contactNamePlaceholder": "Введите имя...",
-    "contactTelPlaceholder": "Введите номер...",
+    "contactTelPlaceholder": "Введите телефон...",
     "addContact": "Добавить контакт",
     "save": "Сохранить",
     "contactTypes": {
@@ -496,22 +858,22 @@
     }
   },
   "addPartner": {
-    "title": "Добавить нового партнёра",
+    "title": "Добавить нового партнера",
     "label": {
       "title": "Название",
       "telephone": "Телефон",
-      "commission": "Комиссия партнёра"
+      "commission": "Комиссия партнера"
     },
     "organization": {
       "title": "Организация",
       "name": "Название организации",
-      "contractNumber": "Номер контракта",
+      "contractNumber": "Номер договора",
       "agreementDate": "Дата соглашения",
       "legalAddress": "Юридический адрес",
       "ogrn": "ОГРН",
       "inn": "ИНН",
-      "directorName": "Полное имя директора",
-      "email": "Электронная почта",
+      "directorName": "ФИО директора",
+      "email": "Email",
       "bank": "Банк",
       "pc": "Р/с",
       "ks": "К/с",
@@ -524,20 +886,20 @@
   },
   "districts": {
     "City": "Город",
-    "Aircraft building district": "Район авиационного строительства",
+    "Aircraft building district": "Авиастроительный район",
     "Azino": "Азино",
     "Konstantinovka": "Константиновка",
     "Tsaritsyno": "Царицыно",
     "Derbyshki": "Дербышки",
-    "Slides": "Слайды",
+    "Slides": "Горки",
     "Boriskovo": "Борисково",
-    "Slides 2": "Слайды 2",
+    "Slides 2": "Горки 2",
     "Sovetsky district": "Советский район",
     "Moskovsky district": "Московский район",
     "Kirovsky district": "Кировский район",
-    "Novo-Savinovsky": "Новосавиновский",
+    "Novo-Savinovsky": "Ново-Савиновский",
     "Centre": "Центр",
-    "The countryside": "Загород",
+    "The countryside": "За городом",
     "Suburb 1": "Пригород 1",
     "Suburb 2": "Пригород 2",
     "Tatarstan District": "Район Татарстан",
@@ -546,16 +908,14 @@
     "Order acceptance area": "Зона приема заказов"
   },
   "categories": {
-    "Suburban Areas": "Пригородные районы",
+    "Suburban Areas": "Пригородные зоны",
     "Transportation": "Транспорт",
-    "Other": "Прочее"
+    "Other": "Другое"
   },
   "buttonsAdd": {
     "addInMap": "Добавить на карту"
   },
-  "titles": {
-    "districts": "Районы"
-  },
+
   "partners": {
     "title": "Партнеры",
     "addNewPartner": "Добавить нового партнера",
@@ -575,42 +935,39 @@
     },
     "table": {
       "name": "Название",
-      "branch": "Филиал",
+      "userType": "Тип пользователя",
       "activityPeriod": "Период активности",
       "status": "Статус",
-      "noItems": "Элементы не найдены"
+      "noItems": "Ничего не найдено"
     }
   },
-  "employees": {
-    "title": "Сотрудники",
-    "tabs": {
-      "working": "Работающие",
-      "invitations": "Приглашения отправлены",
-      "blocked": "Заблокированные"
-    },
-    "filters": {
-      "allCities": "Все города",
-      "kazan": "Казань",
-      "post": "Должность",
-      "allPosts": "Все должности",
-      "administrator": "Администратор",
-      "partnerEmployee": "Сотрудник партнера",
-      "partners": "Партнеры",
-      "allPartners": "Все партнеры"
-    },
-    "search": {
-      "fullName": "Поиск по полному имени...",
-      "toFind": "Найти"
-    },
-    "table": {
-      "fullName": "Полное имя",
-      "jobTitle": "Должность",
-      "branch": "Филиал"
-    },
-    "actions": {
-      "sendAgain": "Отправить снова",
-      "cancel": "Отменить"
-    }
+  "filters": {
+    "allCities": "Все города",
+    "kazan": "Казань",
+    "post": "Должность",
+    "allPosts": "Все должности",
+    "administrator": "Администратор",
+    "partnerEmployee": "Сотрудник партнера",
+    "partners": "Партнеры",
+    "allPartners": "Все партнеры"
+  },
+  "search": {
+    "fullName": "Поиск по ФИО...",
+    "toFind": "Найти"
+  },
+  "table": {
+    "fullName": "ФИО",
+    "jobTitle": "Должность",
+    "branch": "Филиал, где работает сотрудник",
+    "id": "ID",
+    "createdAt": "Дата создания",
+    "status": "Статус",
+    "actions": "Действия"
+  },
+  "actions": {
+    "sendAgain": "Отправить снова",
+    "cancel": "Отменить",
+    "viewDetails": "Просмотр деталей"
   },
   "addDriver": {
     "title": "Добавить водителя",
@@ -625,18 +982,19 @@
     },
     "options": {
       "kazan": "Казань",
-      "taxiDriver": "Таксист",
+      "taxiDriver": "Водитель такси",
       "business": "Бизнес",
       "businessLite": "Бизнес Лайт"
     },
     "save": "Сохранить"
   },
+
   "customers": {
     "active": "Активные клиенты",
     "blocked": "Заблокированные клиенты",
     "all": "Все",
     "inprogress": "В процессе",
-    "completed": "Завершено"
+    "completed": "Завершенные"
   },
   "addGroup": {
     "title": "Добавить группу"
@@ -648,16 +1006,25 @@
     "carClass": "Класс автомобиля",
     "tariffs": "Тарифы",
     "orderClass": "Какие классы заказов будет видеть группа?",
-    "priority": "Приоритет при распределении заказов?"
+    "priority": "Приоритет при распределении заказов?",
+    "name": "Имя",
+    "phoneNumber": "Номер телефона",
+    "address": "Адрес",
+    "commissionSharePercent": "Процент комиссии",
+    "commissionShareFlat": "Фиксированная комиссия",
+    "mobileNumber": "Мобильный номер",
+    "userName": "Имя пользователя",
+    "password": "Пароль",
+    "accountNumber": "Номер счета"
   },
   "options": {
     "kazan": "Казань",
-    "taxiDriver": "Таксист",
+    "taxiDriver": "Водитель такси",
     "business": "Бизнес",
     "businessLite": "Бизнес Лайт"
   },
   "addPhoto": {
-    "title": "Добавить фото",
+    "title": "Добавить",
     "form": {
       "city": "Город",
       "profession": "Профессия",
@@ -666,21 +1033,21 @@
     },
     "options": {
       "kazan": "Казань",
-      "taxiDriver": "Таксист",
+      "taxiDriver": "Водитель такси",
       "business": "Бизнес",
-      "shiftStart": "На начало смены",
+      "shiftStart": "В начале смены",
       "every24Hours": "Каждые 24 часа",
       "everyWeek": "Каждую неделю",
       "everyMonth": "Каждый месяц"
     },
-    "requirePhotos": "Какие фото я должен требовать",
+    "requirePhotos": "Какие фотографии требовать",
     "photoRequirements": {
       "front": "Спереди, чтобы был виден госномер",
       "back": "Сзади, чтобы был виден госномер",
       "right": "Правая сторона",
       "left": "Левая сторона",
-      "cabin-front": "Передняя часть кабины",
-      "cabin-back": "Задняя часть кабины",
+      "cabin-front": "Салон спереди",
+      "cabin-back": "Салон сзади",
       "trunk": "Багажник",
       "documents": "Документы"
     },
@@ -688,8 +1055,8 @@
   },
   "notAssigned": "Не назначено",
   "photoControl": {
-    "title": "Контроль фото",
-    "addButton": "Добавить контроль фото",
+    "title": "Фотоконтроль",
+    "addButton": "Добавить фотоконтроль",
     "tabs": {
       "active": "Активные",
       "blocked": "Заблокированные",
@@ -710,7 +1077,7 @@
       "business": "Бизнес",
       "premium": "Премиум",
       "period": "Период",
-      "shiftStart": "На начало смены",
+      "shiftStart": "В начале смены",
       "every24Hours": "Каждые 24 часа",
       "everyWeek": "Каждую неделю",
       "everyMonth": "Каждый месяц"
@@ -721,56 +1088,55 @@
       "city": "Город"
     }
   },
-
   "fleetDrivers": "Водители автопарка",
-  "active": "Активный",
-  "blocked": "Заблокирован",
+  "active": "Активные",
+  "blocked": "Заблокированные",
   "allCities": "Все города",
   "kazan": "Казань",
   "profession": "Профессия",
   "allProfessions": "Все профессии",
   "taxiDriver": "Водитель такси",
-  "titlePlaceholder": "Заголовок...",
-  "title": "Заголовок",
+  "titlePlaceholder": "Название...",
+  "title": "Название",
   "class": "Класс",
   "city": "Город",
   "priority": "Приоритет",
-  "everythingIsAProfession": "Всё – профессия",
+  "everythingIsAProfession": "Все профессии",
   "today": "Сегодня",
   "yesterday": "Вчера",
   "june": "Июнь",
   "period": "Период",
   "time": "Время",
-  "totalOrders": "Общее количество заказов",
+  "totalOrders": "Всего заказов",
   "numberPaid": "Количество оплаченных",
   "amountPaid": "Сумма оплаченных",
   "quantityUnpaid": "Количество неоплаченных",
   "amountUnpaid": "Сумма неоплаченных",
-  "quantityCancelled": "Количество отменённых",
+  "quantityCancelled": "Количество отмененных",
   "effectiveness": "Эффективность",
   "total": "Итого",
   "pushMails": {
-    "title": "Push-уведомления",
+    "title": "Push-рассылки",
     "today": "Сегодня",
     "yesterday": "Вчера",
     "june": "Июнь",
     "period": "Период",
     "show": "Показать",
     "date": "Дата",
-    "name": "Имя",
+    "name": "Название",
     "recipient": "Получатель",
     "total": "Всего"
   },
-  "forPartner": "Для партнёра",
+  "forPartner": "Для партнера",
   "selectCity": "Выберите город",
-  "selectPartner": "Выберите партнёра",
+  "selectPartner": "Выберите партнера",
   "selectPaymentType": "Выберите тип оплаты",
-  "orderReport": "Отчёт по заказам",
+  "orderReport": "Отчет по заказам",
   "cityOptions": {
     "kazan": "Казань"
   },
   "partnerOptions": {
-    "olrusAuto": "Olrus Auto"
+    "olrusAuto": "Олрус Авто"
   },
   "paymentTypeOptions": {
     "allPaymentTypes": "Все типы оплаты"
@@ -784,12 +1150,12 @@
   "tableHeaders": {
     "period": "Период",
     "city": "Город",
-    "partner": "Партнёр",
+    "partner": "Партнер",
     "payment": "Оплата",
     "executors": "Количество исполнителей",
     "status": "Статус"
   },
-  "currentAsOf": "Текущий на {{date}}",
+  "currentAsOf": "Актуально на {{date}}",
   "corporateClients": {
     "title": "Корпоративные клиенты",
     "titlePlaceholder": "Поиск по названию",
@@ -810,8 +1176,8 @@
     "city": "Город",
     "kazan": "Казань",
     "profession": "Профессия",
-    "everythingIsProfession": "Всё – профессия",
-    "partners": "Партнёры",
+    "everythingIsProfession": "Все профессии",
+    "partners": "Партнеры",
     "paymentMethod": "Способ оплаты",
     "allPaymentMethods": "Все способы оплаты",
     "allSources": "Все источники",
@@ -838,26 +1204,26 @@
   "forAggregrator": {
     "title": "Для агрегатора",
     "selectCity": "Выберите город",
-    "selectPartner": "Выберите партнёра",
+    "selectPartner": "Выберите партнера",
     "kazan": "Казань",
-    "olrusAuto": "Olrus Auto",
+    "olrusAuto": "Олрус Авто",
     "today": "Сегодня",
     "yesterday": "Вчера",
     "june": "Июнь",
     "period": "Период",
-    "orderReport": "Отчёт по заказам",
+    "orderReport": "Отчет по заказам",
     "city": "Город",
-    "partner": "Партнёр",
+    "partner": "Партнер",
     "payment": "Оплата",
     "numberOfExecutors": "Количество исполнителей",
     "status": "Статус",
-    "currentAsOf": "Текущий на {{date}}"
+    "currentAsOf": "Актуально на {{date}}"
   },
   "driversChange": {
-    "title": "Водители",
+    "title": "водители",
     "nav": {
       "orders": "Заказы",
-      "change": "Изменения"
+      "change": "Изменить"
     },
     "filters": {
       "city": {
@@ -865,16 +1231,16 @@
         "option": "Казань"
       },
       "profession": {
-        "placeholder": "Всё – профессия",
-        "option": "Всё – профессия"
+        "placeholder": "Все профессии",
+        "option": "Все профессии"
       },
       "carClass": {
         "placeholder": "Все классы автомобилей",
         "option": "Все классы автомобилей"
       },
       "partners": {
-        "placeholder": "Партнёры",
-        "option": "Партнёры"
+        "placeholder": "Партнеры",
+        "option": "Партнеры"
       }
     },
     "periods": {
@@ -890,12 +1256,12 @@
     "showButton": "Показать",
     "tableHeaders": {
       "executor": "Исполнитель",
-      "totalOrders": "Общее количество заказов",
+      "totalOrders": "Всего заказов",
       "numberPaid": "Количество оплаченных",
       "amountPaid": "Сумма оплаченных",
       "quantityUnpaid": "Количество неоплаченных",
       "amountUnpaid": "Сумма неоплаченных",
-      "quantityCancelled": "Количество отменённых",
+      "quantityCancelled": "Количество отмененных",
       "effectiveness": "Эффективность"
     },
     "total": {
@@ -923,7 +1289,7 @@
     },
     "table": {
       "status": "Статус",
-      "total": "Итого",
+      "total": "Всего",
       "amount": "На сумму",
       "quantity": "Количество",
       "drivers": "Водители"
@@ -932,12 +1298,12 @@
       "created": "Создано",
       "preliminary": "Предварительно",
       "done": "Выполнено",
-      "specialAndCancelled": "Специальные и отменённые"
+      "specialAndCancelled": "Особые и отмененные"
     }
   },
   "shifts": {
-    "employeeSessionTimeReport": "Отчёт по времени сессии сотрудника",
-    "selectLocation": "Выберите локацию",
+    "employeeSessionTimeReport": "Отчет по времени сессий сотрудников",
+    "selectLocation": "Выберите местоположение",
     "kazan": "Казань",
     "moscow": "Москва",
     "selectProfession": "Выберите профессию",
@@ -950,20 +1316,20 @@
     "period": "Период",
     "startDate": "Дата начала",
     "endDate": "Дата окончания",
-    "orderReport": "Заказать отчёт",
+    "orderReport": "Заказать отчет",
     "employee": "Сотрудник",
     "timeOfEntry": "Время входа",
     "exitTime": "Время выхода",
-    "ipAddress": "IP-адрес"
+    "ipAddress": "IP адрес"
   },
   "orderstable": {
     "executor": "Исполнитель",
-    "totalOrders": "Общее количество заказов",
+    "totalOrders": "Всего заказов",
     "paidCount": "Количество оплаченных",
     "paidAmount": "Сумма оплаченных",
     "unpaidCount": "Количество неоплаченных",
     "unpaidAmount": "Сумма неоплаченных",
-    "cancelledCount": "Количество отменённых",
+    "cancelledCount": "Количество отмененных",
     "efficiency": "Эффективность"
   },
   "addVehicle": {
@@ -980,19 +1346,19 @@
     "save": "Сохранить"
   },
   "application": {
-    "title": "Заявка для клиентов",
-    "demoMode": "Режим демонстрации",
+    "title": "Приложение для клиентов",
+    "demoMode": "Демо режим",
     "enabled": "Включено",
     "disabled": "Отключено",
     "restrictUnauthorized": "Ограничить неавторизованных клиентов",
     "smsResendInterval": "Интервал повторной отправки SMS",
-    "smsLifetime": "Срок действия SMS",
+    "smsLifetime": "Время жизни SMS",
     "sec": "сек",
     "min": "мин",
-    "showAdditionalProfileFields": "Показать дополнительные поля профиля",
-    "email": "Электронная почта",
+    "showAdditionalProfileFields": "Показывать дополнительные поля профиля",
+    "email": "Email",
     "none": "Нет",
-    "requireProfileCompletion": "Требовать завершение профиля",
+    "requireProfileCompletion": "Требовать заполнения профиля",
     "welcomeScreen": "Экран приветствия",
     "addressRequest": "Запрос адреса",
     "never": "Никогда",
@@ -1002,27 +1368,27 @@
     "enterWelcomeTitle": "Введите заголовок приветствия",
     "welcomeText": "Текст приветствия",
     "enterWelcomeMessage": "Введите текст приветствия",
-    "showDriverTips": "Показать советы водителю",
-    "showDriverTerminalPayment": "Показать оплату через терминал для водителя",
-    "orderScreenText": "Текст на экране заказа",
+    "showDriverTips": "Показывать подсказки водителю",
+    "showDriverTerminalPayment": "Показывать оплату терминалом",
+    "orderScreenText": "Текст экрана заказа",
     "paymentMethods": {
       "title": "Способы оплаты",
       "cash": "Наличные",
-      "bankCard": "Банковская карта",
-      "fastPayment": "Система быстрой оплаты",
+      "bankCard": "Карта",
+      "fastPayment": "Быстрый платеж",
       "personalAccount": "Личный счет",
       "bonusAccount": "Бонусный счет",
       "terminal": "Терминал",
-      "corporateBalance": "Корпоративный баланс"
+      "corporateBalance": "Корпоративный счет"
     }
   },
   "atc": {
-    "title": "Внешняя АТС",
-    "providerLabel": "Список поставщиков АТС",
-    "selectPlaceholder": "Выберите поставщика",
+    "title": "Внешние АТС",
+    "providerLabel": "Список АТС-провайдеров",
+    "selectPlaceholder": "Выберите провайдера",
     "options": {
       "disable": "Отключить",
-      "custom": "Пользовательская АТС",
+      "custom": "Своя АТС",
       "runtel": "Runtel",
       "sms": "SMS-центр",
       "common": "Общий",
@@ -1045,16 +1411,16 @@
       "headers": {
         "branchAndType": "Филиал и тип",
         "yearOfRelease": "Год выпуска",
-        "assignACar": "Назначить машину",
+        "assignACar": "Назначить автомобиль",
         "city": "Город"
       },
-      "noItems": "Элементы не найдены"
+      "noItems": "Ничего не найдено"
     }
   },
   "cmcSettings": {
-    "title": "CMC",
-    "providerLabel": "Выберите поставщика CMC",
-    "selectPlaceholder": "Выберите продолжительность",
+    "title": "СМС",
+    "providerLabel": "Выберите СМС провайдера",
+    "selectPlaceholder": "Выберите длительность",
     "option60": "60 сек.",
     "option120": "120 сек.",
     "option180": "180 сек.",
@@ -1064,24 +1430,25 @@
     "serverLabel": "Адрес сервера",
     "inputPlaceholder": "5 мин."
   },
+
   "customerNotifications": {
-    "title": "Уведомления для клиентов",
+    "title": "Уведомления клиентов",
     "orderCreatedDispatch": "Заказ создан через диспетчера",
     "orderCreatedApp": "Заказ создан через приложение",
-    "accepted": "Принято",
+    "accepted": "Принят",
     "inProgress": "В процессе",
-    "ready": "Готово",
-    "pickup": "Забор",
+    "ready": "Готов",
+    "pickup": "Подача",
     "newOrder": "Новый заказ",
-    "executorAssigned": "Назначен исполнитель",
-    "driverWillStart": "Водитель начнёт после текущего заказа",
+    "executorAssigned": "Исполнитель назначен",
+    "driverWillStart": "Водитель начнет после текущего заказа",
     "newPreliminaryOrder": "Новый предварительный заказ",
     "executorAcceptedOrder": "Исполнитель принял заказ",
     "executorArrived": "Исполнитель прибыл",
-    "paidWaiting": "Оплачивается ожидание",
+    "paidWaiting": "Платное ожидание",
     "orderExecution": "Выполнение заказа",
-    "completedPaid": "Выполнено и оплачено",
-    "orderCancelled": "Заказ отменён",
+    "completedPaid": "Завершен и оплачен",
+    "orderCancelled": "Заказ отменен",
     "executorRejected": "Исполнитель отклонил назначенный заказ",
     "executorDelayed": "Исполнитель задерживается",
     "preliminaryOrderExecution": "Выполнение предварительного заказа",
@@ -1090,12 +1457,12 @@
     "executorCancelled": "Исполнитель отменил заказ",
     "driverNotFound": "Водитель не найден",
     "cancelledByDriver": "Отменено водителем",
-    "orderedByMistake": "Заказ сделан по ошибке",
+    "orderedByMistake": "Заказано по ошибке",
     "executorRequestedCancel": "Исполнитель запросил отмену",
-    "waitingTooLong": "Ожидание слишком долгое",
-    "differentVehicle": "Прибыло другое транспортное средство",
-    "executorDifferentRoute": "Исполнитель выбрал другой маршрут",
-    "unhappyWithVehicle": "Не доволен моделью транспортного средства",
+    "waitingTooLong": "Слишком долгое ожидание",
+    "differentVehicle": "Прибыл другой автомобиль",
+    "executorDifferentRoute": "Исполнитель поехал другим маршрутом",
+    "unhappyWithVehicle": "Недоволен моделью автомобиля",
     "nothing": "Ничего",
     "smsToClient": "SMS клиенту",
     "pushToClient": "PUSH клиенту",
@@ -1104,7 +1471,7 @@
   "onlineCheckout": {
     "title": "Онлайн-касса",
     "cashierProfiles": "Список профилей кассиров",
-    "cashierConfigurations": "Список конфигураций кассиров"
+    "cashierConfigurations": "Список конфигураций касс"
   },
   "organizationDetails": {
     "title": "Данные организации",
@@ -1113,12 +1480,12 @@
     "taxiServiceName": "Название службы такси",
     "taxiServiceNamePlaceholder": "Милли",
     "legalAddress": "Юридический адрес",
-    "legalAddressPlaceholder": "РТ. Пестрецинский район...",
+    "legalAddressPlaceholder": "РТ. Пестречинский район...",
     "postalAddress": "Почтовый адрес",
-    "postalAddressPlaceholder": "РТ. Пестрецинский район...",
+    "postalAddressPlaceholder": "РТ. Пестречинский район...",
     "organizationPhone": "Телефон организации",
     "phonePlaceholder": "+7(900)000-00-00",
-    "organizationEmail": "Электронная почта организации",
+    "organizationEmail": "Email организации",
     "emailPlaceholder": "email@example.com",
     "website": "Веб-сайт",
     "websitePlaceholder": "https://example.com",
@@ -1126,13 +1493,13 @@
     "lastName": "Фамилия",
     "firstName": "Имя",
     "middleName": "Отчество",
-    "contactPhone": "Телефон контактного лица",
-    "contactEmail": "Электронная почта контактного лица",
+    "contactPhone": "Контактный телефон",
+    "contactEmail": "Контактный email",
     "organizationLogo": "Логотип организации",
     "uploadLogo": "Загрузить логотип",
     "logoRecommendation": "Рекомендуется: 256x256px или больше",
-    "logoFileTypes": "JPG, PNG или GIF. Максимум 5MB.",
-    "directorFullName": "Полное имя директора",
+    "logoFileTypes": "JPG, PNG или GIF. Макс. 5MB.",
+    "directorFullName": "ФИО директора",
     "fullNamePlaceholder": "Полное имя",
     "position": "Должность",
     "positionPlaceholder": "Директор",
@@ -1150,7 +1517,7 @@
     "taxiDriver": "Водитель такси",
     "driver": "Водитель",
     "firstRule": "Первое правило",
-    "firstRuleTooltip": "Расстояние: учитывается близость машины к клиенту.\nРайон: машины, расположенные в том же районе, что и клиент, участвуют.",
+    "firstRuleTooltip": "Расстояние: учитывается близость автомобиля к клиенту.\nРайон: участвуют автомобили, находящиеся в том же районе, что и клиент.",
     "distance": "расстояние",
     "district": "район",
     "circles": "Круги",
@@ -1159,7 +1526,7 @@
     "circle": "Круг",
     "addCircle": "Добавить круг",
     "orderStatus": "Статус заказа между попытками распределения",
-    "toSingleExecutor": "К одному исполнителю",
+    "toSingleExecutor": "Единственному исполнителю",
     "newOrder": "Новый заказ",
     "freeOrder": "Свободный заказ",
     "delayBetweenDistributionAttempts": "Задержка между попытками распределения",
@@ -1168,7 +1535,7 @@
     "thirdRule": "Третье правило",
     "forthRule": "Четвертое правило",
     "no": "Нет",
-    "businessPlus": "Business+",
+    "businessPlus": "Бизнес+",
     "executorBlockingType": "Тип блокировки исполнителя",
     "consecutive": "Последовательно",
     "perShift": "За смену"
@@ -1176,39 +1543,874 @@
   "common": {
     "loading": "Загрузка...",
     "apply": "Применить",
-    "previous": "Назад",
-    "next": "Вперед",
-    "page": "Страница"
+    "previous": "Предыдущий",
+    "next": "Следующий",
+    "hide": "Скрыть",
+    "show": "Показать",
+    "notAssigned": "Не назначено",
+    "confirm": "Подтвердить",
+    "confirmAction": "Подтвердить действие",
+    "seconds": "Секунды",
+    "page": "Страница",
+    "delete": "Удалить",
+    "update": "Обновить",
+    "all": "Все",
+    "remove": "Удалить",
+    "search": "Поиск",
+    "allCities": "Все города",
+
+    "submit": "Отправить",
+    "processing": "Обработка",
+    "phoneNumber": "Номер телефона",
+    "name": "Имя",
+    "address": "Адрес",
+    "commission": "Комиссия",
+    "view": "Просмотр",
+    "actions": "Действия",
+    "date": "Дата",
+    "type": "Тип",
+    "amount": "Сумма",
+    "status": "Статус",
+    "reference": "Ссылка",
+    "export": "Экспорт",
+    "actionIn": "Действие в",
+    "completed": "Завершено",
+    "newTransaction": "Новая транзакция",
+    "createTransaction": "Создать транзакцию",
+    "disabled": "Отключено",
+    "enabled": "Включено",
+    "manage": "Управление",
+    "create": "Создать",
+    "error": "Произошла ошибка",
+    "deleted": "Успешно удалено",
+    "created": "Успешно создано",
+    "updated": "Успешно обновлено",
+
+    "active": "Активный",
+    "inactive": "Неактивный",
+    "start": "Начало",
+    "end": "Конец",
+    "close": "Закрыть",
+    "edit": "Редактировать",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "clear": "Очистить",
+
+    "startEditing": "Начать редактирование",
+    "stopEditing": "Закончить редактирование",
+    "polygonError": "Пожалуйста, нарисуйте полигон как минимум с 3 точками",
+    "noData": "Нет доступных данных"
   },
-  "driversOrders": {
-    "noOrders": "Нет заказов",
-    "noOrdersDescription": "Заказы для этого водителя не найдены.",
-    "inputs": {
-      "id": "ID",
-      "createdOn": "Создано",
-      "status": "Статус",
-      "distance": "Расстояние",
-      "duration": "Длительность",
-      "cost": "Стоимость",
-      "finalCost": "Итоговая стоимость",
-      "currency": "Валюта",
-      "addresses": "Адреса"
+  "configuration": {
+    "title": "Конфигурация",
+    "password": {
+      "title": "Пароль",
+      "current": "Текущий пароль",
+      "new": "Новый пароль"
+    },
+    "purchaseCode": {
+      "title": "Код покупки",
+      "code": "Введите код покупки",
+      "email": "Email (необязательно)"
+    },
+    "mapsApi": {
+      "title": "Конфигурация Maps API",
+      "backend": "Ключ Maps API для бэкенда",
+      "adminPanel": "Ключ Maps API для админ-панели"
+    },
+    "firebase": {
+      "title": "Конфигурация Firebase",
+      "keyFile": "Имя файла ключа Firebase"
+    },
+    "server": {
+      "title": "Управление сервером",
+      "ip": "IP-адрес сервера",
+      "disable": "Отключить сервер"
+    },
+    "success": {
+      "purchaseCode": "Код покупки успешно обновлен",
+      "mapsApi": "Ключи Maps API успешно обновлены",
+      "firebase": "Конфигурация Firebase успешно обновлена",
+      "serverDisabled": "Сервер успешно отключен"
+    },
+    "errors": {
+      "fetchFailed": "Не удалось получить конфигурацию",
+      "purchaseCodeFailed": "Не удалось обновить код покупки",
+      "mapsApiFailed": "Не удалось обновить ключи Maps API",
+      "firebaseFailed": "Не удалось обновить конфигурацию Firebase",
+      "serverDisableFailed": "Не удалось отключить сервер"
     }
   },
-  "viewOrders": {
-    "noOrders": "Нет заказов",
-    "noOrdersDescription": "Заказы для этого водителя не найдены.",
+  "employees": {
+    "addSuccess": "Сотрудник успешно добавлен",
+    "addError": "Не удалось добавить сотрудника",
+    "manageRoles": "Управление ролями",
+    "addNew": "Добавить нового",
+    "form": {
+      "firstName": "Имя",
+      "lastName": "Фамилия",
+      "username": "Имя пользователя",
+      "password": "Пароль",
+      "phone": "Телефон",
+      "email": "Email",
+      "role": "Роль",
+      "roles": {
+        "admin": "Администратор",
+        "operator": "Оператор"
+      },
+      "active": "Активный"
+    },
+    "tabs": {
+      "working": "Работающие",
+      "invitations": "Приглашения",
+      "blocked": "Заблокированные"
+    },
+    "filters": {
+      "allCities": "Все города",
+      "kazan": "Казань",
+      "administrator": "Администратор",
+      "partnerEmployee": "Сотрудник партнера",
+      "allPosts": "Все должности",
+      "post": "Должность",
+      "partners": "Партнеры",
+      "allPartners": "Все партнеры",
+      "partner": "Партнер",
+      "fullName": "Полное имя",
+      "toFind": "Для поиска"
+    },
+    "table": {
+      "fullName": "Полное имя",
+      "jobTitle": "Должность",
+      "email": "Email",
+      "phone": "Телефон",
+      "actions": "Действия"
+    },
+    "actions": {
+      "sendAgain": "Отправить снова",
+      "cancel": "Отменить",
+      "block": "Заблокировать",
+      "unblock": "Разблокировать"
+    },
+
+    "success": {
+      "invitationSent": "Приглашение успешно отправлено повторно",
+      "invitationCancelled": "Приглашение успешно отменено"
+    },
+    "errors": {
+      "fetchFailed": "Не удалось получить список сотрудников",
+      "invitationFailed": "Не удалось повторно отправить приглашение",
+      "cancellationFailed": "Не удалось отменить приглашение"
+    }
+  },
+  "balance": {
+    "currency": "Валюта",
+    "description": "Описание",
+    "amount": "Сумма",
+    "date": "Дата",
+    "type": "Тип",
+    "status": "Статус",
+    "action": "Действие",
+    "rechargeType": "Тип пополнения",
+    "recharge": "Пополнить",
+    "withdraw": "Вывести",
+    "deduct": "Списать",
+    "add": "Добавить",
+    "deductType": "Тип списания",
+    "recharged": "Пополнено",
+    "manual": "Вручную",
+    "bankTransfer": "Банковский перевод",
+    "correction": "Корректировка",
+    "createTransaction": "Создать транзакцию"
+  },
+  "paymentMethods": {
+    "cashcredit": "Наличные/Безналичные",
+    "onlycash": "Только наличные",
+    "onlycredit": "Только безналичные",
+    "bankCard": "Банковская карта",
+    "fastPayment": "Система быстрых платежей",
+    "personalAccount": "Личный счет",
+    "bonusAccount": "Бонусный счет",
+    "terminal": "Терминал",
+    "corporateBalance": "Корпоративный баланс"
+  },
+  "fleet": {
+    "title": "Fleet Management",
+    "tabs": {
+      "details": "Детали",
+      "drivers": "Водители",
+      "financials": "Финансы"
+    },
+    "fields": {
+      "details": "Детали автопарка",
+      "name": "Название",
+      "address": "Адрес",
+      "phoneNumber": "Номер телефона",
+      "accountNumber": "Номер счета",
+      "commissionPercent": "Процент комиссии",
+      "commissionFlat": "Фиксированная комиссия"
+    },
+    "errors": {
+      "nameRequired": "Необходимо указать название",
+      "addressRequired": "Необходимо указать адрес",
+      "phoneRequired": "Необходимо указать номер телефона",
+      "accountRequired": "Необходимо указать номер счета",
+      "commissionPercentRange": "Процент комиссии должен быть от 0 до 100",
+      "commissionFlatPositive": "Фиксированная комиссия должна быть положительной"
+    },
+    "drivers": {
+      "title": "Водители автопарка",
+      "add": "Добавить водителя",
+      "name": "Имя",
+      "status": "Статус",
+      "noDrivers": "Водители не найдены"
+    },
+    "financials": {
+      "title": "Финансы автопарка",
+      "balance": "Баланс",
+      "revenue": "Доход",
+      "transactions": "Транзакции",
+      "noTransactions": "Транзакции не найдены",
+      "createTransaction": "Создать транзакцию"
+    }
+  },
+  "driversWallets": {
+    "noWallets": "Кошельки не найдены",
+    "noWalletsDescription": "Для этого водителя не найдено кошельков"
+  },
+  "formErrors": {
+    "nameRequired": "Необходимо указать имя",
+    "phoneRequired": "Необходимо указать номер телефона",
+    "invalidPhone": "Неверный формат номера телефона",
+    "addressRequired": "Необходимо указать адрес",
+    "commissionSharePercent": "Процент комиссии должен быть от 0 до 100",
+    "commissionShareFlat": "Фиксированная комиссия должна быть положительной",
+    "invalidCommissionFlat": "Фиксированная комиссия должна быть положительной",
+    "invalidCommissionPercent": "Процент комиссии должен быть от 0 до 100",
+    "mobileRequired": "Необходимо указать мобильный номер",
+    "invalidMobile": "Неверный формат мобильного номера",
+    "accountRequired": "Необходимо указать номер счета",
+    "usernameRequired": "Необходимо указать имя пользователя",
+    "passwordRequired": "Необходимо указать пароль",
+    "passwordTooShort": "Пароль должен содержать не менее 8 символов"
+  },
+  "messages": {
+    "errorCreatingFleet": "Не удалось создать автопарк",
+    "errorCreatingDriver": "Не удалось создать водителя",
+    "errorCreatingGroup": "Не удалось создать группу",
+    "errorCreatingFleetGroup": "Не удалось создать группу автопарка",
+    "successCreatingFleet": "Автопарк успешно создан",
+    "successCreatingDriver": "Водитель успешно создан",
+    "successCreatingGroup": "Группа успешно создана",
+    "successCreatingFleetGroup": "Группа автопарка успешно создана",
+    "formValidationError": "Пожалуйста, заполните все обязательные поля"
+  },
+  "payment": {
+    "title": "Оплата",
+    "createdAt": "Создано",
+    "gateways": "Платежные шлюзы",
+    "privateKey": "Приватный ключ",
+    "sandboxMode": "Тестовый режим",
+    "ipnUrl": "URL IPN",
+    "publicKey": "Публичный ключ",
+    "merchantId": "ID продавца",
+    "merchantSecret": "Секретный ключ продавца",
+    "enableGateway": "Включить шлюз",
+    "type": "Тип",
+    "supportedCurrencies": "Поддерживаемые валюты",
+    "lastUsed": "Последнее использование",
+    "sandBoxMode": "Тестовый режим",
+    "status": "Статус",
+    "enabledGateway": "Включен",
+    "noGateway": "Шлюз не найден",
+    "noGateways": "Шлюзы не найдены",
+    "stats": {
+      "successRate": "Процент успеха",
+      "transactions": "Транзакции",
+      "payments": "Платежи",
+      "refunds": "Возвраты",
+      "charges": "Списания"
+    },
+    "webhookUrl": "URL вебхука",
+    "addGateway": "Добавить шлюз",
+    "payouts": "Выплаты",
+    "promotions": "Акции",
+    "labels": {
+      "default": "По умолчанию",
+      "sandbox": "Тестовый",
+      "production": "Рабочий"
+    },
+    "fees": {
+      "title": "Комиссии",
+      "fixed": "Фиксированная",
+      "percent": "Процентная"
+    },
+    "errors": {
+      "methodCreateFailed": "Не удалось создать способ оплаты",
+      "methodUpdateFailed": "Не удалось обновить способ оплаты",
+      "methodDetailsFailed": "Не удалось получить детали способа оплаты",
+      "transactionsFetchFailed": "Не удалось получить транзакции"
+    },
+    "success": {
+      "methodCreated": "Способ оплаты успешно создан",
+      "methodUpdated": "Способ оплаты успешно обновлен"
+    },
+    "common": {
+      "manage": "Управление",
+      "enabled": "Включено",
+      "disabled": "Отключено",
+      "edit": "Редактировать",
+      "save": "Сохранить",
+      "cancel": "Отмена",
+      "create": "Создать",
+      "loading": "Загрузка..."
+    }
+  },
+  "payouts": {
+    "title": "Выплаты",
+    "stats": {
+      "pending": "В ожидании",
+      "lastPayout": "Последняя выплата"
+    },
+    "table": {
+      "id": "ID",
+      "amount": "Сумма",
+      "status": "Статус",
+      "date": "Дата",
+      "actions": "Действия"
+    },
+    "noSessions": "Сессии не найдены",
+    "filters": {
+      "currency": "Валюта"
+    },
+    "actions": {
+      "create": "Создать выплату",
+      "runAutoPayout": "Запустить автовыплату",
+      "createSession": "Создать сессию"
+    },
+    "autoPayout": {
+      "title": "Автовыплата",
+      "description": "Сессии будут оплачены автоматически",
+      "methods": "Способы",
+      "selectMethod": "Выберите способ",
+      "selectSession": "Выберите сессию",
+      "method": "Способ",
+      "session": "Сессия",
+      "amount": "Сумма",
+      "currency": "Валюта"
+    },
+    "createSession": {
+      "title": "Создать сессию",
+      "description": "Описание",
+      "method": "Способ",
+      "session": "Сессия",
+      "amount": "Сумма",
+      "currency": "Валюта",
+      "minimumAmount": "Минимальная сумма",
+      "maximumAmount": "Максимальная сумма",
+      "payoutMethods": "Способы выплаты",
+      "selectCurrency": "Выберите валюту",
+      "selectMethods": "Выберите способы"
+    },
+    "methods": {
+      "title": "Способы выплаты",
+      "name": "Название",
+      "type": "Тип",
+      "currency": "Валюта",
+      "balance": "Баланс",
+      "description": "Описание",
+      "edit": "Редактировать способ выплаты",
+      "view": "Просмотр способа выплаты",
+      "create": "Создать способ выплаты",
+      "transactions": "Просмотр транзакций",
+      "noMethods": "Способы выплаты не найдены"
+    },
+    "transactions": {
+      "date": "Дата",
+      "amount": "Сумма",
+      "status": "Статус",
+      "noData": "Транзакции не найдены"
+    },
+    "complete": "Завершить",
+    "reopen": "Переоткрыть",
+    "errors": {
+      "fetchFailed": "Не удалось получить данные выплат",
+      "methodsFetchFailed": "Не удалось получить способы выплаты",
+      "sessionFieldsFetchFailed": "Не удалось получить поля сессии",
+      "requiredFields": "Пожалуйста, заполните все обязательные поля",
+      "sessionCreateFailed": "Не удалось создать сессию выплаты",
+      "sessionUpdateFailed": "Не удалось обновить сессию выплаты",
+      "methodCreateFailed": "Не удалось создать способ выплаты",
+      "methodUpdateFailed": "Не удалось обновить способ выплаты",
+      "transactionsFetchFailed": "Не удалось получить транзакции",
+      "autoPayoutFailed": "Не удалось запустить автовыплату"
+    },
+    "success": {
+      "sessionCreated": "Сессия выплаты успешно создана",
+      "sessionUpdated": "Сессия выплаты успешно обновлена",
+      "methodCreated": "Способ выплаты успешно создан",
+      "methodUpdated": "Способ выплаты успешно обновлен",
+      "autoPayoutStarted": "Автовыплата успешно запущена"
+    },
+    "sessionDetails": {
+      "title": "Детали сессии",
+      "transactions": "Транзакции",
+      "methods": "Способы",
+      "info": "Информация о сессии"
+    },
+    "status": {
+      "pending": "В ожидании",
+      "paid": "Оплачено",
+      "failed": "Ошибка",
+      "processing": "В обработке"
+    }
+  },
+  "promotions": {
+    "title": "Акции",
+    "filters": {
+      "status": "Статус"
+    },
+    "create": "Создать",
+    "giftCards": "Подарочные карты",
+    "coupons": "Купоны",
+    "code": "Код",
+    "startDate": "Дата начала",
+    "expireDate": "Дата окончания",
+    "status": "Статус",
+    "editCoupon": "Редактировать купон",
+    "createCoupon": "Создать купон",
+    "description": "Описание",
+    "creditGift": "Подарочный кредит",
+    "discountFlat": "Фиксированная скидка",
+    "discountPercent": "Процентная скидка",
+    "isFirstTravelOnly": "Только для первой поездки",
+    "manyTimesUserCanUse": "Количество использований пользователем",
+    "maximumCost": "Максимальная стоимость",
+    "minimumCost": "Минимальная стоимость",
+    "manyUsersCanUse": "Количество пользователей",
+    "name": "Название",
+    "amount": "Сумма",
+    "used": "Использовано",
+    "unused": "Не использовано",
+    "actions": "Действия",
+    "createGiftBatch": "Создать партию подарков",
+    "quantity": "Количество",
+    "availableFrom": "Доступно с",
+    "expireAt": "Истекает",
+    "currency": "Валюта"
+  },
+  "permissions": {
+    "title": "Разрешения",
+    "permissions": "Разрешения",
+    "Announcements_Edit": "Редактирование объявлений",
+    "Announcements_View": "Просмотр объявлений",
+    "Cars_Edit": "Редактирование автомобилей",
+    "Cars_View": "Просмотр автомобилей",
+    "Complaints_Edit": "Редактирование жалоб",
+    "Complaints_View": "Просмотр жалоб",
+    "Coupons_Edit": "Редактирование купонов",
+    "Coupons_View": "Просмотр купонов",
+    "DriverWallet_Edit": "Редактирование кошелька водителя",
+    "DriverWallet_View": "Просмотр кошелька водителя",
+    "Drivers_Edit": "Редактирование водителей",
+    "Drivers_View": "Просмотр водителей",
+    "FleetWallet_Edit": "Редактирование кошелька автопарка",
+    "FleetWallet_View": "Просмотр кошелька автопарка",
+    "Fleets_Edit": "Редактирование автопарков",
+    "Fleets_View": "Просмотр автопарков",
+    "Gateways_Edit": "Редактирование шлюзов",
+    "Gateways_View": "Просмотр шлюзов",
+    "GiftBatch_Create": "Создание партии подарков",
+    "GiftBatch_View": "Просмотр партии подарков",
+    "GiftBatch_ViewCodes": "Просмотр кодов партии подарков",
+    "Payouts_Edit": "Редактирование выплат",
+    "Payouts_View": "Просмотр выплат",
+    "ProviderWallet_Edit": "Редактирование кошелька поставщика",
+    "ProviderWallet_View": "Просмотр кошелька поставщика",
+    "Regions_Edit": "Редактирование регионов",
+    "Regions_View": "Просмотр регионов",
+    "Requests_View": "Просмотр заявок",
+    "ReviewParameter_Edit": "Редактирование параметров отзывов",
+    "RiderWallet_Edit": "Редактирование кошелька пассажира",
+    "RiderWallet_View": "Просмотр кошелька пассажира",
+    "Riders_Edit": "Редактирование пассажиров",
+    "Riders_View": "Просмотр пассажиров",
+    "SMSProviders_Edit": "Редактирование SMS-провайдеров",
+    "SMSProviders_View": "Просмотр SMS-провайдеров",
+    "Services_Edit": "Редактирование услуг",
+    "Services_View": "Просмотр услуг",
+    "Users_Edit": "Редактирование пользователей",
+    "Users_View": "Просмотр пользователей",
+    "riderwallet": "Кошелек пассажира",
+    "riders": "Пассажиры",
+    "requests": "Заявки",
+    "regions": "Регионы",
+    "reviewparameter": "Параметры отзывов",
+    "roles": "Роли",
+    "smsproviders": "SMS-провайдеры",
+    "users": "Пользователи",
+    "services": "Услуги",
+    "payouts": "Выплаты",
+    "providerwallet": "Кошелек поставщика",
+    "fleetwallet": "Кошелек автопарка",
+    "fleets": "Автопарки",
+    "driverwallet": "Кошелек водителя",
+    "drivers": "Водители",
+    "coupons": "Купоны",
+    "giftbatch": "Партия подарков",
+    "gateways": "Шлюзы",
+    "complaints": "Жалобы",
+    "cars": "Автомобили",
+    "announcements": "Объявления",
+    "fleetgroup": "Группа автопарка",
+    "group": "Группа"
+  },
+  "roles": {
+    "title": "Роли",
+    "create": "Создать",
+    "update": "Обновить"
+  },
+  "complaints": {
+    "title": "Жалобы",
+    "create": "Создать",
+    "update": "Обновить",
+    "filters": {
+      "status": "Статус",
+      "search": "Поиск"
+    },
+    "table": {
+      "subject": "Тема",
+      "status": "Статус",
+      "date": "Дата",
+      "actions": "Действия"
+    },
+    "noComplaints": "Жалобы не найдены",
+    "status": {
+      "resolved": "Решено",
+      "pending": "В ожидании",
+      "submitted": "Отправлено",
+      "underinvestigation": "На рассмотрении"
+    },
+    "details": {
+      "title": "Детали жалобы",
+      "subject": "Тема",
+      "content": "Содержание",
+      "date": "Дата",
+      "status": "Статус",
+      "order": "Детали заказа",
+      "orderId": "ID заказа",
+      "orderStatus": "Статус заказа",
+      "createdOn": "Создано",
+      "cost": "Стоимость",
+      "addresses": "Адреса",
+      "rider": "Пассажир",
+      "riderId": "ID пассажира",
+      "riderName": "Имя пассажира",
+      "riderMobile": "Телефон пассажира",
+      "riderStatus": "Статус пассажира",
+      "driver": "Водитель",
+      "driverId": "ID водителя",
+      "driverName": "Имя водителя",
+      "driverMobile": "Телефон водителя",
+      "driverStatus": "Статус водителя",
+      "invalidDate": "Неверная дата",
+      "by": "Кем",
+      "assignedTo": "Назначено",
+      "time": "Время"
+    },
+    "activities": {
+      "assigned": "Назначено",
+      "updated": "Обновлено",
+      "resolved": "Решено",
+      "submitted": "Отправлено",
+      "underInvestigation": "На рассмотрении"
+    }
+  },
+  "reviews": {
+    "parameters": "Параметры",
+    "addParameter": "Добавить параметр",
+    "isGood": "Положительный?",
+    "title": "Заголовок",
+    "parameterTitle": "Введите заголовок параметра",
+    "editParameter": "Редактировать параметр"
+  },
+  "sos": {
+    "title": "SOS сигналы",
+    "detailsTitle": "Детали SOS",
+    "status": "Статус",
+    "createdAt": "Создано",
+    "orderDetails": "Детали заказа",
+    "orderId": "ID заказа",
+    "orderStatus": "Статус",
     "rider": "Пассажир",
     "driver": "Водитель",
-    "name": "Имя",
-    "mobile": "Телефон",
-    "noDriver": "Нет водителя",
-    "orderDetails": "Детали заказа",
-    "id": "ID",
-    "status": "Статус",
-    "created": "Создано",
+    "activities": "Действия",
+    "by": "Кем",
+    "addActivityNote": "Добавить заметку...",
+    "selectAction": "Выберите действие",
+    "adding": "Добавление...",
+    "addActivity": "Добавить действие",
+    "newSOSReceived": "Получен новый SOS сигнал!"
+  },
+  "noSOSFound": "SOS сигналы не найдены",
+  "error": {
+    "fetchSOSList": "Не удалось загрузить список SOS",
+    "fetchSOSDetails": "Не удалось загрузить детали SOS",
+    "addActivity": "Не удалось добавить действие"
+  },
+  "success": {
+    "activityAdded": "Действие успешно добавлено"
+  },
+  "ordersSettings": {
+    "title": "Настройки распределения заказов",
+    "tabs": {
+      "taxiDriver": "Водитель такси",
+      "driver": "Водитель"
+    },
+    "distribution": {
+      "title": "Настройки распределения"
+    },
+    "rules": {
+      "first": "Первое правило",
+      "firstTooltip": "Это подсказка для первого правила",
+      "second": "Второе правило",
+      "secondTooltip": "Это подсказка для второго правила",
+      "third": "Третье правило",
+      "forth": "Четвертое правило"
+    },
+    "circles": "Круги",
+    "searchRadius": "Радиус поиска",
+    "repeatCount": "Количество повторов",
+    "circle": "Круг {index}",
+    "addCircle": "Добавить круг",
+    "ordersSettingstatus": "Статус заказа",
+    "delayBetweenAttempts": "Задержка между попытками",
+    "offerordersSettingsimultaneously": "Предлагать заказ одновременно",
+    "toSingleExecutor": "Одному исполнителю",
+    "neworder": "Новый заказ",
+    "freeorder": "Свободный заказ",
+    "seconds": "сек.",
+    "meters": "м",
+    "andorderCostGreaterThan": "И стоимость заказа больше чем",
+    "distanceCalculationToExecutor": "Расчет расстояния до исполнителя",
+    "byRoads": "По дорогам",
+    "straightLine": "По прямой",
+    "executorDisplayOnMap": "Отображение исполнителя на карте",
+    "showOnMapAs": "Показывать на карте как",
+    "executor": "Исполнитель",
+    "vehicle": "Транспортное средство",
+    "orders": "Заказы",
+    "sendPushNotification": "Отправлять push-уведомление",
+    "freeordersVisibilityRadius": "Радиус видимости свободных заказов",
+    "standardSearchTime": "Стандартное время поиска",
+    "orderOfferTime": "Время предложения заказа",
+    "autoCompleteordersSettingstatusAfter": "Автоматически завершать статус заказа после",
+    "completed": "Завершено",
+    "notFound": "Не найдено",
+    "executorBlockingType": "Тип блокировки исполнителя",
+    "numberOfRejectedOffers": "Количество отклоненных предложений",
+    "blockingDuration": "Продолжительность блокировки",
+    "pcs": "шт.",
+    "orderForm": "Форма заказа",
+    "addPhoneField": "Добавить поле телефона",
+    "addCommentField": "Добавить поле комментария",
+    "dispatcherComment": "Комментарий диспетчера",
+    "driverPayment": "Оплата водителю",
+    "displayTerminalPaymentType": "Отображать тип оплаты терминалом",
+    "showChatBetweenClientAndDriver": "Показывать чат между клиентом и водителем",
+    "preliminaryordersSettings": "Предварительные заказы",
+    "sendPushNotificationPreliminaryOrder": "Отправлять push-уведомление для предварительного заказа",
+    "considerorderPreliminary": "Считать заказ предварительным",
+    "limitVisibilityTime": "Ограничить время видимости",
+    "automaticallyEntersDistributionAfter": "Автоматически входит в распределение после",
+    "notifyExecutorAfter": "Уведомить исполнителя после",
+    "preliminaryorderRejectionWithoutBlocking": "Отказ от предварительного заказа без блокировки",
+    "blockExecutorForPreliminaryordersSettings": "Блокировать исполнителя для предварительных заказов",
+    "allowExecutorToStartPreliminaryOrderAfter": "Разрешить исполнителю начать предварительный заказ после",
+    "doNotAllowTakingNewordersSettingsForXMinutesBefore": "Не разрешать брать новые заказы за X минут до",
+    "orderExchange": "Обмен заказами",
+    "transferorderToAnotherSystem": "Передать заказ в другую систему",
+    "manually": "Вручную",
+    "automatic": "Автоматически",
+    "notifications": "Уведомления",
+    "numberOfCallAttemptsIfClientDoesNotAnswer": "Количество попыток звонка если клиент не отвечает",
+    "timeAfterWhichClientIsConsideredToHaveListened": "Время после которого считается что клиент прослушал уведомление",
+    "sendorderReportToClientVia": "Отправлять отчет о заказе клиенту через",
+    "email": "Email",
+    "sms": "SMS",
+    "reviews": "Отзывы",
+    "minimumClientRatingToCreateorder": "Минимальный рейтинг клиента для создания заказа",
+    "add5StarRatingToClient": "Добавить 5-звездочный рейтинг клиенту",
+    "numberOfRecentClientReviewsConsideredInRating": "Количество последних отзывов клиента учитываемых в рейтинге",
+    "clientPersonalAccountModule": "Модуль личного кабинета клиента",
+    "allowClientToSuggestTheirPrice": "Разрешить клиенту предлагать свою цену",
+    "showExecutorsPhoneNumberToClient": "Показывать номер телефона исполнителя клиенту",
+    "save": "Сохранить",
+    "minutes": "Минуты",
+    "considerOrderPreliminary": "Считать заказ предварительным",
+    "ShowOrderCard": "Показать карточку заказа",
+    "showInOrderCard": "Показать в карточке заказа",
+    "maximumNumberOfClientsDebts": "Максимальное количество долгов клиентов",
+    "AssignOfflineExectors": "Назначить офлайн исполнителя",
+    "currentOrderAmount": "Текущая сумма заказа",
+    "end": "Конец",
+    "start": "Начало",
+    "percentage": "Процент",
+    "interval": "Интервал",
+    "freeordersSettingsVisibilityRadius": "Радиус видимости свободных заказов",
+    "ordersSettings": "Настройки заказов",
+    "andOrderCostGreaterThan": "И стоимость заказа больше чем",
+    "ifOrderClassMatches": "Если класс заказа совпадает",
+    "orderClass": "Класс заказа",
+    "orderClassMatches": "Класс заказа совпадает",
+    "orderClassDoesNotMatch": "Класс заказа не совпадает",
+    "orderClassMatchesAny": "Класс заказа совпадает с любым",
+    "timeCalculationUntilSubmission": "Расчет времени до подачи",
+    "adjustSubmissionTime": "Корректировать время подачи",
+    "useordersSettingsumHolding": "Использовать удержание суммы заказа",
+    "assignOfflineExecutors": "Назначать офлайн исполнителей",
+    "preliminaryOrderRejectionWithoutBlocking": "Отказ от предварительного заказа без блокировки",
+    "transferOrderToAnotherSystem": "Передать заказ в другую систему",
+    "sendOrderReportToClientVia": "Отправлять отчет о заказе клиенту через",
+    "minimumClientRatingToCreateOrder": "Минимальный рейтинг клиента для создания заказа"
+  },
+  "driversSettings": {
+    "taxiDriver": "Водитель такси",
+    "driver": "Водитель",
+    "arrivalTime": "Время прибытия (минуты)",
+    "allowWithoutGPS": "Разрешить работу без GPS?",
+    "minBalance": "Минимальный баланс для начала смены (₽)",
+    "minRating": "Минимальный рейтинг для доступа к системе",
+    "add5StarRatings": "Добавить 5-звездочные оценки водителю",
+    "recentReviews": "Количество последних отзывов для рейтинга",
+    "showNotPaidButton": "Показывать кнопку 'Не оплачено' в конце поездки",
+    "showPaymentViaSBP": "Показывать оплату через СБП",
+    "showPreliminaryCalculation": "Показывать предварительный расчет",
+    "allowEditOrderAddresses": "Разрешить редактирование адресов заказа",
+    "allowEditOrderCost": "Разрешить редактирование стоимости заказа",
+    "showDestinationToDriver": "Показывать пункт назначения водителю",
+    "selectStatus": "Выберите статус",
+    "hideStepsDuringOrder": "Скрывать этапы во время выполнения заказа (статусы)",
+    "showPriceAndAreaFilter": "Показывать фильтр по цене и району",
+    "minSoundVolume": "Минимальный уровень громкости",
+    "clientCommunication": "Общение с клиентом",
+    "showFullName": "Показывать полное имя",
+    "firstNameOnly": "Только имя",
+    "dontShow": "Не показывать",
+    "showClientNameToDriver": "Показывать имя клиента водителю",
+    "showUrgentOrderTime": "Показывать время подачи срочного заказа водителю",
+    "showDispatcherChatBeforeShift": "Показывать чат с диспетчером до смены?",
+    "showDispatcherChatDuringShift": "Показывать чат с диспетчером во время смены?",
+    "showGeneralChatDuringShift": "Показывать общий чат во время смены?",
+    "showEventsSection": "Показывать раздел События",
+    "showOtherCarsOnMap": "Показывать другие машины на карте",
+    "withinRadius": "В радиусе (метров)",
+    "allowTopUpViaBankCard": "Разрешить водителю пополнять баланс банковской картой?",
+    "autoEndShiftIfCoordinatesNotCurrent": "Автоматически завершать смену если координаты водителя не актуальны",
+    "autoEndShiftIfOutsideCity": "Автоматически завершать смену если водитель за пределами города или зоны приема заказов",
+    "showAvailableOrdersInTabs": "Показывать доступные и предварительные заказы во вкладках приложения",
+    "prohibitFakeGPS": "Запретить использование поддельного GPS?",
+    "preventArrivedButtonAdvance": "Предотвращать нажатие кнопки 'Прибыл' заранее?",
+    "requirePasswordForLogin": "Требовать пароль при каждом входе в приложение",
+    "showPrivacyPolicy": "Показывать политику конфиденциальности?",
+    "monitorMileage": "Отслеживать пробег ваших автомобилей?",
+    "allowReserveUrgentOrders": "Разрешить водителю резервировать срочные заказы",
+    "hidePriceAndRoutePoints": "Скрывать цену и точки маршрута (кроме точки А)",
+    "speakTextAfterTaximeterStart": "Произносить текст после запуска таксометра",
+    "speakTextAfterRideCompletion": "Произносить текст после завершения поездки",
+    "autoStartTaximeterAfterFreeWait": "Автоматически запускать таксометр после окончания бесплатного ожидания",
+    "allowOrderTypeSelection": "Разрешить водителю выбирать какие типы заказов получать",
+    "allowSOSButton": "Разрешить водителю использовать кнопку SOS",
+    "allowCancelOrder": "Разрешить водителю отменять заказ",
+    "pickedUpGoingToClient": "Принял и едет к клиенту",
+    "arrivedWaitingBeforePaid": "Прибыл и ждет клиента (до платного ожидания)",
+    "arrivedWaitingAfterPaid": "Прибыл и ждет клиента (после начала платного ожидания)",
+    "showClientRatingWindow": "Показывать окно оценки клиента после завершения заказа",
+    "commissionForPenalties": "Комиссия за штрафы",
+    "whatDataToShow": "Какие данные показывать для заказа:",
+    "inOrderList": "В списке заказов:",
+    "clientRating": "Рейтинг клиента",
+    "routePoints": "Точки маршрута",
+    "comments": "Комментарии",
     "cost": "Стоимость",
-    "finalCost": "Итоговая стоимость",
-    "addresses": "Адреса"
+    "paymentMethod": "Способ оплаты",
+    "timeForUrgentOrders": "Время для срочных заказов",
+    "inDetailedOrderCard": "В детальной карточке заказа:",
+    "showAllPoints": "Показывать все точки",
+    "partialPoints": "Частичные точки",
+    "timeUntilUrgentOrders": "Время до срочных заказов",
+    "duringOrderExecution": "Во время выполнения заказа",
+    "saveChanges": "Сохранить изменения"
+  },
+  "directories": {
+    "zonePrices": {
+      "edit": "Редактировать цену зоны",
+      "view": "Просмотр цены зоны",
+      "noZones": "Зоны не найдены",
+      "map": {
+        "clear": "Очистить",
+        "title": "Карта зоны",
+        "addPoint": "Добавить точку",
+        "fromPoint": "От точки",
+        "toPoint": "До точки"
+      },
+      "title": "Цены зон",
+      "create": "Создать цену зоны",
+      "fields": {
+        "name": "Название",
+        "cost": "Стоимость",
+        "services": "Услуги",
+        "fleets": "Автопарки"
+      },
+      "timeMultiplier": {
+        "title": "Временной множитель",
+        "startTime": "Время начала",
+        "endTime": "Время окончания",
+        "multiply": "Умножить",
+        "add": "Добавить временной множитель"
+      },
+      "actions": {
+        "save": "Сохранить изменения",
+        "delete": "Удалить зону",
+        "edit": "Редактировать зону",
+        "create": "Создать зону"
+      },
+      "filters": {
+        "search": "Поиск зон",
+        "service": "Фильтр по услуге",
+        "fleet": "Фильтр по автопарку"
+      },
+      "messages": {
+        "createSuccess": "Цена зоны успешно создана",
+        "updateSuccess": "Цена зоны успешно обновлена",
+        "deleteSuccess": "Цена зоны успешно удалена"
+      }
+    }
+  },
+  "regions": {
+    "list": "Список регионов",
+    "points": "точки",
+    "showOnMap": "Показать на карте",
+    "status": "Статус",
+    "save": "Сохранить",
+    "addNew": "Добавить новый регион",
+    "createNew": "Создать новый регион",
+    "add": "Добавить регион",
+    "edit": "Редактировать регион",
+    "name": "Название",
+    "currency": "Валюта",
+    "enabled": "Включен",
+    "visible": "Видимый",
+    "drawInstructions": "Нажмите на карту, чтобы нарисовать новый регион. Нажимайте точки, чтобы создать форму многоугольника.",
+    "errors": {
+      "fetchFailed": "Не удалось загрузить регионы",
+      "updateFailed": "Не удалось обновить регион",
+      "deleteFailed": "Не удалось удалить регион"
+    },
+    "deleteSuccess": "Регион успешно удален",
+    "changesSaved": "Изменения успешно сохранены",
+    "updateSuccess": "Регион успешно обновлен"
+  },
+  "titles": {
+    "districts": "Районы"
   }
 }

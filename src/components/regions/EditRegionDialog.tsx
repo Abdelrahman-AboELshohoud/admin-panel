@@ -1,50 +1,54 @@
-import { useState, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoadScript } from "@react-google-maps/api";
-import { MyDialog } from "../../components/common/MyDialog";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import Switch from "../../components/common/Switch";
-import MapComponent from "../../components/regions/MapComponent";
+import { MyDialog } from "../common/MyDialog";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import Switch from "../common/Switch";
+import MapComponent from "./MapComponent";
 
 export interface Point {
   lat: number;
   lng: number;
 }
 
-export interface RegionForm {
+export interface Region {
   name: string;
   currency: string;
   enabled: boolean;
-  points: Point[];
+  location: Point[][];
 }
-
-interface AddRegionDialogProps {
+interface EditRegionDialogProps {
+  region: Region | null;
   isOpen: boolean;
   onClose: () => void;
-  onSave: any;
+  onSave: (region: Region) => Promise<void>;
 }
 
-const defaultRegion: RegionForm = {
-  name: "",
-  currency: "USD",
-  enabled: true,
-  points: [],
-};
-
-export default function AddRegionDialog({
+export default function EditRegionDialog({
+  region,
   isOpen,
   onClose,
   onSave,
-}: AddRegionDialogProps) {
+}: EditRegionDialogProps) {
   const { t } = useTranslation();
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries: ["drawing", "geometry"],
   });
 
-  const [formData, setFormData] = useState<RegionForm>(defaultRegion);
-  const [isEditing, setIsEditing] = useState(true);
+  const [formData, setFormData] = useState<Region | null>(null);
+  const [points, setPoints] = useState<Point[]>([]);
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (region) {
+      setFormData(region);
+      if (region.location?.[0]) {
+        setPoints(region.location[0]);
+      }
+    }
+  }, [region]);
 
   const handleMapClick = useCallback(
     (e: google.maps.MapMouseEvent) => {
@@ -52,43 +56,37 @@ export default function AddRegionDialog({
 
       const lat = e.latLng.lat();
       const lng = e.latLng.lng();
-      setFormData((prev) => ({
-        ...prev,
-        points: [...prev.points, { lat, lng }],
-      }));
+      const newPoint: Point = { lat, lng };
+
+      setPoints((prev) => [...prev, newPoint]);
     },
     [isEditing]
   );
 
   const handlePolygonChange = useCallback((newPoints: Point[]) => {
-    setFormData((prev) => ({
-      ...prev,
-      points: newPoints,
-    }));
+    setPoints(newPoints);
   }, []);
 
   const clearPolygon = useCallback(() => {
-    setFormData((prev) => ({
-      ...prev,
-      points: [],
-    }));
+    setPoints([]);
   }, []);
 
   const handleSubmit = async () => {
-    if (formData.points.length < 3) {
-      alert(t("common.polygonError")); // Replace with a toast or localized alert
-      return;
-    }
-    await onSave(formData);
-    setFormData(defaultRegion);
+    if (!formData) return;
+    await onSave({
+      ...formData,
+      location: [points],
+    });
     onClose();
   };
 
-  if (!isLoaded) return <div>Loading maps...</div>;
+  if (!isLoaded || !formData) {
+    return <div>Loading maps...</div>;
+  }
 
   return (
     <MyDialog
-      title={t("regions.add")}
+      title={t("regions.edit")}
       isOpen={isOpen}
       onOpenChange={onClose}
       showCloseButton={false}
@@ -110,7 +108,7 @@ export default function AddRegionDialog({
 
           <div className="h-[500px]">
             <MapComponent
-              points={formData.points}
+              points={points}
               isEditing={isEditing}
               onPolygonChange={handlePolygonChange}
               onClick={handleMapClick}

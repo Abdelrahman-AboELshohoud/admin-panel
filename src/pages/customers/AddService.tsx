@@ -126,7 +126,7 @@ export default function AddService() {
       <div className="mt-8 flex items-center justify-between">
         <Button
           variant="outline"
-          onClick={() => navigate("/control-panel/services")}
+          onClick={() => navigate("/control-panel/services/active")}
           disabled={isSubmitting}
         >
           {t("common.cancel")}

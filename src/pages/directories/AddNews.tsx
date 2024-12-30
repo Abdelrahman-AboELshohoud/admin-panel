@@ -142,7 +142,7 @@ export default function AddNewsForm() {
 
           <div className="space-y-2">
             <label className="text-sm">
-              {t("User Type")} <span className="text-destructive">*</span>
+              {t("news.userType")} <span className="text-destructive">*</span>
             </label>
             <div className="flex gap-10">
               {Object.values(AnnouncementUserType).map((type) => (

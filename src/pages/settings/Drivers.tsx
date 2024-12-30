@@ -8,27 +8,33 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../components/ui/tabs";
+import { useTranslation } from "react-i18next";
 
 export default function DriverSettings() {
+  const { t } = useTranslation();
+
   return (
     <div className="min-h-screen bg-transparent text-gray-100 p-4 md:p-8">
       <div className=" mx-auto space-y-6">
-        <h1 className="text-2xl font-bold mb-6">drivers</h1>
+        <h1 className="text-2xl font-bold mb-6">{t("driversSettings.title")}</h1>
 
         <Tabs className="flex flex-col gap-4 mb-6" defaultValue="taxi">
           <TabsList className="grid w-[200px] grid-cols-2 bg-transparent">
             <TabsTrigger value="taxi" className="custom-tabs">
-              Taxi Driver
+              {t("driversSettings.taxiDriver")}
             </TabsTrigger>
             <TabsTrigger value="driver" className="custom-tabs">
-              Driver
+              {t("driversSettings.driver")}
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="taxi" className="card-shape flex flex-col gap-4">
+          <TabsContent
+            value="driver"
+            className="card-shape flex flex-col gap-4"
+          >
             <div className="bg-transparent text-gray-100 flex gap-6 items-center mb-6">
               <label className="text-nowrap font-semibold">
-                Arrival Time (minutes)
+                {t("driversSettings.arrivalTime")}
               </label>
               <div className="flex justify-center gap-2 h-full py-auto items-center">
                 {[10, 15, 20, 0, 0, 0].map((value, index) => (
@@ -46,7 +52,7 @@ export default function DriverSettings() {
 
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <label>Allow driver to work without GPS?</label>
+                <label>{t("driversSettings.allowWithoutGPS")}</label>
                 <Switch disabled={false} checked={false} />
               </div>
               <SelectsWithLabel
@@ -55,7 +61,7 @@ export default function DriverSettings() {
                   (i + 1).toString()
                 )}
                 value={1}
-                label="Minimum balance for shift start (₽)"
+                label={t("driversSettings.minBalance")}
               />
 
               <SelectsWithLabel
@@ -64,7 +70,7 @@ export default function DriverSettings() {
                   (i + 1).toString()
                 )}
                 value={1}
-                label="Minimum rating for system access"
+                label={t("driversSettings.minRating")}
               />
 
               <SelectsWithLabel
@@ -73,7 +79,7 @@ export default function DriverSettings() {
                   (i + 1).toString()
                 )}
                 value={60}
-                label="Add 5-star ratings to driver"
+                label={t("driversSettings.add5StarRatings")}
               />
 
               <SelectsWithLabel
@@ -82,17 +88,17 @@ export default function DriverSettings() {
                   (i + 1).toString()
                 )}
                 value={100}
-                label="Number of recent reviews for rating"
+                label={t("driversSettings.recentReviews")}
               />
 
               <div className="space-y-4">
                 {[
-                  "Show 'Not Paid' button at end of ride",
-                  "Show payment via SBP",
-                  "Show preliminary calculation",
-                  "Allow editing order addresses",
-                  "Allow editing order cost",
-                  "Show destination to driver",
+                  t("driversSettings.showNotPaidButton"),
+                  t("driversSettings.showPaymentViaSBP"),
+                  t("driversSettings.showPreliminaryCalculation"),
+                  t("driversSettings.allowEditOrderAddresses"),
+                  t("driversSettings.allowEditOrderCost"),
+                  t("driversSettings.showDestinationToDriver"),
                 ].map((label, index) => (
                   <div
                     key={index}
@@ -105,14 +111,14 @@ export default function DriverSettings() {
               </div>
 
               <SelectsWithLabel
-                placeholder="Select status"
+                placeholder={t("driversSettings.selectStatus")}
                 options={["default", "going", "waiting"]}
                 value="default"
-                label="Hide steps during order execution (statuses)"
+                label={t("driversSettings.hideStepsDuringOrder")}
               />
 
               <div className="flex items-center justify-between">
-                <label>Show price and area filter</label>
+                <label>{t("driversSettings.showPriceAndAreaFilter")}</label>
                 <Switch disabled={false} checked={false} />
               </div>
 
@@ -122,32 +128,34 @@ export default function DriverSettings() {
                   (i * 10).toString()
                 )}
                 value="10%"
-                label="Minimum sound volume level"
+                label={t("driversSettings.minSoundVolume")}
               />
-
-              {/* // <SelectItem key={i} value={(i * 10).toString()}>{i * 10}%</SelectItem> */}
 
               <SelectsWithLabel
                 placeholder="direct"
                 options={["direct", "support"]}
                 value="Direct"
-                label="Client communication"
+                label={t("driversSettings.clientCommunication")}
               />
               <SelectsWithLabel
-                placeholder="Show Full Name"
-                options={["Show Full Name", "First Name Only", "Don't Show"]}
+                placeholder={t("driversSettings.showFullName")}
+                options={[
+                  t("driversSettings.showFullName"),
+                  t("driversSettings.firstNameOnly"),
+                  t("driversSettings.dontShow"),
+                ]}
                 value="Full"
-                label="Show client name to driver"
+                label={t("driversSettings.showClientNameToDriver")}
               />
 
               <div className="space-y-4">
                 {[
-                  "Show urgent order submission time to driver",
-                  "Show dispatcher chat before shift?",
-                  "Show dispatcher chat during shift?",
-                  "Show general chat during shift?",
-                  "Show Events section",
-                  "Show other cars on map",
+                  t("driversSettings.showUrgentOrderTime"),
+                  t("driversSettings.showDispatcherChatBeforeShift"),
+                  t("driversSettings.showDispatcherChatDuringShift"),
+                  t("driversSettings.showGeneralChatDuringShift"),
+                  t("driversSettings.showEventsSection"),
+                  t("driversSettings.showOtherCarsOnMap"),
                 ].map((label, index) => (
                   <div
                     key={index}
@@ -165,27 +173,27 @@ export default function DriverSettings() {
                   (i * 1000).toString()
                 )}
                 value="2000"
-                label="Within radius (meters)"
+                label={t("driversSettings.withinRadius")}
               />
 
               <div className="space-y-4">
                 {[
-                  "Allow driver to top up balance via bank card?",
-                  "Automatically end shift if driver coordinates are not current",
-                  "Automatically end shift if driver is outside city or order acceptance zone",
-                  "Show available and preliminary orders in application tabs",
-                  "Prohibit use of fake GPS?",
-                  "Prevent driver from pressing 'Arrived' button in advance?",
-                  "Require password for each application login",
-                  "Show privacy policy?",
-                  "Monitor your cars' mileage?",
-                  "Allow driver to reserve urgent orders",
-                  "Hide price and route points (except point A)",
-                  "Speak text after taximeter start",
-                  "Speak text after ride completion",
-                  "Automatically start taximeter after free waiting time ends",
-                  "Allow driver to choose which types of orders to receive",
-                  "Allow driver to use SOS button",
+                  t("driversSettings.allowTopUpViaBankCard"),
+                  t("driversSettings.autoEndShiftIfCoordinatesNotCurrent"),
+                  t("driversSettings.autoEndShiftIfOutsideCity"),
+                  t("driversSettings.showAvailableOrdersInTabs"),
+                  t("driversSettings.prohibitFakeGPS"),
+                  t("driversSettings.preventArrivedButtonAdvance"),
+                  t("driversSettings.requirePasswordForLogin"),
+                  t("driversSettings.showPrivacyPolicy"),
+                  t("driversSettings.monitorMileage"),
+                  t("driversSettings.allowReserveUrgentOrders"),
+                  t("driversSettings.hidePriceAndRoutePoints"),
+                  t("driversSettings.speakTextAfterTaximeterStart"),
+                  t("driversSettings.speakTextAfterRideCompletion"),
+                  t("driversSettings.autoStartTaximeterAfterFreeWait"),
+                  t("driversSettings.allowOrderTypeSelection"),
+                  t("driversSettings.allowSOSButton"),
                 ].map((label, index) => (
                   <div
                     key={index}
@@ -198,12 +206,12 @@ export default function DriverSettings() {
               </div>
 
               <div className="space-y-4">
-                <label>Allow driver to cancel order</label>
+                <label>{t("driversSettings.allowCancelOrder")}</label>
                 <div className="flex flex-col gap-4">
                   {[
-                    "Picked up and going to client",
-                    "Arrived and waiting for client (before paid waiting)",
-                    "Arrived and waiting for client (after paid waiting starts)",
+                    t("driversSettings.pickedUpGoingToClient"),
+                    t("driversSettings.arrivedWaitingBeforePaid"),
+                    t("driversSettings.arrivedWaitingAfterPaid"),
                   ].map((label, index) => (
                     <div
                       key={index}
@@ -223,8 +231,8 @@ export default function DriverSettings() {
 
               <div className="space-y-4">
                 {[
-                  "Show client rating window after order completion",
-                  "Commission for penalties",
+                  t("driversSettings.showClientRatingWindow"),
+                  t("driversSettings.commissionForPenalties"),
                 ].map((label, index) => (
                   <div
                     key={index}
@@ -238,42 +246,44 @@ export default function DriverSettings() {
 
               <div className="flex flex-col gap-4">
                 <label className="text-lg font-semibold">
-                  What data to show for order:
+                  {t("driversSettings.whatDataToShow")}
                 </label>
                 <div className="space-y-8">
                   <div className="space-y-4">
-                    <h3 className=" font-semibold">In order list:</h3>
+                    <h3 className=" font-semibold">
+                      {t("driversSettings.inOrderList")}
+                    </h3>
                     <div className="space-y-4 pl-4">
                       <SelectsWithLabel
-                        placeholder="Show Full Name"
+                        placeholder={t("driversSettings.showFullName")}
                         options={[
-                          "Show Full Name",
-                          "First Name Only",
-                          "Don't Show",
+                          t("driversSettings.showFullName"),
+                          t("driversSettings.firstNameOnly"),
+                          t("driversSettings.dontShow"),
                         ]}
                         value="Full"
-                        label="Show client name to driver"
+                        label={t("driversSettings.showClientNameToDriver")}
                       />
 
                       <div className="flex items-center justify-between">
-                        <label>Client rating</label>
+                        <label>{t("driversSettings.clientRating")}</label>
                         <Switch disabled={false} checked={false} />
                       </div>
                       <SelectsWithLabel
-                        placeholder="Route points"
+                        placeholder={t("driversSettings.routePoints")}
                         options={[
-                          "Show Full Name",
-                          "First Name Only",
-                          "Don't Show",
+                          t("driversSettings.showFullName"),
+                          t("driversSettings.firstNameOnly"),
+                          t("driversSettings.dontShow"),
                         ]}
                         value="all"
-                        label="Show client name to driver"
+                        label={t("driversSettings.showClientNameToDriver")}
                       />
                       {[
-                        "Comments",
-                        "Cost",
-                        "Payment method",
-                        "Time for urgent orders",
+                        t("driversSettings.comments"),
+                        t("driversSettings.cost"),
+                        t("driversSettings.paymentMethod"),
+                        t("driversSettings.timeForUrgentOrders"),
                       ].map((item) => (
                         <div
                           key={item}
@@ -288,37 +298,39 @@ export default function DriverSettings() {
 
                   {/* In detailed order card section */}
                   <div className="space-y-4">
-                    <h3 className=" font-semibold">In detailed order card:</h3>
+                    <h3 className=" font-semibold">
+                      {t("driversSettings.inDetailedOrderCard")}
+                    </h3>
                     <div className="space-y-4 pl-4">
                       <SelectsWithLabel
-                        placeholder="Show Full Name"
+                        placeholder={t("driversSettings.showFullName")}
                         options={[
-                          "Show Full Name",
-                          "First Name Only",
-                          "Don't Show",
+                          t("driversSettings.showFullName"),
+                          t("driversSettings.firstNameOnly"),
+                          t("driversSettings.dontShow"),
                         ]}
                         value="Full"
-                        label="Show client name to driver"
+                        label={t("driversSettings.showClientNameToDriver")}
                       />
                       <div className="flex items-center justify-between">
-                        <label>Client rating</label>
+                        <label>{t("driversSettings.clientRating")}</label>
                         <Switch disabled={false} checked={false} />
                       </div>
                       <SelectsWithLabel
-                        placeholder="Route points"
+                        placeholder={t("driversSettings.routePoints")}
                         options={[
-                          "Show all points",
-                          "Partial points",
-                          "Don't show",
+                          t("driversSettings.showAllPoints"),
+                          t("driversSettings.partialPoints"),
+                          t("driversSettings.dontShow"),
                         ]}
                         value="all"
-                        label="Route points"
+                        label={t("driversSettings.routePoints")}
                       />
                       {[
-                        "Comments",
-                        "Cost",
-                        "Payment method",
-                        "Time until urgent orders",
+                        t("driversSettings.comments"),
+                        t("driversSettings.cost"),
+                        t("driversSettings.paymentMethod"),
+                        t("driversSettings.timeUntilUrgentOrders"),
                       ].map((item) => (
                         <div
                           key={item}
@@ -331,28 +343,30 @@ export default function DriverSettings() {
                     </div>
                   </div>
                   <div className="space-y-4">
-                    <h3 className="font-semibold">During order execution:</h3>
+                    <h3 className="font-semibold">
+                      {t("driversSettings.duringOrderExecution")}
+                    </h3>
                     <div className="space-y-4 pl-4">
                       <SelectsWithLabel
-                        placeholder="Show Full Name"
+                        placeholder={t("driversSettings.showFullName")}
                         options={["full", "first", "none"]}
                         value="full"
-                        label="Show client name to driver"
+                        label={t("driversSettings.showClientNameToDriver")}
                       />
 
                       <div className="flex items-center justify-between">
-                        <label>Client rating</label>
+                        <label>{t("driversSettings.clientRating")}</label>
                         <Switch disabled={false} checked={false} />
                       </div>
 
                       <SelectsWithLabel
-                        placeholder="Show all points"
+                        placeholder={t("driversSettings.showAllPoints")}
                         options={["all", "partial", "none"]}
                         value="all"
-                        label="Route points"
+                        label={t("driversSettings.routePoints")}
                       />
                       <div className="flex items-center justify-between">
-                        <label>Cost</label>
+                        <label>{t("driversSettings.cost")}</label>
                         <Switch disabled={false} checked={false} />
                       </div>
                     </div>
@@ -362,7 +376,7 @@ export default function DriverSettings() {
             </div>
 
             <button className=" ml-auto py-2 px-4 bg-primary hover:bg-primary/80 text-black hover:text-white rounded-md transition-colors">
-              Save Changes
+              {t("driversSettings.saveChanges")}
             </button>
           </TabsContent>
         </Tabs>

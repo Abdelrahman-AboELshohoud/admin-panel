@@ -52,6 +52,17 @@ html {
   @apply bg-[#383838] rounded-xl p-6 shadow-lg shadow-[#282828] border-none !important;
 }
 
+.custom-scrollbar::-webkit-scrollbar {
+  width: 0.4rem;
+  background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #282828;
+  border-radius: 0.2rem;
+  width: 1rem;
+}
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
