@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Button } from "../../components/ui/button";
-import DeletionDialog from "../../components/common/DeletionDialog";
+import { Button } from "../../../components/ui/button";
+import DeletionDialog from "../../../components/common/DeletionDialog";
 import BottomCustomerEdit from "./BottomCustomerEdit";
 import LeftCustomerEdit from "./LeftCustomerEdit";
 import RightCustomerEdit from "./RightCustomerEdit";
@@ -13,7 +13,7 @@ import {
   type Service as ServiceType,
   ServicePaymentMethod,
   SetRegionsOnServiceGQL,
-} from "../../graphql/requests";
+} from "../../../graphql/requests";
 import { toast } from "react-hot-toast";
 
 // const mockService: ServiceType = {

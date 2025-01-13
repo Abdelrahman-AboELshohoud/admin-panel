@@ -29,6 +29,7 @@ import {
 } from "../../../graphql/requests";
 import { format } from "date-fns";
 import { MyDialog } from "../../common/MyDialog";
+import Pagination from "../../common/Pagination";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -143,50 +144,8 @@ export default function Complaints() {
     }
   };
 
-  // Render pagination
-  const renderPagination = () => {
-    const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-    const pages = [];
-
-    for (let i = 1; i <= totalPages; i++) {
-      pages.push(
-        <Button
-          key={i}
-          variant={currentPage === i ? "default" : "outline"}
-          onClick={() => setCurrentPage(i)}
-          className="w-10 h-10"
-        >
-          {i}
-        </Button>
-      );
-    }
-
-    return (
-      <div className="flex justify-center gap-2 mt-4">
-        <Button
-          variant="outline"
-          onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-          disabled={currentPage === 1}
-        >
-          {t("common.previous")}
-        </Button>
-        {pages}
-        <Button
-          variant="outline"
-          onClick={() =>
-            setCurrentPage((prev) => Math.min(totalPages, prev + 1))
-          }
-          disabled={currentPage === totalPages}
-        >
-          {t("common.next")}
-        </Button>
-      </div>
-    );
-  };
-
   return (
     <div className="p-6">
-
       <div className="flex gap-4 mb-6">
         <Select
           value={statusFilter}
@@ -235,8 +194,7 @@ export default function Complaints() {
                   {t("common.loading")}
                 </TableCell>
               </TableRow>
-            ) : complaints &&
-              complaints.length > 0 ? (
+            ) : complaints && complaints.length > 0 ? (
               complaints.map((complaint) => (
                 <TableRow
                   key={complaint.id}
@@ -300,7 +258,13 @@ export default function Complaints() {
           </TableBody>
         </Table>
 
-        {complaints.length > 0 && renderPagination()}
+        {complaints.length > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}
+            onPageChange={setCurrentPage}
+          />
+        )}
       </div>
 
       {/* Complaint Details Dialog */}
@@ -358,24 +322,21 @@ export default function Complaints() {
                     {selectedComplaint.activities &&
                       selectedComplaint.activities.length > 0 &&
                       selectedComplaint.activities.map((activity, index) => (
-                        <div
-                          key={index}
-                          className="p-2 bg-gray-800 rounded"
-                        >
+                        <div key={index} className="p-2 bg-gray-800 rounded">
                           <p>
                             {t(
-                            `complaints.activities.${activity.type.toLowerCase()}`
-                          )}
-                        </p>
-                        {activity.comment && <p>{activity.comment}</p>}
-                        {activity.actor && (
-                          <p className="text-sm text-gray-400">
-                            {t("complaints.details.by")}{" "}
-                            {`${activity.actor.firstName} ${activity.actor.lastName}`}
+                              `complaints.activities.${activity.type.toLowerCase()}`
+                            )}
                           </p>
-                        )}
-                      </div>
-                    ))}
+                          {activity.comment && <p>{activity.comment}</p>}
+                          {activity.actor && (
+                            <p className="text-sm text-gray-400">
+                              {t("complaints.details.by")}{" "}
+                              {`${activity.actor.firstName} ${activity.actor.lastName}`}
+                            </p>
+                          )}
+                        </div>
+                      ))}
                   </div>
                 </div>
               )}

@@ -5,7 +5,7 @@ import {
   CardContent,
   CardHeader,
   CardTitle,
-} from "../../components/ui/card";
+} from "../../../components/ui/card";
 import {
   RiderWalletGQL,
   RiderWalletQuery,
@@ -13,23 +13,23 @@ import {
   CreateRiderTransactionGQL,
   RiderRechargeTransactionType,
   RiderDeductTransactionType,
-} from "../../graphql/requests";
-import { Button } from "../../components/ui/button";
+} from "../../../graphql/requests";
+import { Button } from "../../../components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../components/ui/dialog";
-import { Input } from "../../components/ui/input";
+} from "../../../components/ui/dialog";
+import { Input } from "../../../components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select";
+} from "../../../components/ui/select";
 
 interface ClientWalletProps {
   riderId: string;

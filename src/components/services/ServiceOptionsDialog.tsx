@@ -28,20 +28,20 @@ import {
   SetOptionsOnServiceGQL,
 } from "../../graphql/requests";
 
-interface ServiceOption {
-  id: string;
-  name: string;
-  type: ServiceOptionType;
-  icon: ServiceOptionIcon;
-  additionalFee?: number;
-}
+// interface ServiceOption {
+//   id: string;
+//   name: string;
+//   type: ServiceOptionType;
+//   icon: ServiceOptionIcon;
+//   additionalFee?: number;
+// }
 
 interface ServiceOptionsDialogProps {
   isOpen: boolean;
   onClose: () => void;
   serviceId: string;
-  currentOptions: ServiceOption[];
-  onOptionsUpdate: (options: ServiceOption[]) => void;
+  currentOptions: any[];
+  onOptionsUpdate: (options: any[]) => void;
 }
 
 export default function ServiceOptionsDialog({
@@ -52,10 +52,8 @@ export default function ServiceOptionsDialog({
   onOptionsUpdate,
 }: ServiceOptionsDialogProps) {
   const { t } = useTranslation();
-  const [options, setOptions] = useState<ServiceOption[]>([]);
-  const [selectedOption, setSelectedOption] = useState<ServiceOption | null>(
-    null
-  );
+  const [options, setOptions] = useState<any[]>([]);
+  const [selectedOption, setSelectedOption] = useState<any | null>(null);
 
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -76,7 +74,7 @@ export default function ServiceOptionsDialog({
     }
   };
 
-  const handleCreateOption = async (option: Omit<ServiceOption, "id">) => {
+  const handleCreateOption = async (option: any) => {
     try {
       setLoading(true);
       const response = await CreateServiceOptionGQL({
@@ -103,7 +101,7 @@ export default function ServiceOptionsDialog({
     }
   };
 
-  const handleUpdateOption = async (option: ServiceOption) => {
+  const handleUpdateOption = async (option: any) => {
     try {
       setLoading(true);
       const response = await UpdateServiceOptionGQL({
@@ -178,7 +176,7 @@ export default function ServiceOptionsDialog({
               placeholder={t("leftCustomerEdit.serviceOptions.fields.name")}
               value={selectedOption?.name || ""}
               onChange={(e) =>
-                setSelectedOption((prev) => ({
+                setSelectedOption((prev: any) => ({
                   ...prev!,
                   name: e.target.value,
                 }))
@@ -187,7 +185,7 @@ export default function ServiceOptionsDialog({
             <Select
               value={selectedOption?.type || ServiceOptionType.Free}
               onValueChange={(value: ServiceOptionType) =>
-                setSelectedOption((prev) => ({
+                setSelectedOption((prev: any) => ({
                   ...prev!,
                   type: value,
                 }))
@@ -209,7 +207,7 @@ export default function ServiceOptionsDialog({
             <Select
               value={selectedOption?.icon || ServiceOptionIcon.Custom1}
               onValueChange={(value: ServiceOptionIcon) =>
-                setSelectedOption((prev) => ({
+                setSelectedOption((prev: any) => ({
                   ...prev!,
                   icon: value,
                 }))
@@ -232,7 +230,7 @@ export default function ServiceOptionsDialog({
                 placeholder={t("leftCustomerEdit.serviceOptions.fields.fee")}
                 value={selectedOption?.additionalFee || ""}
                 onChange={(e) =>
-                  setSelectedOption((prev) => ({
+                  setSelectedOption((prev: any) => ({
                     ...prev!,
                     additionalFee: Number(e.target.value),
                   }))

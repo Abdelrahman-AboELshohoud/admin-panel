@@ -142,8 +142,7 @@ const Drivers = () => {
                       {t("common.loading")}
                     </td>
                   </TableRow>
-                ) : drivers &&
-                  drivers.length > 0 ? (
+                ) : drivers && drivers.length > 0 ? (
                   drivers.map((driver) => (
                     <DriverRow
                       key={driver.id}
@@ -167,11 +166,9 @@ const Drivers = () => {
 
           {drivers && drivers.length > 0 && (
             <Pagination
-              filters={filters}
-              setFilters={setFilters}
-              totalCount={totalCount}
-              loading={isLoading}
-              t={t}
+              currentPage={currentPage}
+              totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}
+              onPageChange={(page: number) => setCurrentPage(page)}
             />
           )}
         </TabsContent>

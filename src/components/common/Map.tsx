@@ -1,10 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
 import {
   GoogleMap,
-  LoadScript,
   Marker,
   Polygon,
   DrawingManager,
+  useLoadScript,
 } from "@react-google-maps/api";
 import { iconUrl } from "./Mark";
 
@@ -34,10 +34,15 @@ interface MapProps {
   polygons?: MapPolygon[];
   zoom?: number;
   onMapClick?: (event: google.maps.MapMouseEvent) => void;
+  onLoad?: (map: google.maps.Map) => void;
 }
 
-const MapWithClusters = ({
-  selectedLocations,
+const libraries: ("drawing" | "geometry" | "places" | "visualization")[] = [
+  "drawing",
+];
+
+function Map({
+  selectedLocations = [],
   setSelectedLocations,
   center = { lat: 0, lng: 0 },
   children,
@@ -46,19 +51,29 @@ const MapWithClusters = ({
   polygons = [],
   zoom = 10,
   onMapClick,
+  onLoad,
   ...props
-}: MapProps) => {
+}: MapProps) {
   const mapContainerStyle = {
     width: "100%",
-    height: "500px",
+    height: "100%",
   };
 
-  const [key, setKey] = useState(0);
+  const { isLoaded, loadError } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries,
+  });
+
+  const [iconOptions, setIconOptions] = useState<google.maps.Icon | null>(null);
 
   useEffect(() => {
-    // Force reload map when component mounts
-    setKey((prev) => prev + 1);
-  }, []);
+    if (isLoaded) {
+      setIconOptions({
+        url: iconUrl,
+        scaledSize: new google.maps.Size(20, 20),
+      } as google.maps.Icon);
+    }
+  }, [isLoaded]);
 
   const handlePolygonComplete = useCallback(
     (polygon: google.maps.Polygon) => {
@@ -69,62 +84,69 @@ const MapWithClusters = ({
     [onPolygonComplete]
   );
 
-  return (
-    <LoadScript
-      key={key}
-      googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
-      libraries={["drawing"]}
-    >
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        center={center}
-        zoom={zoom}
-        onClick={onMapClick}
-        {...props}
-      >
-        {selectedLocations?.map((location, index) => (
-          <Marker
-            key={`dynamic-${index}`}
-            position={location}
-            icon={{
-              url: iconUrl,
-              scaledSize: new window.google.maps.Size(20, 20),
-            }}
-          />
-        ))}
-        {showDrawingTools && (
-          <DrawingManager
-            onPolygonComplete={handlePolygonComplete}
-            options={{
-              drawingControl: true,
-              drawingControlOptions: {
-                position: google.maps.ControlPosition.TOP_CENTER,
-                drawingModes: [google.maps.drawing.OverlayType.POLYGON],
-              },
-              polygonOptions: {
-                fillColor: "#B69F7D",
-                fillOpacity: 0.4,
-                strokeColor: "#B69F7D",
-                strokeWeight: 2,
-                clickable: true,
-                editable: true,
-                draggable: true,
-              },
-            }}
-          />
-        )}
-        {polygons && polygons.length > 0 &&
-          polygons.map((polygon) => (
-            <Polygon
-              key={polygon.id}
-              paths={polygon.coordinates}
-              options={polygon.options}
-            />
-          ))}
-        {children}
-      </GoogleMap>
-    </LoadScript>
-  );
-};
+  if (loadError) {
+    return <div>Error loading maps</div>;
+  }
 
-export default MapWithClusters;
+  if (!isLoaded) {
+    return <div>Loading maps...</div>;
+  }
+
+  return (
+    <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      center={center}
+      zoom={zoom}
+      onClick={onMapClick}
+      onLoad={onLoad}
+      options={{
+        streetViewControl: false,
+        mapTypeControl: false,
+        fullscreenControl: false,
+      }}
+      {...props}
+    >
+      {selectedLocations?.map((location, index) => (
+        <Marker
+          key={`marker-${index}`}
+          position={location}
+          icon={iconOptions as any}
+        />
+      ))}
+
+      {showDrawingTools && (
+        <DrawingManager
+          onPolygonComplete={handlePolygonComplete}
+          options={{
+            drawingControl: true,
+            drawingControlOptions: {
+              position: google.maps.ControlPosition.TOP_CENTER,
+              drawingModes: [google.maps.drawing.OverlayType.POLYGON],
+            },
+            polygonOptions: {
+              fillColor: "#B69F7D",
+              fillOpacity: 0.4,
+              strokeColor: "#B69F7D",
+              strokeWeight: 2,
+              clickable: true,
+              editable: true,
+              draggable: true,
+            },
+          }}
+        />
+      )}
+
+      {polygons.map((polygon) => (
+        <Polygon
+          key={polygon.id}
+          paths={polygon.coordinates}
+          options={polygon.options}
+        />
+      ))}
+
+      {children}
+    </GoogleMap>
+  );
+}
+
+export default Map;

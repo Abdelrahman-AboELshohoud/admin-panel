@@ -11,7 +11,7 @@ import { Button } from "../ui/button";
 
 interface MyDialogProps {
   trigger?: ReactNode;
-  title: string;
+  title: any;
   description?: string;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;

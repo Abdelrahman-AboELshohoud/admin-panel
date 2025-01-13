@@ -1,7 +1,7 @@
-import { TableCell, TableRow } from "../../components/ui/table";
+import { TableCell, TableRow } from "../../../components/ui/table";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-import { Rider } from "../../graphql/requests";
+import { Rider } from "../../../graphql/requests";
 import { useTranslation } from "react-i18next";
 
 const ClientRow = ({ data, id }: { data: Rider; id: string }) => {

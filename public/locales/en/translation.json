@@ -1,6 +1,6 @@
 {
   "header": {
-    "personalAccount": "Personal account",
+    "personalAccount": "Personal Account",
     "logout": "Logout"
   },
   "login": {
@@ -137,13 +137,20 @@
   "main": {
     "dateButtons": {
       "today": "Today",
-      "week": "Week",
-      "month": "Month"
+      "week": "This Week",
+      "month": "This Month"
     },
     "online": "Online",
     "onOrder": "On Order",
     "free": "Free",
-    "onPause": "On Pause"
+    "onPause": "On Pause",
+    "complaints": "Complaints",
+    "activeOrders": "Active Orders",
+    "bookedOrders": "Booked Orders",
+    "pendingDrivers": "Pending Drivers",
+    "errors": {
+      "fetchFailed": "Failed to fetch overview data"
+    }
   },
   "orders": {
     "orderHeader": "Today",
@@ -278,7 +285,9 @@
       "deleteConfirm": {
         "title": "Delete Service Option",
         "message": "Are you sure you want to delete this service option? This action cannot be undone."
-      }
+      },
+      "addOptions": "Add Options",
+      "addMore": "Add More Options"
     }
   },
   "rightCustomerEdit": {
@@ -400,6 +409,7 @@
     "addCategory": "Add Category",
     "categoryName": "Category Name",
     "noServices": "No services",
+    "noCategoryServices": "No category services",
     "create": {
       "title": "Create New Service"
     }
@@ -1559,7 +1569,11 @@
     "remove": "Remove",
     "search": "Search",
     "allCities": "All cities",
-
+    "pagination": {
+      "pages": "Pages",
+      "next": "Next",
+      "previous": "Previous"
+    },
     "submit": "Submit",
     "processing": "Processing",
     "phoneNumber": "Phone number",
@@ -1867,7 +1881,13 @@
     }
   },
   "payouts": {
+    "tabs": {
+      "payouts": "Payouts",
+      "transactions": "Transactions"
+    },
     "title": "Payouts",
+    "export": "Export",
+
     "stats": {
       "pending": "Pending",
       "lastPayout": "Last payout"
@@ -1912,39 +1932,9 @@
       "selectCurrency": "Select currency",
       "selectMethods": "Select methods"
     },
-    "methods": {
-      "title": "Payout Methods",
-      "name": "Name",
-      "type": "Type",
-      "currency": "Currency",
-      "balance": "Balance",
-      "description": "Description",
-      "edit": "Edit Payout Method",
-      "view": "View Payout Method",
-      "create": "Create Payout Method",
-      "transactions": "View Transactions",
-      "noMethods": "No payout methods found"
-    },
-    "transactions": {
-      "date": "Date",
-      "amount": "Amount",
-      "status": "Status",
-      "noData": "No transactions found"
-    },
     "complete": "Complete",
     "reopen": "Reopen",
-    "errors": {
-      "fetchFailed": "Failed to fetch payout data",
-      "methodsFetchFailed": "Failed to fetch payout methods",
-      "sessionFieldsFetchFailed": "Failed to fetch session fields",
-      "requiredFields": "Please fill in all required fields",
-      "sessionCreateFailed": "Failed to create payout session",
-      "sessionUpdateFailed": "Failed to update payout session",
-      "methodCreateFailed": "Failed to create payout method",
-      "methodUpdateFailed": "Failed to update payout method",
-      "transactionsFetchFailed": "Failed to fetch transactions",
-      "autoPayoutFailed": "Failed to start auto payout"
-    },
+
     "success": {
       "sessionCreated": "Payout session created successfully",
       "sessionUpdated": "Payout session updated successfully",
@@ -1963,6 +1953,63 @@
       "paid": "Paid",
       "failed": "Failed",
       "processing": "Processing"
+    },
+    "transactions": {
+      "dialogTitle": "Payout Transactions",
+      "title": "Transactions",
+      "date": "Date",
+      "driver": "Driver",
+      "amount": "Amount",
+      "status": "Status",
+      "noData": "No transactions found"
+    },
+    "viewTransactions": "View Transactions",
+    "methods": {
+      "create": "Create Payout Method",
+      "edit": "Edit Payout Method",
+      "createSuccess": "Payout method created successfully",
+      "updateSuccess": "Payout method updated successfully",
+      "title": "Payout Methods",
+      "name": "Name",
+      "type": "Type",
+      "currency": "Currency",
+      "balance": "Balance",
+      "description": "Description",
+
+      "view": "View Payout Method",
+
+      "transactions": "View Transactions",
+      "noMethods": "No payout methods found",
+      "fields": {
+        "name": "Method Name",
+        "type": "Method Type",
+        "currency": "Currency",
+        "description": "Description"
+      },
+      "placeholders": {
+        "name": "Enter method name",
+        "description": "Enter method description"
+      },
+      "types": {
+        "bank": "Bank Transfer",
+        "cash": "Cash",
+        "card": "Card"
+      }
+    },
+    "errors": {
+      "requiredFields": "Please fill in all required fields",
+      "createMethodFailed": "Failed to create payout method",
+      "updateMethodFailed": "Failed to update payout method",
+      "fetchFailed": "Failed to fetch payout data",
+      "methodsFetchFailed": "Failed to fetch payout methods",
+      "sessionFieldsFetchFailed": "Failed to fetch session fields",
+
+      "sessionCreateFailed": "Failed to create payout session",
+      "sessionUpdateFailed": "Failed to update payout session",
+      "methodCreateFailed": "Failed to create payout method",
+      "methodUpdateFailed": "Failed to update payout method",
+      "transactionsFetchFailed": "Failed to fetch transactions",
+      "autoPayoutFailed": "Failed to start auto payout"
     }
   },
   "promotions": {
@@ -2415,5 +2462,18 @@
   },
   "titles": {
     "districts": "Districts"
+  },
+  "pagination": {
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "notifications": {
+    "complaints": "New Complaints",
+    "distressSignals": "Distress Signals",
+    "pendingDrivers": "Pending Drivers",
+    "noNotifications": "No new notifications",
+    "errors": {
+      "fetchFailed": "Failed to fetch notifications"
+    }
   }
 }

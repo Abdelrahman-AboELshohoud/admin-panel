@@ -38,7 +38,7 @@ export default function Complaints() {
   //   const navigate = useNavigate();
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [totalCount, setTotalCount] = useState(0);
-  const [currentPage, _setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
     null
@@ -176,8 +176,7 @@ export default function Complaints() {
                   {t("common.loading")}
                 </TableCell>
               </TableRow>
-            ) : complaints &&
-              complaints.length > 0 ? (
+            ) : complaints && complaints.length > 0 ? (
               complaints.map((complaint) => (
                 <TableRow
                   key={complaint.id}
@@ -248,11 +247,9 @@ export default function Complaints() {
         </Table>
       </div>
       <Pagination
-        t={t}
-        filters={{}}
-        setFilters={() => {}}
-        totalCount={totalCount}
-        loading={isLoading}
+        currentPage={currentPage}
+        totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}
+        onPageChange={setCurrentPage}
       />
 
       <MyDialog

@@ -6,24 +6,24 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../components/ui/table";
+} from "../../../components/ui/table";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Badge } from "../../components/ui/badge";
+} from "../../../components/ui/select";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { Badge } from "../../../components/ui/badge";
 import {
   OrderStatus,
   RiderOrdersGQL,
   RiderOrdersQuery,
   OrderSortFields,
   SortDirection,
-} from "../../graphql/requests";
+} from "../../../graphql/requests";
 import { useTranslation } from "react-i18next";
 
 interface ClientOrdersProps {
@@ -207,28 +207,28 @@ export default function ClientOrders({ riderId }: ClientOrdersProps) {
               <TableRow key={order.id} className="hover:bg-neutral-800">
                 <TableCell>
                   {new Date(order.createdOn).toLocaleDateString()}
-                <br />
-                <span className="text-sm text-gray-400">
-                  {new Date(order.createdOn).toLocaleTimeString()}
-                </span>
-              </TableCell>
-              <TableCell>
-                <Badge variant={getStatusBadgeVariant(order.status)}>
-                  {order.status}
-                </Badge>
-              </TableCell>
-              <TableCell>{order.distanceBest}km</TableCell>
-              <TableCell>{order.durationBest}min</TableCell>
-              <TableCell>
-                {order.costAfterCoupon} {order.currency}
-              </TableCell>
-              <TableCell>
-                <div className="max-w-xs truncate">
-                  {order.addresses.join(" → ")}
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+                  <br />
+                  <span className="text-sm text-gray-400">
+                    {new Date(order.createdOn).toLocaleTimeString()}
+                  </span>
+                </TableCell>
+                <TableCell>
+                  <Badge variant={getStatusBadgeVariant(order.status)}>
+                    {order.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>{order.distanceBest}km</TableCell>
+                <TableCell>{order.durationBest}min</TableCell>
+                <TableCell>
+                  {order.costAfterCoupon} {order.currency}
+                </TableCell>
+                <TableCell>
+                  <div className="max-w-xs truncate">
+                    {order.addresses.join(" → ")}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
 

@@ -233,8 +233,7 @@ const Cars = () => {
                     {t("common.loading")}
                   </td>
                 </TableRow>
-              ) : cars &&
-                cars.length > 0 ? (
+              ) : cars && cars.length > 0 ? (
                 cars.map((car: any) => <CarRow key={car.id} car={car} />)
               ) : (
                 <TableRow>
@@ -249,11 +248,11 @@ const Cars = () => {
 
         {cars.length > 0 && (
           <Pagination
-            filters={filters}
-            setFilters={setFilters}
-            totalCount={totalCount}
-            loading={isLoading}
-            t={t}
+            currentPage={filters.page}
+            totalPages={Math.ceil(totalCount / filters.limit)}
+            onPageChange={(page: number) =>
+              setFilters((prev) => ({ ...prev, page: page }))
+            }
           />
         )}
       </Tabs>

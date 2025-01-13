@@ -81,13 +81,10 @@ export default function ZonePriceForm({
       const lng = e.latLng.lng();
       const newPoint: Point = { lat, lng };
 
-      setFormData((prev) => {
-        const currentPoints = prev[selectedPoint];
-        return {
-          ...prev,
-          [selectedPoint]: [...currentPoints, newPoint],
-        };
-      });
+      setFormData((prev) => ({
+        ...prev,
+        [selectedPoint]: [...(prev[selectedPoint] || []), newPoint],
+      }));
     },
     [isEditing, selectedPoint]
   );
@@ -167,7 +164,14 @@ export default function ZonePriceForm({
       return;
     }
 
-    onSubmit(formData);
+    const submissionData = {
+      ...formData,
+      from: formData.from,
+      to: formData.to,
+      timeMultipliers: formData.timeMultipliers || [],
+    };
+
+    onSubmit(submissionData);
   };
 
   if (!isLoaded) {

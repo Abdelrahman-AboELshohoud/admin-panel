@@ -43,7 +43,7 @@ export const RolesManagement = () => {
       const res = await RoleGQL({ id });
       if (res?.data?.operatorRole) {
         setTitle(res?.data?.operatorRole?.title);
-        setPermissions(res?.data?.operatorRole?.permissions);
+        setPermissions(res?.data?.operatorRole?.permissions || []);
       } else {
         toast.error(t("common.error"));
       }
@@ -57,7 +57,9 @@ export const RolesManagement = () => {
   }, []);
 
   useEffect(() => {
-    getRole(selectedRole);
+    if (selectedRole) {
+      getRole(selectedRole);
+    }
   }, [selectedRole]);
 
   const handleCreateRole = async () => {
@@ -72,10 +74,12 @@ export const RolesManagement = () => {
           permissions,
         },
       });
-      if (res?.data?.createOperatorRole) {
+      if (res?.data?.createOneOperatorRole) {
         toast.success(t("common.created"));
         setIsCreateDialogOpen(false);
-        setRoles((prev) => [...prev, res?.data?.createOperatorRole]);
+        setRoles((prev) => [...prev, res?.data?.createOneOperatorRole]);
+        setTitle("");
+        setPermissions([]);
       } else {
         toast.error(t("common.error"));
       }
@@ -85,6 +89,10 @@ export const RolesManagement = () => {
   };
 
   const handleUpdateRole = async (id: string) => {
+    if (title.trim().length === 0) {
+      toast.error(t("common.nameRequired"));
+      return;
+    }
     try {
       const res = await UpdateRoleGQL({
         id,
@@ -93,9 +101,25 @@ export const RolesManagement = () => {
           permissions,
         },
       });
-      if (res?.data?.updateOperatorRole) {
+      console.log(res);
+      if (res?.data?.updateOneOperatorRole) {
         toast.success(t("common.updated"));
         setIsUpdateDialogOpen(false);
+        // Update the roles list with the updated role
+        setRoles((prev) =>
+          prev.map((role) =>
+            role.id === id
+              ? {
+                  ...role,
+                  title,
+                  permissions,
+                }
+              : role
+          )
+        );
+        setTitle("");
+        setPermissions([]);
+        setSelectedRole("");
       } else {
         toast.error(t("common.error"));
       }
@@ -106,10 +130,10 @@ export const RolesManagement = () => {
 
   const handlePermissionToggle = (permission: OperatorPermission) => {
     setPermissions((prev) => {
-      if (prev.includes(permission)) {
+      if (prev?.includes(permission)) {
         return prev.filter((p) => p !== permission);
       } else {
-        return [...prev, permission];
+        return [...(prev || []), permission];
       }
     });
   };
@@ -136,7 +160,7 @@ export const RolesManagement = () => {
               <Card className="p-2 flex items-center justify-between">
                 <span>{t(`permissions.${permission}`)}</span>
                 <Switch
-                  checked={permissions.includes(permission)}
+                  checked={permissions?.includes(permission) || false}
                   onCheckedChange={() => handlePermissionToggle(permission)}
                 />
               </Card>
@@ -145,6 +169,19 @@ export const RolesManagement = () => {
         </div>
       </div>
     ));
+  };
+
+  const handleOpenCreateDialog = () => {
+    setTitle("");
+    setPermissions([]);
+    setIsCreateDialogOpen(true);
+  };
+
+  const handleOpenUpdateDialog = (role: OperatorRole) => {
+    setSelectedRole(role.id);
+    setTitle(role.title);
+    setPermissions(role.permissions || []);
+    setIsUpdateDialogOpen(true);
   };
 
   if (!hasAccess) {
@@ -161,10 +198,7 @@ export const RolesManagement = () => {
     <div className="p-4">
       <div className="flex justify-between items-center">
         <h3 className="text-2xl font-bold mb-4">{t("roles.title")}</h3>
-        <Button
-          onClick={() => setIsCreateDialogOpen(true)}
-          className="add-button"
-        >
+        <Button onClick={handleOpenCreateDialog} className="add-button">
           {t("employees.addNew")}
         </Button>
       </div>
@@ -174,10 +208,7 @@ export const RolesManagement = () => {
           <div className="w-1/3 px-2 mb-4" key={role.id}>
             <Card
               className="p-4 cursor-pointer hover:shadow-lg"
-              onClick={() => {
-                setSelectedRole(role.id);
-                setIsUpdateDialogOpen(true);
-              }}
+              onClick={() => handleOpenUpdateDialog(role)}
             >
               <CardHeader>
                 <CardTitle>{role.title}</CardTitle>
@@ -208,12 +239,12 @@ export const RolesManagement = () => {
             <h6 className="mb-3">{t("permissions.title")}</h6>
             {renderPermissionSwitches()}
           </div>
-          <div className="flex justify-between">
-            <Button onClick={() => setIsCreateDialogOpen(false)}>
-              {t("common.cancel")}
-            </Button>
-            <Button onClick={handleCreateRole}>{t("common.create")}</Button>
-          </div>
+        </div>
+        <div className="flex justify-between">
+          <Button onClick={() => setIsCreateDialogOpen(false)}>
+            {t("common.cancel")}
+          </Button>
+          <Button onClick={handleCreateRole}>{t("common.create")}</Button>
         </div>
       </MyDialog>
 
@@ -238,14 +269,14 @@ export const RolesManagement = () => {
             <h6 className="mb-3">{t("permissions.title")}</h6>
             {renderPermissionSwitches()}
           </div>
-          <div className="flex justify-between">
-            <Button onClick={() => setIsUpdateDialogOpen(false)}>
-              {t("common.cancel")}
-            </Button>
-            <Button onClick={() => handleUpdateRole(selectedRole)}>
-              {t("common.update")}
-            </Button>
-          </div>
+        </div>
+        <div className="flex justify-between">
+          <Button onClick={() => setIsUpdateDialogOpen(false)}>
+            {t("common.cancel")}
+          </Button>
+          <Button onClick={() => handleUpdateRole(selectedRole)}>
+            {t("common.update")}
+          </Button>
         </div>
       </MyDialog>
     </div>

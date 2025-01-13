@@ -5,25 +5,15 @@ import {
   UpdateZonePriceGQL,
   ZonePricesListGQL,
   DeleteZonePriceGQL,
-  //   SetZonePriceRelationsGQL,
-  // ZonePriceInput,
 } from "../../graphql/requests";
 import { Button } from "../../components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { Input } from "../../components/ui/input";
-
 import { toast } from "react-hot-toast";
 import { MyDialog } from "../../components/common/MyDialog";
-
 import DeletionDialog from "../../components/common/DeletionDialog";
 import ZonePriceForm from "./ZonePriceForm";
+import MyTable from "../../components/common/MyTable";
+import Pagination from "../../components/common/Pagination";
 
 interface Point {
   lat: number;
@@ -64,13 +54,15 @@ export default function ZonesPrices() {
   const [filters, setFilters] = useState({
     search: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const fetchZones = useCallback(async () => {
     try {
       setLoading(true);
       const response = await ZonePricesListGQL({});
       if (response.data?.zonePrices) {
-        setZones(response.data.zonePrices);
+        setZones(response.data.zonePrices.nodes);
       }
       setLoading(false);
     } catch (error) {
@@ -84,24 +76,35 @@ export default function ZonesPrices() {
   }, [fetchZones]);
 
   const handleCreateZone = async (zoneData: ZonePriceFormData) => {
+    console.log(zoneData);
     try {
       setLoading(true);
       const response = await CreateZonePriceGQL({
         input: {
           name: zoneData.name,
           cost: zoneData.cost,
-          from: [zoneData.from],
-          to: [zoneData.to],
+          from: zoneData.from.map((point) => [
+            {
+              lat: point.lat,
+              lng: point.lng,
+            },
+          ]),
+          to: zoneData.to.map((point) => [
+            {
+              lat: point.lat,
+              lng: point.lng,
+            },
+          ]),
           timeMultipliers: zoneData.timeMultipliers,
         },
       });
+      console.log(response);
 
       if (response.data?.createZonePrice) {
-        setZones((prev) => [...prev, response.data.createZonePrice]);
+        await fetchZones();
         toast.success(t("directories.zonePrices.messages.createSuccess"));
         setShowDialog(false);
       }
-      setShowDialog(false);
     } catch (error) {
       console.error("Error creating zone:", error);
       toast.error(t("directories.zonePrices.messages.error.create"));
@@ -120,19 +123,24 @@ export default function ZonesPrices() {
         update: {
           name: zoneData.name,
           cost: zoneData.cost,
-          from: [zoneData.from],
-          to: [zoneData.to],
+          from: zoneData.from.map((point) => [
+            {
+              lat: point.lat,
+              lng: point.lng,
+            },
+          ]),
+          to: zoneData.to.map((point) => [
+            {
+              // Convert to array of arrays
+              lat: point.lat,
+              lng: point.lng,
+            },
+          ]),
           timeMultipliers: zoneData.timeMultipliers,
         },
       });
       if (response.data?.updateZonePrice) {
-        setZones((prev) =>
-          prev.map((zone) =>
-            zone.id === selectedZone.id
-              ? { ...zoneData, id: selectedZone.id }
-              : zone
-          )
-        );
+        await fetchZones();
         toast.success(t("directories.zonePrices.messages.updateSuccess"));
         setShowDialog(false);
       }
@@ -150,7 +158,7 @@ export default function ZonesPrices() {
     try {
       setLoading(true);
       await DeleteZonePriceGQL({ id: selectedZone.id });
-      setZones((prev) => prev.filter((zone) => zone.id !== selectedZone.id));
+      await fetchZones();
       toast.success(t("directories.zonePrices.messages.deleteSuccess"));
       setShowDeleteDialog(false);
       setSelectedZone(null);
@@ -168,6 +176,45 @@ export default function ZonesPrices() {
       .includes(filters.search.toLowerCase());
     return matchesSearch;
   });
+
+  const totalPages = Math.ceil(filteredZones.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentZones = filteredZones.slice(startIndex, endIndex);
+
+  const tableHeaders = [
+    t("directories.zonePrices.fields.name"),
+    t("directories.zonePrices.fields.cost"),
+    t("common.actions"),
+  ];
+
+  const tableRows = currentZones.map((zone) => [
+    zone.name,
+    zone.cost,
+    <div className="flex gap-2" key={zone.id}>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={() => {
+          setSelectedZone(zone);
+          setIsEditing(true);
+          setShowDialog(true);
+        }}
+      >
+        {t("common.edit")}
+      </Button>
+      <Button
+        variant="destructive"
+        size="sm"
+        onClick={() => {
+          setSelectedZone(zone);
+          setShowDeleteDialog(true);
+        }}
+      >
+        {t("common.delete")}
+      </Button>
+    </div>,
+  ]);
 
   return (
     <div className="p-6">
@@ -196,69 +243,19 @@ export default function ZonesPrices() {
         />
       </div>
 
-      <div className="card-shape">
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-transparent border-none">
-              <TableHead>{t("directories.zonePrices.fields.name")}</TableHead>
-              <TableHead>{t("directories.zonePrices.fields.cost")}</TableHead>
+      {loading ? (
+        <div className="text-center py-14">{t("common.loading")}</div>
+      ) : (
+        <>
+          <MyTable headers={tableHeaders} rows={tableRows} />
 
-              <TableHead>{t("common.actions")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {loading ? (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center py-14">
-                  {t("common.loading")}
-                </TableCell>
-              </TableRow>
-            ) : filteredZones && filteredZones.length > 0 ? (
-              filteredZones.map((zone) => (
-                <TableRow
-                  key={zone.id}
-                  className="hover:bg-[#282828] border-none"
-                >
-                  <TableCell>{zone.name}</TableCell>
-                  <TableCell>{zone.cost}</TableCell>
-
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedZone(zone);
-                          setIsEditing(true);
-                          setShowDialog(true);
-                        }}
-                      >
-                        {t("common.edit")}
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => {
-                          setSelectedZone(zone);
-                          setShowDeleteDialog(true);
-                        }}
-                      >
-                        {t("common.delete")}
-                      </Button>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={5} className="text-center">
-                  {t("directories.zonePrices.noZones")}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
+        </>
+      )}
 
       <MyDialog
         title={

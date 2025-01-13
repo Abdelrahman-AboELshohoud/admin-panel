@@ -238,11 +238,9 @@ export default function DriversGroups() {
         <div className="text-center py-4 text-gray-500">{t("noFleets")}</div>
       )}
       <Pagination
-        filters={filters}
-        setFilters={setFilters}
-        totalCount={totalCount}
-        loading={loading}
-        t={t}
+        currentPage={filters.page}
+        totalPages={Math.ceil(totalCount / filters.limit)}
+        onPageChange={(page: number) => handleFilterChange("page", page.toString())}
       />
     </div>
   );

@@ -8,11 +8,11 @@ import {
   CreateServiceCategoryGQL,
   ServiceCategory,
   ServiceCategoryInput,
-} from "../../graphql/requests.js";
-import { Button } from "../../components/ui/button.js";
-import { Input } from "../../components/ui/input";
-import { MyDialog } from "../../components/common/MyDialog";
-import DeletionDialog from "../../components/common/DeletionDialog";
+} from "../../../graphql/requests.js";
+import { Button } from "../../../components/ui/button.js";
+import { Input } from "../../../components/ui/input.js";
+import { MyDialog } from "../../../components/common/MyDialog.js";
+import DeletionDialog from "../../../components/common/DeletionDialog.js";
 import toast from "react-hot-toast";
 
 export default function Services() {
@@ -213,7 +213,10 @@ export default function Services() {
                           }
                         >
                           <img
-                            src={service?.media?.address || "/placeholder-image.jpg"}
+                            src={
+                              service?.media?.address ||
+                              "/placeholder-image.jpg"
+                            }
                             alt={service.name}
                             className="w-full h-48 object-cover rounded mt-2"
                           />

@@ -1,34 +1,21 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
-
+import { Button } from "../../../components/ui/button";
+import { Card, CardContent, CardTitle } from "../../../components/ui/card";
+import { Input } from "../../../components/ui/input";
 import { Plus } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import {
   CouponListGQL,
   CreateCouponGQL,
   DeleteCouponGQL,
   CreateCouponMutationVariables,
   UpdateCouponGQL,
-} from "../../graphql/requests";
-import { MyDialog } from "../../components/common/MyDialog";
-import { format } from "date-fns";
+} from "../../../graphql/requests";
+import { MyDialog } from "../../../components/common/MyDialog";
+import moment from "moment";
 import toast from "react-hot-toast";
-import { Switch } from "../../components/ui/switch";
+import { Switch } from "../../../components/ui/switch";
+import MyTableWithHeader from "../../../components/common/MyTableWithHeader";
 
 interface Coupon {
   id: string;
@@ -148,8 +135,13 @@ export default function Copouns() {
         toast.success(t("common.updated"));
       } else {
         const { data } = await CreateCouponGQL({ input });
-        setCoupons((prev) => [...prev, data.createCoupon]);
-        toast.success(t("common.created"));
+        if (data.createCoupon) {
+          setCoupons((prev) => [
+            ...prev,
+            { ...input, id: data.createCoupon.id },
+          ]);
+          toast.success(t("common.created"));
+        }
       }
 
       setShowCouponDialog(false);
@@ -175,95 +167,74 @@ export default function Copouns() {
     }
   };
 
+  const TableHeader = () => (
+    <div className="flex justify-between items-center">
+      <CardTitle className="text-gray-200 text-xl">
+        {t("promotions.coupons")}
+      </CardTitle>
+      <Button onClick={() => setShowCouponDialog(true)}>
+        <Plus className="w-4 h-4 mr-2" />
+        {t("common.create")}
+      </Button>
+    </div>
+  );
+
+  const headers = [
+    t("promotions.code"),
+    t("promotions.title"),
+    t("promotions.startDate"),
+    t("promotions.expireDate"),
+    t("promotions.status"),
+    t("common.actions"),
+  ];
+  console.log(coupons);
+  const rows = coupons.map((coupon) => [
+    coupon?.code || "-",
+    coupon?.title || "-",
+    moment(coupon?.startAt || "").format("ll"),
+    moment(coupon?.expireAt || "").format("ll"),
+    <span className={coupon?.isEnabled ? "text-green-500" : "text-red-500"}>
+      {coupon?.isEnabled ? t("common.active") : t("common.inactive")}
+    </span>,
+    <div className="space-x-2">
+      <Button
+        variant="secondary"
+        size="sm"
+        onClick={() => handleEditCoupon(coupon)}
+      >
+        {t("common.edit")}
+      </Button>
+      <Button
+        variant="destructive"
+        size="sm"
+        onClick={() => handleDeleteCoupon(coupon?.id || "")}
+      >
+        {t("common.delete")}
+      </Button>
+    </div>,
+  ]);
+
   return (
-    <div className="card-shape">
+    <div>
       <Card className="bg-transparent border-transparent shadow-none">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-gray-200 text-xl">
-            {t("promotions.coupons")}
-          </CardTitle>
-          <Button onClick={() => setShowCouponDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            {t("common.create")}
-          </Button>
-        </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent border-transparent">
-                <TableHead>{t("promotions.code")}</TableHead>
-                <TableHead>{t("promotions.title")}</TableHead>
-                <TableHead>{t("promotions.startDate")}</TableHead>
-                <TableHead>{t("promotions.expireDate")}</TableHead>
-                <TableHead>{t("promotions.status")}</TableHead>
-                <TableHead>{t("common.actions")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={6}
-                    className="text-center py-14 hover:bg-transparent border-transparent text-gray-200"
-                  >
-                    {t("common.loading")}
-                  </TableCell>
-                </TableRow>
-              ) : coupons.length === 0 ? (
-                <TableRow className="hover:bg-transparent border-transparent">
-                  <TableCell colSpan={6} className="text-center py-14 ">
-                    {t("common.noData")}
-                  </TableCell>
-                </TableRow>
-              ) : (
-                coupons &&
-                coupons?.map((coupon) => (
-                  <TableRow
-                    key={coupon.id}
-                    className="hover:bg-[#262626] border-transparent text-gray-200"
-                  >
-                    <TableCell>{coupon.code}</TableCell>
-                    <TableCell>{coupon.title}</TableCell>
-                    <TableCell>
-                      {format(new Date(coupon.startAt), "PP")}
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(coupon.expireAt), "PP")}
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className={
-                          coupon.isEnabled ? "text-green-500" : "text-red-500"
-                        }
-                      >
-                        {coupon.isEnabled
-                          ? t("common.active")
-                          : t("common.inactive")}
-                      </span>
-                    </TableCell>
-                    <TableCell className="space-x-2">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={() => handleEditCoupon(coupon)}
-                      >
-                        {t("common.edit")}
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDeleteCoupon(coupon.id)}
-                      >
-                        {t("common.delete")}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+          {loading ? (
+            <div className="text-center py-14 text-gray-200">
+              {t("common.loading")}
+            </div>
+          ) : coupons.length === 0 ? (
+            <div className="text-center py-14">{t("common.noData")}</div>
+          ) : (
+            <MyTableWithHeader
+              Header={TableHeader}
+              headers={headers}
+              rows={rows}
+              navigate={() => {}}
+            />
+          )}
         </CardContent>
       </Card>
+
       <MyDialog
         isOpen={showCouponDialog}
         onOpenChange={setShowCouponDialog}

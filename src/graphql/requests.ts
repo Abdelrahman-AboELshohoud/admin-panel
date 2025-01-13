@@ -3674,6 +3674,15 @@ export const OrdersListDocument = gql`
           lastName
           mobileNumber
         }
+        driver {
+          id
+          firstName
+          lastName
+          mobileNumber
+        }
+        service {
+          name
+        }
       }
       totalCount
     }

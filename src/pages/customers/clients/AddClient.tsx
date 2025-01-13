@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { CreateRiderGQL, Gender, Rider } from "../../graphql/requests";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
+import { CreateRiderGQL, Gender, Rider } from "../../../graphql/requests";
 import { useNavigate } from "react-router-dom";
-import SelectsWithLabel from "../../components/common/SelectsWithLabel";
+import SelectsWithLabel from "../../../components/common/SelectsWithLabel";
 import { t } from "i18next";
 
-import Switch from "../../components/common/Switch";
+import Switch from "../../../components/common/Switch";
 
 interface FormErrors {
   firstName?: string;

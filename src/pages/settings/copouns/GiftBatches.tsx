@@ -1,29 +1,17 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
-import { Input } from "../../components/ui/input";
+import { Button } from "../../../components/ui/button";
+
+import { Input } from "../../../components/ui/input";
 import { Plus } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import {
   GiftBatchListGQL,
   CreateGiftBachGQL,
   ExportGiftBatchToCsvGQL,
   CreateGiftBachMutationVariables,
-} from "../../graphql/requests";
-import { MyDialog } from "../../components/common/MyDialog";
+  ViewGiftBatchQuery,
+} from "../../../graphql/requests";
+import { MyDialog } from "../../../components/common/MyDialog";
 import toast from "react-hot-toast";
 import {
   Select,
@@ -31,29 +19,16 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../components/ui/select";
+} from "../../../components/ui/select";
 
-interface GiftBatch {
-  id: string;
-  name: string;
-  amount: number;
-  currency: string;
-  totalUsed: {
-    count: {
-      id: number;
-    };
-  };
-  totalUnused: {
-    count: {
-      id: number;
-    };
-  };
-}
+import moment from "moment";
+import MyTableWithHeader from "../../../components/common/MyTableWithHeader";
 
 export default function GiftBatches() {
   const { t } = useTranslation();
-  const [giftBatches, setGiftBatches] = useState<GiftBatch[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [giftBatches, setGiftBatches] = useState<
+    ViewGiftBatchQuery["giftBatch"][]
+  >([]);
 
   const [showGiftBatchDialog, setShowGiftBatchDialog] = useState(false);
 
@@ -69,7 +44,7 @@ export default function GiftBatches() {
   });
 
   const fetchData = async () => {
-    setLoading(true);
+
     try {
       const [giftBatchData] = await Promise.all([GiftBatchListGQL({})]);
 
@@ -77,7 +52,6 @@ export default function GiftBatches() {
     } catch (error) {
       toast.error(t("common.error"));
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -85,9 +59,11 @@ export default function GiftBatches() {
   }, []);
 
   const handleExportGiftBatch = async (id: string) => {
+    console.log(id);
     try {
       const response = await ExportGiftBatchToCsvGQL({ giftBatchId: id });
       // Handle CSV download
+      console.log(response);
       if (response.statusCode === 200) {
         const blob = new Blob([response.data.exportGiftBatchToCsv], {
           type: "text/csv",
@@ -130,75 +106,60 @@ export default function GiftBatches() {
     }
   };
 
+  console.log(giftBatches);
+
   return (
-    <div className="card-shape ">
-      <Card className="bg-transparent border-transparent shadow-none">
-        <CardHeader className="flex flex-row items-center justify-between">
-          <CardTitle className="text-gray-200 text-xl">
-            {t("promotions.giftCards")}
-          </CardTitle>
-          <Button onClick={() => setShowGiftBatchDialog(true)}>
-            <Plus className="w-4 h-4 mr-2" />
-            {t("common.create")}
-          </Button>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent border-transparent">
-                <TableHead>{t("promotions.name")}</TableHead>
-                <TableHead>{t("promotions.amount")}</TableHead>
-                <TableHead>{t("promotions.used")}</TableHead>
-                <TableHead>{t("promotions.unused")}</TableHead>
-                <TableHead>{t("common.actions")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {loading ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={5}
-                    className="text-center text-gray-200 py-14 hover:bg-transparent border-transparent"
-                  >
-                    {t("common.loading")}
-                  </TableCell>
-                </TableRow>
-              ) : giftBatches.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={5}
-                    className="text-center text-gray-200 py-14 hover:bg-transparent border-transparent"
-                  >
-                    {t("common.noData")}
-                  </TableCell>
-                </TableRow>
-              ) : (
-                giftBatches.map((batch) => (
-                  <TableRow
-                    key={batch.id}
-                    className="hover:bg-[#262626] border-transparent text-gray-200"
-                  >
-                    <TableCell>{batch.name}</TableCell>
-                    <TableCell>{`${batch.amount} ${batch.currency}`}</TableCell>
-                    <TableCell>{batch.totalUsed.count.id}</TableCell>
-                    <TableCell>{batch.totalUnused.count.id}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="text-gray-700"
-                        onClick={() => handleExportGiftBatch(batch.id)}
-                      >
-                        {t("common.export")}
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+    <>
+      <MyTableWithHeader
+        Header={() => (
+          <div className="flex flex-row items-center justify-between">
+            <h3 className="text-gray-200 text-xl font-bold">
+              {t("promotions.giftCards")}
+            </h3>
+            <Button
+              className="add-button"
+              onClick={() => setShowGiftBatchDialog(true)}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              {t("common.create")}
+            </Button>
+          </div>
+        )}
+        headers={[
+          t("promotions.name"),
+          t("promotions.amount"),
+          t("promotions.unused"),
+          t("promotions.used"),
+          t("promotions.availableFrom"),
+          t("promotions.expireAt"),
+          t("common.actions"),
+        ]}
+        rows={giftBatches.map((batch) => [
+          batch.name,
+          `${batch.amount} ${batch.currency}`,
+          batch?.totalUnused[0]?.count?.id,
+          batch?.totalUsed[0]?.count?.id,
+          <>
+            {moment(batch.availableFrom).format("DD.MM.YYYY HH:mm")}
+            <br />
+            {moment(batch.availableFrom).format("HH:mm A")}
+          </>,
+          <>
+            {moment(batch.expireAt).format("DD.MM.YYYY HH:mm")}
+            <br />
+            {moment(batch.expireAt).format("HH:mm A")}
+          </>,
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-gray-700"
+            onClick={() => handleExportGiftBatch(batch.id)}
+          >
+            {t("common.export")}
+          </Button>,
+        ])}
+        navigate={() => {}}
+      />
 
       <MyDialog
         isOpen={showGiftBatchDialog}
@@ -292,6 +253,7 @@ export default function GiftBatches() {
           </div>
           <div className="flex justify-end space-x-2">
             <Button
+              className="hover:text-gray-600 text-gray-500"
               variant="outline"
               onClick={() => setShowGiftBatchDialog(false)}
             >
@@ -303,6 +265,6 @@ export default function GiftBatches() {
           </div>
         </div>
       </MyDialog>
-    </div>
+    </>
   );
 }

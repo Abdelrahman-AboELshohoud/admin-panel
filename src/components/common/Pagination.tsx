@@ -1,50 +1,69 @@
-import { Button } from "../ui/button";
+import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
+
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
 
 export default function Pagination({
-  filters,
-  setFilters,
-  totalCount,
-  loading,
-  t,
-}: {
-  filters: any;
-  setFilters: any;
-  totalCount: number;
-  loading: boolean;
-  t: any;
-}) {
+  currentPage,
+  totalPages,
+  onPageChange,
+}: PaginationProps) {
+  const { t } = useTranslation();
+
+  const getPageNumbers = () => {
+    let startPage = currentPage > 6 ? currentPage - 6 : 1;
+    let endPage = currentPage > 6 ? currentPage + 4 : 10;
+    if (endPage > totalPages) {
+      endPage = totalPages;
+      startPage = endPage - 9 > 0 ? endPage - 9 : 1;
+    }
+    const pages = [];
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  };
+
   return (
-    <div className="flex justify-between items-center mt-4">
-      <Button
-        variant="outline"
-        onClick={() =>
-          setFilters((prev: any) => ({
-            ...prev,
-            page: prev.page - 1,
-          }))
-        }
-        disabled={filters.page === 1 || loading}
-      >
-        {t("common.previous")}
-      </Button>
-      <span>
-        {t("common.page")} {filters.page || 1} /{" "}
-        {Math.ceil(totalCount / filters.limit || 1)}
-      </span>
-      <Button
-        variant="outline"
-        onClick={() =>
-          setFilters((prev: any) => ({
-            ...prev,
-            page: prev.page + 1,
-          }))
-        }
-        disabled={
-          filters.page >= Math.ceil(totalCount / filters.limit) || loading
-        }
-      >
-        {t("common.next")}
-      </Button>
+    <div className="p-4">
+      <div className="text-lg font-semibold mb-2 text-gray-100">
+        {t("common.pagination.pages")}
+      </div>
+      <div className="flex items-center gap-2">
+        {getPageNumbers().map((page) => (
+          <button
+            key={page}
+            className={` text-lg font-semibold  ${
+              page === currentPage ? "font-bold text-white" : "text-blue-400"
+            }`}
+            onClick={() => onPageChange(page)}
+          >
+            {page}
+          </button>
+        ))}
+      </div>
+      <div className="flex items-center space-x-4 mt-2">
+        <button
+          className="flex items-center text-blue-400 disabled:text-gray-500 font-medium text-lg"
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          <ArrowLeftIcon className="w-4 h-4" />
+          <span className="ml-1">{t("common.pagination.previous")}</span>
+        </button>
+        <button
+          className="flex items-center text-blue-400 disabled:text-gray-500 font-medium text-lg"
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          <span className="mr-1">{t("common.pagination.next")}</span>
+          <ArrowRightIcon className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 }

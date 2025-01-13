@@ -6,7 +6,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../../components/ui/tabs";
+} from "../../../components/ui/tabs";
 
 import GiftBatches from "./GiftBatches";
 import Copouns from "./Copouns";

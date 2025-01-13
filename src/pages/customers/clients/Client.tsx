@@ -5,19 +5,19 @@ import {
   ViewRiderGQL,
   DeleteRiderGQL,
   DispatcherCalculateFareGQL,
-} from "../../graphql/requests";
+} from "../../../graphql/requests";
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
-} from "../../components/ui/tabs";
+} from "../../../components/ui/tabs";
 import { useTranslation } from "react-i18next";
 import ClientProfile from "./ClientProfile";
 import ClientWallet from "./ClientWallet";
 import ClientOrders from "./ClientOrders";
-import { Button } from "../../components/ui/button";
-import DeletionDialog from "../../components/common/DeletionDialog";
+import { Button } from "../../../components/ui/button";
+import DeletionDialog from "../../../components/common/DeletionDialog";
 import {
   GoogleMap,
   Marker,

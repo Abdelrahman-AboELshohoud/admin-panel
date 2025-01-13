@@ -46,45 +46,12 @@ interface FleetFilters {
   limit: number;
 }
 
-const mockFleets: Fleet[] = [
-  {
-    id: "1",
-    name: "Premium Fleet Services",
-    address: "123 Main St, Kazan",
-    phoneNumber: "+7 (999) 123-4567",
-    status: FleetStatus.Active,
-    accountNumber: "ACC123456",
-    commissionSharePercent: 15,
-    commissionShareFlat: 100,
-  },
-  {
-    id: "2",
-    name: "City Drivers Co",
-    address: "456 Oak Ave, Kazan",
-    phoneNumber: "+7 (999) 765-4321",
-    status: FleetStatus.Blocked,
-    accountNumber: "ACC789012",
-    commissionSharePercent: 12,
-    commissionShareFlat: 75,
-  },
-  {
-    id: "3",
-    name: "Express Fleet",
-    address: "789 Pine Rd, Moscow",
-    phoneNumber: "+7 (999) 246-8135",
-    status: FleetStatus.Active,
-    accountNumber: "ACC345678",
-    commissionSharePercent: 18,
-    commissionShareFlat: 150,
-  },
-];
-
 export default function DriversGroups() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [fleets, setFleets] = useState<Fleet[]>(mockFleets);
-  const [totalCount, setTotalCount] = useState(mockFleets.length);
+  const [fleets, setFleets] = useState<Fleet[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [filters, setFilters] = useState<FleetFilters>({
     status: "all",
     city: "all",
@@ -97,7 +64,7 @@ export default function DriversGroups() {
     try {
       setLoading(true);
       // Filter mock data based on filters
-      let filteredFleets = [...mockFleets];
+      let filteredFleets = [...fleets];
 
       if (filters.status !== "all") {
         filteredFleets = filteredFleets.filter(
@@ -136,8 +103,11 @@ export default function DriversGroups() {
     setFilters((prev: FleetFilters) => ({ ...prev, status: value, page: 1 }));
   };
 
-  const handleFilterChange = (key: keyof FleetFilters, value: string) => {
-    setFilters((prev: FleetFilters) => ({ ...prev, [key]: value, page: 1 }));
+  const handleFilterChange = (
+    key: keyof FleetFilters,
+    value: string | number
+  ) => {
+    setFilters((prev: FleetFilters) => ({ ...prev, [key]: value }));
   };
 
   return (
@@ -221,17 +191,18 @@ export default function DriversGroups() {
                   key={fleet.id}
                   className="bg-transparent border-none mb-2 hover:bg-[#262626] hover:cursor-pointer h-12"
                   onClick={() =>
-                  navigate(`/control-panel/drivers-groups/fleet/${fleet.id}`)
-                }
-              >
-                <TableCell>{fleet.name}</TableCell>
-                <TableCell>{fleet.address}</TableCell>
-                <TableCell>{fleet.phoneNumber}</TableCell>
-                <TableCell>
-                  {fleet.commissionSharePercent}% + {fleet.commissionShareFlat}
-                </TableCell>
-              </TableRow>
-            ))}
+                    navigate(`/control-panel/drivers-groups/fleet/${fleet.id}`)
+                  }
+                >
+                  <TableCell>{fleet.name}</TableCell>
+                  <TableCell>{fleet.address}</TableCell>
+                  <TableCell>{fleet.phoneNumber}</TableCell>
+                  <TableCell>
+                    {fleet.commissionSharePercent}% +{" "}
+                    {fleet.commissionShareFlat}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </div>
@@ -242,11 +213,9 @@ export default function DriversGroups() {
         <div className="text-center py-14 text-gray-500">{t("noFleets")}</div>
       )}
       <Pagination
-        filters={filters}
-        setFilters={setFilters}
-        totalCount={totalCount}
-        loading={loading}
-        t={t}
+        currentPage={filters.page}
+        totalPages={Math.ceil(totalCount / filters.limit)}
+        onPageChange={(page: number) => handleFilterChange("page", page)}
       />
     </div>
   );

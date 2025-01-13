@@ -3,7 +3,12 @@ import Switch from "../../components/common/Switch";
 import { Button } from "../../components/ui/button";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
-import { GoogleMap, Polygon, useLoadScript } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  Polygon,
+  Marker,
+  useLoadScript,
+} from "@react-google-maps/api";
 import {
   RegionListGQL,
   UpdateRegionGQL,
@@ -27,6 +32,16 @@ const libraries: ("drawing" | "geometry" | "places" | "visualization")[] = [
   "geometry",
 ];
 
+// Helper function to generate random color
+const getRandomColor = () => {
+  const letters = "0123456789ABCDEF";
+  let color = "#";
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
 export default function MapPage() {
   const { t } = useTranslation();
   const [regions, setRegions] = useState<Region[]>([]);
@@ -36,23 +51,27 @@ export default function MapPage() {
   const [_map, setMap] = useState<google.maps.Map | null>(null);
   const [visibleRegions, setVisibleRegions] = useState<Set<string>>(new Set());
   const [editingRegion, setEditingRegion] = useState<Region | null>(null);
+  const [regionColors] = useState<Map<string, string>>(new Map());
 
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "",
     libraries,
   });
 
-  // Initialize visible regions
-  useEffect(() => {
-    const initialVisible = new Set(regions.map((r) => r.id));
-    setVisibleRegions(initialVisible);
-  }, [regions]);
-
   const fetchRegions = useCallback(async () => {
     try {
       const response = await RegionListGQL({});
       if (response.data?.regions) {
-        setRegions(response.data.regions);
+        const fetchedRegions = response.data.regions.nodes;
+        // Assign random colors to new regions
+        fetchedRegions.forEach((region: Region) => {
+          if (!regionColors.has(region.id)) {
+            regionColors.set(region.id, getRandomColor());
+          }
+        });
+        setRegions(fetchedRegions);
+        // Initialize visible regions with all fetched regions
+        setVisibleRegions(new Set(fetchedRegions.map((r: Region) => r.id)));
       }
     } catch (error) {
       console.error("Error fetching regions:", error);
@@ -161,17 +180,35 @@ export default function MapPage() {
               const polygonPath = region.location?.[0];
               if (!polygonPath || polygonPath.length < 3) return null;
 
+              const regionColor =
+                regionColors.get(region.id) || getRandomColor();
+
               return (
-                <Polygon
-                  key={region.id}
-                  paths={polygonPath}
-                  options={{
-                    fillColor: region.enabled ? "#00FF00" : "#FF0000",
-                    fillOpacity: 0.35,
-                    strokeColor: region.enabled ? "#00FF00" : "#FF0000",
-                    strokeWeight: 2,
-                  }}
-                />
+                <div key={region.id}>
+                  <Polygon
+                    paths={polygonPath}
+                    options={{
+                      fillColor: regionColor,
+                      fillOpacity: 0.35,
+                      strokeColor: regionColor,
+                      strokeWeight: 2,
+                    }}
+                  />
+                  {polygonPath.map((point, index) => (
+                    <Marker
+                      key={`${region.id}-point-${index}`}
+                      position={point}
+                      icon={{
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 7,
+                        fillColor: regionColor,
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "#FFFFFF",
+                      }}
+                    />
+                  ))}
+                </div>
               );
             })}
         </GoogleMap>
@@ -203,7 +240,7 @@ export default function MapPage() {
                 <div
                   className="w-4 h-4 rounded-full"
                   style={{
-                    backgroundColor: region.enabled ? "#00FF00" : "#FF0000",
+                    backgroundColor: regionColors.get(region.id),
                     opacity: 0.6,
                   }}
                 />
@@ -259,6 +296,7 @@ export default function MapPage() {
           isOpen={showAddInMap}
           onClose={() => setShowAddInMap(false)}
           onSave={async (region: Region) => {
+            regionColors.set(region.id, getRandomColor());
             setRegions((prev) => [...prev, region]);
           }}
         />
@@ -289,10 +327,9 @@ export default function MapPage() {
               );
             } else {
               // Add new region
-              setRegions((prev) => [
-                ...prev,
-                { ...updatedRegion, id: String(Date.now()) },
-              ]);
+              const newId = String(Date.now());
+              regionColors.set(newId, getRandomColor());
+              setRegions((prev) => [...prev, { ...updatedRegion, id: newId }]);
             }
             setShowDialog(false);
             setEditingRegion(null);

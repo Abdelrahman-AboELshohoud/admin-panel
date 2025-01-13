@@ -4,22 +4,22 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "../../components/ui/select";
+} from "../../../components/ui/select";
 
-import { Input } from "../../components/ui/input";
-import Switch from "../../components/common/Switch";
+import { Input } from "../../../components/ui/input";
+import Switch from "../../../components/common/Switch";
 import { useTranslation } from "react-i18next";
 import {
   ServicePaymentMethod,
-  ServiceOptionType,
-  ServiceOptionIcon,
   type Service as ServiceType,
   Service,
-} from "../../graphql/requests";
-import { FaPlus } from "react-icons/fa";
-import { Button } from "../../components/ui/button";
-import ServiceOptionsDialog from "../../components/services/ServiceOptionsDialog";
-import { useState } from "react";
+  ServiceOption,
+  ServiceOptionsListGQL,
+} from "../../../graphql/requests";
+import { Button } from "../../../components/ui/button";
+import ServiceOptionsDialog from "../../../components/services/ServiceOptionsDialog";
+import { useState, useEffect } from "react";
+import AddServiceOptionsDialog from "../../../components/services/AddServiceOptionsDialog";
 
 interface LeftCustomerEditProps {
   editing: boolean;
@@ -34,6 +34,22 @@ export default function LeftCustomerEdit({
 }: LeftCustomerEditProps) {
   const { t } = useTranslation();
   const [showOptionsDialog, setShowOptionsDialog] = useState(false);
+  const [showAddOptionsDialog, setShowAddOptionsDialog] = useState(false);
+  const [availableOptions, setAvailableOptions] = useState<ServiceOption[]>([]);
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const response = await ServiceOptionsListGQL({});
+        if (response.data?.serviceOptions) {
+          setAvailableOptions(response.data.serviceOptions);
+        }
+      } catch (error) {
+        console.error("Error fetching service options:", error);
+      }
+    };
+    fetchOptions();
+  }, []);
 
   const handleInputChange = (key: keyof ServiceType, value: any) => {
     setService({ ...service, [key]: value });
@@ -165,13 +181,12 @@ export default function LeftCustomerEdit({
         </div>
       </div>
 
-      <div className="flex flex-row justify-between items-start">
-        <label className="flex w-1/3">{t("rightCustomerEdit.options")}</label>
-        <div className="w-2/3 space-y-2">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-medium">
-              {t("leftCustomerEdit.serviceOptions.title")}
-            </h3>
+      <div className="flex flex-col space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-medium">
+            {t("leftCustomerEdit.serviceOptions.title")}
+          </h3>
+          {editing && (
             <Button
               variant="outline"
               size="sm"
@@ -179,84 +194,53 @@ export default function LeftCustomerEdit({
             >
               {t("leftCustomerEdit.serviceOptions.manage")}
             </Button>
-          </div>
-
-          {service.options &&
-            service.options.length > 0 &&
-            service.options.map((option, index) => (
-              <div key={index} className="flex gap-2">
-                <Input
-                  value={option.name}
-                onChange={(e) => {
-                  const newOptions = [...(service.options || [])];
-                  newOptions[index] = {
-                    ...newOptions[index],
-                    name: e.target.value,
-                  };
-                  handleInputChange("options", newOptions);
-                }}
-                readOnly={!editing}
-                className="custom-input text-gray-100"
-              />
-              <Select
-                value={option.icon}
-                onValueChange={(value) => {
-                  const newOptions = [...(service.options || [])];
-                  newOptions[index] = {
-                    ...newOptions[index],
-                    icon: value as ServiceOptionIcon,
-                  };
-                  handleInputChange("options", newOptions);
-                }}
-                disabled={!editing}
-              >
-                <SelectTrigger className="border-transparent bg-[#262628] h-full border-0 outline-transparent text-gray-100">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.values(ServiceOptionIcon).map((icon) => (
-                    <SelectItem key={icon} value={icon}>
-                      {icon}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          ))}
-          {editing && (
-            <Button
-              onClick={() => {
-                const newOptions = [...(service.options || [])];
-                newOptions.push({
-                  id: `new_${Date.now()}`,
-                  name: "",
-                  icon: ServiceOptionIcon.Custom1,
-                  type: ServiceOptionType.Free,
-                });
-                handleInputChange("options", newOptions);
-              }}
-              className="mt-2"
-            >
-              <FaPlus className="mr-2" />
-              {t("rightCustomerEdit.addOption")}
-            </Button>
           )}
         </div>
+
+        <div className="space-y-2">
+          {service.options?.map((option, index) => (
+            <div
+              key={index}
+              className="flex items-center gap-2 p-2 bg-zinc-900 rounded"
+            >
+              <span className="flex-1">{option.name}</span>
+              <span className="text-gray-400">{option.icon}</span>
+              {option.additionalFee && (
+                <span className="text-gray-400">+{option.additionalFee}</span>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {editing && (
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-full"
+            onClick={() => setShowAddOptionsDialog(true)}
+          >
+            {t("leftCustomerEdit.serviceOptions.addMore")}
+          </Button>
+        )}
       </div>
 
       <ServiceOptionsDialog
         isOpen={showOptionsDialog}
         onClose={() => setShowOptionsDialog(false)}
         serviceId={service.id}
-        currentOptions={
-          service.options &&
-          service.options.length > 0 &&
-          service.options.map((option) => ({
-            ...option,
-            additionalFee: option.additionalFee ?? undefined,
-          })) || []
-        }
+        currentOptions={service.options || []}
         onOptionsUpdate={(options) => handleInputChange("options", options)}
+      />
+
+      <AddServiceOptionsDialog
+        isOpen={showAddOptionsDialog}
+        onClose={() => setShowAddOptionsDialog(false)}
+        availableOptions={availableOptions}
+        selectedOptions={service.options || []}
+        onOptionsSelect={(newOptions) => {
+          const updatedOptions = [...(service.options || []), ...newOptions];
+          handleInputChange("options", updatedOptions);
+        }}
       />
     </div>
   );
