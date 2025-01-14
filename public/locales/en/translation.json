@@ -232,6 +232,44 @@
     "noOrders": "No orders found",
     "summary": {
       "total": "Total Amount"
+    },
+    "view": {
+      "title": "Order",
+      "tabs": {
+        "order": "Order",
+        "events": "Events",
+        "route": "Route on map",
+        "chat": "Chat",
+        "photos": "Photos"
+      },
+      "client": "Client",
+      "executor": "Executor",
+      "details": "Order Details",
+      "addresses": "Addresses",
+      "fields": {
+        "createdAt": "Created",
+        "startTime": "Start Time",
+        "finishTime": "Finish Time",
+        "cost": "Cost",
+        "finalCost": "Final Cost",
+        "status": "Status"
+      }
+    },
+    "events": {
+      "noEvents": "No events found",
+      "created": "Order created",
+      "driverAssigned": "Driver {{driver}} assigned to order",
+      "statusUpdated": "Status updated to {{status}}",
+      "edited": "Order edited by {{editor}}",
+      "carAssigned": "Car assigned to order",
+      "currentStatus": "Current status updated"
+    },
+    "chat": {
+      "noMessages": "No messages yet",
+      "messagePlaceholder": "Type your message...",
+      "sendError": "Failed to send message",
+      "messageDeleted": "Message deleted",
+      "messageEdited": "Message edited"
     }
   },
   "leftCustomerEdit": {
@@ -602,6 +640,9 @@
     "title": "Cars",
     "carPlate": "Car plate",
     "carProductionYear": "Car production year",
+    "carLicensePlateNumber": "Car license plate number",
+    "type": "Type",
+    "partner": "Partner",
     "filters": {
       "allCities": "All cities",
       "profession": "Everything is a profession",

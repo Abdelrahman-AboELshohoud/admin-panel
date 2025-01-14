@@ -7,13 +7,6 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { Input } from "../../components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { UserPlus } from "lucide-react";
 import {
   TabsContent,
@@ -22,11 +15,11 @@ import {
   Tabs,
 } from "../../components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
-import CarRow from "../../components/pages/drivers/CarRow";
-import { DriversListGQL } from "../../graphql/requests";
+import { Driver, DriversListGQL } from "../../graphql/requests";
 import { useCallback, useEffect, useState } from "react";
 import { t } from "i18next";
 import Pagination from "../../components/common/Pagination";
+import MyTable from "../../components/common/MyTable";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -39,8 +32,8 @@ const tabItems = [
 const Cars = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [cars, setCars] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+  const [cars, setCars] = useState<Driver[]>([]);
+  const [_isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const [filters, setFilters] = useState({
     page: 1,
@@ -78,6 +71,16 @@ const Cars = () => {
   useEffect(() => {
     getDriverCars();
   }, [getDriverCars]);
+
+  const columns = [
+    { header: t("cars.carPlate"), accessor: "carPlate" },
+    { header: t("drivers.driver.title"), accessor: "driver" },
+    { header: t("cars.carProductionYear"), accessor: "productionYear" },
+    { header: t("cars.callSign"), accessor: "callSign" },
+    { header: t("cars.carLicensePlateNumber"), accessor: "carLicense" },
+    { header: t("cars.type"), accessor: "carType" },
+    { header: t("cars.partner"), accessor: "partner" },
+  ];
 
   return (
     <div className="p-6 space-y-6">
@@ -211,39 +214,23 @@ const Cars = () => {
             </Button>
           </div>
         </div>
-        <div className="card-shape">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-none hover:bg-transparent">
-                <TableHead className="text-gray-400">
-                  {t("cars.carPlate")}
-                </TableHead>
-                <TableHead className="text-gray-400">
-                  {t("drivers.driver.title")}
-                </TableHead>
-                <TableHead className="text-gray-400">
-                  {t("cars.carProductionYear")}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <td colSpan={3} className="text-center py-14">
-                    {t("common.loading")}
-                  </td>
-                </TableRow>
-              ) : cars && cars.length > 0 ? (
-                cars.map((car: any) => <CarRow key={car.id} car={car} />)
-              ) : (
-                <TableRow>
-                  <td colSpan={3} className="text-center py-14">
-                    {t("common.no_results")}
-                  </td>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+        <div>
+          <MyTable
+            headers={columns.map((column) => column.header)}
+            rows={cars.map((car: Driver) => [
+              <img
+                className="w-12 h-12 rounded-md object-cover"
+                alt={"no plate"}
+                src={car.carPlate || ""}
+              />,
+              `${car.firstName} ${car.lastName || ""}`,
+              car.carProductionYear || t("common.notAssigned"),
+
+              t("common.notAssigned"),
+              car.carPlate || t("common.notAssigned"),
+              "Bussiness",
+            ])}
+          />
         </div>
 
         {cars.length > 0 && (
