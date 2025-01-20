@@ -1,5 +1,5 @@
 import { useState } from "react";
-import i18n from "../../translation/i18n";
+import i18n from "../../../translation/i18n";
 
 export default function ChangeLanguageBtn() {
   const [showLanguage, setShowLanguage] = useState(false);

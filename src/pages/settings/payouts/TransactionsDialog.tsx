@@ -1,15 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { MyDialog } from "../../../components/common/MyDialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../../components/ui/table";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog";
 import { Button } from "../../../components/ui/button";
 import { format } from "date-fns";
+import MyTable from "../../../components/common/table-components/MyTable";
+import { ReactNode } from "react";
 
 interface Transaction {
   id: string;
@@ -32,6 +26,21 @@ export default function TransactionsDialog({
 }: TransactionsDialogProps) {
   const { t } = useTranslation();
 
+  const headers = [
+    t("payouts.transactions.date"),
+    t("payouts.transactions.amount"),
+    t("payouts.transactions.status"),
+  ];
+
+  const rows = transactions.map((transaction) => ({
+    id: transaction.id,
+    data: [
+      format(new Date(transaction.createdAt), "PPp"),
+      `${transaction.amount} ${transaction.currency}`,
+      transaction.status,
+    ] as ReactNode[],
+  }));
+
   return (
     <MyDialog
       title={t("payouts.methods.transactions")}
@@ -41,28 +50,7 @@ export default function TransactionsDialog({
     >
       <div className="space-y-4">
         {transactions.length > 0 ? (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("payouts.transactions.date")}</TableHead>
-                <TableHead>{t("payouts.transactions.amount")}</TableHead>
-                <TableHead>{t("payouts.transactions.status")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {transactions.map((transaction) => (
-                <TableRow key={transaction.id}>
-                  <TableCell>
-                    {format(new Date(transaction.createdAt), "PPp")}
-                  </TableCell>
-                  <TableCell>
-                    {transaction.amount} {transaction.currency}
-                  </TableCell>
-                  <TableCell>{transaction.status}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <MyTable headers={headers} rows={rows} />
         ) : (
           <div className="text-center py-4">
             {t("payouts.transactions.noData")}

@@ -8,19 +8,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../ui/table";
-import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Pagination from "../../common/Pagination";
+import Pagination from "../../common/table-components/Pagination";
+import MyTabs from "../../common/MyTabs";
+import MyTable from "../../common/table-components/MyTable";
 
 enum FleetStatus {
   Active = "Active",
@@ -132,55 +125,21 @@ export default function DriversGroups() {
     fetchFleets();
   }, [filters]);
 
-  const handleTabChange = (value: FleetStatus | "all") => {
-    setFilters((prev: FleetFilters) => ({ ...prev, status: value, page: 1 }));
+  const handleTabChange = (value: string) => {
+    setFilters((prev: FleetFilters) => ({
+      ...prev,
+      status: value as FleetStatus | "all",
+      page: 1,
+    }));
   };
 
   const handleFilterChange = (key: keyof FleetFilters, value: string) => {
     setFilters((prev: FleetFilters) => ({ ...prev, [key]: value, page: 1 }));
   };
 
-  return (
-    <div className="bg-background text-foreground p-6 rounded-lg">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{t("fleetDrivers")}</h1>
-        <Button
-          onClick={() => navigate("/control-panel/drivers-groups/add-group")}
-          className="add-button"
-        >
-          <Plus className="mr-2 h-4 w-4" /> {t("add")}
-        </Button>
-      </div>
-
-      <Tabs
-        value={filters.status}
-        onValueChange={(value: string) =>
-          handleTabChange(value as FleetStatus | "all")
-        }
-        className="w-full"
-      >
-        <TabsList className="bg-transparent flex justify-start gap-4 mb-6">
-          <TabsTrigger
-            value="all"
-            className="bg-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-          >
-            {t("all")}
-          </TabsTrigger>
-          <TabsTrigger
-            value={FleetStatus.Active}
-            className="bg-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-          >
-            {t("active")}
-          </TabsTrigger>
-          <TabsTrigger
-            value={FleetStatus.Blocked}
-            className="bg-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-          >
-            {t("blocked")}
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-
+  const tabs = ["all", FleetStatus.Active, FleetStatus.Blocked];
+  const tabsContent = [
+    <div key="content" className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <Select
           value={filters.city}
@@ -203,44 +162,54 @@ export default function DriversGroups() {
         />
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent py-2">
-            <TableHead>{t("name")}</TableHead>
-            <TableHead>{t("address")}</TableHead>
-            <TableHead>{t("phoneNumber")}</TableHead>
-            <TableHead>{t("commission")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {fleets.map((fleet: Fleet) => (
-            <TableRow
-              key={fleet.id}
-              className="hover:bg-transparent cursor-pointer h-12"
-              onClick={() =>
-                navigate(`/control-panel/drivers-groups/fleet/${fleet.id}`)
-              }
-            >
-              <TableCell>{fleet.name}</TableCell>
-              <TableCell>{fleet.address}</TableCell>
-              <TableCell>{fleet.phoneNumber}</TableCell>
-              <TableCell>
-                {fleet.commissionSharePercent}% + {fleet.commissionShareFlat}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <MyTable
+        headers={[t("name"), t("address"), t("phoneNumber"), t("commission")]}
+        rows={fleets.map((fleet) => ({
+          data: [
+            fleet.name,
+            fleet.address,
+            fleet.phoneNumber,
+            `${fleet.commissionSharePercent}% + ${fleet.commissionShareFlat}`,
+          ],
+          id: fleet.id,
+        }))}
+        navigate={(id?: string) =>
+          navigate(id ? `/control-panel/drivers-groups/${id}` : "")
+        }
+      />
 
       {loading && <div className="text-center py-4">{t("common.loading")}</div>}
 
       {!loading && fleets.length === 0 && (
         <div className="text-center py-4 text-gray-500">{t("noFleets")}</div>
       )}
+
       <Pagination
         currentPage={filters.page}
         totalPages={Math.ceil(totalCount / filters.limit)}
-        onPageChange={(page: number) => handleFilterChange("page", page.toString())}
+        onPageChange={(page: number) =>
+          handleFilterChange("page", page.toString())
+        }
+      />
+    </div>,
+  ];
+
+  return (
+    <div className="bg-background text-foreground p-6 rounded-lg">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">{t("fleetDrivers")}</h1>
+        <Button
+          onClick={() => navigate("/control-panel/drivers-groups/add-group")}
+          className="add-button"
+        >
+          <Plus className="mr-2 h-4 w-4" /> {t("add")}
+        </Button>
+      </div>
+
+      <MyTabs
+        tabs={tabs}
+        tabsContent={tabsContent}
+        setActiveTab={handleTabChange}
       />
     </div>
   );

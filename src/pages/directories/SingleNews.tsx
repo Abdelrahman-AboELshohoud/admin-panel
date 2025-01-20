@@ -9,8 +9,8 @@ import {
   AnnouncementUserType,
   AnnouncementInput,
 } from "../../graphql/requests";
-import Switch from "../../components/common/Switch";
-import DeletionDialog from "../../components/common/DeletionDialog";
+import Switch from "../../components/common/form-elements/Switch";
+import DeletionDialog from "../../components/common/dialogs/DeletionDialog";
 
 export default function SingleNews() {
   const { id } = useParams();

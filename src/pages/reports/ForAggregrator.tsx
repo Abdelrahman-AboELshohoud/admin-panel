@@ -14,14 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
+import MyTable from "../../components/common/table-components/MyTable";
 import { Input } from "../../components/ui/input";
 
 const ForAggregrator = () => {
@@ -92,43 +85,44 @@ const ForAggregrator = () => {
           <Button className="bg-zinc-800">{buttons.orderReport}</Button>
         </div>
 
-        <Table className="items-center gap-6 p-4 bg-[#1C1C1E] rounded-xl col-span-4">
-          <TableHeader>
-            <TableRow className="hover:bg-transparent border-none">
-              <TableHead>{t("forAggregrator.period")}</TableHead>
-              <TableHead>{t("forAggregrator.city")}</TableHead>
-              <TableHead>{t("forAggregrator.partner")}</TableHead>
-              <TableHead>{t("forAggregrator.payment")}</TableHead>
-              <TableHead>{t("forAggregrator.numberOfExecutors")}</TableHead>
-              <TableHead>{t("forAggregrator.status")}</TableHead>
-              <TableHead></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow className="hover:bg-transparent">
-              <TableCell>09.07.2023 - 09.07.2023</TableCell>
-              <TableCell>{t("kazan")}</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>0</TableCell>
-              <TableCell>1</TableCell>
-              <TableCell>
-                {t("forAggregrator.currentAsOf", { date: "10.07.2023 22:32" })}
-              </TableCell>
-              <TableCell className="flex gap-2 items-center">
-                <Button variant="ghost" size="icon">
-                  <Download className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8 rounded-full bg-red-600 hover:bg-red-700"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <div className="bg-[#1C1C1E] rounded-xl">
+          <MyTable
+            headers={[
+              t("forAggregrator.period"),
+              t("forAggregrator.city"),
+              t("forAggregrator.partner"),
+              t("forAggregrator.payment"),
+              t("forAggregrator.numberOfExecutors"),
+              t("forAggregrator.status"),
+              "",
+            ]}
+            rows={[
+              {
+                id: "1",
+                data: [
+                  "09.07.2023 - 09.07.2023",
+                  t("kazan"),
+                  "-",
+                  "0",
+                  "1",
+                  t("forAggregrator.currentAsOf", { date: "10.07.2023 22:32" }),
+                  <div className="flex gap-2 items-center">
+                    <Button variant="ghost" size="icon">
+                      <Download className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-8 w-8 rounded-full bg-red-600 hover:bg-red-700"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>,
+                ],
+              },
+            ]}
+          />
+        </div>
       </CardContent>
     </Card>
   );

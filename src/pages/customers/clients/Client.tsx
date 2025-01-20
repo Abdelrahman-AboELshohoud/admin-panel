@@ -6,18 +6,13 @@ import {
   DeleteRiderGQL,
   DispatcherCalculateFareGQL,
 } from "../../../graphql/requests";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../../components/ui/tabs";
+import MyTabs from "../../../components/common/MyTabs";
 import { useTranslation } from "react-i18next";
 import ClientProfile from "./ClientProfile";
 import ClientWallet from "./ClientWallet";
 import ClientOrders from "./ClientOrders";
 import { Button } from "../../../components/ui/button";
-import DeletionDialog from "../../../components/common/DeletionDialog";
+import DeletionDialog from "../../../components/common/dialogs/DeletionDialog";
 import {
   GoogleMap,
   Marker,
@@ -49,6 +44,7 @@ export default function Client() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [deleteCountdown, setDeleteCountdown] = useState(5);
   const [_isDeleting, setIsDeleting] = useState(false);
+  const [_activeTab, setActiveTab] = useState("profile");
 
   // Map related state
   const [pickup, setPickup] = useState<Location | null>(null);
@@ -210,6 +206,165 @@ export default function Client() {
     );
   }
 
+  const tabs = [
+    {
+      title: t("clients.profile"),
+      value: "profile",
+    },
+    {
+      title: t("clients.orders"),
+      value: "orders",
+    },
+    {
+      title: t("clients.wallets"),
+      value: "wallets",
+    },
+    {
+      title: t("clients.dispatcherCalculator.title"),
+      value: "calculator",
+    },
+  ];
+
+  const tabsContent = [
+    {
+      value: "profile",
+      content: (
+        <ClientProfile
+          client={client}
+          formData={formData}
+          setFormData={setFormData}
+        />
+      ),
+    },
+    {
+      value: "orders",
+      content: <ClientOrders riderId={client.id} />,
+    },
+    {
+      value: "wallets",
+      content: <ClientWallet riderId={client.id} />,
+    },
+    {
+      value: "calculator",
+      content: (
+        <div className="card-shape p-6">
+          <div className="mb-6">
+            <h3 className="text-xl font-semibold mb-4">
+              {t("clients.dispatcherCalculator.title")}
+            </h3>
+            <p className="text-gray-400 mb-4">
+              {t("clients.dispatcherCalculator.instructions")}
+            </p>
+          </div>
+
+          <div className="space-y-6">
+            <div className="h-[500px] relative w-full">
+              <GoogleMap
+                zoom={13}
+                center={{ lat: 55.7887, lng: 49.1221 }}
+                mapContainerClassName="w-full h-full rounded-lg"
+                onClick={handleMapClick}
+                onLoad={(map) => {
+                  mapRef.current = map;
+                }}
+              >
+                {pickup && (
+                  <Marker
+                    position={pickup}
+                    label="A"
+                    draggable
+                    onDragEnd={(e) => {
+                      if (e.latLng) {
+                        setPickup({
+                          lat: e.latLng.lat(),
+                          lng: e.latLng.lng(),
+                        });
+                      } else {
+                        toast.error(t("common.errors.invalidLocation"));
+                      }
+                    }}
+                  />
+                )}
+                {dropoff && (
+                  <Marker
+                    position={dropoff}
+                    label="B"
+                    draggable
+                    onDragEnd={(e) => {
+                      if (e.latLng) {
+                        setDropoff({
+                          lat: e.latLng.lat(),
+                          lng: e.latLng.lng(),
+                        });
+                      } else {
+                        toast.error(t("common.errors.invalidLocation"));
+                      }
+                    }}
+                  />
+                )}
+                {directions && (
+                  <DirectionsRenderer
+                    directions={directions}
+                    options={{
+                      suppressMarkers: true,
+                    }}
+                  />
+                )}
+              </GoogleMap>
+            </div>
+
+            {calculationResult && (
+              <div className="bg-secondary/10 p-6 rounded-lg space-y-4">
+                <h4 className="text-lg font-semibold">
+                  {t("clients.dispatcherCalculator.results.title")}
+                </h4>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <p className="text-gray-400">
+                      {t("clients.dispatcherCalculator.results.distance")}
+                    </p>
+                    <p className="text-lg">
+                      {calculationResult.distance.toFixed(2)} km
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">
+                      {t("clients.dispatcherCalculator.results.duration")}
+                    </p>
+                    <p className="text-lg">
+                      {Math.round(calculationResult.duration)} min
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-gray-400">
+                      {t("clients.dispatcherCalculator.results.cost")}
+                    </p>
+                    <p className="text-lg font-bold">
+                      {calculationResult.cost} {calculationResult.currency}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-4">
+              <Button onClick={calculateFare} className="w-full">
+                {t("clients.dispatcherCalculator.calculate")}
+              </Button>
+              <Button
+                onClick={clearPoints}
+                variant="outline"
+                className="w-full"
+              >
+                {t("clients.dispatcherCalculator.clear")}
+              </Button>
+            </div>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
@@ -235,151 +390,12 @@ export default function Client() {
         title={t("clients.deleteConfirmation")}
         description={t("clients.deleteWarning")}
       />
-      <Tabs defaultValue="profile">
-        <TabsList className="bg-transparent">
-          <TabsTrigger value="profile" className="custom-tabs">
-            {t("clients.profile")}
-          </TabsTrigger>
-          <TabsTrigger value="orders" className="custom-tabs">
-            {t("clients.orders")}
-          </TabsTrigger>
-          <TabsTrigger value="wallets" className="custom-tabs">
-            {t("clients.wallets")}
-          </TabsTrigger>
-          <TabsTrigger value="calculator" className="custom-tabs">
-            {t("clients.dispatcherCalculator.title")}
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="profile">
-          <ClientProfile
-            client={client}
-            formData={formData}
-            setFormData={setFormData}
-          />
-        </TabsContent>
-        <TabsContent value="orders">
-          <ClientOrders riderId={client.id} />
-        </TabsContent>
-        <TabsContent value="wallets">
-          <ClientWallet riderId={client.id} />
-        </TabsContent>
-        <TabsContent value="calculator">
-          <div className="card-shape p-6">
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold mb-4">
-                {t("clients.dispatcherCalculator.title")}
-              </h3>
-              <p className="text-gray-400 mb-4">
-                {t("clients.dispatcherCalculator.instructions")}
-              </p>
-            </div>
 
-            <div className="space-y-6">
-              <div className="h-[500px] relative w-full">
-                <GoogleMap
-                  zoom={13}
-                  center={{ lat: 55.7887, lng: 49.1221 }}
-                  mapContainerClassName="w-full h-full rounded-lg"
-                  onClick={handleMapClick}
-                  onLoad={(map) => {
-                    mapRef.current = map;
-                  }}
-                >
-                  {pickup && (
-                    <Marker
-                      position={pickup}
-                      label="A"
-                      draggable
-                      onDragEnd={(e) => {
-                        if (e.latLng) {
-                          setPickup({
-                            lat: e.latLng.lat(),
-                            lng: e.latLng.lng(),
-                          });
-                        } else {
-                          toast.error(t("common.errors.invalidLocation"));
-                        }
-                      }}
-                    />
-                  )}
-                  {dropoff && (
-                    <Marker
-                      position={dropoff}
-                      label="B"
-                      draggable
-                      onDragEnd={(e) => {
-                        if (e.latLng) {
-                          setDropoff({
-                            lat: e.latLng.lat(),
-                            lng: e.latLng.lng(),
-                          });
-                        } else {
-                          toast.error(t("common.errors.invalidLocation"));
-                        }
-                      }}
-                    />
-                  )}
-                  {directions && (
-                    <DirectionsRenderer
-                      directions={directions}
-                      options={{
-                        suppressMarkers: true,
-                      }}
-                    />
-                  )}
-                </GoogleMap>
-              </div>
-
-              {calculationResult && (
-                <div className="bg-secondary/10 p-6 rounded-lg space-y-4">
-                  <h4 className="text-lg font-semibold">
-                    {t("clients.dispatcherCalculator.results.title")}
-                  </h4>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <p className="text-gray-400">
-                        {t("clients.dispatcherCalculator.results.distance")}
-                      </p>
-                      <p className="text-lg">
-                        {calculationResult.distance.toFixed(2)} km
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400">
-                        {t("clients.dispatcherCalculator.results.duration")}
-                      </p>
-                      <p className="text-lg">
-                        {Math.round(calculationResult.duration)} min
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-gray-400">
-                        {t("clients.dispatcherCalculator.results.cost")}
-                      </p>
-                      <p className="text-lg font-bold">
-                        {calculationResult.cost} {calculationResult.currency}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div className="flex gap-4">
-                <Button onClick={calculateFare} className="w-full">
-                  {t("clients.dispatcherCalculator.calculate")}
-                </Button>
-                <Button
-                  onClick={clearPoints}
-                  variant="outline"
-                  className="w-full"
-                >
-                  {t("clients.dispatcherCalculator.clear")}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </TabsContent>
-      </Tabs>
+      <MyTabs
+        tabs={tabs}
+        tabsContent={tabsContent}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
 }

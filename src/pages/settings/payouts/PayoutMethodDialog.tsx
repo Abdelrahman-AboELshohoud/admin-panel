@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { MyDialog } from "../../../components/common/MyDialog";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog";
 import { useState, useEffect } from "react";
 import {
   PayoutMethod,

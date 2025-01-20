@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoadScript } from "@react-google-maps/api";
-import { MyDialog } from "../common/MyDialog";
+import { MyDialog } from "../common/dialogs/MyDialog";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import Switch from "../common/Switch";
+import Switch from "../common/form-elements/Switch";
 import MapComponent from "./MapComponent";
 
 export interface Point {

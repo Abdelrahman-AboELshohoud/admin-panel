@@ -14,14 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
+import MyTable from "../../components/common/table-components/MyTable";
 import { Input } from "../../components/ui/input";
 
 const ForPartner = () => {
@@ -107,43 +100,44 @@ const ForPartner = () => {
           <Button className="bg-zinc-800">{t("orderReport")}</Button>
         </div>
 
-        <Table className="items-center gap-6 p-4 bg-[#1C1C1E] rounded-xl col-span-4">
-          <TableHeader>
-            <TableRow className="hover:bg-transparent border-none">
-              <TableHead>{t("tableHeaders.period")}</TableHead>
-              <TableHead>{t("tableHeaders.city")}</TableHead>
-              <TableHead>{t("tableHeaders.partner")}</TableHead>
-              <TableHead>{t("tableHeaders.payment")}</TableHead>
-              <TableHead>{t("tableHeaders.executors")}</TableHead>
-              <TableHead>{t("tableHeaders.status")}</TableHead>
-              <TableHead></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow className="hover:bg-transparent">
-              <TableCell>09.07.2023 - 09.07.2023</TableCell>
-              <TableCell>{t("cityOptions.kazan")}</TableCell>
-              <TableCell>-</TableCell>
-              <TableCell>0</TableCell>
-              <TableCell>1</TableCell>
-              <TableCell>
-                {t("currentAsOf", { date: "10.07.2023 22:32" })}
-              </TableCell>
-              <TableCell className="flex gap-2 items-center">
-                <Button variant="ghost" size="icon">
-                  <Download className="h-4 w-4" />
-                </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  className="h-8 w-8 rounded-full bg-red-600 hover:bg-red-700"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <div className="bg-[#1C1C1E] rounded-xl">
+          <MyTable
+            headers={[
+              t("tableHeaders.period"),
+              t("tableHeaders.city"),
+              t("tableHeaders.partner"),
+              t("tableHeaders.payment"),
+              t("tableHeaders.executors"),
+              t("tableHeaders.status"),
+              "",
+            ]}
+            rows={[
+              {
+                id: "1",
+                data: [
+                  "09.07.2023 - 09.07.2023",
+                  t("cityOptions.kazan"),
+                  "-",
+                  "0",
+                  "1",
+                  t("currentAsOf", { date: "10.07.2023 22:32" }),
+                  <div className="flex gap-2 items-center">
+                    <Button variant="ghost" size="icon">
+                      <Download className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-8 w-8 rounded-full bg-red-600 hover:bg-red-700"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>,
+                ],
+              },
+            ]}
+          />
+        </div>
       </CardContent>
     </Card>
   );

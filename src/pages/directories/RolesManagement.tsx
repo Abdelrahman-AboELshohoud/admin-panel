@@ -13,7 +13,7 @@ import { Switch } from "../../components/ui/switch";
 import { Card, CardHeader, CardTitle } from "../../components/ui/card";
 import toast from "react-hot-toast";
 import { t } from "i18next";
-import { MyDialog } from "../../components/common/MyDialog";
+import { MyDialog } from "../../components/common/dialogs/MyDialog";
 
 export const RolesManagement = () => {
   const [selectedRole, setSelectedRole] = useState<string>("");

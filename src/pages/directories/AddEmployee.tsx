@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { MyDialog } from "../../components/common/MyDialog";
-import Switch from "../../components/common/Switch";
+import { MyDialog } from "../../components/common/dialogs/MyDialog";
+import Switch from "../../components/common/form-elements/Switch";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import {

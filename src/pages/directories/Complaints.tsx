@@ -1,14 +1,6 @@
 import { useState, useEffect } from "react";
 // import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { Button } from "../../components/ui/button";
 import {
   Select,
@@ -28,8 +20,9 @@ import {
   ComplaintStatus,
 } from "../../graphql/requests";
 import { format } from "date-fns";
-import { MyDialog } from "../../components/common/MyDialog";
-import Pagination from "../../components/common/Pagination";
+import { MyDialog } from "../../components/common/dialogs/MyDialog";
+import Pagination from "../../components/common/table-components/Pagination";
+import MyTable from "../../components/common/table-components/MyTable";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -126,6 +119,80 @@ export default function Complaints() {
     );
   }
 
+  const headers = [
+    t("complaints.table.date"),
+    t("complaints.table.subject"),
+    t("complaints.table.status"),
+    t("complaints.table.actions"),
+  ];
+
+  const rows = isLoading
+    ? [
+        {
+          id: "loading",
+          data: <div className="text-center py-4">{t("common.loading")}</div>,
+        },
+      ]
+    : complaints.length === 0
+    ? [
+        {
+          id: "no-data",
+          data: (
+            <div className="text-center py-4">
+              {t("complaints.noComplaints")}
+            </div>
+          ),
+        },
+      ]
+    : complaints.map((complaint) => ({
+        id: complaint.id,
+        data: [
+          format(new Date(complaint.inscriptionTimestamp), "PPp"),
+          complaint.subject,
+          <span
+            className={`px-2 py-1 rounded-full text-sm ${
+              complaint.status === ComplaintStatus.Submitted
+                ? "bg-yellow-500/20 text-yellow-500"
+                : complaint.status === ComplaintStatus.UnderInvestigation
+                ? "bg-blue-500/20 text-blue-500"
+                : "bg-green-500/20 text-green-500"
+            }`}
+          >
+            {t(`complaints.status.${complaint.status.toLowerCase()}`)}
+          </span>,
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => handleViewDetails(complaint.id)}
+            >
+              {t("common.view")}
+            </Button>
+            <Select
+              value={complaint.status}
+              onValueChange={(value: ComplaintStatus) =>
+                handleUpdateStatus(complaint.id, value)
+              }
+            >
+              <SelectTrigger className="custom-input w-[200px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(ComplaintStatus).map((status) => (
+                  <SelectItem
+                    key={status}
+                    value={status}
+                    onClick={() => handleUpdateStatus(complaint.id, status)}
+                  >
+                    {t(`complaints.status.${status.toLowerCase()}`)}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>,
+        ],
+      }));
+
   return (
     <div className="p-6">
       {/* Filters */}
@@ -160,92 +227,9 @@ export default function Complaints() {
       </div>
 
       <div className="card-shape">
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-transparent border-transparent">
-              <TableHead>{t("complaints.table.date")}</TableHead>
-              <TableHead>{t("complaints.table.subject")}</TableHead>
-              <TableHead>{t("complaints.table.status")}</TableHead>
-              <TableHead>{t("complaints.table.actions")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow className="hover:bg-transparent h-96">
-                <TableCell colSpan={4} className="text-center ">
-                  {t("common.loading")}
-                </TableCell>
-              </TableRow>
-            ) : complaints && complaints.length > 0 ? (
-              complaints.map((complaint) => (
-                <TableRow
-                  key={complaint.id}
-                  className="hover:bg-transparent border-transparent"
-                >
-                  <TableCell>
-                    {format(new Date(complaint.inscriptionTimestamp), "PPp")}
-                  </TableCell>
-                  <TableCell>{complaint.subject}</TableCell>
-                  <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-sm ${
-                        complaint.status === ComplaintStatus.Submitted
-                          ? "bg-yellow-500/20 text-yellow-500"
-                          : complaint.status ===
-                            ComplaintStatus.UnderInvestigation
-                          ? "bg-blue-500/20 text-blue-500"
-                          : "bg-green-500/20 text-green-500"
-                      }`}
-                    >
-                      {t(`complaints.status.${complaint.status.toLowerCase()}`)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewDetails(complaint.id)}
-                      >
-                        {t("common.view")}
-                      </Button>
-                      <Select
-                        value={complaint.status}
-                        onValueChange={(value: ComplaintStatus) =>
-                          handleUpdateStatus(complaint.id, value)
-                        }
-                      >
-                        <SelectTrigger className="custom-input w-[200px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.values(ComplaintStatus).map((status) => (
-                            <SelectItem
-                              key={status}
-                              value={status}
-                              onClick={() =>
-                                handleUpdateStatus(complaint.id, status)
-                              }
-                            >
-                              {t(`complaints.status.${status.toLowerCase()}`)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow className="hover:bg-transparent h-96">
-                <TableCell colSpan={4} className="text-center">
-                  {t("complaints.noComplaints")}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        <MyTable headers={headers} rows={rows} />
       </div>
+
       <Pagination
         currentPage={currentPage}
         totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}

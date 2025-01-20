@@ -7,8 +7,8 @@ import {
   Gender,
   UpdateDriverInput,
 } from "../../graphql/requests";
-import SelectsWithLabel from "../../components/common/SelectsWithLabel";
-import InputField from "../../components/common/InputField";
+import SelectsWithLabel from "../../components/common/form-elements/SelectsWithLabel";
+import InputField from "../../components/common/form-elements/InputField";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

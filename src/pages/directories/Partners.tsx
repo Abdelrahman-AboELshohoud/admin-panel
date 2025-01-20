@@ -1,23 +1,11 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "../../components/ui/tabs";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Plus } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { Link, useNavigate } from "react-router-dom";
+import MyTable from "../../components/common/table-components/MyTable";
+import MyTabs from "../../components/common/MyTabs";
 
 interface Partner {
   id: number;
@@ -41,6 +29,42 @@ export default function Partners() {
     partner.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const headers = [t("partners.tableHeadName"), t("partners.tableHeadSort")];
+
+  const rows = filteredPartners.map((partner) => ({
+    id: partner.id.toString(),
+    data: [
+      <Link to="#" className="text-primary hover:underline">
+        {partner.name}
+      </Link>,
+      partner.sort,
+    ],
+  }));
+
+  const tabLabels = [
+    { title: "active", value: "active" },
+    { title: "blocked", value: "blocked" },
+  ];
+
+  const tabContents = [
+    {
+      value: "active",
+      content: (
+        <div className="p-4 bg-[#383838] rounded-xl shadow-lg shadow-[#282828] border-none">
+          <MyTable headers={headers} rows={rows} />
+        </div>
+      ),
+    },
+    {
+      value: "blocked",
+      content: (
+        <div className="text-center py-6 text-muted-foreground">
+          {t("partners.noBlockedPartners")}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="p-6 max-w-4xl mx-auto min-h-screen">
       <div className="flex items-center justify-between">
@@ -56,61 +80,22 @@ export default function Partners() {
         </Button>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-[200px] grid-cols-2 bg-transparent">
-          <TabsTrigger value="active" className="custom-tabs">
-            {t("partners.active")}
-          </TabsTrigger>
-          <TabsTrigger value="blocked" className="custom-tabs">
-            {t("partners.blocked")}
-          </TabsTrigger>
-        </TabsList>
+      <div className="mt-4">
+        <Input
+          placeholder={t("partners.searchPlaceholder")}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="max-w-sm custom-input"
+        />
+      </div>
 
-        <div className="mt-4">
-          <Input
-            placeholder={t("partners.searchPlaceholder")}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-sm custom-input"
-          />
-        </div>
-
-        <TabsContent value="active" className="mt-4 ">
-          <div className="p-4 bg-[#383838] rounded-xl shadow-lg shadow-[#282828] border-none ">
-            <Table className="p-10">
-              <TableHeader>
-                <TableRow className="hover:bg-transparent border-transparent">
-                  <TableHead>{t("partners.tableHeadName")}</TableHead>
-                  <TableHead>{t("partners.tableHeadSort")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredPartners &&
-                  filteredPartners.length > 0 &&
-                  filteredPartners.map((partner) => (
-                    <TableRow
-                      key={partner.id}
-                      className="hover:bg-transparent border-transparent"
-                    >
-                      <TableCell>
-                        <Link to={`#`} className="text-primary hover:underline">
-                          {partner.name}
-                        </Link>
-                      </TableCell>
-                      <TableCell>{partner.sort}</TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="blocked">
-          <div className="text-center py-6 text-muted-foreground">
-            {t("partners.noBlockedPartners")}
-          </div>
-        </TabsContent>
-      </Tabs>
+      <div className="mt-4">
+        <MyTabs
+          tabs={tabLabels}
+          tabsContent={tabContents}
+          setActiveTab={setActiveTab}
+        />
+      </div>
     </div>
   );
 }

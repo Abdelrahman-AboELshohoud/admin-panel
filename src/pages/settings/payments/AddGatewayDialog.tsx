@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select";
-import Switch from "../../../components/common/Switch";
+import Switch from "../../../components/common/form-elements/Switch";
 import { useTranslation } from "react-i18next";
 import { PaymentGatewayType } from "../../../graphql/requests";
 import GatewayFields from "./GatewayFields";

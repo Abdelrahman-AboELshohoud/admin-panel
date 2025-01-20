@@ -1,7 +1,7 @@
-import SectionsLayout from "../components/pages/SectionsLayout";
+import SectionsLayout from "../components/common/rare-using/SectionsLayout";
 
-import Header from "../components/common/MyHeader";
-import MySidebar from "../components/common/MySidebar";
+import Header from "../components/common/rare-using/MyHeader";
+import MySidebar from "../components/common/rare-using/MySidebar";
 
 export default function ControlPanel({
   children,

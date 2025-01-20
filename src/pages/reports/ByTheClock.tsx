@@ -8,14 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
+import MyTable from "../../components/common/table-components/MyTable";
 
 const ByTheClock = () => {
   const { t } = useTranslation();
@@ -84,43 +77,31 @@ const ByTheClock = () => {
         </Button>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow className="border-none hover:bg-transparent">
-            <TableHead className="text-gray-400">{t("time")}</TableHead>
-            <TableHead className="text-gray-400">{t("totalOrders")}</TableHead>
-            <TableHead className="text-gray-400">{t("numberPaid")}</TableHead>
-            <TableHead className="text-gray-400">{t("amountPaid")}</TableHead>
-            <TableHead className="text-gray-400">
-              {t("quantityUnpaid")}
-            </TableHead>
-            <TableHead className="text-gray-400">{t("amountUnpaid")}</TableHead>
-            <TableHead className="text-gray-400">
-              {t("quantityCancelled")}
-            </TableHead>
-            <TableHead className="text-gray-400">
-              {t("effectiveness")}
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {timeSlots.map((slot) => (
-            <TableRow
-              key={slot.time}
-              className="border-none hover:bg-[#2F2F2F]"
-            >
-              <TableCell>{slot.time}</TableCell>
-              <TableCell>{slot.totalOrders}</TableCell>
-              <TableCell>{slot.numberPaid}</TableCell>
-              <TableCell>{slot.amountPaid}</TableCell>
-              <TableCell>{slot.quantityUnpaid}</TableCell>
-              <TableCell>{slot.amountUnpaidCancelled}</TableCell>
-              <TableCell>{slot.quantity}</TableCell>
-              <TableCell>{slot.effectiveness}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <MyTable
+        headers={[
+          t("time"),
+          t("totalOrders"),
+          t("numberPaid"),
+          t("amountPaid"),
+          t("quantityUnpaid"),
+          t("amountUnpaid"),
+          t("quantityCancelled"),
+          t("effectiveness"),
+        ]}
+        rows={timeSlots.map((slot) => ({
+          id: slot.time,
+          data: [
+            slot.time,
+            slot.totalOrders,
+            slot.numberPaid,
+            slot.amountPaid,
+            slot.quantityUnpaid,
+            slot.amountUnpaidCancelled,
+            slot.quantity,
+            slot.effectiveness,
+          ],
+        }))}
+      />
 
       <div className="flex justify-between items-center bg-black rounded-full p-4 mt-4">
         <span className="text-white text-lg">{t("total")}</span>

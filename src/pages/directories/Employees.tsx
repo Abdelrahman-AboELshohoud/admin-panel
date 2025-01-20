@@ -1,4 +1,5 @@
-import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
 import {
   Select,
   SelectContent,
@@ -6,26 +7,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
-import { Input } from "../../components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
-import { TabsContent } from "@radix-ui/react-tabs";
-import { Button } from "../../components/ui/button";
 import { useTranslation } from "react-i18next";
 import { Operator, UsersListGQL } from "../../graphql/requests";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MyTable from "../../components/common/table-components/MyTable";
+import MyTabs from "../../components/common/MyTabs";
 
 export default function Employees() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const [selectedTab, setSelectedTab] = useState("working");
+  const [users, setUsers] = useState<Operator[]>([]);
+  const [hasAccess, setHasAccess] = useState(true);
   const [filters, setFilters] = useState({
     city: "",
     position: "",
@@ -33,8 +26,6 @@ export default function Employees() {
     search: "",
     searchBy: "",
   });
-  const [users, setUsers] = useState<Operator[]>([]);
-  const [hasAccess, setHasAccess] = useState(true);
 
   const AllUsers = async () => {
     try {
@@ -70,6 +61,149 @@ export default function Employees() {
     );
   }
 
+  const getTableHeaders = (tab: string) => {
+    const headers = [
+      t("employees.table.fullName"),
+      t("employees.table.jobTitle"),
+      t("employees.table.email"),
+      t("employees.table.phone"),
+    ];
+    if (tab === "invitations") {
+      headers.push(t("employees.table.actions"));
+    }
+    return headers;
+  };
+
+  const getTableRows = (tab: string) => {
+    return staff.map((member) => {
+      const rowData: any = [
+        { data: `${member.firstName} ${member.lastName}` },
+        { data: member.role?.title },
+        { data: member.email },
+        { data: member.mobileNumber },
+      ];
+
+      if (tab === "invitations") {
+        rowData.push({
+          data: (
+            <div className="flex gap-4">
+              <Button className="bg-transparent border-green-500 border-2 text-green-500 hover:bg-green-500 hover:text-white p-2 rounded-md">
+                {t("employees.actions.sendAgain")}
+              </Button>
+              <Button className="bg-transparent border-red-500 border-2 text-red-500 hover:bg-red-500 hover:text-white p-2 rounded-md">
+                {t("employees.actions.cancel")}
+              </Button>
+            </div>
+          ),
+        });
+      }
+
+      return {
+        data: rowData,
+        id: member.id,
+      };
+    });
+  };
+
+  const TabContent = ({ tab }: { tab: string }) => {
+    return (
+      <>
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          <Select
+            value={filters.city}
+            onValueChange={(value) => handleFilterChange("city", value)}
+          >
+            <SelectTrigger className="custom-input">
+              <SelectValue placeholder={t("employees.filters.allCities")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                {t("employees.filters.allCities")}
+              </SelectItem>
+              <SelectItem value="kazan">
+                {t("employees.filters.kazan")}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.position}
+            onValueChange={(value) => handleFilterChange("position", value)}
+          >
+            <SelectTrigger className="custom-input">
+              <SelectValue placeholder={t("employees.filters.post")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                {t("employees.filters.allPosts")}
+              </SelectItem>
+              <SelectItem value="administrator">
+                {t("employees.filters.administrator")}
+              </SelectItem>
+              <SelectItem value="partnerEmployee">
+                {t("employees.filters.partnerEmployee")}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={filters.partner}
+            onValueChange={(value) => handleFilterChange("partner", value)}
+          >
+            <SelectTrigger className="custom-input">
+              <SelectValue placeholder={t("employees.filters.partners")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">
+                {t("employees.filters.allPartners")}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mb-6">
+          <Input
+            value={filters.search}
+            onChange={(e) => handleFilterChange("search", e.target.value)}
+            placeholder={t("employees.search.fullName")}
+            className="bg-zinc-900 border-zinc-700 text-zinc-100"
+          />
+          <Input
+            value={filters.searchBy}
+            onChange={(e) => handleFilterChange("searchBy", e.target.value)}
+            placeholder={t("employees.search.toFind")}
+            className="bg-black border-zinc-700 text-zinc-100"
+          />
+        </div>
+
+        {hasAccess ? (
+          <MyTable
+            headers={getTableHeaders(tab)}
+            rows={getTableRows(tab)}
+            navigate={(id?: string) =>
+              navigate(id ? `/control-panel/directories/employees/${id}` : "")
+            }
+          />
+        ) : (
+          <div className="text-center text-zinc-100 py-20">
+            {t("employees.errors.noAccess")}
+          </div>
+        )}
+      </>
+    );
+  };
+
+  const tabItems = [
+    { value: "working", title: t("employees.tabs.working") },
+    { value: "invitations", title: t("employees.tabs.invitations") },
+    { value: "blocked", title: t("employees.tabs.blocked") },
+  ];
+
+  const tabsContent = tabItems.map((tab) => ({
+    value: tab.value,
+    content: <TabContent tab={tab.value} />,
+  }));
+
   return (
     <div className="flex-1 p-6">
       <div className="flex items-center justify-between mb-6">
@@ -96,156 +230,13 @@ export default function Employees() {
         )}
       </div>
 
-      <Tabs value={selectedTab} onValueChange={setSelectedTab} className="mb-6">
-        <TabsList className="bg-transparent mb-2">
-          <TabsTrigger value="working" className="custom-tabs">
-            {t("employees.tabs.working")}
-          </TabsTrigger>
-          <TabsTrigger value="invitations" className="custom-tabs">
-            {t("employees.tabs.invitations")}
-          </TabsTrigger>
-          <TabsTrigger value="blocked" className="custom-tabs">
-            {t("employees.tabs.blocked")}
-          </TabsTrigger>
-        </TabsList>
-
-        {["working", "invitations", "blocked"].map((tab) => (
-          <TabsContent key={tab} value={tab}>
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              <Select
-                value={filters.city}
-                onValueChange={(value) => handleFilterChange("city", value)}
-              >
-                <SelectTrigger className="custom-input">
-                  <SelectValue placeholder={t("employees.filters.allCities")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">
-                    {t("employees.filters.allCities")}
-                  </SelectItem>
-                  <SelectItem value="kazan">
-                    {t("employees.filters.kazan")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select
-                value={filters.position}
-                onValueChange={(value) => handleFilterChange("position", value)}
-              >
-                <SelectTrigger className="custom-input">
-                  <SelectValue placeholder={t("employees.filters.post")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">
-                    {t("employees.filters.allPosts")}
-                  </SelectItem>
-                  <SelectItem value="administrator">
-                    {t("employees.filters.administrator")}
-                  </SelectItem>
-                  <SelectItem value="partnerEmployee">
-                    {t("employees.filters.partnerEmployee")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select
-                value={filters.partner}
-                onValueChange={(value) => handleFilterChange("partner", value)}
-              >
-                <SelectTrigger className="custom-input">
-                  <SelectValue placeholder={t("employees.filters.partners")} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">
-                    {t("employees.filters.allPartners")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <Input
-                value={filters.search}
-                onChange={(e) => handleFilterChange("search", e.target.value)}
-                placeholder={t("employees.search.fullName")}
-                className="bg-zinc-900 border-zinc-700 text-zinc-100"
-              />
-              <Input
-                value={filters.searchBy}
-                onChange={(e) => handleFilterChange("searchBy", e.target.value)}
-                placeholder={t("employees.search.toFind")}
-                className="bg-black border-zinc-700 text-zinc-100"
-              />
-            </div>
-
-            <div className="card-shape">
-              <Table>
-                <TableHeader>
-                  <TableRow className="border-transparent text-slate-300 hover:bg-transparent">
-                    <TableHead>{t("employees.table.fullName")}</TableHead>
-                    <TableHead>{t("employees.table.jobTitle")}</TableHead>
-                    <TableHead>{t("employees.table.email")}</TableHead>
-                    <TableHead>{t("employees.table.phone")}</TableHead>
-                    {tab === "invitations" && (
-                      <TableHead>{t("employees.table.actions")}</TableHead>
-                    )}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {hasAccess ? (
-                    staff.map((member) => (
-                      <TableRow
-                        key={member.id}
-                        className="border-transparent hover:bg-transparent py-2 h-14"
-                        onClick={() =>
-                          navigate(
-                            `/control-panel/directories/employees/${member.id}`
-                          )
-                        }
-                      >
-                        <TableCell className="text-zinc-100">
-                          <div className="flex items-center gap-2">
-                            {member.firstName} {member.lastName}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-zinc-100">
-                          {member.role?.title}
-                        </TableCell>
-                        <TableCell className="text-zinc-100">
-                          {member.email}
-                        </TableCell>
-                        <TableCell className="text-zinc-100">
-                          {member.mobileNumber}
-                        </TableCell>
-                        {tab === "invitations" && (
-                          <TableCell className="text-zinc-100 flex gap-4">
-                            <Button className="bg-transparent border-green-500 border-2 text-green-500 hover:bg-green-500 hover:text-white p-2 rounded-md">
-                              {t("employees.actions.sendAgain")}
-                            </Button>
-                            <Button className="bg-transparent border-red-500 border-2 text-red-500 hover:bg-red-500 hover:text-white p-2 rounded-md">
-                              {t("employees.actions.cancel")}
-                            </Button>
-                          </TableCell>
-                        )}
-                      </TableRow>
-                    ))
-                  ) : (
-                    <TableRow>
-                      <TableCell
-                        colSpan={5}
-                        className="text-center text-zinc-100"
-                      >
-                        {t("employees.errors.noAccess")}
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </div>
-          </TabsContent>
-        ))}
-      </Tabs>
+      <MyTabs
+        tabs={tabItems}
+        tabsContent={tabsContent}
+        setActiveTab={(value) =>
+          navigate(`/control-panel/directories/employees/${value}`)
+        }
+      />
     </div>
   );
 }

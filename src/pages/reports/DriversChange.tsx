@@ -7,14 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
+import MyTable from "../../components/common/table-components/MyTable";
 
 const DriversChange = () => {
   const { t } = useTranslation();
@@ -82,41 +75,29 @@ const DriversChange = () => {
         </Button>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow className="border-none hover:bg-transparent">
-            {Object.keys(
-              t("driversChange.tableHeaders", { returnObjects: true })
-            ).map((header) => (
-              <TableHead key={header} className="text-gray-400">
-                {t(`driversChange.tableHeaders.${header}`)}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {drivers.map((driver) => (
-            <TableRow
-              key={driver.id}
-              className="border-none hover:bg-[#2F2F2F]"
-            >
-              <TableCell>
-                <div>
-                  <div className="font-medium">{driver.id}</div>
-                  <div className="text-sm text-gray-400">{driver.name}</div>
-                </div>
-              </TableCell>
-              <TableCell>{driver.totalOrders}</TableCell>
-              <TableCell>{driver.numberPaid}</TableCell>
-              <TableCell>{driver.amountPaid} ₽</TableCell>
-              <TableCell>{driver.quantityUnpaid}</TableCell>
-              <TableCell>{driver.amountUnpaid} ₽</TableCell>
-              <TableCell>{driver.quantityCancelled}</TableCell>
-              <TableCell>{driver.effectiveness}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <div className="bg-[#1C1C1E] rounded-xl">
+        <MyTable
+          headers={Object.keys(t("driversChange.tableHeaders", { returnObjects: true })).map(
+            (header) => t(`driversChange.tableHeaders.${header}`)
+          )}
+          rows={drivers.map((driver) => ({
+            id: driver.id,
+            data: [
+              <div>
+                <div className="font-medium">{driver.id}</div>
+                <div className="text-sm text-gray-400">{driver.name}</div>
+              </div>,
+              driver.totalOrders,
+              driver.numberPaid,
+              `${driver.amountPaid} ₽`,
+              driver.quantityUnpaid,
+              `${driver.amountUnpaid} ₽`,
+              driver.quantityCancelled,
+              driver.effectiveness,
+            ],
+          }))}
+        />
+      </div>
 
       <div className="flex justify-between items-center bg-black rounded-lg p-4 mt-4">
         <span className="text-white text-lg">

@@ -2,15 +2,7 @@ import {
   DriverWalletsListGQL,
   DriverWalletsListQuery,
 } from "../../graphql/requests";
-
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
+import MyTable from "../../components/common/table-components/MyTable";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -49,34 +41,26 @@ export default function Wallets() {
       </div>
     );
   }
+
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-bold">Driver Wallets</h1>
 
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-transparent">
-              <TableHead>Driver</TableHead>
-              <TableHead>Balance</TableHead>
-              <TableHead>Currency</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {wallets?.map((wallet) => (
-              <TableRow key={wallet.id}>
-                <TableCell>
-                  {wallet.driver?.firstName} {wallet.driver?.lastName}
-                </TableCell>
-                <TableCell>
-                  {wallet.balance} {wallet.currency}
-                </TableCell>
-                <TableCell>{wallet.currency}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+      <MyTable
+        headers={[
+          t("driversWallets.driver"),
+          t("driversWallets.balance"),
+          t("driversWallets.currency"),
+        ]}
+        rows={wallets.map((wallet) => ({
+          id: wallet.id,
+          data: [
+            `${wallet.driver?.firstName} ${wallet.driver?.lastName}`,
+            `${wallet.balance} ${wallet.currency}`,
+            wallet.currency,
+          ],
+        }))}
+      />
     </div>
   );
 }

@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { Button } from "../../../components/ui/button";
 import { PayooutSessionTransactionsGQL } from "../../../graphql/requests";
 import { format } from "date-fns";
-import { MyDialog } from "../../../components/common/MyDialog";
-import MyTableWithHeader from "../../../components/common/MyTableWithHeader";
-import Pagination from "../../../components/common/Pagination";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog";
+import MyTableWithHeader from "../../../components/common/table-components/MyTableWithHeader";
+import Pagination from "../../../components/common/table-components/Pagination";
 
 interface PayoutTransactionsDialogProps {
   isOpen: boolean;

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { cn } from "../../lib/utils";
+import { cn } from "../../../lib/utils";
 import { useState } from "react";
 import { HiMiniSquares2X2 } from "react-icons/hi2";
 import { FaClock } from "react-icons/fa6";
@@ -9,7 +9,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "../ui/accordion";
+} from "../../ui/accordion";
 import { useTranslation } from "react-i18next";
 import ChangeLanguageBtn from "./ChangeLanguageBtn";
 

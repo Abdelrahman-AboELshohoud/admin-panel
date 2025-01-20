@@ -8,7 +8,7 @@ import {
 } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
-import Switch from "../../components/common/Switch";
+import Switch from "../../components/common/form-elements/Switch";
 import { Button } from "../../components/ui/button";
 import {
   Popover,

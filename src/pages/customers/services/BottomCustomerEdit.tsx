@@ -3,8 +3,8 @@ import { FaPlus } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { type Service as ServiceType } from "../../../graphql/requests";
 import { Input } from "../../../components/ui/input";
-import Map from "../../../components/common/Map";
-import Switch from "../../../components/common/Switch";
+import Map from "../../../components/common/rare-using/Map";
+import Switch from "../../../components/common/form-elements/Switch";
 import { useMemo, useState } from "react";
 
 interface BottomCustomerEditProps {

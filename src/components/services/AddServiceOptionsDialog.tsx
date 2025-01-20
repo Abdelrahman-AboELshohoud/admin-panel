@@ -1,17 +1,10 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { MyDialog } from "../common/MyDialog";
+import { MyDialog } from "../common/dialogs/MyDialog";
 import { Button } from "../ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
 import { ServiceOption } from "../../graphql/requests";
-import Switch from "../common/Switch";
+import Switch from "../common/form-elements/Switch";
+import MyTable from "../common/table-components/MyTable";
 
 interface AddServiceOptionsDialogProps {
   isOpen: boolean;
@@ -59,38 +52,27 @@ export default function AddServiceOptionsDialog({
       showCloseButton={false}
     >
       <div className="space-y-4">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[50px]"></TableHead>
-              <TableHead>
-                {t("leftCustomerEdit.serviceOptions.fields.name")}
-              </TableHead>
-              <TableHead>
-                {t("leftCustomerEdit.serviceOptions.fields.type")}
-              </TableHead>
-              <TableHead>
-                {t("leftCustomerEdit.serviceOptions.fields.fee")}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {availableOptions.map((option) => (
-              <TableRow key={option.id}>
-                <TableCell>
-                  <Switch
-                    checked={selected.has(option.id)}
-                    onChange={() => handleToggleOption(option.id)}
-                    disabled={false}
-                  />
-                </TableCell>
-                <TableCell>{option.name}</TableCell>
-                <TableCell>{option.type}</TableCell>
-                <TableCell>{option.additionalFee || "-"}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <MyTable
+          headers={[
+            "",
+            t("leftCustomerEdit.serviceOptions.fields.name"),
+            t("leftCustomerEdit.serviceOptions.fields.type"),
+            t("leftCustomerEdit.serviceOptions.fields.fee"),
+          ]}
+          rows={availableOptions.map((option) => ({
+            id: option.id,
+            data: [
+              <Switch
+                checked={selected.has(option.id)}
+                onChange={() => handleToggleOption(option.id)}
+                disabled={false}
+              />,
+              option.name,
+              option.type,
+              option.additionalFee || "-",
+            ],
+          }))}
+        />
 
         <div className="flex justify-end gap-2">
           <Button variant="outline" onClick={onClose}>

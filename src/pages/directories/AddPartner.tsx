@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
-import Switch from "../../components/common/Switch";
+import Switch from "../../components/common/form-elements/Switch";
 import { useTranslation } from "react-i18next";
 
 export default function AddPartner() {

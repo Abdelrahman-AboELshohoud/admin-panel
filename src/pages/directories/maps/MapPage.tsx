@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
-import Switch from "../../components/common/Switch";
-import { Button } from "../../components/ui/button";
+import Switch from "../../../components/common/form-elements/Switch";
+import { Button } from "../../../components/ui/button";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-hot-toast";
 import {
@@ -13,8 +13,8 @@ import {
   RegionListGQL,
   UpdateRegionGQL,
   type Region,
-} from "../../graphql/requests";
-import EditRegionDialog from "../../components/regions/EditRegionDialog";
+} from "../../../graphql/requests";
+import EditRegionDialog from "../../../components/regions/EditRegionDialog";
 import AddInMap from "./AddInMap";
 
 const mapContainerStyle = {

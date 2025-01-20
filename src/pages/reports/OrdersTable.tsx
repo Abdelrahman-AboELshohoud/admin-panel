@@ -1,14 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { Button } from "../../components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
+import MyTable from "../../components/common/table-components/MyTable";
 
 interface Order {
   id: string;
@@ -47,42 +40,39 @@ export default function OrdersTable() {
 
   return (
     <div className="p-4 bg-[#1C1C1E] rounded-xl">
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            <TableHead>{t("orderstable.executor")}</TableHead>
-            <TableHead>{t("orderstable.totalOrders")}</TableHead>
-            <TableHead>{t("orderstable.paidCount")}</TableHead>
-            <TableHead>{t("orderstable.paidAmount")}</TableHead>
-            <TableHead>{t("orderstable.unpaidCount")}</TableHead>
-            <TableHead>{t("orderstable.unpaidAmount")}</TableHead>
-            <TableHead>{t("orderstable.cancelledCount")}</TableHead>
-            <TableHead>{t("orderstable.efficiency")}</TableHead>
-            <TableHead></TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          <TableRow key={orders[0].id} className="hover:bg-transparent">
-            <TableCell>{`${orders[0].id}, ${orders[0].executor}`}</TableCell>
-            <TableCell>{orders[0].totalOrders}</TableCell>
-            <TableCell>{orders[0].paidCount}</TableCell>
-            <TableCell>{`${orders[0].paidAmount} ₽`}</TableCell>
-            <TableCell>{orders[0].unpaidCount}</TableCell>
-            <TableCell>{`${orders[0].unpaidAmount} ₽`}</TableCell>
-            <TableCell>{orders[0].cancelledCount}</TableCell>
-            <TableCell>{orders[0].efficiency}</TableCell>
-            <TableCell>
-              <Button
-                variant="destructive"
-                className="h-8 w-8 rounded-full"
-                onClick={() => handleDelete(orders[0].id)}
-              >
-                <X />
-              </Button>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
+      <MyTable
+        headers={[
+          t("orderstable.executor"),
+          t("orderstable.totalOrders"),
+          t("orderstable.paidCount"),
+          t("orderstable.paidAmount"),
+          t("orderstable.unpaidCount"),
+          t("orderstable.unpaidAmount"),
+          t("orderstable.cancelledCount"),
+          t("orderstable.efficiency"),
+          "",
+        ]}
+        rows={orders.map((order) => ({
+          id: order.id,
+          data: [
+            `${order.id}, ${order.executor}`,
+            order.totalOrders,
+            order.paidCount,
+            `${order.paidAmount} ₽`,
+            order.unpaidCount,
+            `${order.unpaidAmount} ₽`,
+            order.cancelledCount,
+            order.efficiency,
+            <Button
+              variant="destructive"
+              className="h-8 w-8 rounded-full"
+              onClick={() => handleDelete(order.id)}
+            >
+              <X />
+            </Button>,
+          ],
+        }))}
+      />
     </div>
   );
 }

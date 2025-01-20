@@ -38,7 +38,7 @@ import { useParams } from "react-router-dom";
 import { Switch } from "../../components/ui/switch";
 
 import { FaComments } from "react-icons/fa";
-import MapWithClusters from "../../components/common/Map";
+import MapWithClusters from "../../components/common/rare-using/Map";
 
 interface CancelOrderDialog {
   isOpen: boolean;

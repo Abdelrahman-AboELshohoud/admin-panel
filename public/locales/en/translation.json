@@ -194,7 +194,8 @@
     },
     "errors": {
       "fetchServicesFailed": "Failed to fetch services",
-      "createFailed": "Failed to create order"
+      "createFailed": "Failed to create order",
+      "fetchFailed": "Failed to fetch order details"
     },
     "actions": {
       "cancel": "Cancel",
@@ -253,7 +254,8 @@
         "cost": "Cost",
         "finalCost": "Final Cost",
         "status": "Status"
-      }
+      },
+      "latestOrder": "View Latest Order"
     },
     "events": {
       "noEvents": "No events found",

@@ -15,20 +15,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import { Badge } from "../../components/ui/badge";
@@ -42,6 +28,8 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { FleetTransactionDialog } from "../../components/FleetTransactionDialog";
+import MyTable from "../../components/common/table-components/MyTable";
+import MyTabs from "../../components/common/MyTabs";
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
@@ -110,6 +98,7 @@ export default function Fleet() {
     FleetDriversQuery["drivers"]["nodes"]
   >([]);
   const [fleetFinancials, setFleetFinancials] = useState<FleetFinancialsData>();
+  const [_activeTab, setActiveTab] = useState("details");
   const [formData, setFormData] = useState<FleetInput>({
     name: "",
     address: "",
@@ -344,64 +333,32 @@ export default function Fleet() {
         <Button className="add-button">{t("fleet.drivers.add")}</Button>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent border-transparent">
-            <TableHead className="text-gray-400">
-              {t("fleet.drivers.name")}
-            </TableHead>
-            <TableHead className="text-gray-400">
-              {t("fleet.drivers.status")}
-            </TableHead>
-            <TableHead className="text-gray-400">
-              {t("common.actions")}
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {fleetDrivers &&
-            fleetDrivers.length > 0 &&
-            fleetDrivers.map((driver) => (
-              <TableRow
-                key={driver.id}
-                className="hover:bg-gray-900 border-gray-800"
+      <MyTable
+        headers={[
+          t("fleet.drivers.name"),
+          t("fleet.drivers.status"),
+          t("common.actions"),
+        ]}
+        rows={fleetDrivers.map((driver) => ({
+          id: driver.id,
+          data: [
+            <div>
+              <div className="text-gray-200">
+                {driver.firstName} {driver.lastName}
+              </div>
+              <div className="text-sm text-gray-400">{driver.mobileNumber}</div>
+            </div>,
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate(`/control-panel/drivers/${driver.id}`)}
             >
-              <TableCell className="font-medium">
-                <div>
-                  <div className="text-gray-200">
-                    {driver.firstName} {driver.lastName}
-                  </div>
-                  <div className="text-sm text-gray-400">
-                    {driver.mobileNumber}
-                  </div>
-                </div>
-              </TableCell>
-
-              <TableCell>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() =>
-                    navigate(`/control-panel/drivers/${driver.id}`)
-                  }
-                >
-                  {t("common.view")}
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-          {!fleetDrivers?.length && (
-            <TableRow className="hover:bg-transparent border-gray-800">
-              <TableCell
-                colSpan={5}
-                className="text-center hover:bg-transparent text-gray-400 py-20 "
-              >
-                {t("fleet.drivers.noDrivers")}
-              </TableCell>
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+              {t("common.view")}
+            </Button>,
+          ],
+        }))}
+        navigate={(id) => navigate(`/control-panel/drivers/${id}`)}
+      />
     </div>
   );
 
@@ -414,9 +371,10 @@ export default function Fleet() {
         <FleetTransactionDialog
           fleetId={fleetId!}
           currencies={
-            fleetFinancials?.regions?.nodes &&
-            fleetFinancials?.regions?.nodes.length > 0 &&
-            fleetFinancials?.regions?.nodes?.map((n) => n.currency) || []
+            (fleetFinancials?.regions?.nodes &&
+              fleetFinancials?.regions?.nodes.length > 0 &&
+              fleetFinancials?.regions?.nodes?.map((n) => n.currency)) ||
+            []
           }
           onSuccess={fetchFleetData}
         />
@@ -428,18 +386,18 @@ export default function Fleet() {
             <div key={index} className="card-shape">
               <Card className="bg-white border-gray-200">
                 <CardHeader>
-                <CardTitle className="text-sm text-gray-600">
-                  {wallet.currency} {t("fleet.financials.balance")}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-gray-800">
-                  {wallet.balance.toLocaleString()}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        ))}
+                  <CardTitle className="text-sm text-gray-600">
+                    {wallet.currency} {t("fleet.financials.balance")}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-gray-800">
+                    {wallet.balance.toLocaleString()}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          ))}
       </div>
 
       {/* Chart */}
@@ -475,111 +433,91 @@ export default function Fleet() {
           {t("fleet.financials.transactions")}
         </h3>
         <div className="">
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-transparent border-transparent">
-                <TableHead className="text-gray-600">
-                  {t("common.date")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("common.type")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("common.amount")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("common.status")}
-                </TableHead>
-                <TableHead className="text-gray-600">
-                  {t("common.reference")}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {fleetFinancials?.fleet?.transactions?.nodes?.length &&
-              fleetFinancials?.fleet?.transactions?.nodes?.length > 0 ? (
-                fleetFinancials?.fleet?.transactions?.nodes.map((tx) => (
-                  <TableRow
-                    key={tx.refrenceNumber}
-                    className="hover:bg-[#262626] border-transparent"
+          <MyTable
+            headers={[
+              t("common.date"),
+              t("common.type"),
+              t("common.amount"),
+              t("common.status"),
+              t("common.reference"),
+            ]}
+            rows={
+              fleetFinancials?.fleet?.transactions?.nodes?.map((tx) => ({
+                id: tx.refrenceNumber || "",
+                data: [
+                  new Date(tx.transactionTimestamp).toLocaleDateString(),
+                  <div className="flex flex-col">
+                    <span>{tx.action}</span>
+                    <span className="text-sm text-gray-600">
+                      {tx.deductType || tx.rechargeType}
+                    </span>
+                  </div>,
+                  <span
+                    className={
+                      tx.amount > 0 ? "text-green-600" : "text-red-600"
+                    }
                   >
-                    <TableCell className="text-gray-800">
-                      {new Date(tx.transactionTimestamp).toLocaleDateString()}
-                    </TableCell>
-                    <TableCell className="text-gray-800">
-                      <div className="flex flex-col">
-                        <span>{tx.action}</span>
-                        <span className="text-sm text-gray-600">
-                          {tx.deductType || tx.rechargeType}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell
-                      className={
-                        tx.amount > 0 ? "text-green-600" : "text-red-600"
-                      }
-                    >
-                      {tx.amount > 0 ? "+" : ""}
-                      {tx.amount.toLocaleString()} {tx.currency}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary" className="bg-gray-100">
-                        {tx.status || t("common.completed")}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-gray-600">
-                      {tx.refrenceNumber || "-"}
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow className="hover:bg-transparent border-gray-200">
-                  <TableCell
-                    colSpan={5}
-                    className="text-center hover:bg-transparent text-gray-400 py-14"
-                  >
-                    {t("fleet.financials.noTransactions")}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                    {tx.amount > 0 ? "+" : ""}
+                    {tx.amount.toLocaleString()} {tx.currency}
+                  </span>,
+                  <Badge variant="secondary" className="bg-gray-100">
+                    {tx.status || t("common.completed")}
+                  </Badge>,
+                  tx.refrenceNumber || "-",
+                ],
+              })) || []
+            }
+          />
         </div>
       </div>
     </div>
   );
+
+  const tabs = [
+    {
+      title: t("fleet.tabs.details"),
+      value: "details",
+    },
+    {
+      title: t("fleet.tabs.drivers"),
+      value: "drivers",
+    },
+    {
+      title: t("fleet.tabs.financials"),
+      value: "financials",
+    },
+  ];
+  const tabsContent = [
+    {
+      value: "details",
+      content: renderFleetDetails(),
+    },
+    {
+      value: "drivers",
+      content: renderDrivers(),
+    },
+    {
+      value: "financials",
+      content: renderFinancials(),
+    },
+  ];
 
   return (
     <div>
       <h3 className="text-3xl font-semibold pl-6 mb-3 text-gray-300">
         {t("fleet.title")}
       </h3>
-      <Tabs defaultValue="details" className="w-full">
-        <TabsList className="flex gap-6 pl-6 w-fit mt-6 bg-transparent">
-          <TabsTrigger value="details" className="custom-tabs">
-            {t("fleet.tabs.details")}
-          </TabsTrigger>
-          <TabsTrigger value="drivers" className="custom-tabs">
-            {t("fleet.tabs.drivers")}
-          </TabsTrigger>
-          <TabsTrigger value="financials" className="custom-tabs">
-            {t("fleet.tabs.financials")}
-          </TabsTrigger>
-        </TabsList>
-        <div className="container w-2/3 p-6">
-          <Card className="bg-background border-none text-foreground card-shape">
-            <CardContent className="bg-transparent border-transparent">
-              <TabsContent value="details">{renderFleetDetails()}</TabsContent>
-              <TabsContent value="drivers">{renderDrivers()}</TabsContent>
-              <TabsContent value="financials">{renderFinancials()}</TabsContent>
-            </CardContent>
-          </Card>
-        </div>
-      </Tabs>
+      <div className="container w-2/3 p-6">
+        <Card className="bg-background border-none text-foreground card-shape">
+          <CardContent className="bg-transparent border-transparent">
+            <MyTabs
+              tabs={tabs}
+              tabsContent={tabsContent}
+              setActiveTab={setActiveTab}
+            />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
-}
-
-// translation.json
-{
 }

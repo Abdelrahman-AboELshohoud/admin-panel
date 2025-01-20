@@ -7,25 +7,19 @@ import {
   SosActivityAction,
   SosSubscriptionDocument,
 } from "../../graphql/requests";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { Button } from "../../components/ui/button";
-import { MyDialog } from "../../components/common/MyDialog";
+import { MyDialog } from "../../components/common/dialogs/MyDialog";
 import { Input } from "../../components/ui/input";
 import { toast } from "react-hot-toast";
 import { format } from "date-fns";
-import Map from "../../components/common/Map";
+import Map from "../../components/common/rare-using/Map";
 import { useSubscription } from "@apollo/client";
-import { useTranslation } from "react-i18next"; // Importing useTranslation for i18n
+import { useTranslation } from "react-i18next";
+import MyTable from "../../components/common/table-components/MyTable";
+import { ReactNode } from "react";
 
 export const SOSPage = () => {
-  const { t } = useTranslation(); // Initialize translation
+  const { t } = useTranslation();
   const [sosList, setSOSList] = useState<DistressSignal[]>([]);
   const [selectedSOS, setSelectedSOS] = useState<DistressSignal | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,54 +102,31 @@ export const SOSPage = () => {
     },
   });
 
+  const tableRows = sosList.map((sos) => ({
+    id: sos.id,
+    data: [
+      sos.id,
+      format(new Date(sos.createdAt), "PPp"),
+      sos.status,
+      <Button variant="outline" size="sm" onClick={() => handleViewSOS(sos.id)}>
+        {t("actions.viewDetails")}
+      </Button>,
+    ] as ReactNode[],
+  }));
+
   return (
     <div className="p-6">
       <div className="card-shape">
-        <h1 className="text-2xl font-bold mb-4">{t("sos.title")}</h1>{" "}
-        {/* Using i18n for title */}
-        <Table>
-          <TableHeader>
-            <TableRow className="border-transparent">
-              <TableHead>{t("table.id")}</TableHead>{" "}
-              {/* Using i18n for table header */}
-              <TableHead>{t("table.createdAt")}</TableHead>
-              <TableHead>{t("table.status")}</TableHead>
-              <TableHead>{t("table.actions")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sosList && sosList.length > 0 ? (
-              sosList.map((sos) => (
-                <TableRow
-                  key={sos.id}
-                  className="border-transparent hover:bg-[#262626]"
-                >
-                  <TableCell>{sos.id}</TableCell>
-                  <TableCell>
-                    {format(new Date(sos.createdAt), "PPp")}
-                  </TableCell>
-                  <TableCell>{sos.status}</TableCell>
-                  <TableCell>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleViewSOS(sos.id)}
-                    >
-                      {t("actions.viewDetails")}{" "}
-                      {/* Using i18n for button text */}
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell colSpan={4} className="py-20 text-center">
-                  {t("noSOSFound")} {/* Using i18n for no data message */}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        <h1 className="text-2xl font-bold mb-4">{t("sos.title")}</h1>
+        <MyTable
+          headers={[
+            t("table.id"),
+            t("table.createdAt"),
+            t("table.status"),
+            t("table.actions"),
+          ]}
+          rows={tableRows}
+        />
       </div>
 
       <MyDialog

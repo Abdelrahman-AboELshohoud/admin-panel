@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { MyDialog } from "../common/MyDialog";
+import { MyDialog } from "../common/dialogs/MyDialog";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
@@ -10,14 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../ui/table";
 import { toast } from "react-hot-toast";
 import {
   ServiceOptionType,
@@ -27,14 +19,7 @@ import {
   UpdateServiceOptionGQL,
   SetOptionsOnServiceGQL,
 } from "../../graphql/requests";
-
-// interface ServiceOption {
-//   id: string;
-//   name: string;
-//   type: ServiceOptionType;
-//   icon: ServiceOptionIcon;
-//   additionalFee?: number;
-// }
+import MyTable from "../common/table-components/MyTable";
 
 interface ServiceOptionsDialogProps {
   isOpen: boolean;
@@ -151,6 +136,23 @@ export default function ServiceOptionsDialog({
       setLoading(false);
     }
   };
+
+  const columns = [
+    {
+      header: t("leftCustomerEdit.serviceOptions.fields.name"),
+      accessor: "name",
+    },
+    {
+      header: t("leftCustomerEdit.serviceOptions.fields.type"),
+      accessor: "type",
+    },
+    {
+      header: t("leftCustomerEdit.serviceOptions.fields.icon"),
+      accessor: "icon",
+    },
+    { header: t("common.actions"), accessor: "actions" },
+  ];
+
   return (
     <MyDialog
       isOpen={isOpen}
@@ -263,31 +265,15 @@ export default function ServiceOptionsDialog({
             </div>
           </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow className="border-transparent hover:bg-transparent">
-                <TableHead>
-                  {t("leftCustomerEdit.serviceOptions.fields.name")}
-                </TableHead>
-                <TableHead>
-                  {t("leftCustomerEdit.serviceOptions.fields.type")}
-                </TableHead>
-                <TableHead>
-                  {t("leftCustomerEdit.serviceOptions.fields.icon")}
-                </TableHead>
-                <TableHead>{t("common.actions")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {options && options.length > 0 ? (
-                options.map((option) => (
-                  <TableRow
-                    key={option.id}
-                    className="hover:bg-gray-300 border-transparent"
-                  >
-                    <TableCell>{option.name}</TableCell>
-                    <TableCell>
-                      {t(
+          <MyTable
+            headers={columns.map((column) => column.header)}
+            rows={
+              options && options.length > 0
+                ? options.map((option) => ({
+                    id: option.id,
+                    data: [
+                      option.name,
+                      t(
                         `leftCustomerEdit.serviceOptions.types.${
                           option.type === ServiceOptionType.Free
                             ? "free"
@@ -295,11 +281,9 @@ export default function ServiceOptionsDialog({
                             ? "paid"
                             : "twoway"
                         }`
-                      )}
-                    </TableCell>
-                    <TableCell>{option.icon}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
+                      ),
+                      option.icon,
+                      <div className="flex gap-2" key={option.id}>
                         <Button
                           variant="outline"
                           className="text-gray-600"
@@ -311,19 +295,25 @@ export default function ServiceOptionsDialog({
                         >
                           {t("common.edit")}
                         </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow className="hover:bg-transparent">
-                  <TableCell colSpan={4} className="text-center py-14">
-                    {t("common.noData")}
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
+                      </div>,
+                    ],
+                  }))
+                : [
+                    {
+                      id: "no-data",
+                      data: [
+                        <td
+                          colSpan={4}
+                          className="text-center py-14"
+                          key="no-data"
+                        >
+                          {t("common.noData")}
+                        </td>,
+                      ],
+                    },
+                  ]
+            }
+          />
         )}
 
         <div className="flex justify-end gap-2">

@@ -2,20 +2,6 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../../components/ui/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { useNavigate } from "react-router-dom";
 import {
   Select,
@@ -24,8 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
+import MyTable from "../../components/common/table-components/MyTable";
+import MyTabs from "../../components/common/MyTabs";
+import { ReactNode } from "react";
 
-interface NewsItem {
+interface CarClassItem {
   name: string;
   branch: string;
   activityPeriod: string;
@@ -36,6 +25,16 @@ export default function CarClasses() {
   const { t } = useTranslation();
   const [_activeTab, setActiveTab] = useState("active");
   const navigate = useNavigate();
+
+  const tabs = [
+    { title: t("carClasses.tabs.active"), value: "active" },
+    { title: t("carClasses.tabs.blocked"), value: "blocked" },
+  ];
+
+  const tabsContent = [
+    { value: "active", content: <CarsTable items={[]} /> },
+    { value: "blocked", content: <CarsTable items={[]} /> },
+  ];
 
   return (
     <div className="w-full p-6 space-y-6">
@@ -54,32 +53,34 @@ export default function CarClasses() {
         </Button>
       </div>
 
-      <Tabs
-        defaultValue="active"
-        className="w-full bg-transparent"
-        onValueChange={setActiveTab}
-      >
-        <TabsList className="mb-4 bg-transparent">
-          <TabsTrigger value="active" className="custom-tabs">
-            {t("carClasses.tabs.active")}
-          </TabsTrigger>
-          <TabsTrigger value="blocked" className="custom-tabs">
-            {t("carClasses.tabs.blocked")}
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="active">
-          <CarsTable items={[]} />
-        </TabsContent>
-        <TabsContent value="blocked">
-          <CarsTable items={[]} />
-        </TabsContent>
-      </Tabs>
+      <MyTabs
+        tabs={tabs}
+        tabsContent={tabsContent}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
 }
 
-function CarsTable({ items }: { items: NewsItem[] }) {
+function CarsTable({ items }: { items: CarClassItem[] }) {
   const { t } = useTranslation();
+
+  const headers = [
+    t("carClasses.table.headers.branchAndType"),
+    t("carClasses.table.headers.yearOfRelease"),
+    t("carClasses.table.headers.assignACar"),
+    t("carClasses.table.headers.city"),
+  ];
+
+  const rows = items.map((item) => ({
+    id: item.name, // Using name as ID since no ID field available
+    data: [
+      item.name,
+      item.branch,
+      item.activityPeriod,
+      item.status,
+    ] as ReactNode[],
+  }));
 
   return (
     <div>
@@ -106,44 +107,7 @@ function CarsTable({ items }: { items: NewsItem[] }) {
         </Select>
       </div>
       <div className="card-shape">
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-transparent border-transparent">
-              <TableHead>
-                {t("carClasses.table.headers.branchAndType")}
-              </TableHead>
-              <TableHead>
-                {t("carClasses.table.headers.yearOfRelease")}
-              </TableHead>
-              <TableHead>{t("carClasses.table.headers.assignACar")}</TableHead>
-              <TableHead>{t("carClasses.table.headers.city")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {items.length === 0 ? (
-              <TableRow className="hover:bg-transparent border-transparent">
-                <TableCell
-                  colSpan={4}
-                  className="text-center text-muted-foreground"
-                >
-                  {t("carClasses.table.noItems")}
-                </TableCell>
-              </TableRow>
-            ) : (
-              items.map((item, index) => (
-                <TableRow
-                  key={index}
-                  className="hover:bg-transparent border-transparent"
-                >
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.branch}</TableCell>
-                  <TableCell>{item.activityPeriod}</TableCell>
-                  <TableCell>{item.status}</TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+        <MyTable headers={headers} rows={rows} />
       </div>
     </div>
   );

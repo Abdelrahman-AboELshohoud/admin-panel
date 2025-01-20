@@ -7,8 +7,8 @@ import {
   ReviewParametersListQuery,
 } from "../../graphql/requests";
 import { Button } from "../../components/ui/button";
-import { MyDialog } from "../../components/common/MyDialog";
-import Switch from "../../components/common/Switch";
+import { MyDialog } from "../../components/common/dialogs/MyDialog";
+import Switch from "../../components/common/form-elements/Switch";
 import { Input } from "../../components/ui/input";
 import toast from "react-hot-toast";
 import { Plus, Pencil } from "lucide-react";

@@ -4,6 +4,9 @@ import {
   RequestsChartGQL,
   OverviewGQL,
   DriverLocationFragment,
+  Order,
+  OrderStatus,
+  DriverStatus,
 } from "../../graphql/requests";
 import { useTranslation } from "react-i18next";
 import StackedBar from "../../components/common/statistics/StackedBar";
@@ -17,6 +20,9 @@ import {
 import ComplicatedLines from "../../components/common/statistics/ComplicatedLines";
 import OverView from "./OverView";
 import { toast } from "react-hot-toast";
+import ViewOrderDialog from "../orders/ViewOrderDialog";
+import { Button } from "../../components/ui/button";
+import { Eye } from "lucide-react";
 
 interface OverviewStats {
   complaints: number;
@@ -38,6 +44,8 @@ export default function Main() {
     driversLocations: [],
   });
   const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [showOrderDialog, setShowOrderDialog] = useState(false);
 
   const fetchRequestsData = async () => {
     try {
@@ -78,6 +86,43 @@ export default function Main() {
     }
   };
 
+  const handleViewOrder = async (orderId: string) => {
+    try {
+      // Add your order fetch query here
+      // const response = await GetOrderByIdGQL({ id: orderId });
+      // if (response.data?.order) {
+      //   setSelectedOrder(response.data.order);
+      //   setShowOrderDialog(true);
+      // }
+
+      // For now, just open with mock data
+      setSelectedOrder({
+        id: orderId,
+        status: OrderStatus.Finished,
+        createdOn: new Date().toISOString(),
+        addresses: ["123 Main St", "456 Oak Ave"],
+        currency: "USD",
+        costBest: 25.0,
+        costAfterCoupon: 20.0,
+        rider: {
+          firstName: "John",
+          lastName: "Doe",
+          mobileNumber: "+1234567890",
+        },
+        driver: {
+          firstName: "Jane",
+          lastName: "Smith",
+          mobileNumber: "+0987654321",
+          status: DriverStatus.Online,
+        },
+      });
+      setShowOrderDialog(true);
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      toast.error(t("orders.errors.fetchFailed"));
+    }
+  };
+
   useEffect(() => {
     fetchRequestsData();
     fetchOverviewStats();
@@ -114,7 +159,18 @@ export default function Main() {
           <div className="w-full h-full flex flex-col gap-4">
             <div className="flex gap-3 items-stretch h-[250px]">
               <div className="w-1/4 flex flex-col gap-6 bg-gray-200 text-[#121212] rounded-lg p-4">
-                <p className="font-bold text-xl">{t("drivers.title")}</p>
+                <div className="flex justify-between items-center">
+                  <p className="font-bold text-xl">{t("drivers.title")}</p>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleViewOrder("mock-order-id")}
+                    className="flex items-center gap-2"
+                  >
+                    <Eye className="h-4 w-4" />
+                    {t("orders.view.latestOrder")}
+                  </Button>
+                </div>
                 <div className="font-semibold flex flex-col gap-2">
                   <div className="border-b border-black pb-3">
                     {loading ? (
@@ -171,6 +227,11 @@ export default function Main() {
           setPage: () => {},
           searchData: () => {},
         }}
+      />
+      <ViewOrderDialog
+        isOpen={showOrderDialog}
+        onOpenChange={setShowOrderDialog}
+        order={selectedOrder}
       />
     </div>
   );

@@ -3,7 +3,7 @@ import "../global.css";
 import { Link, useNavigate } from "react-router-dom";
 import { LoginGQL } from "../graphql/requests";
 import useLogin from "../hooks/useLogin";
-import ChangeLanguageBtn from "../components/common/ChangeLanguageBtn";
+import ChangeLanguageBtn from "../components/common/rare-using/ChangeLanguageBtn";
 import { useTranslation } from "react-i18next";
 
 export default function Login() {
@@ -62,7 +62,7 @@ export default function Login() {
       <div className="flex flex-col items-center justify-around h-screen min-w-[25%] max-w-[25%] px-6 bg-tertiary shadow-lg rounded-r-2xl">
         <img src="/logo.svg" alt="logo" className="w-32" />
         <form className="flex flex-col items-center justify-center w-full gap-4">
-          { inputs.map((input) => (
+          {inputs.map((input) => (
             <label
               className="flex flex-col items-center justify-center input-login font-medium text-lg px-4 w-full"
               key={input.placeholder}

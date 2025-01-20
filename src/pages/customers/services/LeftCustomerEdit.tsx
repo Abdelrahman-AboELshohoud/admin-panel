@@ -7,7 +7,7 @@ import {
 } from "../../../components/ui/select";
 
 import { Input } from "../../../components/ui/input";
-import Switch from "../../../components/common/Switch";
+import Switch from "../../../components/common/form-elements/Switch";
 import { useTranslation } from "react-i18next";
 import {
   ServicePaymentMethod,

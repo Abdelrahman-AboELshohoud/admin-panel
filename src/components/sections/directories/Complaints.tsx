@@ -1,14 +1,5 @@
 import { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../ui/table";
 import { Button } from "../../ui/button";
 import {
   Select,
@@ -28,8 +19,9 @@ import {
   ComplaintStatus,
 } from "../../../graphql/requests";
 import { format } from "date-fns";
-import { MyDialog } from "../../common/MyDialog";
-import Pagination from "../../common/Pagination";
+import { MyDialog } from "../../common/dialogs/MyDialog";
+import Pagination from "../../common/table-components/Pagination";
+import MyTable from "../../common/table-components/MyTable";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -68,7 +60,6 @@ interface ComplaintDetails extends Omit<Complaint, "activities" | "order"> {
 
 export default function Complaints() {
   const { t } = useTranslation();
-  //   const navigate = useNavigate();
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -79,7 +70,6 @@ export default function Complaints() {
   const [statusFilter, setStatusFilter] = useState<ComplaintStatus | "">("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Fetch complaints
   const fetchComplaints = async () => {
     try {
       setIsLoading(true);
@@ -102,18 +92,17 @@ export default function Complaints() {
       setIsLoading(false);
     }
   };
+
   const ComplaintSub = async () => {
     const subscription = await ComplaintSubscriptionGQL();
     console.log("Complaint subscription:", subscription);
   };
 
-  // Fetch complaints on page change or filter change
   ComplaintSub();
   useEffect(() => {
     fetchComplaints();
   }, [currentPage, statusFilter]);
 
-  // View complaint details
   const handleViewDetails = async (id: string) => {
     try {
       const response = await ViewComplaintGQL({ id });
@@ -128,7 +117,6 @@ export default function Complaints() {
     }
   };
 
-  // Update complaint status
   const handleUpdateStatus = async (id: string, status: ComplaintStatus) => {
     try {
       const response = await UpdateComplaintStatusGQL({
@@ -143,6 +131,58 @@ export default function Complaints() {
       toast.error(t("complaints.errors.updateStatusFailed"));
     }
   };
+
+  const headers = [
+    t("complaints.table.date"),
+    t("complaints.table.subject"),
+    t("complaints.table.status"),
+    t("complaints.table.actions"),
+  ];
+
+  const tableRows = complaints.map((complaint) => ({
+    id: complaint.id,
+    data: [
+      format(new Date(complaint.inscriptionTimestamp), "PPp"),
+      complaint.subject,
+      <span
+        className={`px-2 py-1 rounded-full text-sm ${
+          complaint.status === ComplaintStatus.Submitted
+            ? "bg-yellow-500/20 text-yellow-500"
+            : complaint.status === ComplaintStatus.UnderInvestigation
+            ? "bg-blue-500/20 text-blue-500"
+            : "bg-green-500/20 text-green-500"
+        }`}
+      >
+        {t(`complaints.status.${complaint.status.toLowerCase()}`)}
+      </span>,
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => handleViewDetails(complaint.id)}
+        >
+          {t("common.view")}
+        </Button>
+        <Select
+          value={complaint.status}
+          onValueChange={(value: ComplaintStatus) =>
+            handleUpdateStatus(complaint.id, value)
+          }
+        >
+          <SelectTrigger className="custom-input w-[200px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {Object.values(ComplaintStatus).map((status) => (
+              <SelectItem key={status} value={status}>
+                {t(`complaints.status.${status.toLowerCase()}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>,
+    ],
+  }));
 
   return (
     <div className="p-6">
@@ -176,87 +216,18 @@ export default function Complaints() {
         />
       </div>
 
-      {/* Complaints Table */}
       <div className="card-shape">
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-transparent border-transparent">
-              <TableHead>{t("complaints.table.date")}</TableHead>
-              <TableHead>{t("complaints.table.subject")}</TableHead>
-              <TableHead>{t("complaints.table.status")}</TableHead>
-              <TableHead>{t("complaints.table.actions")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow className="hover:bg-transparent h-96">
-                <TableCell colSpan={4} className="text-center">
-                  {t("common.loading")}
-                </TableCell>
-              </TableRow>
-            ) : complaints && complaints.length > 0 ? (
-              complaints.map((complaint) => (
-                <TableRow
-                  key={complaint.id}
-                  className="hover:bg-transparent border-transparent"
-                >
-                  <TableCell>
-                    {format(new Date(complaint.inscriptionTimestamp), "PPp")}
-                  </TableCell>
-                  <TableCell>{complaint.subject}</TableCell>
-                  <TableCell>
-                    <span
-                      className={`px-2 py-1 rounded-full text-sm ${
-                        complaint.status === ComplaintStatus.Submitted
-                          ? "bg-yellow-500/20 text-yellow-500"
-                          : complaint.status ===
-                            ComplaintStatus.UnderInvestigation
-                          ? "bg-blue-500/20 text-blue-500"
-                          : "bg-green-500/20 text-green-500"
-                      }`}
-                    >
-                      {t(`complaints.status.${complaint.status.toLowerCase()}`)}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleViewDetails(complaint.id)}
-                      >
-                        {t("common.view")}
-                      </Button>
-                      <Select
-                        value={complaint.status}
-                        onValueChange={(value: ComplaintStatus) =>
-                          handleUpdateStatus(complaint.id, value)
-                        }
-                      >
-                        <SelectTrigger className="custom-input w-[200px]">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {Object.values(ComplaintStatus).map((status) => (
-                            <SelectItem key={status} value={status}>
-                              {t(`complaints.status.${status.toLowerCase()}`)}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
-            ) : (
-              <TableRow className="hover:bg-transparent h-96">
-                <TableCell colSpan={4} className="text-center">
-                  {t("complaints.noComplaints")}
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        {isLoading ? (
+          <div className="h-96 flex items-center justify-center">
+            {t("common.loading")}
+          </div>
+        ) : complaints.length > 0 ? (
+          <MyTable headers={headers} rows={tableRows} />
+        ) : (
+          <div className="h-96 flex items-center justify-center">
+            {t("complaints.noComplaints")}
+          </div>
+        )}
 
         {complaints.length > 0 && (
           <Pagination

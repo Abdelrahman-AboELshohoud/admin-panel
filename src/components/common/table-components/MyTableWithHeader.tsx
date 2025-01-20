@@ -9,7 +9,7 @@ export default function MyTableWithHeader({
   Header: React.FC;
   headers: string[];
   rows: any[];
-  navigate: (id: string) => void;
+  navigate: (id?: string) => void;
 }) {
   return (
     <div className="flex flex-col gap-4 w-full p-4">

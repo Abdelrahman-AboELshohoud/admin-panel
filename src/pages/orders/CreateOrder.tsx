@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
-import { MyDialog } from "../../components/common/MyDialog";
+import { MyDialog } from "../../components/common/dialogs/MyDialog";
 import { toast } from "react-hot-toast";
 import {
   CreateOrderGQL,

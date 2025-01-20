@@ -11,7 +11,7 @@ import {
   CreateGiftBachMutationVariables,
   ViewGiftBatchQuery,
 } from "../../../graphql/requests";
-import { MyDialog } from "../../../components/common/MyDialog";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog";
 import toast from "react-hot-toast";
 import {
   Select,
@@ -22,7 +22,7 @@ import {
 } from "../../../components/ui/select";
 
 import moment from "moment";
-import MyTableWithHeader from "../../../components/common/MyTableWithHeader";
+import MyTableWithHeader from "../../../components/common/table-components/MyTableWithHeader";
 
 export default function GiftBatches() {
   const { t } = useTranslation();
@@ -44,7 +44,6 @@ export default function GiftBatches() {
   });
 
   const fetchData = async () => {
-
     try {
       const [giftBatchData] = await Promise.all([GiftBatchListGQL({})]);
 

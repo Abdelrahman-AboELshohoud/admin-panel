@@ -14,11 +14,11 @@ import {
   CardHeader,
   CardTitle,
 } from "../../../components/ui/card";
-import Switch from "../../../components/common/Switch";
+import Switch from "../../../components/common/form-elements/Switch";
 import { useTranslation } from "react-i18next";
 import { PaymentGatewayType } from "../../../graphql/requests";
 import GatewayFields from "./GatewayFields";
-import { MyDialog } from "../../../components/common/MyDialog";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog";
 import { PaymentGatewayForm } from "./Payment";
 
 export default function ViewGatewayDialog({

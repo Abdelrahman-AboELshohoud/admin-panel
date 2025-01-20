@@ -1,15 +1,9 @@
 import { useTranslation } from "react-i18next";
-import { MyDialog } from "../../../components/common/MyDialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../../components/ui/table";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog";
 import moment from "moment";
 import { PayoutSession } from "../../../graphql/requests";
+import MyTable from "../../../components/common/table-components/MyTable";
+import { ReactNode } from "react";
 
 interface SessionDetailsDialogProps {
   isOpen: boolean;
@@ -25,6 +19,23 @@ export default function SessionDetailsDialog({
   const { t } = useTranslation();
 
   if (!session) return null;
+
+  const headers = [
+    t("payouts.table.driver"),
+    t("payouts.table.amount"),
+    t("payouts.table.status"),
+    t("payouts.table.date"),
+  ];
+
+  const rows = session.driverTransactions.nodes.map((transaction) => ({
+    id: transaction.id,
+    data: [
+      `${transaction.driver?.firstName} ${transaction.driver?.lastName}`,
+      `${transaction.amount} ${transaction.currency}`,
+      transaction.status,
+      moment(transaction.createdAt).format("DD.MM.YYYY HH:mm"),
+    ] as ReactNode[],
+  }));
 
   return (
     <MyDialog
@@ -69,33 +80,7 @@ export default function SessionDetailsDialog({
           <h4 className="font-medium text-gray-400 mb-4">
             {t("payouts.sessionDetails.transactions")}
           </h4>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("payouts.table.driver")}</TableHead>
-                <TableHead>{t("payouts.table.amount")}</TableHead>
-                <TableHead>{t("payouts.table.status")}</TableHead>
-                <TableHead>{t("payouts.table.date")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {session.driverTransactions.nodes.map((transaction, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    {transaction.driver?.firstName}{" "}
-                    {transaction.driver?.lastName}
-                  </TableCell>
-                  <TableCell>
-                    {transaction.amount} {transaction.currency}
-                  </TableCell>
-                  <TableCell>{transaction.status}</TableCell>
-                  <TableCell>
-                    {moment(transaction.createdAt).format("DD.MM.YYYY HH:mm")}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <MyTable headers={headers} rows={rows} />
         </div>
       </div>
     </MyDialog>

@@ -8,15 +8,8 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { Input } from "../../components/ui/input";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { Badge } from "../../components/ui/badge";
+import MyTable from "../../components/common/table-components/MyTable";
 
 interface Order {
   id: string;
@@ -195,20 +188,19 @@ const ListOfOrders = () => {
         </Button>
       </div>
 
-      <Table>
-        <TableHeader className="border-none">
-          <TableRow className="hover:bg-transparent border-none">
-            <TableHead>{t("listOfOrders.number")}</TableHead>
-            <TableHead>{t("listOfOrders.address")}</TableHead>
-            <TableHead>{t("listOfOrders.status")}</TableHead>
-            <TableHead>{t("listOfOrders.executor")}</TableHead>
-            <TableHead>{t("listOfOrders.rate")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders.map((order) => (
-            <TableRow key={order.id} className="hover:bg-neutral-800">
-              <TableCell className="text-slate-300">
+      <div className="bg-[#1C1C1E] rounded-xl">
+        <MyTable
+          headers={[
+            t("listOfOrders.number"),
+            t("listOfOrders.address"),
+            t("listOfOrders.status"),
+            t("listOfOrders.executor"),
+            t("listOfOrders.rate"),
+          ]}
+          rows={orders.map((order) => ({
+            id: order.id,
+            data: [
+              <div className="text-slate-300">
                 {order.id}
                 <div className="text-sm text-slate-400">
                   {t("listOfOrders.on")} {order.date}
@@ -225,34 +217,28 @@ const ListOfOrders = () => {
                   <br />
                   {order.client}
                 </div>
-              </TableCell>
-              <TableCell className="text-slate-300">
+              </div>,
+              <div className="text-slate-300">
                 {order.location.city},
                 <br />
                 {order.location.address}
                 <br />
                 {order.location.area}
-              </TableCell>
-              <TableCell>
-                <Badge
-                  variant={
-                    order.status.type === "completed"
-                      ? "destructive"
-                      : "default"
-                  }
-                  className="bg-green-900/50 text-green-400 hover:bg-green-900/50"
-                >
-                  {order.status.text}
-                </Badge>
-              </TableCell>
-              <TableCell className="text-slate-300">
+              </div>,
+              <Badge
+                variant={order.status.type === "completed" ? "destructive" : "default"}
+                className="bg-green-900/50 text-green-400 hover:bg-green-900/50"
+              >
+                {order.status.text}
+              </Badge>,
+              <div className="text-slate-300">
                 {order.executor.name}
                 <br />
                 {order.executor.vehicle}
                 <br />
                 {order.executor.plate}
-              </TableCell>
-              <TableCell className="text-slate-300">
+              </div>,
+              <div className="text-slate-300">
                 {order.business.type}
                 <br />
                 {order.business.amount}
@@ -260,11 +246,11 @@ const ListOfOrders = () => {
                 {order.business.distance}
                 <br />
                 {order.business.duration}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </div>,
+            ],
+          }))}
+        />
+      </div>
 
       <div className="flex justify-between items-center bg-black rounded-full p-4 mt-4">
         <span className="text-white text-lg">{t("listOfOrders.total")}</span>

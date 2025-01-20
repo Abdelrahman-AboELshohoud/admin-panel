@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "../../../components/ui/button";
-import DeletionDialog from "../../../components/common/DeletionDialog";
+import DeletionDialog from "../../../components/common/dialogs/DeletionDialog";
 import BottomCustomerEdit from "./BottomCustomerEdit";
 import LeftCustomerEdit from "./LeftCustomerEdit";
 import RightCustomerEdit from "./RightCustomerEdit";

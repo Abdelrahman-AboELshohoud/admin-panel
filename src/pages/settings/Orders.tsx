@@ -2,12 +2,12 @@ import * as React from "react";
 import { Button } from "../../components/ui/button";
 import { Card, CardContent } from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
-import Selects from "../../components/common/Selects";
-import Switch from "../../components/common/Switch";
+import Selects from "../../components/common/form-elements/Selects";
+import Switch from "../../components/common/form-elements/Switch";
 import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
 import { Plus, X } from "lucide-react";
 import ToolTip from "../../components/common/ToolTip";
-import SelectsWithLabel from "../../components/common/SelectsWithLabel";
+import SelectsWithLabel from "../../components/common/form-elements/SelectsWithLabel";
 import { useTranslation } from "react-i18next";
 
 export default function OrderDistributionSettings() {

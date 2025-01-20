@@ -11,18 +11,13 @@ import {
 import { Button } from "../../../components/ui/button";
 import { Badge } from "../../../components/ui/badge";
 import { Eye, Plus } from "lucide-react";
-import Switch from "../../../components/common/Switch";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../../components/ui/tabs";
-import MyTable from "../../../components/common/MyTable";
+import Switch from "../../../components/common/form-elements/Switch";
+import MyTable from "../../../components/common/table-components/MyTable";
 import Promotions from "../copouns/Promotions";
 import Payouts from "../payouts/Payouts";
 import AddGatewayDialog from "./AddGatewayDialog";
 import ViewGatewayDialog from "./ViewGatewayDialog";
+import MyTabs from "../../../components/common/MyTabs";
 
 interface PaymentGateway {
   id: string;
@@ -93,6 +88,7 @@ export default function Payment() {
   const [createDialog, setCreateDialog] = useState<CreateDialogState>({
     isOpen: false,
   });
+  const [_activeTab, setActiveTab] = useState("gateways");
 
   const fetchPaymentGateways = async () => {
     try {
@@ -194,102 +190,103 @@ export default function Payment() {
   ];
 
   const rows = (Array.isArray(paymentGateways) ? paymentGateways : []).map(
-    (gateway) => [
-      gateway.title,
-      gateway.type,
-      <Switch
-        key={`switch-${gateway.id}`}
-        checked={gateway.enabled}
-        disabled={false}
-        onChange={(checked) => handleStatusToggle(gateway.id, checked)}
-      />,
-      gateway.isDefault ? (
-        <Badge key={`badge-${gateway.id}`} className="bg-green-600">
-          {t("payment.labels.default")}
-        </Badge>
-      ) : null,
-      <Button
-        key={`button-${gateway.id}`}
-        variant="outline"
-        size="sm"
-        onClick={async () => {
-          const response = await ViewPaymentGatewayGQL({
-            id: gateway.id,
-          });
-          const gatewayDetails = response.data.paymentGateway;
+    (gateway) => ({
+      id: gateway.id,
+      data: [
+        gateway.title,
+        gateway.type,
+        <Switch
+          key={`switch-${gateway.id}`}
+          checked={gateway.enabled}
+          disabled={false}
+          onChange={(checked) => handleStatusToggle(gateway.id, checked)}
+        />,
+        gateway.isDefault ? (
+          <Badge key={`badge-${gateway.id}`} className="bg-green-600">
+            {t("payment.labels.default")}
+          </Badge>
+        ) : null,
+        <Button
+          key={`button-${gateway.id}`}
+          variant="outline"
+          size="sm"
+          onClick={async () => {
+            const response = await ViewPaymentGatewayGQL({
+              id: gateway.id,
+            });
+            const gatewayDetails = response.data.paymentGateway;
 
-          setFormData({
-            title: gatewayDetails.title,
-            type: gatewayDetails.type,
-            enabled: gatewayDetails.enabled,
-            privateKey: gatewayDetails.privateKey,
-            publicKey: gatewayDetails.publicKey,
-            merchantId: gatewayDetails.merchantId,
-            saltKey: gatewayDetails.saltKey,
-          });
-          setViewDialog({
-            isOpen: true,
-            gateway: gatewayDetails,
-            activeTab: "details",
-            isEditing: false,
-          });
-        }}
-        className="text-gray-500 hover:text-gray-600"
-      >
-        <Eye className="w-4 h-4 mr-2" />
-        {t("common.manage")}
-      </Button>,
-    ]
+            setFormData({
+              title: gatewayDetails.title,
+              type: gatewayDetails.type,
+              enabled: gatewayDetails.enabled,
+              privateKey: gatewayDetails.privateKey,
+              publicKey: gatewayDetails.publicKey,
+              merchantId: gatewayDetails.merchantId,
+              saltKey: gatewayDetails.saltKey,
+            });
+            setViewDialog({
+              isOpen: true,
+              gateway: gatewayDetails,
+              activeTab: "details",
+              isEditing: false,
+            });
+          }}
+          className="text-gray-500 hover:text-gray-600"
+        >
+          <Eye className="w-4 h-4 mr-2" />
+          {t("common.manage")}
+        </Button>,
+      ],
+    })
   );
+
+  const tabs = [
+    { title: t("payment.gateways"), value: "gateways" },
+    { title: t("payment.payouts"), value: "payouts" },
+    { title: t("payment.promotions"), value: "promotions" },
+  ];
+
+  const GatewaysContent = () => (
+    <>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-200">
+          {t("payment.title")}
+        </h1>
+        <Button
+          onClick={() => {
+            resetForm();
+            setCreateDialog({ isOpen: true });
+          }}
+        >
+          <Plus className="w-4 h-4 mr-2" />
+          {t("payment.addGateway")}
+        </Button>
+      </div>
+
+      {loading ? (
+        <div className="text-center py-8 text-gray-400">
+          {t("common.loading")}
+        </div>
+      ) : (
+        <MyTable headers={headers} rows={rows} />
+      )}
+    </>
+  );
+
+  const tabsContent = [
+    { value: "gateways", content: <GatewaysContent /> },
+    { value: "payouts", content: <Payouts /> },
+    { value: "promotions", content: <Promotions /> },
+  ];
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <Tabs defaultValue="gateways" className="w-full">
-        <TabsList className="flex gap-4 w-fit bg-transparent">
-          <TabsTrigger value="gateways" className="custom-tabs">
-            {t("payment.gateways")}
-          </TabsTrigger>
-          <TabsTrigger value="payouts" className="custom-tabs">
-            {t("payment.payouts")}
-          </TabsTrigger>
-          <TabsTrigger value="promotions" className="custom-tabs">
-            {t("payment.promotions")}
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="gateways">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-2xl font-bold text-gray-200">
-              {t("payment.title")}
-            </h1>
-            <Button
-              onClick={() => {
-                resetForm();
-                setCreateDialog({ isOpen: true });
-              }}
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              {t("payment.addGateway")}
-            </Button>
-          </div>
-
-          {loading ? (
-            <div className="text-center py-8 text-gray-400">
-              {t("common.loading")}
-            </div>
-          ) : (
-            <MyTable headers={headers} rows={rows} />
-          )}
-        </TabsContent>
-
-        <TabsContent value="payouts">
-          <Payouts />
-        </TabsContent>
-
-        <TabsContent value="promotions">
-          <Promotions />
-        </TabsContent>
-      </Tabs>
+      <MyTabs
+        tabs={tabs}
+        tabsContent={tabsContent}
+        setActiveTab={setActiveTab}
+      />
 
       <ViewGatewayDialog
         setViewDialog={setViewDialog}

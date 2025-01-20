@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import Switch from "../../components/common/Switch";
-import { MyDialog } from "../../components/common/MyDialog";
+import Switch from "../../components/common/form-elements/Switch";
+import { MyDialog } from "../../components/common/dialogs/MyDialog";
 import {
   Select,
   SelectContent,

@@ -1,26 +1,20 @@
 import { Button } from "../../../components/ui/button";
-import Switch from "../../../components/common/Switch";
+import Switch from "../../../components/common/form-elements/Switch";
 import { UserPlus } from "lucide-react";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../../components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
-
+import MyTabs from "../../../components/common/MyTabs";
 import ClientsFilters from "../../../components/pages/drivers/DriversFilters";
 import { Rider, RidersListGQL } from "../../../graphql/requests";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
-import Pagination from "../../../components/common/Pagination";
-import MyTable from "../../../components/common/MyTable";
+import Pagination from "../../../components/common/table-components/Pagination";
+import MyTable from "../../../components/common/table-components/MyTable";
 import moment from "moment";
 
 const tabItems = [
-  { value: "active", label: "Active" },
-  { value: "blocked", label: "Blocked" },
-  { value: "inactive", label: "Inactive" },
+  { value: "active", title: "Active" },
+  { value: "blocked", title: "Blocked" },
+  { value: "inactive", title: "Inactive" },
 ];
 
 const Clients = () => {
@@ -40,6 +34,7 @@ const Clients = () => {
     t("clients.table.status"),
     t("clients.table.orders"),
   ];
+
   useEffect(() => {
     const getAllClients = async () => {
       const res = await RidersListGQL({
@@ -53,54 +48,19 @@ const Clients = () => {
     };
     getAllClients();
   }, [currentPage]);
-
-  return (
-    <div className="p-6 space-y-6">
-      <Tabs defaultValue={location.pathname.split("/")[3]} className="w-full">
-        <TabsList className="bg-transparent hover:bg-transparent mb-6 w-full">
-          {tabItems &&
-            tabItems.length > 0 &&
-            tabItems.map((tab) => (
-              <TabsTrigger
-                onClick={() => {
-                  navigate(`/control-panel/clients/${tab.value}`);
-                }}
-                key={tab.value}
-                value={tab.value}
-                className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-              >
-                {t(`tabs.${tab.value}`)}
-              </TabsTrigger>
-            ))}
-          <div className="ml-auto">
-            <Button
-              variant="outline"
-              onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
-                navigate("/control-panel/clients/add-client");
-              }}
-              className="gap-2 add-button"
-            >
-              <UserPlus size={16} />
-              {t("clients.buttons.add")}
-            </Button>
-          </div>
-        </TabsList>
-
-        <TabsContent value={location.pathname.split("/")[3]}>
-          <ClientsFilters />
-
-          {location.pathname.split("/")[3] === "active" && (
-            <div className="flex items-center gap-6 mb-6">
-              <span className="text-sm text-gray-300">
-                {t("clients.online")}
-              </span>
-              <Switch checked={false} disabled={false} />
-            </div>
-          )}
-          <MyTable
-            headers={TableColumns}
-            rows={clients.map((client) => [
+  const TableContent = () => {
+    return (
+      <>
+        <ClientsFilters />
+        <div className="flex items-center gap-6 mb-6">
+          <span className="text-sm text-gray-300">{t("clients.online")}</span>
+          <Switch checked={false} disabled={false} />
+        </div>
+        <MyTable
+          headers={TableColumns}
+          rows={clients.map((client) => ({
+            id: client.id,
+            data: [
               client.id,
               <>
                 {moment(client.registrationTimestamp).format("DD.MM.YYYY")}
@@ -130,25 +90,61 @@ const Clients = () => {
                 )}
               </div>,
               <div className="text-sm">{client?.orders?.totalCount || 0}</div>,
-            ])}
-            navigate={(id: string) =>
-              navigate(
-                `/control-panel/clients/${
-                  location.pathname.split("/")[3]
-                }/${id}/profile`
-              )
-            }
-          />
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            onPageChange={setCurrentPage}
-          />
-        </TabsContent>
+            ],
+          }))}
+          navigate={(id) =>
+            id &&
+            navigate(
+              `/control-panel/clients/${
+                location.pathname.split("/")[3]
+              }/${id}/profile`
+            )
+          }
+        />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
+        />
+      </>
+    );
+  };
 
-        <TabsContent value="blocked" />
-        <TabsContent value="inactive" />
-      </Tabs>
+  const tabsContent = [
+    {
+      value: "active",
+      content: <TableContent />,
+    },
+    {
+      value: "blocked",
+      content: <TableContent />,
+    },
+    {
+      value: "inactive",
+      content: <TableContent />,
+    },
+  ];
+
+  return (
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center mb-6">
+        <MyTabs
+          tabs={tabItems}
+          tabsContent={tabsContent}
+          setActiveTab={(value) => navigate(`/control-panel/clients/${value}`)}
+        />
+        <Button
+          variant="outline"
+          onClick={(e: React.MouseEvent) => {
+            e.preventDefault();
+            navigate("/control-panel/clients/add-client");
+          }}
+          className="gap-2 add-button"
+        >
+          <UserPlus size={16} />
+          {t("clients.buttons.add")}
+        </Button>
+      </div>
     </div>
   );
 };

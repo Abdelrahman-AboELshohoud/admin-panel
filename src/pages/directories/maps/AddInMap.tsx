@@ -1,11 +1,11 @@
 import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useLoadScript } from "@react-google-maps/api";
-import { MyDialog } from "../../components/common/MyDialog";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import Switch from "../../components/common/Switch";
-import MapComponent from "../../components/regions/MapComponent";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
+import Switch from "../../../components/common/form-elements/Switch";
+import MapComponent from "../../../components/regions/MapComponent";
 
 export interface Point {
   lat: number;

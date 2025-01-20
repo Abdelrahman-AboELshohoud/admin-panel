@@ -7,14 +7,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { Button } from "../../components/ui/button";
 import { Calendar } from "../../components/ui/calendar";
 import {
@@ -24,6 +16,7 @@ import {
 } from "../../components/ui/popover";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import MyTable from "../../components/common/table-components/MyTable";
 
 interface Employee {
   name: string;
@@ -143,29 +136,23 @@ export default function Shifts() {
       </div>
 
       <div className="p-4 bg-[#1C1C1E] rounded-xl">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-transparent hover:bg-transparent h-12 text-gray-300">
-              <TableHead>{t("shifts.employee")}</TableHead>
-              <TableHead>{t("shifts.timeOfEntry")}</TableHead>
-              <TableHead>{t("shifts.exitTime")}</TableHead>
-              <TableHead>{t("shifts.ipAddress")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {employees.map((employee, index) => (
-              <TableRow
-                key={index}
-                className="border-transparent hover:bg-transparent pb-4"
-              >
-                <TableCell className="font-medium">{employee.name}</TableCell>
-                <TableCell>{employee.timeOfEntry}</TableCell>
-                <TableCell>{employee.exitTime}</TableCell>
-                <TableCell>{employee.ipAddress}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+        <MyTable
+          headers={[
+            t("shifts.employee"),
+            t("shifts.timeOfEntry"),
+            t("shifts.exitTime"), 
+            t("shifts.ipAddress")
+          ]}
+          rows={employees.map((employee, index) => ({
+            id: index.toString(),
+            data: [
+              employee.name,
+              employee.timeOfEntry,
+              employee.exitTime,
+              employee.ipAddress
+            ]
+          }))}
+        />
       </div>
     </div>
   );

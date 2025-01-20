@@ -9,8 +9,8 @@ import {
   CreatePayoutSessionFieldsGQL,
 } from "../../../graphql/requests";
 import { format } from "date-fns";
-import MyTableWithHeader from "../../../components/common/MyTableWithHeader";
-import Pagination from "../../../components/common/Pagination";
+import MyTableWithHeader from "../../../components/common/table-components/MyTableWithHeader";
+import Pagination from "../../../components/common/table-components/Pagination";
 import CreateSessionDialog from "./CreateSessionDialog";
 import AutoPayoutDialog from "./AutoPayoutDialog";
 import PayoutMethodDialog from "./PayoutMethodDialog";

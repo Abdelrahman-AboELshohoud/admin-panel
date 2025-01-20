@@ -3,22 +3,9 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { AnnouncementsListGQL } from "../../graphql/requests";
-
 import { Button } from "../../components/ui/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../components/ui/tabs";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
+import MyTable from "../../components/common/table-components/MyTable";
+import MyTabs from "../../components/common/MyTabs";
 
 interface Announcement {
   id: string;
@@ -68,6 +55,82 @@ export default function News() {
     }
   };
 
+  const headers = [
+    t("news.table.name"),
+    t("news.table.userType"),
+    t("news.table.activityPeriod"),
+    t("news.table.status"),
+  ];
+
+  const formatDateRange = (startAt: string, expireAt: string) => {
+    const start = new Date(startAt).toLocaleDateString();
+    const end = new Date(expireAt).toLocaleDateString();
+    return `${start} - ${end}`;
+  };
+
+  const getTableRows = (items: Announcement[]) => {
+    if (items.length === 0) {
+      return [
+        {
+          id: "no-data",
+          data: [
+            <div className="text-center text-muted-foreground col-span-4">
+              {t("news.table.noItems")}
+            </div>,
+          ],
+        },
+      ];
+    }
+
+    return items.map((item) => ({
+      id: item.id,
+      data: [
+        item.title,
+        item.userType.join(", "),
+        formatDateRange(item.startAt, item.expireAt),
+        new Date() >= new Date(item.startAt) &&
+        new Date() <= new Date(item.expireAt)
+          ? t("common.active")
+          : t("common.blocked"),
+      ],
+      navigate: () => navigate(`/control-panel/directories/news/${item.id}`),
+    }));
+  };
+
+  const tabs = [
+    {
+      title: t("common.active"),
+      value: "active",
+    },
+    {
+      title: t("common.blocked"),
+      value: "blocked",
+    },
+  ];
+
+  const tabContents = [
+    {
+      value: "active",
+      content: (
+        <MyTable
+          key="active"
+          headers={headers}
+          rows={getTableRows(announcements)}
+        />
+      ),
+    },
+    {
+      value: "blocked",
+      content: (
+        <MyTable
+          key="blocked"
+          headers={headers}
+          rows={getTableRows(announcements)}
+        />
+      ),
+    },
+  ];
+
   return (
     <div className="w-full p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -85,86 +148,13 @@ export default function News() {
         </Button>
       </div>
 
-      <Tabs
-        defaultValue="active"
-        className="w-full bg-transparent"
-        onValueChange={setActiveTab}
-      >
-        <TabsList className="mb-4 bg-transparent">
-          <TabsTrigger value="active" className="custom-tabs">
-            {t("common.active")}
-          </TabsTrigger>
-          <TabsTrigger value="blocked" className="custom-tabs">
-            {t("common.blocked")}
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="active">
-          <NewsTable items={announcements} />
-        </TabsContent>
-        <TabsContent value="blocked">
-          <NewsTable items={announcements} />
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-}
-
-function NewsTable({ items }: { items: Announcement[] }) {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
-
-  const formatDateRange = (startAt: string, expireAt: string) => {
-    const start = new Date(startAt).toLocaleDateString();
-    const end = new Date(expireAt).toLocaleDateString();
-    return `${start} - ${end}`;
-  };
-
-  return (
-    <div className="card-shape">
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent border-transparent">
-            <TableHead>{t("news.table.name")}</TableHead>
-            <TableHead>{t("news.table.userType")}</TableHead>
-            <TableHead>{t("news.table.activityPeriod")}</TableHead>
-            <TableHead>{t("news.table.status")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {items.length === 0 ? (
-            <TableRow className="hover:bg-transparent border-transparent">
-              <TableCell
-                colSpan={4}
-                className="text-center text-muted-foreground"
-              >
-                {t("news.table.noItems")}
-              </TableCell>
-            </TableRow>
-          ) : (
-            items.map((item) => (
-              <TableRow
-                key={item.id}
-                className="hover:bg-transparent border-transparent cursor-pointer"
-                onClick={() =>
-                  navigate(`/control-panel/directories/news/${item.id}`)
-                }
-              >
-                <TableCell>{item.title}</TableCell>
-                <TableCell>{item.userType.join(", ")}</TableCell>
-                <TableCell>
-                  {formatDateRange(item.startAt, item.expireAt)}
-                </TableCell>
-                <TableCell>
-                  {new Date() >= new Date(item.startAt) &&
-                  new Date() <= new Date(item.expireAt)
-                    ? t("common.active")
-                    : t("common.blocked")}
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+      <div className="bg-[#1C1C1E] rounded-xl p-4">
+        <MyTabs
+          tabs={tabs}
+          tabsContent={tabContents}
+          setActiveTab={setActiveTab}
+        />
+      </div>
     </div>
   );
 }

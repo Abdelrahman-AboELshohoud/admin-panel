@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 import { Switch } from "../../components/ui/switch";
-import Map from "../../components/common/Map";
+import Map from "../../components/common/rare-using/Map";
 import { MarkerClusterer } from "@googlemaps/markerclusterer";
 
 interface Location {

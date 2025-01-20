@@ -13,7 +13,7 @@ import {
   CreateFleetTransactionGQL,
   TransactionAction,
 } from "../graphql/requests";
-import { MyDialog } from "./common/MyDialog";
+import { MyDialog } from "./common/dialogs/MyDialog";
 
 interface FleetTransactionDialogProps {
   fleetId: string;
@@ -192,7 +192,8 @@ export function FleetTransactionDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {uniqueCurrencies &&  uniqueCurrencies.length > 0 &&
+                {uniqueCurrencies &&
+                  uniqueCurrencies.length > 0 &&
                   uniqueCurrencies.map((currency) => (
                     <SelectItem key={currency} value={currency}>
                       {currency}

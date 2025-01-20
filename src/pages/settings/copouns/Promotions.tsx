@@ -1,19 +1,22 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../../components/ui/tabs";
-
+import MyTabs from "../../../components/common/MyTabs";
 import GiftBatches from "./GiftBatches";
 import Copouns from "./Copouns";
 
 export default function Promotions() {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState("coupons");
+  const [_activeTab, setActiveTab] = useState("coupons");
+
+  const tabs = [
+    { title: t("promotions.coupons"), value: "coupons" },
+    { title: t("promotions.giftCards"), value: "giftCards" },
+  ];
+
+  const tabsContent = [
+    { value: "coupons", content: <Copouns /> },
+    { value: "giftCards", content: <GiftBatches /> },
+  ];
 
   return (
     <div className="container mx-auto py-6 space-y-6">
@@ -21,29 +24,12 @@ export default function Promotions() {
         <h1 className="text-2xl font-bold">{t("promotions.title")}</h1>
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="bg-transparent border-transparent">
-          <TabsTrigger value="coupons" className="custom-tabs">
-            {t("promotions.coupons")}
-          </TabsTrigger>
-          {/* <TabsTrigger value="rewards">{t("promotions.rewards")}</TabsTrigger> */}
-          <TabsTrigger value="giftCards" className="custom-tabs">
-            {t("promotions.giftCards")}
-          </TabsTrigger>
-        </TabsList>
+      <MyTabs
+        tabs={tabs}
+        tabsContent={tabsContent}
+        setActiveTab={setActiveTab}
+      />
 
-        <TabsContent value="coupons">
-          <Copouns />
-        </TabsContent>
-
-        {/* <TabsContent value="rewards">
-          <Rewards />
-        </TabsContent> */}
-
-        <TabsContent value="giftCards">
-          <GiftBatches />
-        </TabsContent>
-      </Tabs>
       {/* 
       <MyDialog
         isOpen={showRewardDialog}

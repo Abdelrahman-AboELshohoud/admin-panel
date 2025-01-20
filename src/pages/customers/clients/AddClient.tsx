@@ -3,10 +3,10 @@ import { Button } from "../../../components/ui/button";
 import { Input } from "../../../components/ui/input";
 import { CreateRiderGQL, Gender, Rider } from "../../../graphql/requests";
 import { useNavigate } from "react-router-dom";
-import SelectsWithLabel from "../../../components/common/SelectsWithLabel";
+import SelectsWithLabel from "../../../components/common/form-elements/SelectsWithLabel";
 import { t } from "i18next";
 
-import Switch from "../../../components/common/Switch";
+import Switch from "../../../components/common/form-elements/Switch";
 
 interface FormErrors {
   firstName?: string;

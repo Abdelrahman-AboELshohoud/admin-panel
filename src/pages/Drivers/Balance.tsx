@@ -2,20 +2,6 @@ import { Card } from "../../components/ui/card";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../../components/ui/dialog";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -35,6 +21,8 @@ import {
   DriverDeductTransactionType,
   TransactionAction,
 } from "../../graphql/requests";
+import MyTable from "../../components/common/table-components/MyTable";
+import { MyDialog } from "../../components/common/dialogs/MyDialog";
 
 interface TransactionFormData {
   amount: string;
@@ -93,7 +81,7 @@ const Balance = ({ profile }: { profile: DriverType }) => {
       });
 
       setIsDialogOpen(false);
-      getUserFinancialData(); // Refresh the list
+      getUserFinancialData();
       setFormData({
         amount: "",
         currency: "USD",
@@ -107,149 +95,175 @@ const Balance = ({ profile }: { profile: DriverType }) => {
   };
 
   const renderTransactionDialog = () => (
-    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-      <DialogContent className="bg-gray-800 text-gray-100">
-        <DialogHeader>
-          <DialogTitle>{t("balance.createTransaction")}</DialogTitle>
-        </DialogHeader>
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <label>{t("balance.action")}</label>
-            <Select
-              value={formData.action}
-              onValueChange={(value: TransactionAction) =>
-                setFormData((prev) => ({ ...prev, action: value }))
-              }
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={TransactionAction.Recharge}>
-                  {t("balance.recharge")}
-                </SelectItem>
-                <SelectItem value={TransactionAction.Deduct}>
-                  {t("balance.deduct")}
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {formData.action === TransactionAction.Recharge && (
-            <div className="space-y-2">
-              <label>{t("balance.rechargeType")}</label>
-              <Select
-                value={formData.rechargeType}
-                onValueChange={(value: DriverRechargeTransactionType) =>
-                  setFormData((prev) => ({ ...prev, rechargeType: value }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={DriverRechargeTransactionType.Gift}>
-                    {t("balance.manual")}
-                  </SelectItem>
-                  <SelectItem
-                    value={DriverRechargeTransactionType.BankTransfer}
-                  >
-                    {t("balance.bankTransfer")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          {formData.action === TransactionAction.Deduct && (
-            <div className="space-y-2">
-              <label>{t("balance.deductType")}</label>
-              <Select
-                value={formData.deductType}
-                onValueChange={(value: DriverDeductTransactionType) =>
-                  setFormData((prev) => ({ ...prev, deductType: value }))
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value={DriverDeductTransactionType.Withdraw}>
-                    {t("balance.withdraw")}
-                  </SelectItem>
-                  <SelectItem value={DriverDeductTransactionType.Correction}>
-                    {t("balance.correction")}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          <div className="space-y-2">
-            <label>{t("balance.amount")}</label>
-            <Input
-              type="number"
-              value={formData.amount}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, amount: e.target.value }))
-              }
-              className="bg-gray-700"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label>{t("balance.currency")}</label>
-            <Select
-              value={formData.currency}
-              onValueChange={(value: string) =>
-                setFormData((prev) => ({ ...prev, currency: value }))
-              }
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="USD">USD</SelectItem>
-                <SelectItem value="EUR">EUR</SelectItem>
-                <SelectItem value="GBP">GBP</SelectItem>
-                <SelectItem value="RUB">RUB</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <label>{t("balance.description")}</label>
-            <Input
-              value={formData.description}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-              className="bg-gray-700"
-            />
-          </div>
-
-          <div className="flex justify-end gap-4 mt-4">
-            <Button
-              variant="outline"
-              onClick={() => setIsDialogOpen(false)}
-              disabled={isSubmitting}
-            >
-              {t("common.cancel")}
-            </Button>
-            <Button
-              onClick={handleCreateTransaction}
-              disabled={isSubmitting || !formData.amount}
-            >
-              {isSubmitting ? t("common.processing") : t("common.create")}
-            </Button>
-          </div>
+    <MyDialog
+      isOpen={isDialogOpen}
+      onOpenChange={setIsDialogOpen}
+      title={t("balance.createTransaction")}
+      showCloseButton={false}
+      className="bg-gray-800 text-gray-100"
+    >
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <label>{t("balance.action")}</label>
+          <Select
+            value={formData.action}
+            onValueChange={(value: TransactionAction) =>
+              setFormData((prev) => ({ ...prev, action: value }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={TransactionAction.Recharge}>
+                {t("balance.recharge")}
+              </SelectItem>
+              <SelectItem value={TransactionAction.Deduct}>
+                {t("balance.deduct")}
+              </SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-      </DialogContent>
-    </Dialog>
+
+        {formData.action === TransactionAction.Recharge && (
+          <div className="space-y-2">
+            <label>{t("balance.rechargeType")}</label>
+            <Select
+              value={formData.rechargeType}
+              onValueChange={(value: DriverRechargeTransactionType) =>
+                setFormData((prev) => ({ ...prev, rechargeType: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={DriverRechargeTransactionType.Gift}>
+                  {t("balance.manual")}
+                </SelectItem>
+                <SelectItem value={DriverRechargeTransactionType.BankTransfer}>
+                  {t("balance.bankTransfer")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        {formData.action === TransactionAction.Deduct && (
+          <div className="space-y-2">
+            <label>{t("balance.deductType")}</label>
+            <Select
+              value={formData.deductType}
+              onValueChange={(value: DriverDeductTransactionType) =>
+                setFormData((prev) => ({ ...prev, deductType: value }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value={DriverDeductTransactionType.Withdraw}>
+                  {t("balance.withdraw")}
+                </SelectItem>
+                <SelectItem value={DriverDeductTransactionType.Correction}>
+                  {t("balance.correction")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        <div className="space-y-2">
+          <label>{t("balance.amount")}</label>
+          <Input
+            type="number"
+            value={formData.amount}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, amount: e.target.value }))
+            }
+            className="bg-gray-700"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label>{t("balance.currency")}</label>
+          <Select
+            value={formData.currency}
+            onValueChange={(value: string) =>
+              setFormData((prev) => ({ ...prev, currency: value }))
+            }
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="USD">USD</SelectItem>
+              <SelectItem value="EUR">EUR</SelectItem>
+              <SelectItem value="GBP">GBP</SelectItem>
+              <SelectItem value="RUB">RUB</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <label>{t("balance.description")}</label>
+          <Input
+            value={formData.description}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                description: e.target.value,
+              }))
+            }
+            className="bg-gray-700"
+          />
+        </div>
+
+        <div className="flex justify-end gap-4 mt-4">
+          <Button
+            variant="outline"
+            onClick={() => setIsDialogOpen(false)}
+            disabled={isSubmitting}
+          >
+            {t("common.cancel")}
+          </Button>
+          <Button
+            onClick={handleCreateTransaction}
+            disabled={isSubmitting || !formData.amount}
+          >
+            {isSubmitting ? t("common.processing") : t("common.create")}
+          </Button>
+        </div>
+      </div>
+    </MyDialog>
   );
+
+  const headers = ["Date of the event", "Deducted", "Amount", "Currency"];
+
+  const rows =
+    financialData?.driver?.transactions?.nodes?.map((transaction: any) => ({
+      id: transaction.id,
+      data: [
+        {
+          data: (
+            <>
+              {moment(transaction.createdAt).format("DD.MM.YYYY")}
+              <br />
+              {moment(transaction.createdAt).format("HH:mm A")}
+            </>
+          ),
+        },
+        {
+          data: (
+            <span className="block truncate w-2/3">
+              {transaction.deductType}
+            </span>
+          ),
+        },
+        { data: transaction.amount },
+        { data: transaction.currency },
+      ],
+    })) || [];
 
   return (
     <div className="space-y-6 p-6 ">
@@ -302,49 +316,7 @@ const Balance = ({ profile }: { profile: DriverType }) => {
           </div>
         </div>
 
-        <Table>
-          <TableHeader>
-            <TableRow className="hover:bg-transparent">
-              <TableHead>Date of the event</TableHead>
-              <TableHead>Deducted</TableHead>
-              <TableHead>Amount</TableHead>
-              <TableHead>Currency</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {financialData?.driver?.transactions?.nodes &&
-            financialData?.driver?.transactions?.nodes.length > 0 ? (
-              financialData?.driver?.transactions?.nodes?.map(
-                (transaction: any, index: number) => (
-                  <TableRow key={index}>
-                    <TableCell className="text-slate-300">
-                      {moment(transaction.createdAt).format("DD.MM.YYYY")}{" "}
-                      <br />
-                      {moment(transaction.createdAt).format("HH:mm A")}
-                    </TableCell>
-                    <TableCell className="text-slate-300 ">
-                      <span className="block truncate w-2/3">
-                        {transaction.deductType}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-slate-300">
-                      {transaction.amount}
-                    </TableCell>
-                    <TableCell className="text-slate-300">
-                      {transaction.currency}
-                    </TableCell>
-                  </TableRow>
-                )
-              )
-            ) : (
-              <TableRow className="h-32 w-full hover:bg-transparent">
-                <TableCell colSpan={4} className="text-slate-300 text-center">
-                  No transactions found
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+        <MyTable headers={headers} rows={rows} />
         {renderTransactionDialog()}
       </div>
     </div>

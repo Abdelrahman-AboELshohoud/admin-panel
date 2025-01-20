@@ -1,14 +1,6 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
-import {
   Select,
   SelectContent,
   SelectItem,
@@ -16,7 +8,7 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { Input } from "../../components/ui/input";
-import { Link } from "react-router-dom";
+import MyTable from "../../components/common/table-components/MyTable";
 
 interface Client {
   title: string;
@@ -48,6 +40,21 @@ export default function CorporateClients() {
     });
   }, [selectedCity, searchQuery]);
 
+  const headers = [
+    t("corporateClients.title"),
+    t("corporateClients.activity"),
+    t("corporateClients.city"),
+  ];
+
+  const rows = filteredClients.map((client) => ({
+    id: client.title,
+    data: [
+      client.title,
+      t(`corporateClients.activity.${client.activity}`),
+      client.city,
+    ],
+  }));
+
   return (
     <div className="min-h-screen p-6 text-zinc-100">
       <h1 className="mb-8 text-3xl font-semibold tracking-tight">
@@ -76,43 +83,8 @@ export default function CorporateClients() {
         />
       </div>
 
-      <div className="p-4 bg-[#1C1C1E] rounded-xl">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-zinc-800  h-12 hover:bg-transparent">
-              <TableHead className="text-zinc-400">
-                {t("corporateClients.title")}
-              </TableHead>
-              <TableHead className="text-zinc-400">
-                {t("corporateClients.activity")}
-              </TableHead>
-              <TableHead className="text-zinc-400">
-                {t("corporateClients.city")}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className="py-6">
-            {filteredClients.map((client, index) => (
-              <TableRow
-                key={index}
-                className="border-zinc-800 hover:bg-zinc-800/50 h-20"
-              >
-                <TableCell className="font-medium text-zinc-100">
-                  <Link
-                    to={`/control-panel/reports/corporate-clients/${client.title}`}
-                    className="hover:underline"
-                  >
-                    {client.title}
-                  </Link>
-                </TableCell>
-                <TableCell className="text-zinc-100">
-                  {t(`corporateClients.activity.${client.activity}`)}
-                </TableCell>
-                <TableCell className="text-zinc-100">{client.city}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+      <div className="bg-[#1C1C1E] rounded-xl">
+        <MyTable headers={headers} rows={rows} />
       </div>
     </div>
   );

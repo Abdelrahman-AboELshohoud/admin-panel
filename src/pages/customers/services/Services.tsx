@@ -11,8 +11,8 @@ import {
 } from "../../../graphql/requests.js";
 import { Button } from "../../../components/ui/button.js";
 import { Input } from "../../../components/ui/input.js";
-import { MyDialog } from "../../../components/common/MyDialog.js";
-import DeletionDialog from "../../../components/common/DeletionDialog.js";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog.js";
+import DeletionDialog from "../../../components/common/dialogs/DeletionDialog.js";
 import toast from "react-hot-toast";
 
 export default function Services() {

@@ -11,11 +11,11 @@ import {
   CreateCouponMutationVariables,
   UpdateCouponGQL,
 } from "../../../graphql/requests";
-import { MyDialog } from "../../../components/common/MyDialog";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog";
 import moment from "moment";
 import toast from "react-hot-toast";
 import { Switch } from "../../../components/ui/switch";
-import MyTableWithHeader from "../../../components/common/MyTableWithHeader";
+import MyTableWithHeader from "../../../components/common/table-components/MyTableWithHeader";
 
 interface Coupon {
   id: string;

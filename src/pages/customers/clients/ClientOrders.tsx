@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../../components/ui/table";
+import { Badge } from "../../../components/ui/badge";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import {
   Select,
   SelectContent,
@@ -14,9 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../../components/ui/select";
-import { Button } from "../../../components/ui/button";
-import { Input } from "../../../components/ui/input";
-import { Badge } from "../../../components/ui/badge";
+import MyTable from "../../../components/common/table-components/MyTable";
 import {
   OrderStatus,
   RiderOrdersGQL,
@@ -131,6 +124,55 @@ export default function ClientOrders({ riderId }: ClientOrdersProps) {
     }
   };
 
+  const headers = [
+    t("orders.table.date"),
+    t("orders.table.status"),
+    t("orders.table.distance"),
+    t("orders.table.duration"),
+    t("orders.table.cost"),
+    t("orders.table.addresses"),
+  ];
+
+  const rows = loading
+    ? [
+        {
+          id: "loading",
+          data: <div className="text-center py-4">{t("common.loading")}</div>,
+        },
+      ]
+    : orders.length === 0
+    ? [
+        {
+          id: "no-data",
+          data: (
+            <div className="text-center py-14 text-gray-400">
+              {t("orders.noOrders")}
+            </div>
+          ),
+        },
+      ]
+    : orders.map((order) => ({
+        id: order.id,
+        data: [
+          <>
+            {new Date(order.createdOn).toLocaleDateString()}
+            <br />
+            <span className="text-sm text-gray-400">
+              {new Date(order.createdOn).toLocaleTimeString()}
+            </span>
+          </>,
+          <Badge variant={getStatusBadgeVariant(order.status)}>
+            {order.status}
+          </Badge>,
+          `${order.distanceBest}km`,
+          `${order.durationBest}min`,
+          `${order.costAfterCoupon} ${order.currency}`,
+          <div className="max-w-xs truncate">
+            {order.addresses.join(" → ")}
+          </div>,
+        ],
+      }));
+
   return (
     <div className="space-y-6">
       {/* Filters Section */}
@@ -189,54 +231,7 @@ export default function ClientOrders({ riderId }: ClientOrdersProps) {
       </div>
 
       {/* Orders Table */}
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            <TableHead>{t("orders.table.date")}</TableHead>
-            <TableHead>{t("orders.table.status")}</TableHead>
-            <TableHead>{t("orders.table.distance")}</TableHead>
-            <TableHead>{t("orders.table.duration")}</TableHead>
-            <TableHead>{t("orders.table.cost")}</TableHead>
-            <TableHead>{t("orders.table.addresses")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {orders &&
-            orders.length > 0 &&
-            orders.map((order) => (
-              <TableRow key={order.id} className="hover:bg-neutral-800">
-                <TableCell>
-                  {new Date(order.createdOn).toLocaleDateString()}
-                  <br />
-                  <span className="text-sm text-gray-400">
-                    {new Date(order.createdOn).toLocaleTimeString()}
-                  </span>
-                </TableCell>
-                <TableCell>
-                  <Badge variant={getStatusBadgeVariant(order.status)}>
-                    {order.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{order.distanceBest}km</TableCell>
-                <TableCell>{order.durationBest}min</TableCell>
-                <TableCell>
-                  {order.costAfterCoupon} {order.currency}
-                </TableCell>
-                <TableCell>
-                  <div className="max-w-xs truncate">
-                    {order.addresses.join(" → ")}
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-        </TableBody>
-      </Table>
-
-      {orders.length === 0 && !loading && (
-        <div className="text-center py-14 text-gray-400">
-          {t("orders.noOrders")}
-        </div>
-      )}
+      <MyTable headers={headers} rows={rows} />
 
       {/* Pagination */}
       <div className="flex justify-between items-center">

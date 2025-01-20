@@ -6,15 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { Input } from "../../components/ui/input";
+import MyTable from "../../components/common/table-components/MyTable";
 
 const PushMails = () => {
   const { t } = useTranslation();
@@ -53,24 +46,22 @@ const PushMails = () => {
           <Button className="bg-zinc-800">{t("pushMails.show")}</Button>
         </div>
 
-        <Table className="items-center gap-6 p-4 bg-[#1C1C1E] rounded-xl col-span-4">
-          <TableHeader>
-            <TableRow className="hover:bg-transparent border-none">
-              <TableHead>{t("pushMails.date")}</TableHead>
-              <TableHead>{t("pushMails.name")}</TableHead>
-              <TableHead>{t("pushMails.recipient")}</TableHead>
-              <TableHead>{t("pushMails.total")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow className="hover:bg-transparent border-none">
-              <TableCell className="text-white">08.07.2023</TableCell>
-              <TableCell className="text-white">Olrus Auto</TableCell>
-              <TableCell className="text-white">All</TableCell>
-              <TableCell className="text-white">10</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <div className="bg-[#1C1C1E] rounded-xl">
+          <MyTable
+            headers={[
+              t("pushMails.date"),
+              t("pushMails.name"),
+              t("pushMails.recipient"),
+              t("pushMails.total"),
+            ]}
+            rows={[
+              {
+                id: "1",
+                data: ["08.07.2023", "Olrus Auto", "All", "10"],
+              },
+            ]}
+          />
+        </div>
       </CardContent>
     </Card>
   );

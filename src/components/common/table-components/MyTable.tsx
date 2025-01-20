@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 import {
   Table,
   TableHeader,
@@ -5,7 +6,7 @@ import {
   TableRow,
   TableCell,
   TableHead,
-} from "../../components/ui/table";
+} from "../../ui/table";
 import { useTranslation } from "react-i18next";
 export default function MyTable({
   headers,
@@ -13,8 +14,11 @@ export default function MyTable({
   navigate,
 }: {
   headers: string[];
-  rows: any[];
-  navigate?: (path: string) => void;
+  rows: {
+    data: ReactNode | string | number;
+    id?: string;
+  }[];
+  navigate?: (id?: string) => void;
 }) {
   const { t } = useTranslation();
 
@@ -35,11 +39,11 @@ export default function MyTable({
                 key={index}
                 className="hover:bg-transparent border-none h-12 cursor-pointer"
                 onClick={() => {
-                  navigate && navigate(row[0]);
+                  navigate ? (row.id ? navigate(row.id) : navigate()) : null;
                 }}
               >
-                {row.map((cell: any) => (
-                  <TableCell key={cell}>{cell}</TableCell>
+                {row.map((cell: any, index: number) => (
+                  <TableCell key={index}>{cell.data}</TableCell>
                 ))}
               </TableRow>
             ))

@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-
 import { MapPin, Star } from "lucide-react";
-
-import { Tabs, TabsList } from "../../components/ui/tabs";
-import { TabsContent, TabsTrigger } from "@radix-ui/react-tabs";
 import { useNavigate, useParams } from "react-router-dom";
 import Profile from "./Profile";
 import EmailAndPassword from "./EmailAndPassword";
@@ -18,8 +14,8 @@ import Feedbacks from "./Feedbacks";
 import Orders from "./Orders";
 import Wallets from "./Wallets";
 import { Button } from "../../components/ui/button";
-
-import DeletionDialog from "../../components/common/DeletionDialog";
+import DeletionDialog from "../../components/common/dialogs/DeletionDialog";
+import MyTabs from "../../components/common/MyTabs";
 
 const Driver: React.FC = () => {
   const [profile, setProfile] = useState<DriverType | null>(null);
@@ -67,6 +63,51 @@ const Driver: React.FC = () => {
     }
   };
 
+  const tabItems = [
+    { value: "Profile", title: "Profile" },
+    { value: "Orders", title: "Orders" },
+    { value: "Balance", title: "Balance" },
+    { value: "Reviews", title: "Reviews" },
+    { value: "Wallets", title: "Wallets" },
+    { value: "Photo control", title: "Photo control" },
+  ];
+
+  const tabsContent = [
+    {
+      value: "Profile",
+      content: (
+        <Profile
+          profile={profile as DriverType}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          setProfile={
+            setProfile as React.Dispatch<React.SetStateAction<DriverType>>
+          }
+        />
+      ),
+    },
+    {
+      value: "Orders",
+      content: <Orders driverProfile={profile as DriverType} />,
+    },
+    {
+      value: "Balance",
+      content: <Balance profile={profile as DriverType} />,
+    },
+    {
+      value: "Reviews",
+      content: <Feedbacks profile={profile as DriverType} />,
+    },
+    {
+      value: "Wallets",
+      content: <Wallets />,
+    },
+    {
+      value: "Photo control",
+      content: <EmailAndPassword />,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-5xl mx-auto">
@@ -101,56 +142,13 @@ const Driver: React.FC = () => {
           description={t("drivers.deleteWarning")}
         />
 
-        <Tabs defaultValue={"Profile"} className="w-full">
-          <TabsList className="bg-transparent hover:bg-transparent flex flex-wrap gap-4 justify-start mb-6 w-full">
-            {[
-              "Profile",
-              "Orders",
-              "Balance",
-              "Reviews",
-              "Wallets",
-              "Photo control",
-            ].map((tab) => (
-              <TabsTrigger
-                onClick={() => {
-                  navigate(
-                    `/control-panel/drivers/active/${profile?.id}/${tab}`
-                  );
-                }}
-                key={tab}
-                value={tab}
-                className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-              >
-                {tab}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          <TabsContent value={"Profile"} className="space-y-6">
-            <Profile
-              profile={profile as DriverType}
-              isEditing={isEditing}
-              setIsEditing={setIsEditing}
-              setProfile={
-                setProfile as React.Dispatch<React.SetStateAction<DriverType>>
-              }
-            />
-          </TabsContent>
-          <TabsContent value={"Call sign and password"} className="space-y-6">
-            <EmailAndPassword />
-          </TabsContent>
-          <TabsContent value={"Balance"} className="space-y-6">
-            <Balance profile={profile as DriverType} />
-          </TabsContent>
-          <TabsContent value={"Reviews"} className="space-y-6">
-            <Feedbacks profile={profile as DriverType} />
-          </TabsContent>
-          <TabsContent value={"Orders"} className="space-y-6">
-            <Orders driverProfile={profile as DriverType} />
-          </TabsContent>
-          <TabsContent value={"Wallets"} className="space-y-6">
-            <Wallets />
-          </TabsContent>
-        </Tabs>
+        <MyTabs
+          tabs={tabItems}
+          tabsContent={tabsContent}
+          setActiveTab={(value) => {
+            navigate(`/control-panel/drivers/active/${profile?.id}/${value}`);
+          }}
+        />
       </div>
     </div>
   );

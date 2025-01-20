@@ -3,9 +3,9 @@ import { useTranslation } from "react-i18next";
 import { HiMiniUserCircle } from "react-icons/hi2";
 import { IoNotifications } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { NotificationsGQL } from "../../graphql/requests";
+import { NotificationsGQL } from "../../../graphql/requests";
 import { toast } from "react-hot-toast";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../../ui/popover";
 
 interface NotificationCounts {
   complaints: number;

@@ -1,45 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
 import { Button } from "../../components/ui/button";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../components/ui/table";
 import { UserPlus } from "lucide-react";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../components/ui/tabs";
-import { useLocation, useNavigate } from "react-router-dom";
-import DriverRow from "../../components/pages/drivers/DriverRow";
-import DriversFilters from "../../components/pages/drivers/DriversFilters";
+import { useNavigate } from "react-router-dom";
 import { Driver, DriversListGQL, DriverFilter } from "../../graphql/requests";
 import { useTranslation } from "react-i18next";
-import Pagination from "../../components/common/Pagination";
+import Pagination from "../../components/common/table-components/Pagination";
+import MyTabs from "../../components/common/MyTabs";
+import MyTable from "../../components/common/table-components/MyTable";
+import DriversFilters from "../../components/pages/drivers/DriversFilters";
+import { format } from "date-fns";
 
 const ITEMS_PER_PAGE = 10;
 
-const TableColumns = [
-  "Date of registration",
-  "Photo",
-  "Name",
-  "Phone number",
-  "Rating",
-  "Status",
-];
-
-const tabItems = [
-  { value: "active", label: "Active" },
-  { value: "blocked", label: "Blocked" },
-  { value: "inactive", label: "Inactive" },
-];
-
-const Drivers = () => {
-  const location = useLocation();
+export default function Drivers() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -49,6 +22,7 @@ const Drivers = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState<DriverFilter>({});
   const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("active");
 
   const fetchDrivers = useCallback(async () => {
     try {
@@ -58,6 +32,11 @@ const Drivers = () => {
           offset: (currentPage - 1) * ITEMS_PER_PAGE,
           limit: ITEMS_PER_PAGE,
         },
+        filter: {
+          ...filters,
+          // status: activeTab.toUpperCase(),
+        },
+        // searchQuery,
       });
 
       if (response.data?.drivers) {
@@ -69,7 +48,7 @@ const Drivers = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, filters, searchQuery]);
+  }, [currentPage, filters, searchQuery, activeTab]);
 
   useEffect(() => {
     fetchDrivers();
@@ -80,104 +59,81 @@ const Drivers = () => {
     setCurrentPage(1);
   };
 
+  const headers = [
+    t("drivers.columns.date_of_registration"),
+    t("drivers.columns.photo"),
+    t("drivers.columns.name"),
+    t("drivers.columns.phone_number"),
+    t("drivers.columns.rating"),
+    t("drivers.columns.status"),
+  ];
+
+  const TabContent = () => (
+    <>
+      <DriversFilters
+        onFilterChange={handleFilterChange}
+        onSearchChange={setSearchQuery}
+        isLoading={isLoading}
+      />
+      <div className="card-shape">
+        <MyTable
+          headers={headers}
+          rows={drivers.map((driver) => ({
+            id: driver.id,
+            data: [
+              format(new Date(driver.registrationTimestamp), "PPp"),
+              driver.media?.address || "-",
+              `${driver.firstName} ${driver.lastName}`,
+              driver.mobileNumber,
+              driver.rating?.toFixed(1) || "-",
+              driver.status,
+            ],
+          }))}
+          navigate={(id) => navigate(`/control-panel/drivers/${id}`)}
+        />
+      </div>
+
+      {drivers && drivers.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}
+          onPageChange={(page: number) => setCurrentPage(page)}
+        />
+      )}
+    </>
+  );
+
+  const tabs = [
+    { title: t("tabs.active"), value: "active" },
+    { title: t("tabs.blocked"), value: "blocked" },
+    { title: t("tabs.inactive"), value: "inactive" },
+  ];
+
+  const tabsContent = [
+    { value: "active", content: <TabContent /> },
+    { value: "blocked", content: <TabContent /> },
+    { value: "inactive", content: <TabContent /> },
+  ];
+
   return (
     <div className="p-6 space-y-6">
-      <Tabs defaultValue={location.pathname.split("/")[3]} className="w-full">
-        <TabsList className="bg-transparent hover:bg-transparent mb-6 w-full">
-          {tabItems.map((tab) => (
-            <TabsTrigger
-              onClick={() => {
-                navigate(`/control-panel/drivers/${tab.value}`);
-              }}
-              key={tab.value}
-              value={tab.value}
-              className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-            >
-              {t(`tabs.${tab.value}`)}
-            </TabsTrigger>
-          ))}
-          <div className="ml-auto">
-            <Button
-              variant="outline"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/control-panel/drivers/add-driver");
-              }}
-              className="gap-2 add-button"
-            >
-              <UserPlus size={16} />
-              {t("drivers.buttons.add")}
-            </Button>
-          </div>
-        </TabsList>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl text-zinc-100">{t("drivers.title")}</h1>
+        <Button
+          variant="outline"
+          onClick={() => navigate("/control-panel/drivers/add-driver")}
+          className="gap-2 add-button"
+        >
+          <UserPlus size={16} />
+          {t("drivers.buttons.add")}
+        </Button>
+      </div>
 
-        <TabsContent value={location.pathname.split("/")[3]}>
-          <DriversFilters
-            onFilterChange={handleFilterChange}
-            onSearchChange={setSearchQuery}
-            isLoading={isLoading}
-          />
-          <div className="card-shape">
-            <Table>
-              <TableHeader>
-                <TableRow className="border-none hover:bg-transparent">
-                  {TableColumns.map((column) => (
-                    <TableHead key={column} className="text-gray-400">
-                      {t(
-                        `drivers.columns.${column
-                          .toLowerCase()
-                          .replace(/\s+/g, "_")}`
-                      )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {isLoading ? (
-                  <TableRow>
-                    <td
-                      colSpan={TableColumns.length}
-                      className="text-center py-8"
-                    >
-                      {t("common.loading")}
-                    </td>
-                  </TableRow>
-                ) : drivers && drivers.length > 0 ? (
-                  drivers.map((driver) => (
-                    <DriverRow
-                      key={driver.id}
-                      data={driver}
-                      id={String(driver.id)}
-                    />
-                  ))
-                ) : (
-                  <TableRow>
-                    <td
-                      colSpan={TableColumns.length}
-                      className="text-center py-8"
-                    >
-                      {t("drivers.no_results")}
-                    </td>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-
-          {drivers && drivers.length > 0 && (
-            <Pagination
-              currentPage={currentPage}
-              totalPages={Math.ceil(totalCount / ITEMS_PER_PAGE)}
-              onPageChange={(page: number) => setCurrentPage(page)}
-            />
-          )}
-        </TabsContent>
-
-        <TabsContent value="blocked" />
-        <TabsContent value="inactive" />
-      </Tabs>
+      <MyTabs
+        tabs={tabs}
+        tabsContent={tabsContent}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
-};
-
-export default Drivers;
+}

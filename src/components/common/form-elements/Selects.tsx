@@ -4,7 +4,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from "../ui/select";
+} from "../../ui/select";
 
 export default function Selects({
   placeholder,
@@ -32,7 +32,8 @@ export default function Selects({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent className="bg-[#3A3A3C] border-[#48484A] text-white">
-        {options && options.length > 0 &&
+        {options &&
+          options.length > 0 &&
           options.map((option) => (
             <SelectItem key={option} value={option}>
               {option}

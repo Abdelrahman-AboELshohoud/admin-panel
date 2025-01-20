@@ -9,7 +9,7 @@ import { Input } from "../../../components/ui/input";
 import { Button } from "../../../components/ui/button";
 import { useTranslation } from "react-i18next";
 import moment from "moment";
-import SelectsWithLabel from "../../../components/common/SelectsWithLabel";
+import SelectsWithLabel from "../../../components/common/form-elements/SelectsWithLabel";
 import { Rider } from "../../../graphql/requests";
 import { UpdateRiderGQL, Gender } from "../../../graphql/requests";
 import { useParams } from "react-router-dom";

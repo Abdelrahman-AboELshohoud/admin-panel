@@ -28,7 +28,7 @@ import AddBranch from "./pages/directories/AddBranch";
 import Partners from "./pages/directories/Partners";
 import AddPartner from "./pages/directories/AddPartner";
 import Employees from "./pages/directories/Employees";
-import MapPage from "./pages/directories/MapPage";
+import MapPage from "./pages/directories/maps/MapPage";
 import Addresses from "./pages/directories/Addresses";
 import AddAddress from "./pages/directories/AddAdress";
 import News from "./pages/directories/News";
@@ -60,7 +60,7 @@ import AddService from "./pages/customers/services/AddService";
 import Complaints from "./pages/directories/Complaints";
 import ReviewsParams from "./pages/directories/ReviewsParams";
 import SOSPage from "./pages/reports/SOS";
-import ZonesPrices from "./pages/directories/ZonesPrices";
+import ZonesPrices from "./pages/directories/maps/ZonesPrices";
 
 function App() {
   return (

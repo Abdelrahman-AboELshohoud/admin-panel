@@ -5,15 +5,15 @@ import {
   UpdateZonePriceGQL,
   ZonePricesListGQL,
   DeleteZonePriceGQL,
-} from "../../graphql/requests";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
+} from "../../../graphql/requests";
+import { Button } from "../../../components/ui/button";
+import { Input } from "../../../components/ui/input";
 import { toast } from "react-hot-toast";
-import { MyDialog } from "../../components/common/MyDialog";
-import DeletionDialog from "../../components/common/DeletionDialog";
+import { MyDialog } from "../../../components/common/dialogs/MyDialog";
+import DeletionDialog from "../../../components/common/dialogs/DeletionDialog";
 import ZonePriceForm from "./ZonePriceForm";
-import MyTable from "../../components/common/MyTable";
-import Pagination from "../../components/common/Pagination";
+import MyTable from "../../../components/common/table-components/MyTable";
+import Pagination from "../../../components/common/table-components/Pagination";
 
 interface Point {
   lat: number;

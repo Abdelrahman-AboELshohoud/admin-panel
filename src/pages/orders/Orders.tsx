@@ -19,8 +19,8 @@ import {
   SortDirection,
 } from "../../graphql/requests";
 import { useNavigate } from "react-router-dom";
-import MyTable from "../../components/common/MyTable";
-import Pagination from "../../components/common/Pagination";
+import MyTable from "../../components/common/table-components/MyTable";
+import Pagination from "../../components/common/table-components/Pagination";
 import moment from "moment";
 
 interface OrderFilters {
@@ -119,21 +119,22 @@ export default function Orders() {
     }));
   };
 
-  const rows = orders?.map((order) => [
-    order.id,
-    moment(order.createdOn).format("DD/MM/YYYY HH:mm"),
-    moment(order.expectedTimestamp).format("DD/MM/YYYY HH:mm "),
-    order.status,
-    `${order.rider?.firstName} ${order.rider?.lastName}`,
-    `${
+  const rows = orders?.map((order) => ({
+    id: order.id,
+    data: [
+      order.id,
+      moment(order.createdOn).format("DD/MM/YYYY HH:mm"),
+      moment(order.expectedTimestamp).format("DD/MM/YYYY HH:mm "),
+      order.status,
+      `${order.rider?.firstName} ${order.rider?.lastName}`,
       order.driver
-        ? order.driver?.firstName + " " + order.driver?.lastName
-        : t("common.notAssigned")
-    }`,
-    order.service?.name,
-    `${order.costAfterCoupon} ${order.currency}`,
-    order.addresses?.join(" → "),
-  ]);
+        ? `${order.driver?.firstName} ${order.driver?.lastName}`
+        : t("common.notAssigned"),
+      order.service?.name,
+      `${order.costAfterCoupon} ${order.currency}`,
+      order.addresses?.join(" → "),
+    ],
+  }));
 
   return (
     <div className="p-6 flex flex-col gap-10">
@@ -213,7 +214,9 @@ export default function Orders() {
           t("orders.inputs.address"),
         ]}
         rows={rows}
-        navigate={(id: string) => navigate(`/control-panel/orders/${id}`)}
+        navigate={(id?: string) =>
+          id && navigate(`/control-panel/orders/${id}`)
+        }
       />
 
       <Pagination
