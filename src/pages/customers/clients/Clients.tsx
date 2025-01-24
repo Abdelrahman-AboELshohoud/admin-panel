@@ -52,9 +52,22 @@ const Clients = () => {
     return (
       <>
         <ClientsFilters />
-        <div className="flex items-center gap-6 mb-6">
-          <span className="text-sm text-gray-300">{t("clients.online")}</span>
-          <Switch checked={false} disabled={false} />
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-6 mb-6">
+            <span className="text-sm text-gray-300">{t("clients.online")}</span>
+            <Switch checked={false} disabled={false} />
+          </div>
+          <Button
+            variant="outline"
+            onClick={(e: React.MouseEvent) => {
+              e.preventDefault();
+              navigate("/control-panel/clients/add-client");
+            }}
+            className="gap-2 add-button"
+          >
+            <UserPlus size={16} />
+            {t("clients.buttons.add")}
+          </Button>
         </div>
         <MyTable
           headers={TableColumns}
@@ -127,23 +140,12 @@ const Clients = () => {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center mb-6 ">
         <MyTabs
           tabs={tabItems}
           tabsContent={tabsContent}
           setActiveTab={(value) => navigate(`/control-panel/clients/${value}`)}
         />
-        <Button
-          variant="outline"
-          onClick={(e: React.MouseEvent) => {
-            e.preventDefault();
-            navigate("/control-panel/clients/add-client");
-          }}
-          className="gap-2 add-button"
-        >
-          <UserPlus size={16} />
-          {t("clients.buttons.add")}
-        </Button>
       </div>
     </div>
   );

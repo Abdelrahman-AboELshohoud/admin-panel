@@ -106,9 +106,8 @@ function CarsTable({ items }: { items: CarClassItem[] }) {
           </SelectContent>
         </Select>
       </div>
-      <div className="card-shape">
-        <MyTable headers={headers} rows={rows} />
-      </div>
+
+      <MyTable headers={headers} rows={rows} />
     </div>
   );
 }

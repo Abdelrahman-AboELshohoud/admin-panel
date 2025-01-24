@@ -8,12 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
 import MyTable from "../../components/common/table-components/MyTable";
 import { Input } from "../../components/ui/input";
 
@@ -39,14 +33,12 @@ const ForAggregrator = () => {
   };
 
   return (
-    <Card className="w-full bg-transparent max-w-4xl  text-white border-none">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">
-          {t("forAggregrator.title")}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6 ">
-        <div className=" gap-4 grid grid-cols-6">
+    <div className="w-full text-white">
+      <div className="px-6 py-4">
+        <h2 className="text-2xl font-bold">{t("forAggregrator.title")}</h2>
+      </div>
+      <div className="px-6 py-4 space-y-6">
+        <div className="gap-4 grid grid-cols-6">
           {Object.values(selects).map((select, index) => (
             <Select key={index} defaultValue={select.defaultValue}>
               <SelectTrigger className="w-full custom-input col-span-2">
@@ -123,8 +115,8 @@ const ForAggregrator = () => {
             ]}
           />
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

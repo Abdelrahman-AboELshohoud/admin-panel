@@ -29,10 +29,10 @@ const ITEMS_PER_PAGE = 10;
 export default function Complaints() {
   const { t } = useTranslation();
   //   const navigate = useNavigate();
-  const [complaints, setComplaints] = useState<Complaint[]>([]);
+  const [_complaints, setComplaints] = useState<Complaint[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [_isLoading, setIsLoading] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState<Complaint | null>(
     null
   );
@@ -126,72 +126,76 @@ export default function Complaints() {
     t("complaints.table.actions"),
   ];
 
-  const rows = isLoading
-    ? [
-        {
-          id: "loading",
-          data: <div className="text-center py-4">{t("common.loading")}</div>,
-        },
-      ]
-    : complaints.length === 0
-    ? [
-        {
-          id: "no-data",
-          data: (
-            <div className="text-center py-4">
-              {t("complaints.noComplaints")}
-            </div>
-          ),
-        },
-      ]
-    : complaints.map((complaint) => ({
-        id: complaint.id,
-        data: [
-          format(new Date(complaint.inscriptionTimestamp), "PPp"),
-          complaint.subject,
-          <span
-            className={`px-2 py-1 rounded-full text-sm ${
-              complaint.status === ComplaintStatus.Submitted
-                ? "bg-yellow-500/20 text-yellow-500"
-                : complaint.status === ComplaintStatus.UnderInvestigation
-                ? "bg-blue-500/20 text-blue-500"
-                : "bg-green-500/20 text-green-500"
-            }`}
-          >
-            {t(`complaints.status.${complaint.status.toLowerCase()}`)}
-          </span>,
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => handleViewDetails(complaint.id)}
-            >
-              {t("common.view")}
-            </Button>
-            <Select
-              value={complaint.status}
-              onValueChange={(value: ComplaintStatus) =>
-                handleUpdateStatus(complaint.id, value)
-              }
-            >
-              <SelectTrigger className="custom-input w-[200px]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(ComplaintStatus).map((status) => (
-                  <SelectItem
-                    key={status}
-                    value={status}
-                    onClick={() => handleUpdateStatus(complaint.id, status)}
-                  >
-                    {t(`complaints.status.${status.toLowerCase()}`)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>,
-        ],
-      }));
+  const mockComplaints = [
+    {
+      id: "1",
+      inscriptionTimestamp: "2023-12-01T10:30:00Z",
+      subject: "Late Delivery",
+      status: ComplaintStatus.Submitted,
+    },
+    {
+      id: "2",
+      inscriptionTimestamp: "2023-12-01T11:45:00Z",
+      subject: "Wrong Order",
+      status: ComplaintStatus.UnderInvestigation,
+    },
+    {
+      id: "3",
+      inscriptionTimestamp: "2023-12-01T13:15:00Z",
+      subject: "Driver Behavior",
+      status: ComplaintStatus.Resolved,
+    },
+  ];
+
+  const rows = mockComplaints?.map((complaint) => ({
+    id: complaint.id,
+    data: [
+      format(new Date(complaint.inscriptionTimestamp), "PPp"),
+      complaint.subject,
+      <span
+        className={`px-2 py-1 rounded-full text-sm ${
+          complaint.status === ComplaintStatus.Submitted
+            ? "bg-yellow-500/20 text-yellow-500"
+            : complaint.status === ComplaintStatus.UnderInvestigation
+            ? "bg-blue-500/20 text-blue-500"
+            : "bg-green-500/20 text-green-500"
+        }`}
+      >
+        {t(`complaints.status.${complaint.status.toLowerCase()}`)}
+      </span>,
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="text-gray-500 hover:text-gray-600"
+          onClick={() => handleViewDetails(complaint.id)}
+        >
+          {t("common.view")}
+        </Button>
+        <Select
+          value={complaint.status}
+          onValueChange={(value: ComplaintStatus) =>
+            handleUpdateStatus(complaint.id, value)
+          }
+        >
+          <SelectTrigger className="custom-input w-[200px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {Object.values(ComplaintStatus).map((status) => (
+              <SelectItem
+                key={status}
+                value={status}
+                onClick={() => handleUpdateStatus(complaint.id, status)}
+              >
+                {t(`complaints.status.${status.toLowerCase()}`)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>,
+    ],
+  }));
 
   return (
     <div className="p-6">
@@ -226,9 +230,7 @@ export default function Complaints() {
         />
       </div>
 
-      <div className="card-shape">
-        <MyTable headers={headers} rows={rows} />
-      </div>
+      <MyTable headers={headers} rows={rows} />
 
       <Pagination
         currentPage={currentPage}

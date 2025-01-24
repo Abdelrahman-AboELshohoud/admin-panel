@@ -21,7 +21,7 @@ import ProtectedRoutes from "./ProtectedRoutes";
 import CorporateClients from "./pages/reports/CorporateClients";
 import ForPartner from "./pages/reports/ForPartner";
 import Shifts from "./pages/reports/Shifts";
-import ForAggregator from "./pages/reports/PushMails";
+import ForAggregator from "./pages/reports/ForAggregrator";
 import PushMails from "./pages/reports/PushMails";
 import BranchesManager from "./pages/directories/Branches";
 import AddBranch from "./pages/directories/AddBranch";

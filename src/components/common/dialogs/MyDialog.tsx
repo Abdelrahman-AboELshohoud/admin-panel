@@ -48,7 +48,7 @@ export const MyDialog = ({
         <div className="flex-1 my-4">{children}</div>
 
         {showCloseButton && (
-          <div className="flex justify-end mt-auto">
+          <div className="flex justify-end mt-auto text-gray-500 hover:text-gray-600">
             <Button variant="outline" onClick={() => onOpenChange(false)}>
               Close
             </Button>

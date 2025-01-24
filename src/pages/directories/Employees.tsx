@@ -76,16 +76,18 @@ export default function Employees() {
 
   const getTableRows = (tab: string) => {
     return staff.map((member) => {
-      const rowData: any = [
-        { data: `${member.firstName} ${member.lastName}` },
-        { data: member.role?.title },
-        { data: member.email },
-        { data: member.mobileNumber },
+      const baseData = [
+        member.firstName + " " + member.lastName,
+        member.role?.title || "",
+        member.email,
+        member.mobileNumber,
       ];
 
       if (tab === "invitations") {
-        rowData.push({
-          data: (
+        return {
+          id: member.id,
+          data: [
+            ...baseData,
             <div className="flex gap-4">
               <Button className="bg-transparent border-green-500 border-2 text-green-500 hover:bg-green-500 hover:text-white p-2 rounded-md">
                 {t("employees.actions.sendAgain")}
@@ -93,14 +95,14 @@ export default function Employees() {
               <Button className="bg-transparent border-red-500 border-2 text-red-500 hover:bg-red-500 hover:text-white p-2 rounded-md">
                 {t("employees.actions.cancel")}
               </Button>
-            </div>
-          ),
-        });
+            </div>,
+          ],
+        };
       }
 
       return {
-        data: rowData,
         id: member.id,
+        data: baseData,
       };
     });
   };

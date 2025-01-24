@@ -15,7 +15,7 @@ interface Partner {
 
 export default function Partners() {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState("active");
+  const [_activeTab, setActiveTab] = useState("active");
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
@@ -49,11 +49,7 @@ export default function Partners() {
   const tabContents = [
     {
       value: "active",
-      content: (
-        <div className="p-4 bg-[#383838] rounded-xl shadow-lg shadow-[#282828] border-none">
-          <MyTable headers={headers} rows={rows} />
-        </div>
-      ),
+      content: <MyTable headers={headers} rows={rows} />,
     },
     {
       value: "blocked",
@@ -80,7 +76,7 @@ export default function Partners() {
         </Button>
       </div>
 
-      <div className="mt-4">
+      <div className="my-4">
         <Input
           placeholder={t("partners.searchPlaceholder")}
           value={searchQuery}
@@ -89,13 +85,11 @@ export default function Partners() {
         />
       </div>
 
-      <div className="mt-4">
-        <MyTabs
-          tabs={tabLabels}
-          tabsContent={tabContents}
-          setActiveTab={setActiveTab}
-        />
-      </div>
+      <MyTabs
+        tabs={tabLabels}
+        tabsContent={tabContents}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
 }

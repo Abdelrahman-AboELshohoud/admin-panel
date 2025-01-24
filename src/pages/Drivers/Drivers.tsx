@@ -75,23 +75,24 @@ export default function Drivers() {
         onSearchChange={setSearchQuery}
         isLoading={isLoading}
       />
-      <div className="card-shape">
-        <MyTable
-          headers={headers}
-          rows={drivers.map((driver) => ({
-            id: driver.id,
-            data: [
-              format(new Date(driver.registrationTimestamp), "PPp"),
-              driver.media?.address || "-",
-              `${driver.firstName} ${driver.lastName}`,
-              driver.mobileNumber,
-              driver.rating?.toFixed(1) || "-",
-              driver.status,
-            ],
-          }))}
-          navigate={(id) => navigate(`/control-panel/drivers/${id}`)}
-        />
-      </div>
+
+      <MyTable
+        headers={headers}
+        rows={drivers.map((driver) => ({
+          id: driver.id,
+          data: [
+            format(new Date(driver.registrationTimestamp), "PPp"),
+            driver.media?.address || "-",
+            `${driver.firstName} ${driver.lastName}`,
+            driver.mobileNumber,
+            driver.rating?.toFixed(1) || "-",
+            driver.status,
+          ],
+        }))}
+        navigate={(id) =>
+          navigate(`/control-panel/drivers/active/${id}/active`)
+        }
+      />
 
       {drivers && drivers.length > 0 && (
         <Pagination

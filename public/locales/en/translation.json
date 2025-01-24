@@ -153,28 +153,12 @@
     }
   },
   "orders": {
-    "orderHeader": "Today",
-    "carSummary": "Cars on the line",
-    "mapButton": "Map",
-    "newOrderButton": "Add a new order",
+    "orderHeader": "Orders",
+    "mapButton": "Map View",
+    "newOrderButton": "New Order",
     "inputs": {
-      "orderNumber": "Order number",
-      "address": "Address",
-      "client": "Client",
-      "executor": "Executor",
-      "comment": "Comment",
-      "cancel": {
-        "updateReasons": "Update reasons",
-        "addReason": "Add reason",
-        "createReason": "Create reason",
-        "editReason": "Edit reason",
-        "selectUserType": "Select user type",
-        "driver": "Driver",
-        "rider": "Rider",
-        "selectReason": "Select reason",
-        "enterReason": "Enter reason",
-        "commentPlaceholder": "Enter comment"
-      }
+      "orderNumber": "Order Number",
+      "address": "Address"
     },
     "create": {
       "title": "Create New Order",
@@ -199,13 +183,20 @@
     },
     "actions": {
       "cancel": "Cancel",
-      "noActions": "No actions"
+      "noActions": "No actions",
+      "title": "Order"
     },
     "statusFilter": {
-      "all": "All",
-      "inProgress": "In progress",
-      "completed": "Completed",
-      "cancelled": "Cancelled"
+      "all": "All Statuses",
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "arrived": "Arrived",
+      "started": "Started",
+      "finished": "Finished",
+      "canceled": "Canceled",
+      "expired": "Expired",
+      "rider_canceled": "Rider Canceled",
+      "driver_canceled": "Driver Canceled"
     },
     "filters": {
       "status": "Status",
@@ -228,7 +219,10 @@
       "client": "Client",
       "rider": "Rider",
       "status": "Status",
-      "cost": "Cost"
+      "cost": "Cost",
+      "driver": "Driver",
+      "service": "Service",
+      "id": "ID"
     },
     "noOrders": "No orders found",
     "summary": {
@@ -272,6 +266,11 @@
       "sendError": "Failed to send message",
       "messageDeleted": "Message deleted",
       "messageEdited": "Message edited"
+    },
+    "common": {
+      "loading": "Loading...",
+      "apply": "Apply",
+      "notAssigned": "Not Assigned"
     }
   },
   "leftCustomerEdit": {
@@ -371,6 +370,57 @@
     "showOnMap": "Show on map"
   },
   "clients": {
+    "add": {
+      "title": "Add New Client",
+      "description": "Enter the client's details below",
+      "form": {
+        "firstName": {
+          "label": "First Name",
+          "placeholder": "John"
+        },
+        "lastName": {
+          "label": "Last Name",
+          "placeholder": "Doe"
+        },
+        "mobileNumber": {
+          "label": "Mobile Number",
+          "placeholder": "+1234567890"
+        },
+        "email": {
+          "label": "Email",
+          "placeholder": "john@example.com"
+        },
+        "idNumber": {
+          "label": "ID Number",
+          "placeholder": "ID Number"
+        },
+        "gender": {
+          "label": "Gender",
+          "options": {
+            "male": "Male",
+            "female": "Female",
+            "unknown": "Unknown"
+          }
+        },
+        "isResident": {
+          "label": "Is Resident?"
+        },
+        "submit": "Create Client"
+      },
+      "success": "Client created successfully",
+      "error": "Failed to create client"
+    },
+    "table": {
+      "id": "ID",
+      "registeredOn": "Registered On",
+      "name": "Name",
+      "mobileNumber": "Mobile Number",
+      "email": "Email",
+      "orders": "Orders",
+      "status": "Status",
+      "photo": "Photo",
+      "registrationDate": "Registration Date"
+    },
     "orders": "Orders",
     "totalOrders": "Total orders",
     "balance": "Balance",
@@ -448,6 +498,7 @@
     "addService": "Add Service",
     "addCategory": "Add Category",
     "categoryName": "Category Name",
+    "fetchSuccess": "Services fetched successfully",
     "noServices": "No services",
     "noCategoryServices": "No category services",
     "create": {
@@ -456,7 +507,10 @@
   },
   "drivers": {
     "title": "Drivers",
+
     "subtitle": "List of all drivers registered.",
+    "deleteWarning": "Are you sure you want to delete this driver?",
+    "deleteConfirmation": "Delete Driver",
     "filters": {
       "cities": "All cities",
       "profession": "Profession",
@@ -1595,6 +1649,8 @@
     "perShift": "Per shift"
   },
   "common": {
+    "pleaseWait": "Please wait...",
+    "id": "ID",
     "loading": "Loading...",
     "apply": "Apply",
     "previous": "Previous",
@@ -1662,7 +1718,7 @@
   "configuration": {
     "title": "Configuration",
     "password": {
-      "title": "Password",
+      "title": "Reset password",
       "current": "Current password",
       "new": "New password"
     },
@@ -2163,58 +2219,65 @@
   },
   "complaints": {
     "title": "Complaints",
-    "create": "Create",
-    "update": "Update",
     "filters": {
-      "status": "Status",
-      "search": "Search"
+      "status": "Filter by Status",
+      "allStatuses": "All Statuses",
+      "search": "Search complaints..."
+    },
+    "status": {
+      "submitted": "Submitted",
+      "underinvestigation": "Under Investigation",
+      "resolved": "Resolved",
+      "closed": "Closed"
     },
     "table": {
+      "id": "ID",
       "subject": "Subject",
+      "content": "Content",
       "status": "Status",
-      "date": "Date",
-      "actions": "Actions"
-    },
-    "noComplaints": "No complaints found",
-    "status": {
-      "resolved": "Resolved",
-      "pending": "Pending",
-      "submitted": "Submitted",
-      "underinvestigation": "Under Investigation"
+      "submittedBy": "Submitted By",
+      "submittedAt": "Submitted At"
     },
     "details": {
       "title": "Complaint Details",
       "subject": "Subject",
       "content": "Content",
-      "date": "Date",
-      "status": "Status",
+      "time": "Submission Time",
+      "invalidDate": "Invalid Date",
       "order": "Order Details",
       "orderId": "Order ID",
       "orderStatus": "Order Status",
       "createdOn": "Created On",
       "cost": "Cost",
       "addresses": "Addresses",
-      "rider": "Rider",
+      "rider": "Rider Details",
       "riderId": "Rider ID",
-      "riderName": "Rider Name",
-      "riderMobile": "Rider Mobile",
-      "riderStatus": "Rider Status",
-      "driver": "Driver",
+      "riderName": "Name",
+      "riderMobile": "Mobile",
+      "riderStatus": "Status",
+      "driver": "Driver Details",
       "driverId": "Driver ID",
-      "driverName": "Driver Name",
-      "driverMobile": "Driver Mobile",
-      "driverStatus": "Driver Status",
-      "invalidDate": "Invalid Date",
+      "driverName": "Name",
+      "driverMobile": "Mobile",
+      "driverStatus": "Status",
       "by": "By",
-      "assignedTo": "Assigned To",
-      "time": "Time"
+      "assignedTo": "Assigned to"
     },
     "activities": {
+      "created": "Complaint Created",
+      "updated": "Complaint Updated",
+      "statuschanged": "Status Changed",
       "assigned": "Assigned",
-      "updated": "Updated",
       "resolved": "Resolved",
-      "submitted": "Submitted",
-      "underInvestigation": "Under Investigation"
+      "closed": "Closed"
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch complaints",
+      "fetchDetailsFailed": "Failed to fetch complaint details",
+      "updateFailed": "Failed to update complaint"
+    },
+    "success": {
+      "statusUpdated": "Complaint status updated successfully"
     }
   },
   "reviews": {
@@ -2517,6 +2580,57 @@
     "noNotifications": "No new notifications",
     "errors": {
       "fetchFailed": "Failed to fetch notifications"
+    }
+  },
+  "cmc": {
+    "title": "SMS Provider Settings",
+    "providerType": {
+      "label": "Provider Type",
+      "placeholder": "Select provider type"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "Enter provider name"
+    },
+    "accountId": {
+      "label": "Account ID",
+      "placeholder": "Enter account ID"
+    },
+    "authToken": {
+      "label": "Auth Token",
+      "placeholder": "Enter auth token"
+    },
+    "fromNumber": {
+      "label": "From Number",
+      "placeholder": "Enter from number"
+    },
+    "verificationTemplate": {
+      "label": "Verification Template",
+      "placeholder": "Enter verification template"
+    },
+    "configuredProviders": "Configured Providers",
+    "buttons": {
+      "addProvider": "Add Provider",
+      "edit": "Edit",
+      "setDefault": "Set Default",
+      "default": "Default",
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes"
+    },
+    "status": {
+      "adding": "Adding...",
+      "saving": "Saving..."
+    },
+    "errors": {
+      "fetchFailed": "Failed to fetch SMS providers",
+      "saveFailed": "Failed to save SMS provider",
+      "updateFailed": "Failed to update SMS provider",
+      "loadDetailsFailed": "Failed to load provider details"
+    },
+    "success": {
+      "created": "SMS provider created successfully",
+      "updated": "SMS provider updated successfully",
+      "setDefault": "Default provider set successfully"
     }
   }
 }

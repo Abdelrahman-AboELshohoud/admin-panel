@@ -88,10 +88,6 @@ function Map({
     return <div>Error loading maps</div>;
   }
 
-  if (!isLoaded) {
-    return <div>Loading maps...</div>;
-  }
-
   return (
     <GoogleMap
       mapContainerStyle={mapContainerStyle}

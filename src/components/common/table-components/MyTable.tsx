@@ -21,7 +21,7 @@ export default function MyTable({
   navigate?: (id?: string) => void;
 }) {
   const { t } = useTranslation();
-
+  console.log(rows);
   return (
     <div className="text-gray-100 h-full flex card-shape">
       <Table>
@@ -39,11 +39,11 @@ export default function MyTable({
                 key={index}
                 className="hover:bg-transparent border-none h-12 cursor-pointer"
                 onClick={() => {
-                  navigate ? (row.id ? navigate(row.id) : navigate()) : null;
+                  navigate ? (row?.id ? navigate(row?.id) : navigate()) : null;
                 }}
               >
-                {row.map((cell: any, index: number) => (
-                  <TableCell key={index}>{cell.data}</TableCell>
+                {row?.data?.map((cell: any, index: number) => (
+                  <TableCell key={index}>{cell}</TableCell>
                 ))}
               </TableRow>
             ))

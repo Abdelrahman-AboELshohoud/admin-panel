@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MapPin, Star } from "lucide-react";
+import { FaStar, FaLocationDot } from "react-icons/fa6";
 import { useNavigate, useParams } from "react-router-dom";
 import Profile from "./Profile";
 import EmailAndPassword from "./EmailAndPassword";
@@ -114,12 +114,22 @@ const Driver: React.FC = () => {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
-              <MapPin className="text-muted-foreground" size={16} />
-              <span className="text-foreground">{profile?.address}</span>
+              <FaLocationDot className="text-muted-foreground" size={16} />
+              <span className="text-foreground">
+                {profile?.address || "Not Assigned"}
+              </span>
             </div>
             <div className="flex items-center gap-2">
-              <Star className="text-muted-foreground" size={16} />
-              <span className="text-foreground">{profile?.rating} Rating</span>
+              <FaStar
+                className="text-yellow-400"
+                size={16}
+                style={{
+                  opacity: profile?.rating ? profile.rating / 5 : 0.2,
+                }}
+              />
+              <span className="text-foreground">
+                {profile?.rating?.toFixed(1) || "0.0"}
+              </span>
             </div>
           </div>
           <Button

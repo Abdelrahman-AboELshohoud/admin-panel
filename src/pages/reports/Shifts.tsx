@@ -96,7 +96,7 @@ export default function Shifts() {
 
         <div className="flex items-center gap-2">
           <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger asChild className="border-transparent">
               <Button variant="outline" className="bg-gray-800">
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {startDate
@@ -115,7 +115,7 @@ export default function Shifts() {
           </Popover>
 
           <Popover>
-            <PopoverTrigger asChild>
+            <PopoverTrigger asChild className="border-transparent">
               <Button variant="outline" className="bg-gray-800">
                 <CalendarIcon className="mr-2 h-4 w-4" />
                 {endDate ? format(endDate, "dd.MM.yyyy") : t("shifts.endDate")}
@@ -135,25 +135,23 @@ export default function Shifts() {
         <Button className="ml-auto">{t("shifts.orderReport")}</Button>
       </div>
 
-      <div className="p-4 bg-[#1C1C1E] rounded-xl">
-        <MyTable
-          headers={[
-            t("shifts.employee"),
-            t("shifts.timeOfEntry"),
-            t("shifts.exitTime"), 
-            t("shifts.ipAddress")
-          ]}
-          rows={employees.map((employee, index) => ({
-            id: index.toString(),
-            data: [
-              employee.name,
-              employee.timeOfEntry,
-              employee.exitTime,
-              employee.ipAddress
-            ]
-          }))}
-        />
-      </div>
+      <MyTable
+        headers={[
+          t("shifts.employee"),
+          t("shifts.timeOfEntry"),
+          t("shifts.exitTime"),
+          t("shifts.ipAddress"),
+        ]}
+        rows={employees.map((employee, index) => ({
+          id: index.toString(),
+          data: [
+            employee.name,
+            employee.timeOfEntry,
+            employee.exitTime,
+            employee.ipAddress,
+          ],
+        }))}
+      />
     </div>
   );
 }

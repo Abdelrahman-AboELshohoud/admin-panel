@@ -8,19 +8,21 @@ import {
 } from "../../ui/select";
 import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Plus } from "lucide-react";
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "../../ui/table";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import MyTable from "../../common/table-components/MyTable";
 
 export default function PhotoControl() {
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  const headers = [
+    t("photoControl.table.profession"),
+    t("photoControl.table.carClass"),
+    t("photoControl.table.city"),
+  ];
+
+  let rows: any[] = []; // Add rows data when available
 
   return (
     <div className="p-6 space-y-6 bg-background text-foreground min-h-screen">
@@ -141,16 +143,7 @@ export default function PhotoControl() {
         </Select>
       </div>
 
-      <Table>
-        <TableHeader className="bg-transparent hover:bg-transparent">
-          <TableRow className="bg-transparent hover:bg-transparent">
-            <TableHead>{t("photoControl.table.profession")}</TableHead>
-            <TableHead>{t("photoControl.table.carClass")}</TableHead>
-            <TableHead>{t("photoControl.table.city")}</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>{/* Add table rows here when you have data */}</TableBody>
-      </Table>
+      <MyTable headers={headers} rows={rows} />
     </div>
   );
 }

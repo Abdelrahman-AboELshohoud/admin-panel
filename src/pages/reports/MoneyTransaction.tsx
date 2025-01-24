@@ -74,7 +74,7 @@ export default function MoneyTransaction() {
 
   return (
     <div className="p-6 space-y-6 flex flex-col">
-      <div className="space-y-4">
+      <div className="space-y-4 bg-transparent">
         <h1 className="text-2xl font-semibold">{t("monetaryTransactions")}</h1>
 
         <div className="flex flex-wrap gap-4">
@@ -187,9 +187,7 @@ export default function MoneyTransaction() {
         </div>
       </div>
 
-      <div className="rounded-lg">
-        <OrdersTable />
-      </div>
+      <OrdersTable />
 
       <Card className="bg-transparent border-none">
         <CardContent className="flex justify-between items-center py-3 px-5 bg-black rounded-full text-slate-200">

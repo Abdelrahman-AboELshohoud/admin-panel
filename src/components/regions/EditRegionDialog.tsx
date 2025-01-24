@@ -39,29 +39,34 @@ export default function EditRegionDialog({
 
   const [formData, setFormData] = useState<Region | null>(null);
   const [points, setPoints] = useState<Point[]>([]);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
+  // Initialize form data and points when region changes or dialog opens
   useEffect(() => {
     if (region) {
       setFormData(region);
+      // Set initial points from region location if available
       if (region.location?.[0]) {
         setPoints(region.location[0]);
       }
+      setIsVisible(region.enabled);
+    } else {
+      // Reset form when dialog closes
+      setFormData(null);
+      setPoints([]);
+      setIsVisible(true);
     }
-  }, [region]);
+  }, [region, isOpen]);
 
-  const handleMapClick = useCallback(
-    (e: google.maps.MapMouseEvent) => {
-      if (!e.latLng || !isEditing) return;
+  const handleMapClick = useCallback((e: google.maps.MapMouseEvent) => {
+    if (!e.latLng) return;
 
-      const lat = e.latLng.lat();
-      const lng = e.latLng.lng();
-      const newPoint: Point = { lat, lng };
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+    const newPoint: Point = { lat, lng };
 
-      setPoints((prev) => [...prev, newPoint]);
-    },
-    [isEditing]
-  );
+    setPoints((prev) => [...prev, newPoint]);
+  }, []);
 
   const handlePolygonChange = useCallback((newPoints: Point[]) => {
     setPoints(newPoints);
@@ -81,7 +86,7 @@ export default function EditRegionDialog({
   };
 
   if (!isLoaded || !formData) {
-    return <div>Loading maps...</div>;
+    return null;
   }
 
   return (
@@ -94,22 +99,26 @@ export default function EditRegionDialog({
     >
       <div className="grid grid-cols-2 gap-6">
         <div className="space-y-4">
-          <div className="flex gap-2">
-            <Button
-              onClick={() => setIsEditing(!isEditing)}
-              variant={isEditing ? "default" : "outline"}
-            >
-              {isEditing ? t("common.stopEditing") : t("common.startEditing")}
-            </Button>
+          <div className="flex gap-2 justify-between">
             <Button variant="destructive" onClick={clearPolygon}>
               {t("common.clear")}
             </Button>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-400">
+                {t("regions.showOnMap")}
+              </span>
+              <Switch
+                disabled={false}
+                checked={isVisible}
+                onChange={() => setIsVisible(!isVisible)}
+              />
+            </div>
           </div>
 
           <div className="h-[500px]">
             <MapComponent
               points={points}
-              isEditing={isEditing}
+              isEditing={true}
               onPolygonChange={handlePolygonChange}
               onClick={handleMapClick}
             />

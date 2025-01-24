@@ -245,14 +245,14 @@ export default function Configuration() {
   return (
     <div className="container mx-auto space-y-6">
       <Card className="bg-gray-800 border-gray-700 w-1/2 card-shape">
-        <CardHeader>
-          <CardTitle className="text-3xl    text-gray-200">
+        <CardHeader className="mb-8">
+          <CardTitle className="text-3xl text-gray-200">
             {t("configuration.title")}
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           <div>
-            <h2 className="text-xl font-semibold text-gray-200">
+            <h2 className="text-xl font-semibold text-gray-200 mb-4">
               {t("configuration.password.title")}
             </h2>
             <div className="flex flex-col gap-2 mb-auto">
@@ -303,7 +303,7 @@ export default function Configuration() {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-gray-200">
+            <h2 className="text-xl font-semibold text-gray-200 mb-4">
               {t("configuration.purchaseCode.title")}
             </h2>
             <div className="flex flex-col gap-2 mb-auto">
@@ -349,7 +349,7 @@ export default function Configuration() {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-gray-200">
+            <h2 className="text-xl font-semibold text-gray-200 mb-4">
               {t("configuration.mapsApi.title")}
             </h2>
             <div className="space-y-2">
@@ -404,7 +404,7 @@ export default function Configuration() {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-gray-200">
+            <h2 className="text-xl font-semibold text-gray-200 mb-4">
               {t("configuration.firebase.title")}
             </h2>
             <div className="space-y-2">
@@ -435,7 +435,7 @@ export default function Configuration() {
           </div>
 
           <div>
-            <h2 className="text-xl font-semibold text-gray-200">
+            <h2 className="text-xl font-semibold text-gray-200 mb-4">
               {t("configuration.server.title")}
             </h2>
             <div className="flex justify-end mt-6">

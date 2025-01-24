@@ -32,7 +32,7 @@ export default function MyTabs({
         <TabsContent
           key={content.value}
           value={content.value}
-          className="mt-4  bg-[#1C1C1E] rounded-xl p-4"
+          className="mt-4  bg-transparent rounded-xl p-4"
         >
           {content.content}
         </TabsContent>

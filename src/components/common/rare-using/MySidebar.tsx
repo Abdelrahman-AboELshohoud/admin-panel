@@ -79,10 +79,10 @@ const MySidebar = () => {
           name: t("links.reports.moneyTransactions"),
           path: "/control-panel/reports/money-transactions",
         },
-        {
-          name: t("links.reports.sos"),
-          path: "/control-panel/reports/sos",
-        },
+        // {
+        //   name: t("links.reports.sos"),
+        //   path: "/control-panel/reports/sos",
+        // },
         {
           name: t("links.reports.corporationClients"),
           path: "/control-panel/reports/corporation-clients",

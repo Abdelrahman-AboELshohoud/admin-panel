@@ -14,10 +14,12 @@ import { t } from "i18next";
 import Pagination from "../../components/common/table-components/Pagination";
 import MyTable from "../../components/common/table-components/MyTable";
 import MyTabs from "../../components/common/MyTabs";
+import { useNavigate } from "react-router-dom";
 
 const ITEMS_PER_PAGE = 10;
 
 const Cars = () => {
+  const navigate = useNavigate();
   const [cars, setCars] = useState<Driver[]>([]);
   const [_isLoading, setIsLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
@@ -195,6 +197,7 @@ const Cars = () => {
               "Bussiness",
             ],
           }))}
+          navigate={(id) => navigate(`/control-panel/cars/active/${id}/active`)}
         />
       </div>
 

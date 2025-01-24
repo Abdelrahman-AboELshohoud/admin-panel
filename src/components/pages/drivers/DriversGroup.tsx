@@ -20,7 +20,7 @@ import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import Pagination from "../../common/Pagination";
+import Pagination from "../../common/table-components/Pagination";
 
 enum FleetStatus {
   Active = "Active",

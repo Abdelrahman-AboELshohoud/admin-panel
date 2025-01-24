@@ -188,33 +188,36 @@ export default function ZonesPrices() {
     t("common.actions"),
   ];
 
-  const tableRows = currentZones.map((zone) => [
-    zone.name,
-    zone.cost,
-    <div className="flex gap-2" key={zone.id}>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => {
-          setSelectedZone(zone);
-          setIsEditing(true);
-          setShowDialog(true);
-        }}
-      >
-        {t("common.edit")}
-      </Button>
-      <Button
-        variant="destructive"
-        size="sm"
-        onClick={() => {
-          setSelectedZone(zone);
-          setShowDeleteDialog(true);
-        }}
-      >
-        {t("common.delete")}
-      </Button>
-    </div>,
-  ]);
+  const tableRows = currentZones.map((zone) => ({
+    data: [
+      zone.name,
+      zone.cost,
+      <div className="flex gap-2" key={zone.id}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setSelectedZone(zone);
+            setIsEditing(true);
+            setShowDialog(true);
+          }}
+        >
+          {t("common.edit")}
+        </Button>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => {
+            setSelectedZone(zone);
+            setShowDeleteDialog(true);
+          }}
+        >
+          {t("common.delete")}
+        </Button>
+      </div>,
+    ],
+    id: zone.id,
+  }));
 
   return (
     <div className="p-6">

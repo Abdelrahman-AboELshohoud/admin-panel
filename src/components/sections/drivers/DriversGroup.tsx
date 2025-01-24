@@ -137,61 +137,80 @@ export default function DriversGroups() {
     setFilters((prev: FleetFilters) => ({ ...prev, [key]: value, page: 1 }));
   };
 
-  const tabs = ["all", FleetStatus.Active, FleetStatus.Blocked];
+  const tabs = [
+    { title: "All", value: "all" },
+    { title: "Active", value: FleetStatus.Active },
+    { title: "Blocked", value: FleetStatus.Blocked },
+  ];
+
   const tabsContent = [
-    <div key="content" className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <Select
-          value={filters.city}
-          onValueChange={(value) => handleFilterChange("city", value)}
-        >
-          <SelectTrigger className="custom-input">
-            <SelectValue placeholder={t("allCities")} />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">{t("allCities")}</SelectItem>
-            <SelectItem value="kazan">{t("kazan")}</SelectItem>
-          </SelectContent>
-        </Select>
+    {
+      value: "all",
+      content: (
+        <div key="content" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <Select
+              value={filters.city}
+              onValueChange={(value) => handleFilterChange("city", value)}
+            >
+              <SelectTrigger className="custom-input">
+                <SelectValue placeholder={t("allCities")} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t("allCities")}</SelectItem>
+                <SelectItem value="kazan">{t("kazan")}</SelectItem>
+              </SelectContent>
+            </Select>
 
-        <Input
-          placeholder={t("search")}
-          value={filters.search}
-          onChange={(e) => handleFilterChange("search", e.target.value)}
-          className="custom-input"
-        />
-      </div>
+            <Input
+              placeholder={t("search")}
+              value={filters.search}
+              onChange={(e) => handleFilterChange("search", e.target.value)}
+              className="custom-input"
+            />
+          </div>
 
-      <MyTable
-        headers={[t("name"), t("address"), t("phoneNumber"), t("commission")]}
-        rows={fleets.map((fleet) => ({
-          data: [
-            fleet.name,
-            fleet.address,
-            fleet.phoneNumber,
-            `${fleet.commissionSharePercent}% + ${fleet.commissionShareFlat}`,
-          ],
-          id: fleet.id,
-        }))}
-        navigate={(id?: string) =>
-          navigate(id ? `/control-panel/drivers-groups/${id}` : "")
-        }
-      />
+          <MyTable
+            headers={[
+              t("name"),
+              t("address"),
+              t("phoneNumber"),
+              t("commission"),
+            ]}
+            rows={fleets.map((fleet) => ({
+              data: [
+                fleet.name,
+                fleet.address,
+                fleet.phoneNumber,
+                `${fleet.commissionSharePercent}% + ${fleet.commissionShareFlat}`,
+              ],
+              id: fleet.id,
+            }))}
+            navigate={(id?: string) =>
+              navigate(id ? `/control-panel/drivers-groups/${id}` : "")
+            }
+          />
 
-      {loading && <div className="text-center py-4">{t("common.loading")}</div>}
+          {loading && (
+            <div className="text-center py-4">{t("common.loading")}</div>
+          )}
 
-      {!loading && fleets.length === 0 && (
-        <div className="text-center py-4 text-gray-500">{t("noFleets")}</div>
-      )}
+          {!loading && fleets.length === 0 && (
+            <div className="text-center py-4 text-gray-500">
+              {t("noFleets")}
+            </div>
+          )}
 
-      <Pagination
-        currentPage={filters.page}
-        totalPages={Math.ceil(totalCount / filters.limit)}
-        onPageChange={(page: number) =>
-          handleFilterChange("page", page.toString())
-        }
-      />
-    </div>,
+          <Pagination
+            currentPage={filters.page}
+            totalPages={Math.ceil(totalCount / filters.limit)}
+            onPageChange={(page: number) =>
+              handleFilterChange("page", page.toString())
+            }
+          />
+        </div>
+      ),
+    },
   ];
 
   return (

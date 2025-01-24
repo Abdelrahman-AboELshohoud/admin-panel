@@ -39,40 +39,38 @@ export default function OrdersTable() {
   };
 
   return (
-    <div className="p-4 bg-[#1C1C1E] rounded-xl">
-      <MyTable
-        headers={[
-          t("orderstable.executor"),
-          t("orderstable.totalOrders"),
-          t("orderstable.paidCount"),
-          t("orderstable.paidAmount"),
-          t("orderstable.unpaidCount"),
-          t("orderstable.unpaidAmount"),
-          t("orderstable.cancelledCount"),
-          t("orderstable.efficiency"),
-          "",
-        ]}
-        rows={orders.map((order) => ({
-          id: order.id,
-          data: [
-            `${order.id}, ${order.executor}`,
-            order.totalOrders,
-            order.paidCount,
-            `${order.paidAmount} ₽`,
-            order.unpaidCount,
-            `${order.unpaidAmount} ₽`,
-            order.cancelledCount,
-            order.efficiency,
-            <Button
-              variant="destructive"
-              className="h-8 w-8 rounded-full"
-              onClick={() => handleDelete(order.id)}
-            >
-              <X />
-            </Button>,
-          ],
-        }))}
-      />
-    </div>
+    <MyTable
+      headers={[
+        t("orderstable.executor"),
+        t("orderstable.totalOrders"),
+        t("orderstable.paidCount"),
+        t("orderstable.paidAmount"),
+        t("orderstable.unpaidCount"),
+        t("orderstable.unpaidAmount"),
+        t("orderstable.cancelledCount"),
+        t("orderstable.efficiency"),
+        "",
+      ]}
+      rows={orders.map((order) => ({
+        id: order.id,
+        data: [
+          `${order.id}, ${order.executor}`,
+          order.totalOrders,
+          order.paidCount,
+          `${order.paidAmount} ₽`,
+          order.unpaidCount,
+          `${order.unpaidAmount} ₽`,
+          order.cancelledCount,
+          order.efficiency,
+          <Button
+            variant="destructive"
+            className="h-8 w-8 rounded-full"
+            onClick={() => handleDelete(order.id)}
+          >
+            <X />
+          </Button>,
+        ],
+      }))}
+    />
   );
 }

@@ -70,8 +70,6 @@ export default function MapPage() {
           }
         });
         setRegions(fetchedRegions);
-        // Initialize visible regions with all fetched regions
-        setVisibleRegions(new Set(fetchedRegions.map((r: Region) => r.id)));
       }
     } catch (error) {
       console.error("Error fetching regions:", error);
@@ -95,7 +93,35 @@ export default function MapPage() {
     });
   };
 
-  const handleToggleEnabled = async (regionId: string) => {
+  // const handleToggleEnabled = async (regionId: string) => {
+  //   try {
+  //     const region = regions.find((r) => r.id === regionId);
+  //     if (!region) return;
+
+  //     await UpdateRegionGQL({
+  //       id: regionId,
+  //       update: {
+  //         enabled: !region.enabled,
+  //         name: region.name,
+  //         currency: region.currency,
+  //         location: region.location,
+  //       },
+  //     });
+
+  //     setRegions((prev) =>
+  //       prev.map((r) => (r.id === regionId ? { ...r, enabled: !r.enabled } : r))
+  //     );
+  //     toast.success(t("regions.updateSuccess"));
+  //   } catch (error) {
+  //     console.error("Error updating region:", error);
+  //     toast.error(t("regions.errors.updateFailed"));
+  //   }
+  // };
+
+  const handleUpdateRegion = async (
+    regionId: string,
+    updatedData: Partial<Region>
+  ) => {
     try {
       const region = regions.find((r) => r.id === regionId);
       if (!region) return;
@@ -103,16 +129,15 @@ export default function MapPage() {
       await UpdateRegionGQL({
         id: regionId,
         update: {
-          enabled: region.enabled,
-          name: region.name,
-          currency: region.currency,
-          location: region.location,
+          ...region,
+          ...updatedData,
         },
       });
 
       setRegions((prev) =>
-        prev.map((r) => (r.id === regionId ? { ...r, enabled: !r.enabled } : r))
+        prev.map((r) => (r.id === regionId ? { ...r, ...updatedData } : r))
       );
+      toast.success(t("regions.updateSuccess"));
     } catch (error) {
       console.error("Error updating region:", error);
       toast.error(t("regions.errors.updateFailed"));
@@ -129,10 +154,27 @@ export default function MapPage() {
     setShowDialog(true);
   };
 
-  if (!isLoaded) return <div>Loading...</div>;
+  const handleSaveNewRegion = async (region: Region) => {
+    try {
+      // Assign a random color to the new region
+      regionColors.set(region.id, getRandomColor());
+
+      // Add the new region to the list
+      setRegions((prev) => [...prev, region]);
+
+      setShowAddInMap(false);
+      setShowDialog(false); // Close the dialog after saving
+      await fetchRegions(); // Refresh the list
+    } catch (error) {
+      console.error("Error saving new region:", error);
+      toast.error(t("regions.errors.createFailed"));
+    }
+  };
+
+  if (!isLoaded) return <div>Loading maps...</div>;
 
   return (
-    <div className="flex flex-col p-6">
+    <div className="flex flex-col px-6">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-200">
           {t("titles.districts")}
@@ -163,7 +205,7 @@ export default function MapPage() {
         </div>
       </div>
 
-      <div className="card-shape h-[600px] mb-6">
+      <div className="card-shape mb-6">
         <GoogleMap
           mapContainerStyle={mapContainerStyle}
           center={defaultCenter}
@@ -216,9 +258,11 @@ export default function MapPage() {
 
       <div className="card-shape p-4">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-200">
-            {t("regions.list")}
-          </h2>
+          <div className="flex items-center gap-4">
+            <h2 className="text-xl font-semibold text-gray-200">
+              {t("regions.list")}
+            </h2>
+          </div>
           {isEditing && (
             <Button
               onClick={() => setShowAddInMap(true)}
@@ -230,7 +274,7 @@ export default function MapPage() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {regions.map((region) => (
             <div
               key={region.id}
@@ -263,19 +307,6 @@ export default function MapPage() {
                     onChange={() => handleToggleVisibility(region.id)}
                   />
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-400">
-                    {t("regions.status")}
-                  </span>
-                  <Switch
-                    checked={region.enabled}
-                    disabled={false}
-                    onChange={(e) => {
-                      e.stopPropagation();
-                      handleToggleEnabled(region.id);
-                    }}
-                  />
-                </div>
                 {isEditing && (
                   <Button
                     variant="outline"
@@ -295,10 +326,7 @@ export default function MapPage() {
         <AddInMap
           isOpen={showAddInMap}
           onClose={() => setShowAddInMap(false)}
-          onSave={async (region: Region) => {
-            regionColors.set(region.id, getRandomColor());
-            setRegions((prev) => [...prev, region]);
-          }}
+          onSave={handleSaveNewRegion}
         />
       )}
 
@@ -310,32 +338,14 @@ export default function MapPage() {
           setEditingRegion(null);
         }}
         onSave={async (updatedRegion) => {
-          try {
-            await UpdateRegionGQL({
-              id: editingRegion?.id || "",
-              update: updatedRegion,
-            });
+          if (!editingRegion?.id) return;
 
-            if (editingRegion) {
-              // Update existing region
-              setRegions((prev) =>
-                prev.map((r) =>
-                  r.id === editingRegion.id
-                    ? { ...updatedRegion, id: editingRegion.id }
-                    : r
-                )
-              );
-            } else {
-              // Add new region
-              const newId = String(Date.now());
-              regionColors.set(newId, getRandomColor());
-              setRegions((prev) => [...prev, { ...updatedRegion, id: newId }]);
-            }
+          try {
+            await handleUpdateRegion(editingRegion.id, updatedRegion);
             setShowDialog(false);
             setEditingRegion(null);
-            toast.success(t("regions.updateSuccess"));
           } catch (error) {
-            toast.error(t("regions.errors.updateFailed"));
+            console.error("Error in dialog save:", error);
           }
         }}
       />

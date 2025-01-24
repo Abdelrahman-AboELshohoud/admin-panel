@@ -17,6 +17,10 @@ export default function BranchesManager() {
   const { t } = useTranslation();
   const [branches, _setBranches] = useState<Branch[]>([
     { id: "1", title: "Kazan", sorting: 100, status: "active" },
+    { id: "2", title: "Moscow", sorting: 200, status: "active" },
+    { id: "3", title: "Saint Petersburg", sorting: 300, status: "blocked" },
+    { id: "4", title: "Novosibirsk", sorting: 400, status: "active" },
+    { id: "5", title: "Yekaterinburg", sorting: 500, status: "blocked" },
   ]);
   const [_activeTab, setActiveTab] = useState("active");
   const navigate = useNavigate();
@@ -45,10 +49,7 @@ export default function BranchesManager() {
             .filter((branch) => branch.status === "active")
             .map((branch) => ({
               id: branch.id,
-              data: [
-                { data: branch.title },
-                { data: branch.sorting, className: "text-right" },
-              ],
+              data: [branch.title, branch.sorting.toString()],
             }))}
         />
       ),
@@ -63,10 +64,7 @@ export default function BranchesManager() {
             .filter((branch) => branch.status === "blocked")
             .map((branch) => ({
               id: branch.id,
-              data: [
-                { data: branch.title },
-                { data: branch.sorting, className: "text-right" },
-              ],
+              data: [branch.title, branch.sorting.toString()],
             }))}
         />
       ),
@@ -88,13 +86,12 @@ export default function BranchesManager() {
           {t("branches.addButton")}
         </Button>
       </div>
-      <div className="bg-[#1C1C1E] rounded-xl p-4">
-        <MyTabs
-          tabs={tabs}
-          tabsContent={tabsContent}
-          setActiveTab={setActiveTab}
-        />
-      </div>
+
+      <MyTabs
+        tabs={tabs}
+        tabsContent={tabsContent}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
 }

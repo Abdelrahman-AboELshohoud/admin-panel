@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 interface Address {
+  id: string;
   name: string;
   address: string;
 }
@@ -12,34 +13,30 @@ interface Address {
 export default function Addresses() {
   const { t } = useTranslation();
   const addresses: Address[] = [
-    { name: "John Doe", address: "123 Main St" },
-    { name: "Jane Smith", address: "456 Elm St" },
+    { id: "1", name: "John Doe", address: "123 Main St" },
+    { id: "2", name: "Jane Smith", address: "456 Elm St" },
   ];
   const navigate = useNavigate();
 
   const headers = [t("addresses.name"), t("addresses.address"), ""];
 
   const rows = addresses.map((address) => ({
-    id: address.name, // Using name as id since we don't have a unique id
+    id: address.id,
     data: [
-      { data: address.name },
-      { data: address.address },
-      {
-        data: (
-          <div className="flex gap-2 justify-end">
-            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-3xl">
-              <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-8 w-8 text-white hover:text-black bg-red-500 hover:bg-red-600 rounded-full"
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-        ),
-      },
+      address.name,
+      address.address,
+      <div key={address.id} className="flex gap-2 justify-end">
+        <Button size="icon" variant="ghost" className="h-8 w-8 rounded-3xl">
+          <Pencil className="h-4 w-4" />
+        </Button>
+        <Button
+          size="icon"
+          variant="ghost"
+          className="h-8 w-8 text-white hover:text-black bg-red-500 hover:bg-red-600 rounded-full"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </div>,
     ],
   }));
 
@@ -57,9 +54,8 @@ export default function Addresses() {
           {t("addresses.addAddress")}
         </Button>
       </div>
-      <div className="card-shape p-4 text-white">
-        <MyTable headers={headers} rows={rows} />
-      </div>
+
+      <MyTable headers={headers} rows={rows} />
     </div>
   );
 }

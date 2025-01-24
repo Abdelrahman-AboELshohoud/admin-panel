@@ -116,7 +116,7 @@ export const SOSPage = () => {
 
   return (
     <div className="p-6">
-      <div className="card-shape">
+      <div>
         <h1 className="text-2xl font-bold mb-4">{t("sos.title")}</h1>
         <MyTable
           headers={[

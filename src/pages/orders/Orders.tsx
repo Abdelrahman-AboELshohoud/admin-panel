@@ -14,7 +14,8 @@ import { Button } from "../../components/ui/button";
 import {
   OrderStatus,
   OrdersListGQL,
-  // CancelOrderGQL,
+  ViewOrderGQL,
+  Order,
   OrderSortFields,
   SortDirection,
 } from "../../graphql/requests";
@@ -22,6 +23,8 @@ import { useNavigate } from "react-router-dom";
 import MyTable from "../../components/common/table-components/MyTable";
 import Pagination from "../../components/common/table-components/Pagination";
 import moment from "moment";
+import ViewOrderDialog from "./ViewOrderDialog";
+import { toast } from "react-hot-toast";
 
 interface OrderFilters {
   status?: OrderStatus;
@@ -44,6 +47,8 @@ export default function Orders() {
     page: 1,
     limit: 10,
   });
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [showOrderDialog, setShowOrderDialog] = useState(false);
 
   const fetchOrders = async () => {
     try {
@@ -53,13 +58,6 @@ export default function Orders() {
       if (filters.status) {
         filterObject.status = { eq: filters.status };
       }
-
-      // if (filters.searchTerm) {
-      //   filterObject.or = [
-      //     { id: { iLike: `%${filters.searchTerm}%` } },
-      //     { addresses: { iLike: `%${filters.searchTerm}%` } },
-      //   ];
-      // }
 
       if (filters.dateRange?.start && filters.dateRange?.end) {
         filterObject.createdOn = {
@@ -99,6 +97,7 @@ export default function Orders() {
     fetchOrders();
   }, [filters]);
 
+  console.log(orders);
   const handleFilterChange = (
     key: keyof OrderFilters,
     value: number | string
@@ -119,20 +118,50 @@ export default function Orders() {
     }));
   };
 
+  const handleViewOrder = async (orderId: string) => {
+    try {
+      const response = await ViewOrderGQL({ id: orderId });
+      if (response.data?.order) {
+        setSelectedOrder(response.data.order);
+        setShowOrderDialog(true);
+      }
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      toast.error(t("orders.errors.fetchFailed"));
+    }
+  };
+
+  // const handleCancelOrder = async (orderId: string) => {
+  //   try {
+  //     await CancelOrderGQL({ orderId });
+  //     toast.success(t("orders.cancelSuccess"));
+  //     await fetchOrders(); // Refresh the list
+  //     setShowOrderDialog(false);
+  //   } catch (error) {
+  //     console.error("Error canceling order:", error);
+  //     toast.error(t("orders.cancelError"));
+  //   }
+  // };
+
+  const handleOrderUpdate = async () => {
+    // Refresh orders list after update
+    await fetchOrders();
+  };
+
   const rows = orders?.map((order) => ({
-    id: order.id,
+    id: order?.id,
     data: [
-      order.id,
-      moment(order.createdOn).format("DD/MM/YYYY HH:mm"),
-      moment(order.expectedTimestamp).format("DD/MM/YYYY HH:mm "),
-      order.status,
-      `${order.rider?.firstName} ${order.rider?.lastName}`,
-      order.driver
-        ? `${order.driver?.firstName} ${order.driver?.lastName}`
+      order?.id,
+      moment(order?.createdOn).format("DD/MM/YYYY HH:mm"),
+      moment(order?.expectedTimestamp).format("DD/MM/YYYY HH:mm"),
+      order?.status,
+      `${order?.rider?.firstName} ${order?.rider?.lastName}`,
+      order?.driver
+        ? `${order?.driver?.firstName} ${order?.driver?.lastName}`
         : t("common.notAssigned"),
-      order.service?.name,
-      `${order.costAfterCoupon} ${order.currency}`,
-      order.addresses?.join(" → "),
+      order?.service?.name,
+      `${order?.costAfterCoupon} ${order?.currency}`,
+      order?.addresses?.join(" → ") || "",
     ],
   }));
 
@@ -214,9 +243,14 @@ export default function Orders() {
           t("orders.inputs.address"),
         ]}
         rows={rows}
-        navigate={(id?: string) =>
-          id && navigate(`/control-panel/orders/${id}`)
-        }
+        navigate={(id?: string) => id && handleViewOrder(id)}
+      />
+
+      <ViewOrderDialog
+        isOpen={showOrderDialog}
+        onOpenChange={setShowOrderDialog}
+        order={selectedOrder}
+        onOrderUpdate={handleOrderUpdate}
       />
 
       <Pagination

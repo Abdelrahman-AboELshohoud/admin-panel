@@ -9,7 +9,7 @@ import {
 } from "../../ui/select";
 import { Card, CardContent } from "../../ui/card";
 import { Button } from "../../ui/button";
-import Switch from "../../common/Switch";
+import Switch from "../../common/form-elements/Switch";
 
 type PhotoRequirement = {
   id: string;
@@ -112,10 +112,10 @@ export default function DriverForm() {
                   options={select.options}
                   defaultValue={select.defaultValue}
                   onChange={(value) =>
-                  handleSelectChange(select.label.toLowerCase(), value)
-                }
-              />
-            ))}
+                    handleSelectChange(select.label.toLowerCase(), value)
+                  }
+                />
+              ))}
 
             <div className="space-y-4">
               <label className="text-sm text-zinc-400">
@@ -128,20 +128,23 @@ export default function DriverForm() {
                   <div
                     key={item.id}
                     className="flex items-center justify-between gap-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <label htmlFor={item.id} className="text-sm text-slate-200">
-                      {t(`addPhoto.photoRequirements.${item.id}`)}
-                    </label>
-                  </div>
+                  >
+                    <div className="flex items-center gap-2">
+                      <label
+                        htmlFor={item.id}
+                        className="text-sm text-slate-200"
+                      >
+                        {t(`addPhoto.photoRequirements.${item.id}`)}
+                      </label>
+                    </div>
 
-                  <Switch
-                    checked={false}
-                    // checked={photoSettings[item.id] || false}
-                    disabled={false}
-                  />
-                </div>
-              ))}
+                    <Switch
+                      checked={false}
+                      // checked={photoSettings[item.id] || false}
+                      disabled={false}
+                    />
+                  </div>
+                ))}
             </div>
           </div>
 

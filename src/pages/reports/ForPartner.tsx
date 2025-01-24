@@ -8,12 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
 import MyTable from "../../components/common/table-components/MyTable";
 import { Input } from "../../components/ui/input";
 
@@ -34,11 +28,11 @@ const ForPartner = () => {
   const periodButtons = ["today", "yesterday", "june", "period"];
 
   return (
-    <Card className="w-full bg-transparent max-w-4xl text-white border-none">
-      <CardHeader>
-        <CardTitle className="text-2xl font-bold">{t("forPartner")}</CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
+    <div className="w-full bg-transparent text-white">
+      <div className="px-6 py-4">
+        <h2 className="text-2xl font-bold">{t("forPartner")}</h2>
+      </div>
+      <div className="px-6 py-4 space-y-6">
         <div className="gap-4 grid grid-cols-6">
           <Select defaultValue="kazan">
             <SelectTrigger className="w-full custom-input col-span-2">
@@ -138,8 +132,8 @@ const ForPartner = () => {
             ]}
           />
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

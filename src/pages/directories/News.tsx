@@ -69,20 +69,7 @@ export default function News() {
   };
 
   const getTableRows = (items: Announcement[]) => {
-    if (items.length === 0) {
-      return [
-        {
-          id: "no-data",
-          data: [
-            <div className="text-center text-muted-foreground col-span-4">
-              {t("news.table.noItems")}
-            </div>,
-          ],
-        },
-      ];
-    }
-
-    return items.map((item) => ({
+    return items?.map((item) => ({
       id: item.id,
       data: [
         item.title,
@@ -148,13 +135,11 @@ export default function News() {
         </Button>
       </div>
 
-      <div className="bg-[#1C1C1E] rounded-xl p-4">
-        <MyTabs
-          tabs={tabs}
-          tabsContent={tabContents}
-          setActiveTab={setActiveTab}
-        />
-      </div>
+      <MyTabs
+        tabs={tabs}
+        tabsContent={tabContents}
+        setActiveTab={setActiveTab}
+      />
     </div>
   );
 }

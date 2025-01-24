@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { Input } from "../../components/ui/input";
 import {
   Select,
@@ -14,12 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "../../components/ui/dialog";
+import { MyDialog } from "../../components/common/dialogs/MyDialog";
 import {
   SmsProvidersQuery,
   SmsProviderType,
@@ -47,6 +42,122 @@ const initialFormState: SMSProviderForm = {
   fromNumber: "",
   verificationTemplate: "",
 };
+
+interface EditDialogProps {
+  dialogOpen: boolean;
+  setDialogOpen: (open: boolean) => void;
+  editingProvider: {
+    id: string;
+    data: SMSProviderForm;
+  } | null;
+  handleInputChange: (field: keyof SMSProviderForm, value: string) => void;
+  handleUpdateProvider: () => Promise<void>;
+  isSubmitting: boolean;
+}
+
+const EditDialog = memo(
+  ({
+    dialogOpen,
+    setDialogOpen,
+    editingProvider,
+    handleInputChange,
+    handleUpdateProvider,
+    isSubmitting,
+  }: EditDialogProps) => (
+    <MyDialog
+      title="Edit SMS Provider"
+      isOpen={dialogOpen}
+      showCloseButton={false}
+      onOpenChange={setDialogOpen}
+      className="sm:max-w-[600px]"
+    >
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Provider Type</label>
+          <Select
+            value={editingProvider?.data.type}
+            onValueChange={(value) => handleInputChange("type", value)}
+          >
+            <SelectTrigger className="custom-input">
+              <SelectValue placeholder="Select provider type" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.values(SmsProviderType).map((type) => (
+                <SelectItem key={type} value={type}>
+                  {type}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Name</label>
+          <Input
+            value={editingProvider?.data.name}
+            onChange={(e) => handleInputChange("name", e.target.value)}
+            className="bg-gray-800 border-gray-700"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Account ID</label>
+          <Input
+            value={editingProvider?.data.accountId}
+            onChange={(e) => handleInputChange("accountId", e.target.value)}
+            className="bg-gray-800 border-gray-700"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium">Auth Token</label>
+          <Input
+            type="password"
+            value={editingProvider?.data.authToken}
+            onChange={(e) => handleInputChange("authToken", e.target.value)}
+            className="bg-gray-800 border-gray-700"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label className="text-sm font-medium">From Number</label>
+          <Input
+            value={editingProvider?.data.fromNumber}
+            onChange={(e) => handleInputChange("fromNumber", e.target.value)}
+            className="bg-gray-800 border-gray-700"
+          />
+        </div>
+
+        <div className="space-y-2 col-span-2">
+          <label className="text-sm font-medium">Verification Template</label>
+          <textarea
+            value={editingProvider?.data.verificationTemplate}
+            onChange={(e) =>
+              handleInputChange("verificationTemplate", e.target.value)
+            }
+            className="w-full h-32 px-3 py-2 bg-[#141414] border-transparent text-gray-200 placeholder:text-gray-600 rounded-md resize-none"
+          />
+        </div>
+
+        <div className="col-span-2 flex justify-end gap-3 mt-4">
+          <button
+            onClick={() => setDialogOpen(false)}
+            className="px-4 py-2 text-sm bg-gray-700 rounded-md hover:bg-gray-600"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleUpdateProvider}
+            disabled={isSubmitting}
+            className="px-4 py-2 text-sm bg-primary rounded-md hover:bg-primary/90 disabled:opacity-50"
+          >
+            {isSubmitting ? "Saving..." : "Save Changes"}
+          </button>
+        </div>
+      </div>
+    </MyDialog>
+  )
+);
 
 export default function CMCSettings() {
   const { t } = useTranslation();
@@ -168,100 +279,6 @@ export default function CMCSettings() {
     }
   };
 
-  const EditDialog = () => (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogContent className="sm:max-w-[600px] bg-gray-900 text-white">
-        <DialogHeader>
-          <DialogTitle>Edit SMS Provider</DialogTitle>
-        </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 py-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Provider Type</label>
-            <Select
-              value={editingProvider?.data.type}
-              onValueChange={(value) => handleInputChange("type", value)}
-            >
-              <SelectTrigger className="custom-input">
-                <SelectValue placeholder="Select provider type" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.values(SmsProviderType).map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {type}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Name</label>
-            <Input
-              value={editingProvider?.data.name}
-              onChange={(e) => handleInputChange("name", e.target.value)}
-              className="bg-gray-800 border-gray-700"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Account ID</label>
-            <Input
-              value={editingProvider?.data.accountId}
-              onChange={(e) => handleInputChange("accountId", e.target.value)}
-              className="bg-gray-800 border-gray-700"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Auth Token</label>
-            <Input
-              type="password"
-              value={editingProvider?.data.authToken}
-              onChange={(e) => handleInputChange("authToken", e.target.value)}
-              className="bg-gray-800 border-gray-700"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">From Number</label>
-            <Input
-              value={editingProvider?.data.fromNumber}
-              onChange={(e) => handleInputChange("fromNumber", e.target.value)}
-              className="bg-gray-800 border-gray-700"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Verification Template</label>
-            <Input
-              value={editingProvider?.data.verificationTemplate}
-              onChange={(e) =>
-                handleInputChange("verificationTemplate", e.target.value)
-              }
-              className="bg-gray-800 border-gray-700"
-            />
-          </div>
-
-          <div className="col-span-2 flex justify-end gap-3 mt-4">
-            <button
-              onClick={() => setDialogOpen(false)}
-              className="px-4 py-2 text-sm bg-gray-700 rounded-md hover:bg-gray-600"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleUpdateProvider}
-              disabled={isSubmitting}
-              className="px-4 py-2 text-sm bg-primary rounded-md hover:bg-primary/90 disabled:opacity-50"
-            >
-              {isSubmitting ? "Saving..." : "Save Changes"}
-            </button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
-  );
-
   if (!hasAccess) {
     return (
       <div className="flex-1 p-6 flex flex-col h-[80vh] justify-center items-center">
@@ -275,21 +292,21 @@ export default function CMCSettings() {
     <div className="min-h-screen bg-background p-4 flex items-start">
       <Card className="w-1/2 card-shape text-gray-100">
         <CardHeader>
-          <CardTitle className="text-2xl font-bold">
-            SMS Provider Settings
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold">{t("cmc.title")}</CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
           {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium">Provider Type</label>
+            <label className="block text-sm font-medium">
+              {t("cmc.providerType.label")}
+            </label>
             <Select
               value={formData.type}
               onValueChange={(value) => handleInputChange("type", value)}
             >
               <SelectTrigger className="custom-input">
-                <SelectValue placeholder="Select provider type" />
+                <SelectValue placeholder={t("cmc.providerType.placeholder")} />
               </SelectTrigger>
               <SelectContent>
                 {Object.values(SmsProviderType).map((type) => (
@@ -302,57 +319,65 @@ export default function CMCSettings() {
           </div>
 
           <div className="space-y-2">
-            <label className="block text-sm font-medium">Provider Name</label>
+            <label className="block text-sm font-medium">
+              {t("cmc.name.label")}
+            </label>
             <Input
               value={formData.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
-              placeholder="Enter provider name"
-              className="bg-gray-200/20 border-transparent text-black placeholder:text-gray-800"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-sm font-medium">Account ID</label>
-            <Input
-              value={formData.accountId || ""}
-              onChange={(e) => handleInputChange("accountId", e.target.value)}
-              placeholder="Enter account ID"
-              className="bg-gray-200/20 border-transparent text-black placeholder:text-gray-800"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-sm font-medium">Auth Token</label>
-            <Input
-              type="password"
-              value={formData.authToken || ""}
-              onChange={(e) => handleInputChange("authToken", e.target.value)}
-              placeholder="Enter auth token"
-              className="bg-gray-200/20 border-transparent text-black placeholder:text-gray-800"
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-sm font-medium">From Number</label>
-            <Input
-              value={formData.fromNumber || ""}
-              onChange={(e) => handleInputChange("fromNumber", e.target.value)}
-              placeholder="Enter from number"
-              className="bg-gray-200/20 border-transparent text-black placeholder:text-gray-800"
+              placeholder={t("cmc.name.placeholder")}
+              className="bg-[#141414] border-transparent text-gray-200 placeholder:text-gray-600"
             />
           </div>
 
           <div className="space-y-2">
             <label className="block text-sm font-medium">
-              Verification Template
+              {t("cmc.accountId.label")}
             </label>
             <Input
+              value={formData.accountId || ""}
+              onChange={(e) => handleInputChange("accountId", e.target.value)}
+              placeholder={t("cmc.accountId.placeholder")}
+              className="bg-[#141414] border-transparent text-gray-200 placeholder:text-gray-600"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">
+              {t("cmc.authToken.label")}
+            </label>
+            <Input
+              type="password"
+              value={formData.authToken || ""}
+              onChange={(e) => handleInputChange("authToken", e.target.value)}
+              placeholder={t("cmc.authToken.placeholder")}
+              className="bg-[#141414] border-transparent text-gray-200 placeholder:text-gray-600"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">
+              {t("cmc.fromNumber.label")}
+            </label>
+            <Input
+              value={formData.fromNumber || ""}
+              onChange={(e) => handleInputChange("fromNumber", e.target.value)}
+              placeholder={t("cmc.fromNumber.placeholder")}
+              className="bg-[#141414] border-transparent text-gray-200 placeholder:text-gray-600"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="block text-sm font-medium">
+              {t("cmc.verificationTemplate.label")}
+            </label>
+            <textarea
               value={formData.verificationTemplate || ""}
               onChange={(e) =>
                 handleInputChange("verificationTemplate", e.target.value)
               }
-              placeholder="Enter verification template"
-              className="bg-gray-200/20 border-transparent text-black placeholder:text-gray-800"
+              placeholder={t("cmc.verificationTemplate.placeholder")}
+              className="w-full h-32 px-3 py-2 bg-[#141414] border-transparent text-gray-200 placeholder:text-gray-600 rounded-md resize-none"
             />
           </div>
 
@@ -361,55 +386,62 @@ export default function CMCSettings() {
             disabled={isSubmitting}
             className="w-full bg-primary text-white py-2 rounded-md hover:bg-primary/90 disabled:opacity-50"
           >
-            {isSubmitting ? "Adding..." : "Add Provider"}
+            {isSubmitting
+              ? t("cmc.status.adding")
+              : t("cmc.buttons.addProvider")}
           </button>
 
           {providers.length > 0 && (
             <div className="mt-8">
               <h3 className="text-lg font-semibold mb-4">
-                Configured Providers
+                {t("cmc.configuredProviders")}
               </h3>
               <div className="space-y-4">
-                {providers &&
-                  providers.length > 0 &&
-                  providers.map((provider) => (
-                    <div
-                      key={provider.id}
-                      className="flex items-center justify-between p-4 bg-gray-800 rounded-md"
-                    >
-                      <div>
-                        <p className="font-medium">{provider.name}</p>
-                        <p className="text-sm text-gray-400">{provider.type}</p>
-                      </div>
-                      <div className="flex gap-2">
+                {providers.map((provider) => (
+                  <div
+                    key={provider.id}
+                    className="flex items-center justify-between p-4 bg-[#202020] rounded-md"
+                  >
+                    <div>
+                      <p className="font-medium">{provider.name}</p>
+                      <p className="text-sm text-gray-400">{provider.type}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => handleEditProvider(provider.id)}
+                        className="px-3 py-1 text-sm bg-gray-600 text-white rounded-md hover:bg-gray-700"
+                      >
+                        {t("cmc.buttons.edit")}
+                      </button>
+                      {!provider.isDefault && (
                         <button
-                          onClick={() => handleEditProvider(provider.id)}
+                          onClick={() => handleSetDefault(provider.id)}
                           className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
                         >
-                          Edit
+                          {t("cmc.buttons.setDefault")}
                         </button>
-                        {!provider.isDefault && (
-                          <button
-                            onClick={() => handleSetDefault(provider.id)}
-                            className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600"
-                          >
-                            Set Default
-                          </button>
-                        )}
-                        {provider.isDefault && (
-                          <span className="px-3 py-1 text-sm bg-green-500 text-white rounded-md">
-                            Default
-                          </span>
-                        )}
-                      </div>
+                      )}
+                      {provider.isDefault && (
+                        <span className="px-3 py-1 text-sm bg-green-500 text-white rounded-md">
+                          {t("cmc.buttons.default")}
+                        </span>
+                      )}
                     </div>
-                  ))}
+                  </div>
+                ))}
               </div>
             </div>
           )}
         </CardContent>
       </Card>
-      <EditDialog />
+      <EditDialog
+        dialogOpen={dialogOpen}
+        setDialogOpen={setDialogOpen}
+        editingProvider={editingProvider}
+        handleInputChange={handleInputChange}
+        handleUpdateProvider={handleUpdateProvider}
+        isSubmitting={isSubmitting}
+      />
     </div>
   );
 }
