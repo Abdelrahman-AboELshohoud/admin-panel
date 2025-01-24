@@ -65,13 +65,31 @@ function Map({
   });
 
   const [iconOptions, setIconOptions] = useState<google.maps.Icon | null>(null);
+  const [drawingOptions, setDrawingOptions] = useState<any>(null);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (isLoaded && window.google) {
       setIconOptions({
         url: iconUrl,
-        scaledSize: new google.maps.Size(20, 20),
+        scaledSize: new window.google.maps.Size(20, 20),
       } as google.maps.Icon);
+
+      setDrawingOptions({
+        drawingControl: true,
+        drawingControlOptions: {
+          position: window.google.maps.ControlPosition.TOP_CENTER,
+          drawingModes: [window.google.maps.drawing.OverlayType.POLYGON],
+        },
+        polygonOptions: {
+          fillColor: "#B69F7D",
+          fillOpacity: 0.4,
+          strokeColor: "#B69F7D",
+          strokeWeight: 2,
+          clickable: true,
+          editable: true,
+          draggable: true,
+        },
+      });
     }
   }, [isLoaded]);
 
@@ -86,6 +104,10 @@ function Map({
 
   if (loadError) {
     return <div>Error loading maps</div>;
+  }
+
+  if (!isLoaded) {
+    return <div>Loading maps...</div>;
   }
 
   return (
@@ -110,25 +132,10 @@ function Map({
         />
       ))}
 
-      {showDrawingTools && (
+      {showDrawingTools && drawingOptions && (
         <DrawingManager
           onPolygonComplete={handlePolygonComplete}
-          options={{
-            drawingControl: true,
-            drawingControlOptions: {
-              position: google.maps.ControlPosition.TOP_CENTER,
-              drawingModes: [google.maps.drawing.OverlayType.POLYGON],
-            },
-            polygonOptions: {
-              fillColor: "#B69F7D",
-              fillOpacity: 0.4,
-              strokeColor: "#B69F7D",
-              strokeWeight: 2,
-              clickable: true,
-              editable: true,
-              draggable: true,
-            },
-          }}
+          options={drawingOptions}
         />
       )}
 

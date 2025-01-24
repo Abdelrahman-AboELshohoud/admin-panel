@@ -187,32 +187,35 @@ export default function Copouns() {
     t("promotions.status"),
     t("common.actions"),
   ];
-  console.log(coupons);
-  const rows = coupons.map((coupon) => [
-    coupon?.code || "-",
-    coupon?.title || "-",
-    moment(coupon?.startAt || "").format("ll"),
-    moment(coupon?.expireAt || "").format("ll"),
-    <span className={coupon?.isEnabled ? "text-green-500" : "text-red-500"}>
-      {coupon?.isEnabled ? t("common.active") : t("common.inactive")}
-    </span>,
-    <div className="space-x-2">
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={() => handleEditCoupon(coupon)}
-      >
-        {t("common.edit")}
-      </Button>
-      <Button
-        variant="destructive"
-        size="sm"
-        onClick={() => handleDeleteCoupon(coupon?.id || "")}
-      >
-        {t("common.delete")}
-      </Button>
-    </div>,
-  ]);
+
+  const rows = coupons.map((coupon) => ({
+    data: [
+      coupon?.code || "-",
+      coupon?.title || "-",
+      moment(coupon?.startAt || "").format("ll"),
+      moment(coupon?.expireAt || "").format("ll"),
+      <span className={coupon?.isEnabled ? "text-green-500" : "text-red-500"}>
+        {coupon?.isEnabled ? t("common.active") : t("common.inactive")}
+      </span>,
+      <div className="space-x-2">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => handleEditCoupon(coupon)}
+        >
+          {t("common.edit")}
+        </Button>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => handleDeleteCoupon(coupon?.id || "")}
+        >
+          {t("common.delete")}
+        </Button>
+      </div>,
+    ],
+    id: coupon.id,
+  }));
 
   return (
     <div>

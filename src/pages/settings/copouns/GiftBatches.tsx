@@ -133,30 +133,33 @@ export default function GiftBatches() {
           t("promotions.expireAt"),
           t("common.actions"),
         ]}
-        rows={giftBatches.map((batch) => [
-          batch.name,
-          `${batch.amount} ${batch.currency}`,
-          batch?.totalUnused[0]?.count?.id,
-          batch?.totalUsed[0]?.count?.id,
-          <>
-            {moment(batch.availableFrom).format("DD.MM.YYYY HH:mm")}
-            <br />
-            {moment(batch.availableFrom).format("HH:mm A")}
-          </>,
-          <>
-            {moment(batch.expireAt).format("DD.MM.YYYY HH:mm")}
-            <br />
-            {moment(batch.expireAt).format("HH:mm A")}
-          </>,
-          <Button
-            variant="outline"
-            size="sm"
-            className="text-gray-700"
-            onClick={() => handleExportGiftBatch(batch.id)}
-          >
-            {t("common.export")}
-          </Button>,
-        ])}
+        rows={giftBatches.map((batch) => ({
+          id: batch.id,
+          data: [
+            batch.name,
+            `${batch.amount} ${batch.currency}`,
+            batch?.totalUnused[0]?.count?.id,
+            batch?.totalUsed[0]?.count?.id,
+            <>
+              {moment(batch.availableFrom).format("DD.MM.YYYY HH:mm")}
+              <br />
+              {moment(batch.availableFrom).format("HH:mm A")}
+            </>,
+            <>
+              {moment(batch.expireAt).format("DD.MM.YYYY HH:mm")}
+              <br />
+              {moment(batch.expireAt).format("HH:mm A")}
+            </>,
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-gray-700"
+              onClick={() => handleExportGiftBatch(batch.id)}
+            >
+              {t("common.export")}
+            </Button>,
+          ],
+        }))}
         navigate={() => {}}
       />
 

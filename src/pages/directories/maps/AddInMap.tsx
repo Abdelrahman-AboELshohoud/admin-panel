@@ -125,74 +125,79 @@ export default function AddRegionDialog({
       isOpen={isOpen}
       onOpenChange={onClose}
       showCloseButton={false}
-      className="max-w-4xl"
+      className="max-w-3xl"
     >
-      <div className="flex flex-col h-full">
-        <div className="grid grid-cols-2 gap-6 flex-grow">
-          <div className="space-y-4">
-            <div className="flex gap-2">
-              <Button
-                onClick={() => setIsEditing(!isEditing)}
-                variant={isEditing ? "default" : "outline"}
-              >
-                {isEditing ? t("common.stopEditing") : t("common.startEditing")}
-              </Button>
-              <Button variant="destructive" onClick={clearPolygon}>
-                {t("common.clear")}
-              </Button>
+      <div className="flex flex-col max-h-[80vh]">
+        <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setIsEditing(!isEditing)}
+                  variant={isEditing ? "default" : "outline"}
+                  size="sm"
+                >
+                  {isEditing
+                    ? t("common.stopEditing")
+                    : t("common.startEditing")}
+                </Button>
+                <Button variant="destructive" size="sm" onClick={clearPolygon}>
+                  {t("common.clear")}
+                </Button>
+              </div>
+
+              <div className="h-[400px]">
+                <MapComponent
+                  points={formData.points}
+                  isEditing={isEditing}
+                  onPolygonChange={handlePolygonChange}
+                  onClick={handleMapClick}
+                />
+              </div>
             </div>
 
-            <div className="h-[500px]">
-              <MapComponent
-                points={formData.points}
-                isEditing={isEditing}
-                onPolygonChange={handlePolygonChange}
-                onClick={handleMapClick}
-              />
-            </div>
-          </div>
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">
+                  {t("regions.name")}
+                </label>
+                <Input
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                />
+              </div>
 
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">
-                {t("regions.name")}
-              </label>
-              <Input
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-              />
-            </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">
+                  {t("regions.currency")}
+                </label>
+                <Input
+                  value={formData.currency}
+                  onChange={(e) =>
+                    setFormData({ ...formData, currency: e.target.value })
+                  }
+                />
+              </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-1">
-                {t("regions.currency")}
-              </label>
-              <Input
-                value={formData.currency}
-                onChange={(e) =>
-                  setFormData({ ...formData, currency: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="flex items-center gap-4">
-              <label className="text-sm font-medium text-gray-400">
-                {t("regions.enabled")}
-              </label>
-              <Switch
-                disabled={false}
-                checked={formData.enabled}
-                onChange={(checked) =>
-                  setFormData({ ...formData, enabled: checked })
-                }
-              />
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-medium text-gray-400">
+                  {t("regions.enabled")}
+                </label>
+                <Switch
+                  disabled={false}
+                  checked={formData.enabled}
+                  onChange={(checked) =>
+                    setFormData({ ...formData, enabled: checked })
+                  }
+                />
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex justify-end gap-2 mt-6 pt-4 border-t border-gray-700">
+        <div className="flex justify-end gap-2 mt-4 pt-4 border-t border-gray-700">
           <Button variant="outline" onClick={onClose} disabled={isSubmitting}>
             {t("common.cancel")}
           </Button>

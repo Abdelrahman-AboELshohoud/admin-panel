@@ -1,4 +1,6 @@
+import { ReactNode } from "react";
 import MyTable from "./MyTable";
+
 
 export default function MyTableWithHeader({
   Header,
@@ -8,7 +10,10 @@ export default function MyTableWithHeader({
 }: {
   Header: React.FC;
   headers: string[];
-  rows: any[];
+  rows: {
+    data: ReactNode | string | number | undefined;
+    id?: string;
+  }[];
   navigate: (id?: string) => void;
 }) {
   return (

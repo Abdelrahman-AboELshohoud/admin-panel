@@ -196,6 +196,7 @@ export default function ZonesPrices() {
         <Button
           variant="outline"
           size="sm"
+          className="text-gray-600 hover:text-gray-700"
           onClick={() => {
             setSelectedZone(zone);
             setIsEditing(true);

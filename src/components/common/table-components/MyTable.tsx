@@ -15,7 +15,7 @@ export default function MyTable({
 }: {
   headers: string[];
   rows: {
-    data: ReactNode | string | number;
+    data: ReactNode | string | number | undefined;
     id?: string;
   }[];
   navigate?: (id?: string) => void;

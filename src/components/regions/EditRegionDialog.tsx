@@ -95,80 +95,84 @@ export default function EditRegionDialog({
       isOpen={isOpen}
       onOpenChange={onClose}
       showCloseButton={false}
-      className="max-w-4xl"
+      className="max-w-3xl"
     >
-      <div className="grid grid-cols-2 gap-6">
-        <div className="space-y-4">
-          <div className="flex gap-2 justify-between">
-            <Button variant="destructive" onClick={clearPolygon}>
-              {t("common.clear")}
-            </Button>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-400">
-                {t("regions.showOnMap")}
-              </span>
-              <Switch
-                disabled={false}
-                checked={isVisible}
-                onChange={() => setIsVisible(!isVisible)}
-              />
-            </div>
-          </div>
+      <div className="flex flex-col max-h-[80vh]">
+        <div className="flex-1 overflow-y-auto custom-scrollbar pr-2">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="flex gap-2 justify-between">
+                <Button variant="destructive" onClick={clearPolygon}>
+                  {t("common.clear")}
+                </Button>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-400">
+                    {t("regions.showOnMap")}
+                  </span>
+                  <Switch
+                    disabled={false}
+                    checked={isVisible}
+                    onChange={() => setIsVisible(!isVisible)}
+                  />
+                </div>
+              </div>
 
-          <div className="h-[500px]">
-            <MapComponent
-              points={points}
-              isEditing={true}
-              onPolygonChange={handlePolygonChange}
-              onClick={handleMapClick}
-            />
+              <div className="h-[400px]">
+                <MapComponent
+                  points={points}
+                  isEditing={true}
+                  onPolygonChange={handlePolygonChange}
+                  onClick={handleMapClick}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">
+                  {t("regions.name")}
+                </label>
+                <Input
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-400 mb-1">
+                  {t("regions.currency")}
+                </label>
+                <Input
+                  value={formData.currency}
+                  onChange={(e) =>
+                    setFormData({ ...formData, currency: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="flex items-center gap-4">
+                <label className="text-sm font-medium text-gray-400">
+                  {t("regions.enabled")}
+                </label>
+                <Switch
+                  disabled={false}
+                  checked={formData.enabled}
+                  onChange={(checked) =>
+                    setFormData({ ...formData, enabled: checked })
+                  }
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">
-              {t("regions.name")}
-            </label>
-            <Input
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-400 mb-1">
-              {t("regions.currency")}
-            </label>
-            <Input
-              value={formData.currency}
-              onChange={(e) =>
-                setFormData({ ...formData, currency: e.target.value })
-              }
-            />
-          </div>
-
-          <div className="flex items-center gap-4">
-            <label className="text-sm font-medium text-gray-400">
-              {t("regions.enabled")}
-            </label>
-            <Switch
-              disabled={false}
-              checked={formData.enabled}
-              onChange={(checked) =>
-                setFormData({ ...formData, enabled: checked })
-              }
-            />
-          </div>
-
-          <div className="flex justify-end gap-2 mt-auto pt-6">
-            <Button variant="outline" onClick={onClose}>
-              {t("common.cancel")}
-            </Button>
-            <Button onClick={handleSubmit}>{t("common.save")}</Button>
-          </div>
+        <div className="flex justify-end gap-2 mt-4 pt-4 border-t border-gray-700">
+          <Button variant="outline" onClick={onClose}>
+            {t("common.cancel")}
+          </Button>
+          <Button onClick={handleSubmit}>{t("common.save")}</Button>
         </div>
       </div>
     </MyDialog>
