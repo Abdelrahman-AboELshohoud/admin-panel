@@ -8,32 +8,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../ui/select";
-import { Tabs, TabsList, TabsTrigger } from "../../ui/tabs";
 import { Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Pagination from "../../common/table-components/Pagination";
 import MyTable from "../../common/table-components/MyTable";
-
-enum FleetStatus {
-  Active = "Active",
-  Blocked = "Blocked",
-}
-
-interface Fleet {
-  id: string;
-  name: string;
-  address: string;
-  phoneNumber: string;
-  status: FleetStatus;
-  accountNumber: string;
-  commissionSharePercent: number;
-  commissionShareFlat: number;
-}
+import { Fleet, FleetFilter, FleetsListGQL } from "../../../graphql/requests";
 
 interface FleetFilters {
-  status: FleetStatus | "all";
-  city: string;
+  filter?: FleetFilter;
   search: string;
   page: number;
   limit: number;
@@ -46,8 +29,7 @@ export default function DriversGroups() {
   const [fleets, setFleets] = useState<Fleet[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [filters, setFilters] = useState<FleetFilters>({
-    status: "all",
-    city: "all",
+    filter: undefined,
     search: "",
     page: 1,
     limit: 10,
@@ -56,31 +38,22 @@ export default function DriversGroups() {
   const fetchFleets = async () => {
     try {
       setLoading(true);
-      // Filter mock data based on filters
-      let filteredFleets = [...fleets];
+      const response = await FleetsListGQL({
+        paging: {
+          offset: (filters.page - 1) * filters.limit,
+          limit: filters.limit,
+        },
+        filter: filters.filter,
+      });
 
-      if (filters.status !== "all") {
-        filteredFleets = filteredFleets.filter(
-          (fleet) => fleet.status === filters.status
+      if (response.data?.fleets) {
+        const filteredFleets = response.data.fleets.nodes.filter(
+          (fleet: Fleet) =>
+            fleet.name.toLowerCase().includes(filters.search.toLowerCase())
         );
+        setFleets(filteredFleets);
+        setTotalCount(response.data.fleets.totalCount);
       }
-
-      if (filters.city !== "all") {
-        filteredFleets = filteredFleets.filter((fleet) =>
-          fleet.address.toLowerCase().includes(filters.city.toLowerCase())
-        );
-      }
-
-      if (filters.search) {
-        filteredFleets = filteredFleets.filter(
-          (fleet) =>
-            fleet.name.toLowerCase().includes(filters.search.toLowerCase()) ||
-            fleet.phoneNumber.includes(filters.search)
-        );
-      }
-
-      setFleets(filteredFleets);
-      setTotalCount(filteredFleets.length);
     } catch (error) {
       console.error("Error fetching fleets:", error);
     } finally {
@@ -92,13 +65,9 @@ export default function DriversGroups() {
     fetchFleets();
   }, [filters]);
 
-  const handleTabChange = (value: FleetStatus | "all") => {
-    setFilters((prev: FleetFilters) => ({ ...prev, status: value, page: 1 }));
-  };
-
   const handleFilterChange = (
     key: keyof FleetFilters,
-    value: string | number
+    value: string | number | FleetFilter | undefined
   ) => {
     setFilters((prev: FleetFilters) => ({ ...prev, [key]: value }));
   };
@@ -114,7 +83,7 @@ export default function DriversGroups() {
     id: fleet.id,
     data: [
       fleet.name,
-      fleet.address,
+      fleet.address || "",
       fleet.phoneNumber,
       `${fleet.commissionSharePercent}% + ${fleet.commissionShareFlat}`,
     ],
@@ -132,39 +101,15 @@ export default function DriversGroups() {
         </Button>
       </div>
 
-      <Tabs
-        value={filters.status}
-        onValueChange={(value: string) =>
-          handleTabChange(value as FleetStatus | "all")
-        }
-        className="w-full"
-      >
-        <TabsList className="bg-transparent flex justify-start gap-4 mb-6">
-          <TabsTrigger
-            value="all"
-            className="bg-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-          >
-            {t("all")}
-          </TabsTrigger>
-          <TabsTrigger
-            value={FleetStatus.Active}
-            className="bg-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-          >
-            {t("active")}
-          </TabsTrigger>
-          <TabsTrigger
-            value={FleetStatus.Blocked}
-            className="bg-transparent px-4 py-2 data-[state=active]:bg-transparent data-[state=active]:text-slate-300 text-quaternary"
-          >
-            {t("blocked")}
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
-
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
         <Select
-          value={filters.city}
-          onValueChange={(value) => handleFilterChange("city", value)}
+          value={filters.filter?.name?.eq || "all"}
+          onValueChange={(value) =>
+            handleFilterChange(
+              "filter",
+              value === "all" ? undefined : { name: { eq: value } }
+            )
+          }
         >
           <SelectTrigger className="custom-input">
             <SelectValue placeholder={t("common.allCities")} />

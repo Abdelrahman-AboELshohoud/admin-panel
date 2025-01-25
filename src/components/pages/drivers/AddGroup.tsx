@@ -60,20 +60,24 @@ const DriverForm: React.FC = () => {
 
       const lat = e.latLng.lat();
       const lng = e.latLng.lng();
+      console.log("Map clicked at:", { lat, lng });
       setPoints((prev) => [...prev, { lat, lng }]);
     },
     [isEditing]
   );
 
   const handlePolygonChange = useCallback((newPoints: Point[]) => {
+    console.log("Polygon points updated:", newPoints);
     setPoints(newPoints);
   }, []);
 
   const clearPolygon = useCallback(() => {
+    console.log("Clearing polygon points");
     setPoints([]);
   }, []);
 
   const validateForm = (): boolean => {
+    console.log("Validating form data:", formData);
     const newErrors: FormErrors = {};
 
     if (!formData.input.name) {
@@ -127,6 +131,7 @@ const DriverForm: React.FC = () => {
       newErrors.password = t("formErrors.passwordTooShort");
     }
 
+    console.log("Form validation errors:", newErrors);
     setErrors(newErrors);
     const isValid = Object.keys(newErrors).length === 0;
     if (!isValid) {
@@ -137,6 +142,7 @@ const DriverForm: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
+    console.log("Input changed:", { id, value });
     setFormData((prevData) => ({
       ...prevData,
       input: {
@@ -155,6 +161,7 @@ const DriverForm: React.FC = () => {
   const handleNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     const numericValue = value.replace(/[^\d.]/g, "");
+    console.log("Number input changed:", { id, value, numericValue });
     setFormData((prevData) => ({
       ...prevData,
       input: {
@@ -172,12 +179,15 @@ const DriverForm: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Form submission started");
 
     if (!validateForm()) {
+      console.log("Form validation failed");
       return;
     }
 
     if (points.length < 3) {
+      console.log("Invalid area: not enough points", points);
       toast.error(t("messages.invalidArea"));
       return;
     }
@@ -189,6 +199,7 @@ const DriverForm: React.FC = () => {
       (points[0].lat !== points[points.length - 1].lat ||
         points[0].lng !== points[points.length - 1].lng)
     ) {
+      console.log("Closing polygon by adding first point to end");
       areaPoints.push(points[0]);
     }
 
@@ -197,16 +208,24 @@ const DriverForm: React.FC = () => {
       const timestamp = new Date().getTime();
       const randomStr = Math.random().toString(36).substring(7);
 
+      console.log("Submitting fleet data with unique identifiers:", {
+        timestamp,
+        randomStr,
+      });
+
       const response = await CreateFleetGQL({
         input: {
           ...formData.input,
-          userName: `${formData.input.userName}_${timestamp}`, // Make username unique
-          accountNumber: `${formData.input.accountNumber}_${randomStr}`, // Make account number unique
+          userName: `${formData.input.userName}_${timestamp}`,
+          accountNumber: `${formData.input.accountNumber}_${randomStr}`,
           exclusivityAreas: [areaPoints],
         },
       });
 
+      console.log("CreateFleetGQL response:", response);
+
       if (response.data?.createFleet) {
+        console.log("Fleet created successfully");
         toast.success(t("messages.successCreatingFleet"));
         // Reset form
         setFormData({
@@ -226,12 +245,15 @@ const DriverForm: React.FC = () => {
         setPoints([]);
         return;
       }
+      console.log("Fleet creation failed without error");
       toast.error(t("messages.errorCreatingFleet"));
     } catch (error: any) {
       console.error("Error creating fleet:", error);
       if (error.message?.includes("ER_DUP_ENTRY")) {
+        console.log("Duplicate entry error detected");
         toast.error(t("messages.duplicateEntry"));
       } else {
+        console.log("Generic error occurred");
         toast.error(t("messages.errorCreatingFleet"));
       }
     }
