@@ -1905,7 +1905,9 @@
     "accountRequired": "Account number is required",
     "usernameRequired": "Username is required",
     "passwordRequired": "Password is required",
-    "passwordTooShort": "Password must be at least 8 characters long"
+    "passwordTooShort": "Password must be at least 8 characters long",
+    "invalidUsername": "Username must contain only letters and numbers",
+    "invalidAccountNumber": "Account number must contain only numbers"
   },
   "messages": {
     "errorCreatingFleet": "Failed to create fleet",
@@ -1916,7 +1918,9 @@
     "successCreatingDriver": "Driver created successfully",
     "successCreatingGroup": "Group created successfully",
     "successCreatingFleetGroup": "Fleet group created successfully",
-    "formValidationError": "Please fill in all required fields"
+    "formValidationError": "Please fill in all required fields",
+    "duplicateEntry": "A fleet with these details already exists",
+    "invalidArea": "Please draw a valid area on the map (minimum 3 points)"
   },
   "payment": {
     "title": "Payment",

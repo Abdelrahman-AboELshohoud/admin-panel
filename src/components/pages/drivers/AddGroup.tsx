@@ -1,13 +1,20 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "../../ui/button";
 import { Card, CardContent, CardFooter } from "../../ui/card";
 import { Input } from "../../ui/input";
+import { useLoadScript } from "@react-google-maps/api";
+import MapComponent from "../../regions/MapComponent";
 import {
   CreateFleetGQL,
   CreateFleetMutationVariables,
 } from "../../../graphql/requests";
 import { toast } from "react-hot-toast";
+
+interface Point {
+  lat: number;
+  lng: number;
+}
 
 interface FormErrors {
   name?: string;
@@ -24,6 +31,9 @@ interface FormErrors {
 const DriverForm: React.FC = () => {
   const { t } = useTranslation();
   const [errors, setErrors] = useState<FormErrors>({});
+  const [isEditing, setIsEditing] = useState(true);
+  const [points, setPoints] = useState<Point[]>([]);
+
   const [formData, setFormData] = useState<CreateFleetMutationVariables>({
     input: {
       name: "",
@@ -38,6 +48,30 @@ const DriverForm: React.FC = () => {
       userName: "",
     },
   });
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries: ["drawing", "geometry"],
+  });
+
+  const handleMapClick = useCallback(
+    (e: google.maps.MapMouseEvent) => {
+      if (!e.latLng || !isEditing) return;
+
+      const lat = e.latLng.lat();
+      const lng = e.latLng.lng();
+      setPoints((prev) => [...prev, { lat, lng }]);
+    },
+    [isEditing]
+  );
+
+  const handlePolygonChange = useCallback((newPoints: Point[]) => {
+    setPoints(newPoints);
+  }, []);
+
+  const clearPolygon = useCallback(() => {
+    setPoints([]);
+  }, []);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -77,10 +111,14 @@ const DriverForm: React.FC = () => {
 
     if (!formData.input.accountNumber) {
       newErrors.accountNumber = t("formErrors.accountRequired");
+    } else if (!/^\d+$/.test(formData.input.accountNumber)) {
+      newErrors.accountNumber = t("formErrors.invalidAccountNumber");
     }
 
     if (!formData.input.userName) {
       newErrors.userName = t("formErrors.usernameRequired");
+    } else if (!/^[a-zA-Z0-9]+$/.test(formData.input.userName)) {
+      newErrors.userName = t("formErrors.invalidUsername");
     }
 
     if (!formData.input.password) {
@@ -139,11 +177,36 @@ const DriverForm: React.FC = () => {
       return;
     }
 
+    if (points.length < 3) {
+      toast.error(t("messages.invalidArea"));
+      return;
+    }
+
+    // Ensure polygon is closed
+    let areaPoints = [...points];
+    if (
+      points.length >= 3 &&
+      (points[0].lat !== points[points.length - 1].lat ||
+        points[0].lng !== points[points.length - 1].lng)
+    ) {
+      areaPoints.push(points[0]);
+    }
+
     try {
+      // Generate unique identifiers using timestamp and random string
+      const timestamp = new Date().getTime();
+      const randomStr = Math.random().toString(36).substring(7);
+
       const response = await CreateFleetGQL({
-        input: formData.input,
+        input: {
+          ...formData.input,
+          userName: `${formData.input.userName}_${timestamp}`, // Make username unique
+          accountNumber: `${formData.input.accountNumber}_${randomStr}`, // Make account number unique
+          exclusivityAreas: [areaPoints],
+        },
       });
-      if (response.statusCode === 200) {
+
+      if (response.data?.createFleet) {
         toast.success(t("messages.successCreatingFleet"));
         // Reset form
         setFormData({
@@ -160,107 +223,154 @@ const DriverForm: React.FC = () => {
             userName: "",
           },
         });
+        setPoints([]);
         return;
       }
       toast.error(t("messages.errorCreatingFleet"));
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error creating fleet:", error);
-      toast.error(t("messages.errorCreatingFleet"));
+      if (error.message?.includes("ER_DUP_ENTRY")) {
+        toast.error(t("messages.duplicateEntry"));
+      } else {
+        toast.error(t("messages.errorCreatingFleet"));
+      }
     }
   };
 
   return (
     <div className="p-6 space-y-6">
       <h3 className="text-2xl text-white mb-4">{t("addGroup.title")}</h3>
-      <Card className="w-1/2 bg-zinc-900 text-white card-shape border-none">
+      <Card className="w-full bg-zinc-900 text-white card-shape border-none">
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-6">
-            <FormField
-              label={t("formFields.name")}
-              id="name"
-              value={formData.input.name}
-              onChange={handleInputChange}
-              placeholder=" John Smith"
-              error={errors.name}
-            />
+            <div className="grid grid-cols-2 gap-6">
+              <div className="space-y-6">
+                {/* Map Section */}
+                <div className="space-y-4">
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      onClick={() => setIsEditing(!isEditing)}
+                      variant={isEditing ? "default" : "outline"}
+                      size="sm"
+                    >
+                      {isEditing
+                        ? t("common.stopEditing")
+                        : t("common.startEditing")}
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      onClick={clearPolygon}
+                    >
+                      {t("common.clear")}
+                    </Button>
+                  </div>
 
-            <FormField
-              label={t("formFields.phoneNumber")}
-              id="phoneNumber"
-              value={formData.input.phoneNumber}
-              onChange={handleInputChange}
-              placeholder=" +1 234 567 8900"
-              error={errors.phoneNumber}
-            />
+                  <div className="h-[400px] bg-zinc-800 rounded-lg overflow-hidden">
+                    {isLoaded && (
+                      <MapComponent
+                        points={points}
+                        isEditing={isEditing}
+                        onPolygonChange={handlePolygonChange}
+                        onClick={handleMapClick}
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
 
-            <FormField
-              label={t("formFields.address")}
-              id="address"
-              value={formData.input.address || ""}
-              onChange={handleInputChange}
-              placeholder=" 123 Main St, City, Country"
-              error={errors.address}
-            />
+              <div className="space-y-6">
+                {/* Existing Form Fields */}
+                <FormField
+                  label={t("formFields.name")}
+                  id="name"
+                  value={formData.input.name}
+                  onChange={handleInputChange}
+                  placeholder=" John Smith"
+                  error={errors.name}
+                />
 
-            <FormField
-              label={t("formFields.commissionSharePercent")}
-              id="commissionSharePercent"
-              value={formData.input.commissionSharePercent.toString()}
-              onChange={handleNumberChange}
-              type="number"
-              placeholder=" 15"
-              error={errors.commissionSharePercent}
-              suffix="%"
-            />
+                <FormField
+                  label={t("formFields.phoneNumber")}
+                  id="phoneNumber"
+                  value={formData.input.phoneNumber}
+                  onChange={handleInputChange}
+                  placeholder=" +1 234 567 8900"
+                  error={errors.phoneNumber}
+                />
 
-            <FormField
-              label={t("formFields.commissionShareFlat")}
-              id="commissionShareFlat"
-              value={formData.input.commissionShareFlat.toString()}
-              onChange={handleNumberChange}
-              type="number"
-              placeholder=" 5.00"
-              error={errors.commissionShareFlat}
-            />
+                <FormField
+                  label={t("formFields.address")}
+                  id="address"
+                  value={formData.input.address || ""}
+                  onChange={handleInputChange}
+                  placeholder=" 123 Main St, City, Country"
+                  error={errors.address}
+                />
 
-            <FormField
-              label={t("formFields.mobileNumber")}
-              id="mobileNumber"
-              value={formData.input.mobileNumber}
-              onChange={handleInputChange}
-              type="number"
-              placeholder=" +1 234 567 8900"
-              error={errors.mobileNumber}
-            />
+                <FormField
+                  label={t("formFields.commissionSharePercent")}
+                  id="commissionSharePercent"
+                  value={formData.input.commissionSharePercent.toString()}
+                  onChange={handleNumberChange}
+                  type="number"
+                  placeholder=" 15"
+                  error={errors.commissionSharePercent}
+                  suffix="%"
+                />
 
-            <FormField
-              label={t("formFields.accountNumber")}
-              id="accountNumber"
-              value={formData.input.accountNumber}
-              onChange={handleInputChange}
-              placeholder=" 1234567890"
-              type="number"
-              error={errors.accountNumber}
-            />
+                <FormField
+                  label={t("formFields.commissionShareFlat")}
+                  id="commissionShareFlat"
+                  value={formData.input.commissionShareFlat.toString()}
+                  onChange={handleNumberChange}
+                  type="number"
+                  placeholder=" 5.00"
+                  error={errors.commissionShareFlat}
+                />
 
-            <FormField
-              label={t("formFields.userName")}
-              id="userName"
-              value={formData.input.userName}
-              onChange={handleInputChange}
-              placeholder=" johnsmith123"
-              error={errors.userName}
-            />
+                <FormField
+                  label={t("formFields.mobileNumber")}
+                  id="mobileNumber"
+                  value={formData.input.mobileNumber}
+                  onChange={handleInputChange}
+                  type="number"
+                  placeholder=" +1 234 567 8900"
+                  error={errors.mobileNumber}
+                />
 
-            <FormField
-              label={t("formFields.password")}
-              id="password"
-              value={formData.input.password}
-              onChange={handleInputChange}
-              type="password"
-              placeholder=" StrongP@ssw0rd"
-              error={errors.password}
-            />
+                <FormField
+                  label={t("formFields.accountNumber")}
+                  id="accountNumber"
+                  value={formData.input.accountNumber}
+                  onChange={handleInputChange}
+                  placeholder=" 1234567890"
+                  type="number"
+                  error={errors.accountNumber}
+                />
+
+                <FormField
+                  label={t("formFields.userName")}
+                  id="userName"
+                  value={formData.input.userName}
+                  onChange={handleInputChange}
+                  placeholder=" johnsmith123"
+                  error={errors.userName}
+                />
+
+                <FormField
+                  label={t("formFields.password")}
+                  id="password"
+                  value={formData.input.password}
+                  onChange={handleInputChange}
+                  type="password"
+                  placeholder=" StrongP@ssw0rd"
+                  error={errors.password}
+                />
+              </div>
+            </div>
           </CardContent>
           <CardFooter>
             <Button

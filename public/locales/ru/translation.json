@@ -1901,7 +1901,9 @@
     "accountRequired": "Необходимо указать номер счета",
     "usernameRequired": "Необходимо указать имя пользователя",
     "passwordRequired": "Необходимо указать пароль",
-    "passwordTooShort": "Пароль должен быть не менее 8 символов"
+    "passwordTooShort": "Пароль должен быть не менее 8 символов",
+    "invalidUsername": "Имя пользователя должно содержать только буквы и цифры",
+    "invalidAccountNumber": "Номер счета должен содержать только цифры"
   },
   "messages": {
     "errorCreatingFleet": "Не удалось создать автопарк",
@@ -1912,7 +1914,9 @@
     "successCreatingDriver": "Водитель успешно создан",
     "successCreatingGroup": "Группа успешно создана",
     "successCreatingFleetGroup": "Группа автопарка успешно создана",
-    "formValidationError": "Пожалуйста, заполните все обязательные поля"
+    "formValidationError": "Пожалуйста, заполните все обязательные поля",
+    "duplicateEntry": "Автопарк с такими данными уже существует",
+    "invalidArea": "Пожалуйста, нарисуйте корректную зону на карте (минимум 3 точки)"
   },
   "payment": {
     "title": "Оплата",
