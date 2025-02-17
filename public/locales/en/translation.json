@@ -1884,7 +1884,22 @@
       "revenue": "Revenue",
       "transactions": "Transactions",
       "noTransactions": "No transactions found",
-      "createTransaction": "Create Transaction"
+      "createTransaction": "Create Transaction",
+      "newTransaction": "New Transaction",
+      "action": "Action",
+      "amount": "Amount",
+      "currency": "Currency",
+      "rechargeType": "Recharge Type",
+      "deductType": "Deduct Type",
+      "reference": "Reference Number",
+      "description": "Description",
+      "recharge": "Recharge",
+      "deduct": "Deduct",
+      "bankTransfer": "Bank Transfer",
+      "cash": "Cash",
+      "creditCard": "Credit Card",
+      "withdrawal": "Withdrawal",
+      "serviceFee": "Service Fee"
     }
   },
   "driversWallets": {

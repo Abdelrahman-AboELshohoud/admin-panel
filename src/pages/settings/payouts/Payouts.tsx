@@ -113,43 +113,46 @@ export default function Payouts() {
     t("payouts.table.actions"),
   ];
 
-  const rows = payoutSessions.map((session) => [
-    format(new Date(session.createdAt), "PPp"),
-    `${session.totalAmount} ${session.currency}`,
-    session.status,
-    <div className="flex gap-2">
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => {
-          setSelectedSession(session);
-          setShowSessionDialog(true);
-        }}
-      >
-        {t("common.view")}
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => {
-          setSelectedSession(session);
-          setShowAutoPayoutDialog(true);
-        }}
-      >
-        {t("payouts.autoPayout")}
-      </Button>
-      <Button
-        variant="outline"
-        size="sm"
-        onClick={() => {
-          setSelectedSessionId(session.id);
-          setShowTransactionsDialog(true);
-        }}
-      >
-        {t("payouts.viewTransactions")}
-      </Button>
-    </div>,
-  ]);
+  const rows = payoutSessions.map((session) => ({
+    id: session.id,
+    data: [
+      format(new Date(session.createdAt), "PPp"),
+      `${session.totalAmount} ${session.currency}`,
+      session.status,
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setSelectedSession(session);
+            setShowSessionDialog(true);
+          }}
+        >
+          {t("common.view")}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setSelectedSession(session);
+            setShowAutoPayoutDialog(true);
+          }}
+        >
+          {t("payouts.autoPayout")}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            setSelectedSessionId(session.id);
+            setShowTransactionsDialog(true);
+          }}
+        >
+          {t("payouts.viewTransactions")}
+        </Button>
+      </div>,
+    ],
+  }));
 
   return (
     <div className="space-y-4">

@@ -30,6 +30,13 @@ import { Bar } from "react-chartjs-2";
 import { FleetTransactionDialog } from "../../components/FleetTransactionDialog";
 import MyTable from "../../components/common/table-components/MyTable";
 import MyTabs from "../../components/common/MyTabs";
+import {
+  GoogleMap,
+  LoadScript,
+  Polygon,
+  DrawingManager,
+  Marker,
+} from "@react-google-maps/api";
 
 // Register Chart.js components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
@@ -54,10 +61,24 @@ type FleetFinancialsData = {
       currency: string;
       balance: number;
     }>;
+    areas?: Array<{
+      coordinates: Array<{ lat: number; lng: number }>;
+    }>;
   };
   regions: {
     nodes: Array<{ currency: string }>;
   };
+};
+
+const mapContainerStyle = {
+  width: "100%",
+  height: "400px",
+};
+
+// Default center coordinates for Kazan
+const defaultCenter = {
+  lat: 55.7887,
+  lng: 49.1221,
 };
 
 const getChartData = (financials: FleetFinancialsData | undefined) => {
@@ -98,7 +119,12 @@ export default function Fleet() {
     FleetDriversQuery["drivers"]["nodes"]
   >([]);
   const [fleetFinancials, setFleetFinancials] = useState<FleetFinancialsData>();
-  const [_activeTab, setActiveTab] = useState("details");
+  const [activeTab, setActiveTab] = useState("details");
+  const [areas, setAreas] = useState<
+    Array<Array<{ lat: number; lng: number }>>
+  >([]);
+  const [mapCenter, setMapCenter] = useState(defaultCenter);
+  const [mapKey, setMapKey] = useState(0); // Add key for map rerender
   const [formData, setFormData] = useState<FleetInput>({
     name: "",
     address: "",
@@ -134,6 +160,18 @@ export default function Fleet() {
           password: fleetResponse.data.fleet.password || "",
           userName: fleetResponse.data.fleet.userName || "",
         });
+        if (fleetResponse.data.fleet.areas) {
+          const newAreas = fleetResponse.data.fleet.areas.map(
+            (area: any) => area.coordinates
+          );
+          setAreas(newAreas);
+          // Set map center to first point of first area if exists
+          if (newAreas.length > 0 && newAreas[0].length > 0) {
+            setMapCenter(newAreas[0][0]);
+          } else {
+            setMapCenter(defaultCenter); // Fallback to Kazan if no areas
+          }
+        }
       }
 
       if (driversResponse.data?.drivers.nodes) {
@@ -154,6 +192,29 @@ export default function Fleet() {
       fetchFleetData();
     }
   }, [fleetId]);
+
+  // Add effect to reload map when tab changes to details
+  useEffect(() => {
+    if (activeTab === "details") {
+      setMapKey((prev) => prev + 1);
+    }
+  }, [activeTab]);
+
+  const onPolygonComplete = (polygon: google.maps.Polygon) => {
+    if (!editing) return;
+
+    const path = polygon.getPath();
+    const coordinates = [];
+    for (let i = 0; i < path.getLength(); i++) {
+      const point = path.getAt(i);
+      coordinates.push({
+        lat: point.lat(),
+        lng: point.lng(),
+      });
+    }
+    setAreas([...areas, coordinates]);
+    polygon.setMap(null);
+  };
 
   const validateForm = (): boolean => {
     const newErrors: any = {};
@@ -187,7 +248,15 @@ export default function Fleet() {
 
     await UpdateFleetGQL({
       id: fleetId!,
-      update: formData,
+      update: {
+        ...formData,
+        exclusivityAreas: areas.map((coordinates) =>
+          coordinates.map((point) => ({
+            lat: point.lat,
+            lng: point.lng,
+          }))
+        ),
+      },
     });
   };
 
@@ -208,6 +277,7 @@ export default function Fleet() {
       <h3 className="text-xl font-semibold text-gray-200">
         {t("fleet.fields.details")}
       </h3>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label htmlFor="name">{t("fleet.fields.name")}</label>
@@ -300,6 +370,58 @@ export default function Fleet() {
             <p className="text-sm text-red-500">{errors.commissionShareFlat}</p>
           )}
         </div>
+      </div>
+
+      <div className="mt-6">
+        <h3 className="text-xl font-semibold text-gray-200 mb-4">
+          {t("fleet.fields.areas")}
+        </h3>
+        <LoadScript
+          key={mapKey} // Add key to force reload
+          googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY}
+          libraries={["drawing"]}
+        >
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            center={mapCenter}
+            zoom={10}
+          >
+            {areas.map((areaCoords, areaIndex) => (
+              <>
+                <Polygon
+                  key={`polygon-${areaIndex}`}
+                  paths={areaCoords}
+                  options={{
+                    fillColor: "#3B82F6",
+                    fillOpacity: 0.3,
+                    strokeColor: "#2563EB",
+                    strokeWeight: 2,
+                  }}
+                  editable={editing}
+                />
+                {areaCoords.map((point, pointIndex) => (
+                  <Marker
+                    key={`marker-${areaIndex}-${pointIndex}`}
+                    position={point}
+                    label={(pointIndex + 1).toString()}
+                  />
+                ))}
+              </>
+            ))}
+            {editing && (
+              <DrawingManager
+                onPolygonComplete={onPolygonComplete}
+                options={{
+                  drawingControl: true,
+                  drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_CENTER,
+                    drawingModes: [google.maps.drawing.OverlayType.POLYGON],
+                  },
+                }}
+              />
+            )}
+          </GoogleMap>
+        </LoadScript>
       </div>
 
       <div className="flex justify-end gap-4">

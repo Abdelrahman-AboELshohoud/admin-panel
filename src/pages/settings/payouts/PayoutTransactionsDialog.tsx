@@ -69,12 +69,15 @@ export default function PayoutTransactionsDialog({
     t("payouts.transactions.status"),
   ];
 
-  const rows = transactions.map((transaction) => [
-    format(new Date(transaction.createdAt), "PPp"),
-    `${transaction.driver.firstName} ${transaction.driver.lastName}`,
-    `${transaction.amount} ${transaction.currency}`,
-    transaction.status,
-  ]);
+  const rows = transactions.map((transaction) => ({
+    id: transaction.id,
+    data: [
+      format(new Date(transaction.createdAt), "PPp"),
+      `${transaction.driver.firstName} ${transaction.driver.lastName}`,
+      `${transaction.amount} ${transaction.currency}`,
+      transaction.status,
+    ],
+  }));
 
   return (
     <MyDialog

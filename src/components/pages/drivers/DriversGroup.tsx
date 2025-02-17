@@ -63,6 +63,7 @@ export default function DriversGroups() {
 
   useEffect(() => {
     fetchFleets();
+    console.log("filters", fleets);
   }, [filters]);
 
   const handleFilterChange = (
@@ -85,7 +86,9 @@ export default function DriversGroups() {
       fleet.name,
       fleet.address || "",
       fleet.phoneNumber,
-      `${fleet.commissionSharePercent}% + ${fleet.commissionShareFlat}`,
+      `${fleet.commissionSharePercent || 0}% + ${
+        fleet.commissionShareFlat || 0
+      }`,
     ],
   }));
 

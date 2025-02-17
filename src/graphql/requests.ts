@@ -1351,6 +1351,8 @@ export const FleetsListDocument = gql`
         name
         phoneNumber
         address
+        commissionSharePercent
+        commissionShareFlat
       }
       totalCount
     }

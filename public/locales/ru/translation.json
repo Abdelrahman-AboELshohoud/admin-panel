@@ -1880,7 +1880,22 @@
       "revenue": "Доход",
       "transactions": "Транзакции",
       "noTransactions": "Транзакции не найдены",
-      "createTransaction": "Создать транзакцию"
+      "createTransaction": "Создать транзакцию",
+      "newTransaction": "Новая транзакция",
+      "action": "Действие",
+      "amount": "Сумма",
+      "currency": "Валюта",
+      "rechargeType": "Тип пополнения",
+      "deductType": "Тип списания",
+      "reference": "Номер ссылки",
+      "description": "Описание",
+      "recharge": "Пополнить",
+      "deduct": "Списать",
+      "bankTransfer": "Банковский перевод",
+      "cash": "Наличные",
+      "creditCard": "Кредитная карта",
+      "withdrawal": "Вывод средств",
+      "serviceFee": "Сервисный сбор"
     }
   },
   "driversWallets": {

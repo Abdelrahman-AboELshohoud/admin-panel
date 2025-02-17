@@ -169,10 +169,19 @@ export default function EditRegionDialog({
         </div>
 
         <div className="flex justify-end gap-2 mt-4 pt-4 border-t border-gray-700">
-          <Button variant="outline" onClick={onClose}>
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="text-gray-600 hover:text-gray-600"
+          >
             {t("common.cancel")}
           </Button>
-          <Button onClick={handleSubmit}>{t("common.save")}</Button>
+          <Button
+            onClick={handleSubmit}
+            className="text-gray-400 hover:text-gray-300"
+          >
+            {t("common.save")}
+          </Button>
         </div>
       </div>
     </MyDialog>

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { GoogleMap, Polygon } from "@react-google-maps/api";
 import { Point } from "./EditRegionDialog";
 
@@ -39,11 +39,23 @@ export default function MapComponent({
     [isEditing, onPolygonChange]
   );
 
+  const center = useMemo(() => {
+    if (points.length === 0) return defaultCenter;
+
+    const sumLat = points.reduce((sum, point) => sum + point.lat, 0);
+    const sumLng = points.reduce((sum, point) => sum + point.lng, 0);
+
+    return {
+      lat: sumLat / points.length,
+      lng: sumLng / points.length,
+    };
+  }, [points]);
+
   return (
     <GoogleMap
       mapContainerStyle={mapContainerStyle}
-      center={points[0] || defaultCenter}
-      zoom={12}
+      center={center}
+      zoom={9}
       onClick={onClick}
       options={{
         streetViewControl: false,

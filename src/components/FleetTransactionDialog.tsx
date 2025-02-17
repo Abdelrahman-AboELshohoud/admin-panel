@@ -143,7 +143,7 @@ export function FleetTransactionDialog({
             >
               <SelectTrigger
                 defaultValue={formData.action}
-                className="bg-[#1E1E1E] text-gray-100"
+                className="bg-[#1E1E1E] text-gray-100 border-transparent"
               >
                 <SelectValue />
               </SelectTrigger>
@@ -187,7 +187,7 @@ export function FleetTransactionDialog({
             >
               <SelectTrigger
                 defaultValue={formData.currency}
-                className="bg-[#1E1E1E] text-gray-100"
+                className="bg-[#1E1E1E] text-gray-100 border-transparent"
               >
                 <SelectValue />
               </SelectTrigger>
@@ -214,7 +214,7 @@ export function FleetTransactionDialog({
               >
                 <SelectTrigger
                   defaultValue={formData.rechargeType}
-                  className="bg-[#1E1E1E] text-gray-100"
+                  className="bg-[#1E1E1E] text-gray-100 border-transparent"
                 >
                   <SelectValue />
                 </SelectTrigger>
@@ -249,7 +249,7 @@ export function FleetTransactionDialog({
               >
                 <SelectTrigger
                   defaultValue={formData.deductType}
-                  className="bg-[#1E1E1E] text-gray-100"
+                  className="bg-[#1E1E1E] text-gray-100 border-transparent  "
                 >
                   <SelectValue />
                 </SelectTrigger>
